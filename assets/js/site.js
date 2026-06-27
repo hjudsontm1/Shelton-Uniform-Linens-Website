@@ -108,15 +108,26 @@
       href: "quote.html?program=fitness"
     },
     events: {
-      label: "Restaurants, Events & F&B",
-      summary: "Presentation textile support for dining rooms, event orders, chef wear, bar programs, and seasonal volume swings.",
-      textiles: ["Napkins", "Tablecloths", "Chef coats", "Aprons", "Bar towels", "Event linens"],
-      rhythm: "Recurring restaurant service, event-based turns, seasonal changes, and rush needs.",
-      helps: "We help food, beverage, and event teams keep presentation textiles clean, pressed, and ready for service.",
-      finishing: "Pressed napkins and tablecloths, folded or hung uniforms, event-order grouping, and labeled returns.",
-      flow: ["Service calendar", "Pressed finishing", "Event grouping", "Ready-for-service return"],
-      cta: "Build an event or F&B program",
+      label: "Event Linen Programs",
+      summary: "Event-focused linen support for orders that need polished presentation, clear sorting, and dependable turnaround around event deadlines.",
+      textiles: ["Tablecloths", "Napkins", "Runners", "Skirting", "Specialty event goods", "Event linens"],
+      rhythm: "Event-based pickup and return tied to order dates, venue schedules, and seasonal volume.",
+      helps: "We help event teams keep table linens and specialty goods clean, pressed, sorted, and ready for setup without last-minute guessing.",
+      finishing: "Pressed, folded, grouped by order or venue, labeled for setup, and handled for specialty cleaning needs.",
+      flow: ["Event deadline", "Specialty cleaning", "Order sorting", "Presentation-ready return"],
+      cta: "Build an event linen program",
       href: "quote.html?program=events"
+    },
+    restaurants: {
+      label: "Restaurants & Food Service",
+      summary: "Recurring cleaning and finishing for dining-room and kitchen textiles that need consistency through food, grease, and daily service volume.",
+      textiles: ["Napkins", "Aprons", "Chef coats", "Bar towels", "Table linens", "Dining-room goods"],
+      rhythm: "Recurring route service based on service nights, soil level, staff needs, and weekly volume.",
+      helps: "We help restaurant teams keep napkins, aprons, chef coats, and bar towels clean and consistent through repeated use.",
+      finishing: "Pressed or folded dining-room goods, hung or folded garments, sorted returns, and processing matched to food and grease staining.",
+      flow: ["Recurring service", "Stain-aware wash", "Dining-room finish", "Consistent return"],
+      cta: "Build a restaurant program",
+      href: "quote.html?program=restaurants"
     },
     uniforms: {
       label: "Uniform Programs",
@@ -318,9 +329,14 @@
       message: "I am interested in building a gym, yoga, or fitness towel program."
     },
     events: {
+      industry: "event",
+      service: "event",
+      message: "I am interested in building an event linen program for tablecloths, napkins, runners, or specialty event goods."
+    },
+    restaurants: {
       industry: "restaurant",
       service: "event",
-      message: "I am interested in building a restaurant, event, or F&B linen program."
+      message: "I am interested in building a restaurant or food service laundry program for napkins, aprons, bar towels, dining-room goods, or uniforms."
     },
     uniforms: {
       industry: "uniform",
