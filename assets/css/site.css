@@ -202,22 +202,22 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
 .hero-copy h1 {
   position: relative;
   z-index: 1;
-  max-width: 44rem;
-  font-size: clamp(4.45rem, 5.65vw, 7rem);
-  line-height: 0.9;
+  max-width: 45rem;
+  font-size: clamp(4.1rem, 5.25vw, 6.55rem);
+  line-height: 0.92;
 }
 .hero-copy h1 span { display: block; }
-.home-hero--partner .hero-copy h1 { max-width: 44rem; }
+.home-hero--partner .hero-copy h1 { max-width: 45rem; }
 .hero-copy em { color: var(--gold-2); font-style: italic; }
 .hero-copy p:not(.section-eyebrow) {
   position: relative;
   z-index: 1;
-  max-width: 30rem;
+  max-width: 34rem;
   margin-top: clamp(1.5rem, 3vh, 2rem);
   font-size: 1rem;
   line-height: 1.75;
 }
-.home-hero--partner .hero-copy p:not(.section-eyebrow) { max-width: 30rem; }
+.home-hero--partner .hero-copy p:not(.section-eyebrow) { max-width: 34rem; }
 .hero-visual {
   position: relative;
   min-height: 100%;
