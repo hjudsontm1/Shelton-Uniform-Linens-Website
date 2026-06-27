@@ -47,37 +47,23 @@
   if (!form) return;
 
   form.addEventListener("submit", async (event) => {
-    const endpoint = form.dataset.endpoint && form.dataset.endpoint.trim();
-    const isLocalPreview = ["localhost", "127.0.0.1", ""].includes(window.location.hostname) || window.location.protocol === "file:";
-    const status = form.querySelector(".form-status");
-
-    if (!endpoint) {
-      if (isLocalPreview) {
-        event.preventDefault();
-        if (status) {
-          status.textContent = "Preview mode: the form is ready, but needs a live form endpoint or Netlify Forms deployment before it sends.";
-        }
-      }
-      return;
-    }
-
     event.preventDefault();
+
+    const status = form.querySelector(".form-status");
     const submit = form.querySelector("button[type='submit']");
     if (submit) submit.disabled = true;
     if (status) status.textContent = "Sending quote request...";
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch(form.action, {
         method: "POST",
         headers: { Accept: "application/json" },
         body: new FormData(form),
       });
       if (!response.ok) throw new Error("Request failed");
-      form.reset();
-      if (status) status.textContent = "Thanks. Your quote request has been sent.";
+      window.location.href = "thank-you.html";
     } catch {
-      if (status) status.textContent = "The form could not send yet. Please add the final endpoint or deploy with Netlify Forms.";
-    } finally {
+      if (status) status.textContent = "We could not send the request just now. Please try again.";
       if (submit) submit.disabled = false;
     }
   });

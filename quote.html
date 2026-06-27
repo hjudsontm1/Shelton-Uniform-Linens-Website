@@ -40,7 +40,7 @@
     <div class="inner-copy">
       <p class="section-eyebrow">Request a Quote</p>
       <h1>Tell us what your business needs cleaned.</h1>
-      <p>This form is built for real commercial quote requests. When the final form endpoint is added, submissions will route directly to the Shelton laundry team.</p>
+      <p>Share your commercial laundry needs and the Shelton team will follow up with the right account recommendations.</p>
     </div>
     <figure class="inner-media" style="--photo: url('../images/hero-editorial-textiles.jpg')">
       <figcaption>Commercial quote intake</figcaption>
@@ -56,16 +56,11 @@
         <li>We confirm route feasibility and the questions needed for accurate pricing.</li>
         <li>Dedicated laundry phone and email can be added as soon as they are finalized.</li>
       </ul>
-      <div class="integration-note">
-        <h3>Real form connection</h3>
-        <p>The form includes Netlify-ready posting and a configurable endpoint hook. Once the final destination is available, add it to <code>data-endpoint</code> on the form or deploy with Netlify Forms.</p>
-      </div>
     </div>
-    <form class="quote-form reveal" id="quote-form" name="commercial-laundry-quote" method="POST" action="thank-you.html" data-netlify="true" netlify-honeypot="bot-field" data-endpoint="">
-    <input type="hidden" name="form-name" value="commercial-laundry-quote" />
-    <p class="hidden-field"><label>Do not fill this out <input name="bot-field" /></label></p>
+    <form class="quote-form reveal" id="quote-form" name="commercial-laundry-quote" method="POST" action="https://formspree.io/f/mvzjawvl">
+    <input class="hidden-field" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
     <div class="form-row">
-      <label>Business Name<input name="businessName" autocomplete="organization" required placeholder="Hotel, spa, restaurant, studio..." /></label>
+      <label>Business Name<input name="company" autocomplete="organization" required placeholder="Hotel, spa, restaurant, studio..." /></label>
       <label>Your Name<input name="name" autocomplete="name" required placeholder="Jordan Shelton" /></label>
     </div>
     <div class="form-row">
