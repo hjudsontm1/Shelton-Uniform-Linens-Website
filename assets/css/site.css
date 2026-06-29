@@ -1096,7 +1096,7 @@ fieldset {
 }
 .home-page .cta-band {
   width: var(--container-width);
-  margin: clamp(3rem, 6vw, 4.5rem) auto 0;
+  margin: clamp(3rem, 6vw, 4.5rem) auto clamp(4.5rem, 8vw, 6.5rem);
   padding: clamp(2rem, 4vw, 3.25rem);
 }
 .cta-band h2 { margin: 0.8rem 0 1rem; }
