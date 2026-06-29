@@ -563,7 +563,6 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   font-weight: 700;
 }
 .text-link::after { content: " /"; color: var(--muted); }
-.mini-grid,
 .values-grid,
 .route-grid {
   display: grid;
@@ -572,7 +571,6 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   background: var(--border);
   border: 1px solid var(--border);
 }
-.mini-card,
 .value-card,
 .route-card {
   min-height: 18rem;
@@ -590,22 +588,6 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   font-family: "Cormorant Garamond", Georgia, serif;
   font-size: 2.2rem;
   line-height: 1;
-}
-.mini-grid { grid-template-columns: repeat(3, 1fr); }
-.mini-card {
-  min-height: 8rem;
-  color: var(--cream-2);
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 1.8rem;
-}
-.mini-card span {
-  display: block;
-  margin-top: 0.8rem;
-  color: var(--muted);
-  font-family: Inter, Arial, sans-serif;
-  font-size: 0.66rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
 }
 .feature-split { align-items: stretch; }
 .feature-copy {
@@ -1229,7 +1211,6 @@ fieldset {
   .inner-media { min-height: 24rem; }
   .section-head { grid-template-columns: 1fr; align-items: start; }
   .service-detail-grid,
-  .mini-grid,
   .gallery-row,
   .route-timeline { grid-template-columns: 1fr; }
   .credibility-strip div { justify-content: flex-start; }
