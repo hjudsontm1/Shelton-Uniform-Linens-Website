@@ -182,13 +182,13 @@
                 <span class="story-slide__photo"><img class="story-slide__image" src="assets/images/history/seville-cleaners-pacific-beach-1979.jpeg" alt="Seville Cleaners in Pacific Beach circa 1979" /></span>
               </span>
             </button>
+            <p class="story-carousel__hint" data-story-prompt>CLICK OR TAP IMAGE FOR STORY</p>
           </div>
           <div class="story-carousel__footer">
             <div class="story-carousel__caption">
               <span class="story-carousel__counter" data-story-counter>01 / 05</span>
               <p id="story-carousel-caption" data-story-current-caption>John Shelton, Sr., circa 1901</p>
             </div>
-            <p class="story-carousel__hint">Click or tap image for story.</p>
             <div class="story-carousel__controls" aria-label="Story carousel controls">
               <button type="button" data-story-prev aria-label="Previous story photo">&larr;</button>
               <div class="story-carousel__dots" aria-label="Choose a story photo">
@@ -212,34 +212,68 @@
     </div>
   </section>
 
-  <section class="cleaning-quality reveal" id="cleaning-quality" aria-labelledby="cleaning-quality-title">
-    <div class="cleaning-quality__panel">
+  <section class="cleaning-quality reveal" id="cleaning-quality" aria-labelledby="cleaning-quality-title" data-quality-feature data-quality-active="chef">
+    <div class="cleaning-quality__inner">
       <div class="cleaning-quality__copy">
-        <h2 id="cleaning-quality-title">Cleaner goods. Longer life. Fewer headaches.</h2>
-        <p>When goods are cleaned properly, they last longer, look better, and create fewer problems for your staff. Shelton's process is built to remove heavy soil, protect customer-owned goods, and keep commercial items looking consistent over time &mdash; from chef coats and sheets to towels, uniforms, event linens, and specialty items.</p>
+        <p class="quality-kicker">Explore the difference</p>
+        <h2 id="cleaning-quality-title">See how white your whites can stay.</h2>
+        <p>Better cleaning protects what your business already owns &mdash; helping goods look better, last longer, and come back ready for your team.</p>
       </div>
-      <div class="cleaning-quality__cards" aria-label="Cleaning quality proof points">
-        <article class="quality-proof-card">
-          <span>01</span>
-          <h3>Chef Coats That Keep Looking Sharp</h3>
-          <p>Heavy-use chef coats can come back looking clean and professional even after hundreds of laundering cycles.</p>
-        </article>
-        <article class="quality-proof-card">
-          <span>02</span>
-          <h3>Linens That Last Longer</h3>
-          <p>Sheets, towels, and table linens are cleaned and finished with the goal of preserving feel, presentation, and usable life.</p>
-        </article>
-        <article class="quality-proof-card">
-          <span>03</span>
-          <h3>Lower Replacement Headaches</h3>
-          <p>For customer-owned goods, better cleaning can reduce premature replacement, staff complaints, and rejected items.</p>
-        </article>
-        <article class="quality-proof-card">
-          <span>04</span>
-          <h3>Specialty Mold Removal</h3>
-          <p>Shelton can remove mold from items many laundries cannot handle, including colored event goods and specialty pieces.</p>
+      <div class="quality-fabric" aria-label="Interactive cleaning quality proof points">
+        <div class="quality-fabric__surface">
+          <button class="quality-marker quality-marker--soil is-active" type="button" data-quality-proof="soil" aria-pressed="true" aria-describedby="quality-proof-panel" aria-label="Heavy Soil proof point">
+            <span class="quality-marker__plus" aria-hidden="true">+</span>
+            <span class="quality-marker__label">Heavy Soil</span>
+          </button>
+          <button class="quality-marker quality-marker--wear" type="button" data-quality-proof="wear" aria-pressed="false" aria-describedby="quality-proof-panel" aria-label="Long-Term Wear proof point">
+            <span class="quality-marker__plus" aria-hidden="true">+</span>
+            <span class="quality-marker__label">Long-Term Wear</span>
+          </button>
+          <button class="quality-marker quality-marker--mold" type="button" data-quality-proof="mold" aria-pressed="false" aria-describedby="quality-proof-panel" aria-label="Mold and Mildew proof point">
+            <span class="quality-marker__plus" aria-hidden="true">+</span>
+            <span class="quality-marker__label">Mold &amp; Mildew</span>
+          </button>
+          <button class="quality-marker quality-marker--presentation" type="button" data-quality-proof="presentation" aria-pressed="false" aria-describedby="quality-proof-panel" aria-label="Presentation proof point">
+            <span class="quality-marker__plus" aria-hidden="true">+</span>
+            <span class="quality-marker__label">Presentation</span>
+          </button>
+          <button class="quality-marker quality-marker--cost" type="button" data-quality-proof="cost" aria-pressed="false" aria-describedby="quality-proof-panel" aria-label="Replacement Cost proof point">
+            <span class="quality-marker__plus" aria-hidden="true">+</span>
+            <span class="quality-marker__label">Replacement Cost</span>
+          </button>
+        </div>
+        <article class="quality-proof-popover" id="quality-proof-panel" data-quality-proof-panel aria-live="polite">
+          <span data-quality-proof-label>Heavy Soil</span>
+          <p data-quality-proof-copy>Removes deep soil better so goods come back truly clean, not just processed.</p>
         </article>
       </div>
+      <article class="quality-detail" id="quality-detail" data-quality-detail aria-live="polite">
+        <span class="quality-detail__count" data-quality-count>01 / 05</span>
+        <h3 data-quality-title>Chef coats that keep looking sharp.</h3>
+        <p data-quality-copy>Heavy-use chef coats can still leave our facility looking clean, white, and professional after hundreds of laundering cycles when processed properly.</p>
+      </article>
+    </div>
+    <div class="quality-topic-selector" role="tablist" aria-label="Choose a cleaning quality category">
+      <button class="quality-topic is-active" type="button" role="tab" data-quality-key="chef" aria-selected="true" aria-controls="quality-detail">
+        <span class="quality-topic__thumb" aria-hidden="true"></span>
+        <span class="quality-topic__meta"><span>01</span>Chef Coats</span>
+      </button>
+      <button class="quality-topic" type="button" role="tab" data-quality-key="sheets" aria-selected="false" aria-controls="quality-detail" tabindex="-1">
+        <span class="quality-topic__thumb" aria-hidden="true"></span>
+        <span class="quality-topic__meta"><span>02</span>Sheets &amp; Linens</span>
+      </button>
+      <button class="quality-topic" type="button" role="tab" data-quality-key="towels" aria-selected="false" aria-controls="quality-detail" tabindex="-1">
+        <span class="quality-topic__thumb" aria-hidden="true"></span>
+        <span class="quality-topic__meta"><span>03</span>Towels</span>
+      </button>
+      <button class="quality-topic" type="button" role="tab" data-quality-key="events" aria-selected="false" aria-controls="quality-detail" tabindex="-1">
+        <span class="quality-topic__thumb" aria-hidden="true"></span>
+        <span class="quality-topic__meta"><span>04</span>Event Linens</span>
+      </button>
+      <button class="quality-topic" type="button" role="tab" data-quality-key="mold" aria-selected="false" aria-controls="quality-detail" tabindex="-1">
+        <span class="quality-topic__thumb" aria-hidden="true"></span>
+        <span class="quality-topic__meta"><span>05</span>Mold Removal</span>
+      </button>
     </div>
   </section>
 

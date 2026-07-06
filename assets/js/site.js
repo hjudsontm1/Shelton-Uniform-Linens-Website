@@ -72,6 +72,7 @@
     const caption = storyCarousel.querySelector("[data-story-current-caption]");
     const infoPanel = storyCarousel.querySelector("[data-story-info-panel]");
     const infoClose = storyCarousel.querySelector("[data-story-close]");
+    const storyPrompt = storyCarousel.querySelector("[data-story-prompt]");
     let activeStoryIndex = Math.max(0, slides.findIndex((slide) => slide.classList.contains("is-active")));
     let lastStoryFocus = null;
 
@@ -88,6 +89,7 @@
       slides.forEach((slide, index) => {
         slide.setAttribute("aria-expanded", String(isOpen && index === activeStoryIndex));
       });
+      if (storyPrompt) storyPrompt.textContent = isOpen ? "CLICK IMAGE TO CLOSE" : "CLICK OR TAP IMAGE FOR STORY";
     };
     const closeStoryInfo = (restoreFocus = false) => {
       if (!infoPanel || infoPanel.hidden) return;
@@ -164,6 +166,116 @@
       if (event.key === "Escape") closeStoryInfo(true);
     });
     renderStorySlide(activeStoryIndex);
+  }
+
+  const qualityFeature = document.querySelector("[data-quality-feature]");
+  if (qualityFeature) {
+    const qualityProfiles = {
+      chef: {
+        count: "01 / 05",
+        title: "Chef coats that keep looking sharp.",
+        copy: "Heavy-use chef coats can still leave our facility looking clean, white, and professional after hundreds of laundering cycles when processed properly."
+      },
+      sheets: {
+        count: "02 / 05",
+        title: "Linens that hold their feel.",
+        copy: "Sheets and linens should stay consistent in feel, presentation, and usable life with proper cleaning and finishing."
+      },
+      towels: {
+        count: "03 / 05",
+        title: "Towels that come back soft, clean, and ready.",
+        copy: "Better wash chemistry and handling help towels stay presentable for spas, gyms, hospitality, and wellness accounts."
+      },
+      events: {
+        count: "04 / 05",
+        title: "Event goods that are presentation-ready.",
+        copy: "Tablecloths, napkins, runners, and specialty event goods need cleaning that handles stains, storage issues, and deadline pressure."
+      },
+      mold: {
+        count: "05 / 05",
+        title: "Specialty mold removal.",
+        copy: "Shelton can remove mold from items many laundries cannot handle, including colored event goods and specialty pieces."
+      }
+    };
+    const qualityProofs = {
+      soil: {
+        label: "Heavy Soil",
+        copy: "Removes deep soil better so goods come back truly clean, not just processed."
+      },
+      wear: {
+        label: "Long-Term Wear",
+        copy: "Better cleaning and handling can help protect fibers, feel, and presentation over time."
+      },
+      mold: {
+        label: "Mold & Mildew",
+        copy: "Specialty removal for mold issues, including colored event goods and specialty pieces many laundries cannot safely handle."
+      },
+      presentation: {
+        label: "Presentation",
+        copy: "Clean, finished goods look better for guests, staff, and event setups."
+      },
+      cost: {
+        label: "Replacement Cost",
+        copy: "Better cleaning can reduce premature replacement, rejected items, and staff headaches."
+      }
+    };
+    const qualityTiles = Array.from(qualityFeature.querySelectorAll("[data-quality-key]"));
+    const proofButtons = Array.from(qualityFeature.querySelectorAll("[data-quality-proof]"));
+    const qualityDetail = qualityFeature.querySelector("[data-quality-detail]");
+    const proofPanel = qualityFeature.querySelector("[data-quality-proof-panel]");
+    const renderQuality = (key) => {
+      const profile = qualityProfiles[key] || qualityProfiles.chef;
+      qualityFeature.dataset.qualityActive = key;
+      qualityTiles.forEach((button) => {
+        const isActive = button.dataset.qualityKey === key;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-selected", String(isActive));
+        button.tabIndex = isActive ? 0 : -1;
+      });
+      if (!qualityDetail) return;
+      setText(qualityDetail, "[data-quality-count]", profile.count);
+      setText(qualityDetail, "[data-quality-title]", profile.title);
+      setText(qualityDetail, "[data-quality-copy]", profile.copy);
+    };
+    const renderQualityProof = (key) => {
+      const proof = qualityProofs[key] || qualityProofs.soil;
+      proofButtons.forEach((button) => {
+        const isActive = button.dataset.qualityProof === key;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
+      if (!proofPanel) return;
+      setText(proofPanel, "[data-quality-proof-label]", proof.label);
+      setText(proofPanel, "[data-quality-proof-copy]", proof.copy);
+    };
+    qualityTiles.forEach((button, index) => {
+      button.addEventListener("click", () => renderQuality(button.dataset.qualityKey));
+      button.addEventListener("keydown", (event) => {
+        const keyMap = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+        if (event.key === "Home") {
+          event.preventDefault();
+          qualityTiles[0].focus();
+          renderQuality(qualityTiles[0].dataset.qualityKey);
+          return;
+        }
+        if (event.key === "End") {
+          event.preventDefault();
+          qualityTiles[qualityTiles.length - 1].focus();
+          renderQuality(qualityTiles[qualityTiles.length - 1].dataset.qualityKey);
+          return;
+        }
+        if (!keyMap[event.key]) return;
+        event.preventDefault();
+        const nextIndex = (index + keyMap[event.key] + qualityTiles.length) % qualityTiles.length;
+        qualityTiles[nextIndex].focus();
+        renderQuality(qualityTiles[nextIndex].dataset.qualityKey);
+      });
+    });
+    proofButtons.forEach((button) => {
+      button.addEventListener("click", () => renderQualityProof(button.dataset.qualityProof));
+    });
+    renderQuality(qualityTiles.find((button) => button.classList.contains("is-active"))?.dataset.qualityKey || "chef");
+    renderQualityProof(proofButtons.find((button) => button.classList.contains("is-active"))?.dataset.qualityProof || "soil");
   }
 
   const programProfiles = {
