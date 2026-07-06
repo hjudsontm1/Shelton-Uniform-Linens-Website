@@ -69,7 +69,7 @@
     const previousButton = storyCarousel.querySelector("[data-story-prev]");
     const nextButton = storyCarousel.querySelector("[data-story-next]");
     const counter = storyCarousel.querySelector("[data-story-counter]");
-    const caption = storyCarousel.querySelector("[data-story-caption]");
+    const caption = storyCarousel.querySelector("[data-story-current-caption]");
     const infoPanel = storyCarousel.querySelector("[data-story-info-panel]");
     const infoClose = storyCarousel.querySelector("[data-story-close]");
     let activeStoryIndex = Math.max(0, slides.findIndex((slide) => slide.classList.contains("is-active")));
@@ -107,7 +107,9 @@
     };
     const renderStorySlide = (index) => {
       if (!slides.length) return;
-      activeStoryIndex = (index + slides.length) % slides.length;
+      const nextIndex = (index + slides.length) % slides.length;
+      if (nextIndex !== activeStoryIndex) closeStoryInfo(false);
+      activeStoryIndex = nextIndex;
       slides.forEach((slide, slideIndex) => {
         const isActive = slideIndex === activeStoryIndex;
         slide.classList.toggle("is-active", isActive);
@@ -117,7 +119,7 @@
       dots.forEach((dot, dotIndex) => {
         const isActive = dotIndex === activeStoryIndex;
         dot.classList.toggle("is-active", isActive);
-        dot.setAttribute("aria-current", String(isActive));
+        dot.setAttribute("aria-current", isActive ? "true" : "false");
       });
       if (counter) counter.textContent = `${storyNumber(activeStoryIndex + 1)} / ${storyNumber(slides.length)}`;
       if (caption) caption.textContent = activeStorySlide()?.dataset.storyCaption || "";
