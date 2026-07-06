@@ -216,7 +216,7 @@
   const ownershipButtons = document.querySelectorAll("[data-ownership-key]");
   const ownershipPanel = document.querySelector("#ownership-panel");
   const renderOwnership = (key) => {
-    const profile = ownershipProfiles[key] || ownershipProfiles.rental;
+    const profile = ownershipProfiles[key] || ownershipProfiles.cog;
     if (!ownershipPanel) return;
     ownershipButtons.forEach((button) => {
       const isActive = button.dataset.ownershipKey === key;
