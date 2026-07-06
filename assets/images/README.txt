@@ -1,4 +1,4 @@
-Shelton Uniform & Linen filler photo manifest
+Shelton Linen & Uniform Services filler photo manifest
 
 These generated filler photographs currently populate the website:
 

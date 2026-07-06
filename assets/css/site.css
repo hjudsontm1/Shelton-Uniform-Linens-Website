@@ -1397,7 +1397,14 @@ fieldset {
   .program-promise { padding: 3rem var(--page-gutter); }
   .nav-inner { width: min(calc(100% - 1.5rem), var(--content)); }
   .home-page .nav-inner { width: var(--container-width); }
-  .brand-main { font-size: 0.95rem; }
+  .nav-brand { min-width: 0; flex: 1 1 auto; }
+  .brand-copy { min-width: 0; }
+  .brand-main {
+    max-width: min(16rem, calc(100vw - 7.25rem));
+    font-size: clamp(0.72rem, 3.05vw, 0.95rem);
+    letter-spacing: 0.07em;
+    line-height: 1.02;
+  }
   .brand-mark { width: 2.3rem; height: 2.3rem; }
   .hero-copy { padding: 4rem 1.25rem; }
   .hero-copy h1 { font-size: clamp(3.45rem, 14vw, 4.7rem); }
