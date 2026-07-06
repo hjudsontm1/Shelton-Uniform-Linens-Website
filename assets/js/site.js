@@ -62,14 +62,103 @@
     insightPanels.forEach((panel) => panel.removeAttribute("open"));
   });
 
+  const storyCarousel = document.querySelector("[data-story-carousel]");
+  if (storyCarousel) {
+    const slides = Array.from(storyCarousel.querySelectorAll("[data-story-slide]"));
+    const dots = Array.from(storyCarousel.querySelectorAll("[data-story-dot]"));
+    const previousButton = storyCarousel.querySelector("[data-story-prev]");
+    const nextButton = storyCarousel.querySelector("[data-story-next]");
+    const counter = storyCarousel.querySelector("[data-story-counter]");
+    const caption = storyCarousel.querySelector("[data-story-caption]");
+    const infoPanel = storyCarousel.querySelector("[data-story-info-panel]");
+    const infoClose = storyCarousel.querySelector("[data-story-close]");
+    let activeStoryIndex = Math.max(0, slides.findIndex((slide) => slide.classList.contains("is-active")));
+    let lastStoryFocus = null;
+
+    const storyNumber = (value) => String(value).padStart(2, "0");
+    const activeStorySlide = () => slides[activeStoryIndex];
+    const syncStoryPanel = () => {
+      const slide = activeStorySlide();
+      if (!slide || !infoPanel) return;
+      setText(infoPanel, "[data-story-info-era]", slide.dataset.storyEra || "");
+      setText(infoPanel, "[data-story-info-title]", slide.dataset.storyTitle || "");
+      setText(infoPanel, "[data-story-info-copy]", slide.dataset.storyCopy || "");
+    };
+    const setStoryExpanded = (isOpen) => {
+      slides.forEach((slide, index) => {
+        slide.setAttribute("aria-expanded", String(isOpen && index === activeStoryIndex));
+      });
+    };
+    const closeStoryInfo = (restoreFocus = false) => {
+      if (!infoPanel || infoPanel.hidden) return;
+      infoPanel.hidden = true;
+      storyCarousel.classList.remove("is-info-open");
+      setStoryExpanded(false);
+      if (restoreFocus && lastStoryFocus instanceof HTMLElement) lastStoryFocus.focus({ preventScroll: true });
+    };
+    const openStoryInfo = () => {
+      if (!infoPanel) return;
+      lastStoryFocus = document.activeElement;
+      syncStoryPanel();
+      infoPanel.hidden = false;
+      storyCarousel.classList.add("is-info-open");
+      setStoryExpanded(true);
+      if (infoClose) infoClose.focus({ preventScroll: true });
+    };
+    const renderStorySlide = (index) => {
+      if (!slides.length) return;
+      activeStoryIndex = (index + slides.length) % slides.length;
+      slides.forEach((slide, slideIndex) => {
+        const isActive = slideIndex === activeStoryIndex;
+        slide.classList.toggle("is-active", isActive);
+        slide.setAttribute("aria-hidden", String(!isActive));
+        slide.tabIndex = isActive ? 0 : -1;
+      });
+      dots.forEach((dot, dotIndex) => {
+        const isActive = dotIndex === activeStoryIndex;
+        dot.classList.toggle("is-active", isActive);
+        dot.setAttribute("aria-current", String(isActive));
+      });
+      if (counter) counter.textContent = `${storyNumber(activeStoryIndex + 1)} / ${storyNumber(slides.length)}`;
+      if (caption) caption.textContent = activeStorySlide()?.dataset.storyCaption || "";
+      if (infoPanel && !infoPanel.hidden) syncStoryPanel();
+      setStoryExpanded(infoPanel ? !infoPanel.hidden : false);
+    };
+
+    slides.forEach((slide, index) => {
+      slide.addEventListener("click", () => {
+        renderStorySlide(index);
+        openStoryInfo();
+      });
+      slide.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowRight") renderStorySlide(activeStoryIndex + 1);
+        if (event.key === "ArrowLeft") renderStorySlide(activeStoryIndex - 1);
+      });
+    });
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => renderStorySlide(index));
+    });
+    if (previousButton) previousButton.addEventListener("click", () => renderStorySlide(activeStoryIndex - 1));
+    if (nextButton) nextButton.addEventListener("click", () => renderStorySlide(activeStoryIndex + 1));
+    if (infoClose) infoClose.addEventListener("click", () => closeStoryInfo(true));
+    document.addEventListener("click", (event) => {
+      if (!infoPanel || infoPanel.hidden || storyCarousel.contains(event.target)) return;
+      closeStoryInfo();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeStoryInfo(true);
+    });
+    renderStorySlide(activeStoryIndex);
+  }
+
   const programProfiles = {
     hotels: {
       label: "Hotels & Boutique Stays",
       summary: "A reliable linen flow for guest-facing rooms, housekeeping storage, occupancy swings, and the details that shape the stay.",
-      textiles: ["Sheets", "Pillowcases", "Towels", "Bath mats", "Robes", "Guest-facing linens"],
+      items: ["Sheets", "Pillowcases", "Towels", "Bath mats", "Robes", "Guest-facing linens"],
       rhythm: "Recurring pickup and delivery based on occupancy, turn schedules, and storage space.",
       helps: "We help create a reliable linen flow so housekeeping is not stuck chasing towels, sorting bags, or guessing what is coming back.",
-      finishing: "Folded, bundled, labeled, staged by property, or packed by textile type.",
+      finishing: "Folded, bundled, labeled, staged by property, or packed by item type.",
       flow: ["Pickup cadence", "Account sorting", "Finishing standards", "Route-ready return"],
       cta: "Build a hotel program",
       href: "quote.html?program=hotels"
@@ -77,7 +166,7 @@
     str: {
       label: "Short-Term Rentals / Property Managers",
       summary: "A turnover-aware laundry program for property clusters, cleaning teams, guest-ready presentation, and separated owner goods.",
-      textiles: ["Sheets", "Towels", "Bath mats", "Kitchen towels", "Robes", "Blankets", "Comforters", "Pool towels"],
+      items: ["Sheets", "Towels", "Bath mats", "Kitchen towels", "Robes", "Blankets", "Comforters", "Pool towels"],
       rhythm: "Route-based pickup tied to turns, checkouts, cleaning teams, and property clusters.",
       helps: "We help reduce laundry friction between cleaners, property managers, and guests with predictable packaging and account-specific handling.",
       finishing: "Property-labeled bundles, guest-ready folds, and owner goods separated by account or property.",
@@ -87,10 +176,10 @@
     },
     spa: {
       label: "Spas, Massage & Wellness",
-      summary: "Soft, consistent treatment-room textiles with handling that supports the calm, polished client experience.",
-      textiles: ["Massage sheets", "Face cradle covers", "Towels", "Robes", "Blankets", "Wraps", "Wellness linens"],
+      summary: "Soft, consistent treatment-room linens with handling that supports the calm, polished client experience.",
+      items: ["Massage sheets", "Face cradle covers", "Towels", "Robes", "Blankets", "Wraps", "Wellness linens"],
       rhythm: "High-frequency pickup for towel and sheet-heavy accounts with consistent finishing and return packaging.",
-      helps: "We help keep treatment rooms stocked with soft, clean, properly folded textiles that feel aligned with the client experience.",
+      helps: "We help keep treatment rooms stocked with soft, clean, properly folded linens that feel aligned with the client experience.",
       finishing: "Stacked by room or use, towel bundles, sheet bundles, robe handling, and customer-owned or rental possibilities.",
       flow: ["Treatment-room volume", "Softness standards", "Use-based bundles", "Stocked return"],
       cta: "Build a spa program",
@@ -99,7 +188,7 @@
     fitness: {
       label: "Gyms, Yoga & Fitness Studios",
       summary: "A towel-forward route program built around class volume, locker-room pressure, and limited studio storage.",
-      textiles: ["Workout towels", "Shower towels", "Hand towels", "Microfiber", "Specialty studio items"],
+      items: ["Workout towels", "Shower towels", "Hand towels", "Microfiber", "Specialty studio items"],
       rhythm: "Frequent route service built around class volume, towel usage, and studio storage.",
       helps: "We help fitness teams avoid towel shortages, inconsistent returns, and staff time wasted managing laundry.",
       finishing: "Towel bundles, account-labeled bags or carts, and rental or customer-owned towel programs.",
@@ -110,7 +199,7 @@
     events: {
       label: "Event Linen Programs",
       summary: "Event-focused linen support for orders that need polished presentation, clear sorting, and dependable turnaround around event deadlines.",
-      textiles: ["Tablecloths", "Napkins", "Runners", "Skirting", "Specialty event goods", "Event linens"],
+      items: ["Tablecloths", "Napkins", "Runners", "Skirting", "Specialty event goods", "Event linens"],
       rhythm: "Event-based pickup and return tied to order dates, venue schedules, and seasonal volume.",
       helps: "We help event teams keep table linens and specialty goods clean, pressed, sorted, and ready for setup without last-minute guessing.",
       finishing: "Pressed, folded, grouped by order or venue, labeled for setup, and handled for specialty cleaning needs.",
@@ -120,8 +209,8 @@
     },
     restaurants: {
       label: "Restaurants & Food Service",
-      summary: "Recurring cleaning and finishing for dining-room and kitchen textiles that need consistency through food, grease, and daily service volume.",
-      textiles: ["Napkins", "Aprons", "Chef coats", "Bar towels", "Table linens", "Dining-room goods"],
+      summary: "Recurring cleaning and finishing for dining-room and kitchen goods that need consistency through food, grease, and daily service volume.",
+      items: ["Napkins", "Aprons", "Chef coats", "Bar towels", "Table linens", "Dining-room goods"],
       rhythm: "Recurring route service based on service nights, soil level, staff needs, and weekly volume.",
       helps: "We help restaurant teams keep napkins, aprons, chef coats, and bar towels clean and consistent through repeated use.",
       finishing: "Pressed or folded dining-room goods, hung or folded garments, sorted returns, and processing matched to food and grease staining.",
@@ -132,7 +221,7 @@
     uniforms: {
       label: "Uniform Programs",
       summary: "Organized workwear support for teams that need clean, presentable garments without managing every handoff detail.",
-      textiles: ["Chef coats", "Aprons", "Hospitality uniforms", "Casino uniforms", "Service uniforms", "Business uniforms"],
+      items: ["Chef coats", "Aprons", "Hospitality uniforms", "Casino uniforms", "Service uniforms", "Business uniforms"],
       rhythm: "Recurring pickup and delivery based on staff count, soil level, and presentation needs.",
       helps: "We help uniform programs stay organized, clean, and presentable without forcing the customer to manage every detail.",
       finishing: "Hung, folded, employee or account grouping, route-ready returns, and specialty cleaning when needed.",
@@ -143,7 +232,7 @@
     wholesale: {
       label: "Wholesale Dry Cleaners",
       summary: "Behind-the-scenes production support for cleaners that need linen finishing or large-item processing capacity.",
-      textiles: ["Pressed sheets", "Comforters", "Household items", "Specialty laundry", "Large-item support"],
+      items: ["Pressed sheets", "Comforters", "Household items", "Specialty laundry", "Large-item support"],
       rhythm: "Scheduled wholesale route or drop-off support.",
       helps: "We provide behind-the-scenes production capacity for cleaners that need reliable linen finishing or large-item support.",
       finishing: "Pressed, folded, bagged, and labeled by cleaner or customer order.",
@@ -171,7 +260,7 @@
       setText(programPanel, "[data-program-field='rhythm']", profile.rhythm);
       setText(programPanel, "[data-program-field='helps']", profile.helps);
       setText(programPanel, "[data-program-field='finishing']", profile.finishing);
-      setItems(programPanel, "[data-program-list='textiles']", profile.textiles);
+      setItems(programPanel, "[data-program-list='items']", profile.items);
       setItems(programPanel, "[data-program-list='flow']", profile.flow, "span");
 
       const cta = programPanel.querySelector("[data-program-field='href']");
@@ -204,13 +293,13 @@
   const ownershipProfiles = {
     rental: {
       title: "Rental Program",
-      copy: "Shelton supplies and manages textile inventory for accounts that want a more complete program. This can help reduce upfront purchasing, simplify replacements, and keep recurring service more predictable.",
+      copy: "Shelton supplies and manages inventory for accounts that want a more complete program. This can help reduce upfront purchasing, simplify replacements, and keep recurring service more predictable.",
       points: ["Useful for recurring linen, towel, robe, and wellness programs.", "Can support hotels, STRs, spas, towel-heavy accounts, and gyms.", "Helps formalize par levels and replacement planning over time."]
     },
     cog: {
       title: "Customer-Owned Goods",
       copy: "If you already own your linens, towels, uniforms, or event goods, Shelton can clean, finish, package, and route them back according to your account's needs.",
-      points: ["Applies to hotels, STRs, spas, towel accounts, event linens, uniforms, and other commercial textile accounts.", "Keeps customer inventory separated and handled by account expectations.", "Works well when you have established goods but need better finishing, packaging, and route support."]
+      points: ["Applies to hotels, STRs, spas, towel accounts, event linens, uniforms, and other commercial laundry accounts.", "Keeps customer inventory separated and handled by account expectations.", "Works well when you have established goods but need better finishing, packaging, and route support."]
     }
   };
   const ownershipButtons = document.querySelectorAll("[data-ownership-key]");
@@ -253,7 +342,7 @@
     spa: {
       industry: "spa",
       service: "towels",
-      message: "I am interested in building a spa, massage, or wellness textile program."
+      message: "I am interested in building a spa, massage, or wellness laundry program."
     },
     fitness: {
       industry: "gym",

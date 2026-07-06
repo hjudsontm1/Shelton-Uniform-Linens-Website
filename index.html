@@ -51,27 +51,7 @@
     </figure>
   </section>
 
-  <section class="program-promise reveal" aria-labelledby="program-promise-title">
-    <div class="promise-layout">
-      <div class="promise-copy">
-        <h2 id="program-promise-title">Commercial laundry built around the way your business runs.</h2>
-        <p>Every account moves laundry differently. We shape each program around your volume, schedule, standards, packaging, and return needs &mdash; so clean, finished items come back ready when your team needs them.</p>
-      </div>
-      <div class="credibility-strip" aria-label="Commercial accounts served">
-        <p>Serving San Diego businesses across hospitality, events, wellness, restaurants, uniforms, property management, and wholesale cleaning.</p>
-        <div>
-          <span>Hospitality</span>
-          <span>Events</span>
-          <span>Wellness</span>
-          <span>Restaurants</span>
-          <span>Uniforms</span>
-          <span>Property management</span>
-          <span>Wholesale cleaning</span>
-        </div>
-        <!-- Future optional trusted-by/logo strip can be added here -->
-      </div>
-    </div>
-  </section>
+  <!-- Banked positioning copy for later: Every account moves laundry differently. We shape each program around your volume, schedule, standards, packaging, and return needs. -->
 
   <section class="section-block program-builder" id="build-program" aria-labelledby="program-builder-title">
     <div class="section-head section-head--wide">
@@ -126,14 +106,14 @@
       </div>
       <article class="program-detail" id="program-detail-panel" aria-live="polite">
         <div class="program-detail__intro">
-          <p class="section-eyebrow">Selected program</p>
+          <p class="section-eyebrow">Selected Program</p>
           <h3 data-program-field="title">Hotels &amp; Boutique Stays</h3>
           <p data-program-field="summary">A reliable linen flow for guest-facing rooms, housekeeping storage, occupancy swings, and the details that shape the stay.</p>
         </div>
         <div class="program-detail__grid">
           <div>
-            <h4>Common textiles</h4>
-            <ul data-program-list="textiles">
+            <h4>Common Items</h4>
+            <ul data-program-list="items">
               <li>Sheets</li>
               <li>Pillowcases</li>
               <li>Towels</li>
@@ -152,7 +132,7 @@
           </div>
           <div>
             <h4>Finishing / packaging options</h4>
-            <p data-program-field="finishing">Folded, bundled, labeled, staged by property, or packed by textile type.</p>
+            <p data-program-field="finishing">Folded, bundled, labeled, staged by property, or packed by item type.</p>
           </div>
         </div>
         <div class="program-flow" aria-label="Program flow" data-program-list="flow">
@@ -167,45 +147,73 @@
   </section>
 
   <section class="then-now-story reveal" id="shelton-story" aria-labelledby="shelton-story-title">
-    <div class="then-now-story__copy">
-      <p class="story-label">THE SHELTON STORY</p>
-      <h2 id="shelton-story-title">Five generations in laundry. One standard carried forward.</h2>
-      <p>Our family opened White Star Laundry in the 1890s. Five generations later, Shelton continues that work with modern commercial laundry service for San Diego businesses. The equipment has changed, but the standard has not: clean goods thoroughly, finish them properly, and return them ready to use.</p>
-      <p class="then-now-story__note">From historic laundry operations to today's commercial plant, every generation has shaped the way we serve hotels, restaurants, spas, event companies, uniform accounts, property managers, and wholesale partners.</p>
-    </div>
-    <div class="then-now-gallery" aria-label="Then and now Shelton photo slots">
-      <!-- Replace with real White Star Laundry image: assets/images/history/white-star-placeholder.jpg -->
-      <figure class="story-photo story-photo--placeholder story-photo--historic" data-photo-slot="historic-photo-1" data-placeholder-src="assets/images/history/white-star-placeholder.jpg">
-        <div class="story-photo__slot" role="img" aria-label="Historic photo placeholder for White Star Laundry, 1890s">
-          <span>Then</span>
-          <strong>White Star image slot</strong>
+    <h2 class="sr-only" id="shelton-story-title">Shelton story photo carousel</h2>
+    <div class="story-carousel" data-story-carousel aria-roledescription="carousel" aria-label="Shelton story photo carousel">
+      <div class="story-carousel__surface">
+        <div class="story-carousel__stage">
+          <div class="story-carousel__slides" aria-live="polite">
+            <!-- Replace with real White Star Laundry image: assets/images/history/white-star-placeholder.jpg -->
+            <button class="story-slide is-active" type="button" data-story-slide data-story-caption="White Star Laundry, 1890s" data-story-title="White Star Laundry" data-story-era="1890s" data-story-copy="Our family opened White Star Laundry in the 1890s. More than a century later, that laundry background still shapes how Shelton serves commercial accounts today." aria-label="Open details for White Star Laundry" aria-controls="story-info-panel" aria-expanded="false">
+              <span class="story-slide__visual" role="img" aria-label="Placeholder for White Star Laundry historic photo" data-placeholder-src="assets/images/history/white-star-placeholder.jpg">
+                <span class="story-slide__number">01</span>
+                <strong>White Star image slot</strong>
+              </span>
+            </button>
+            <!-- Replace with real family laundry photo: assets/images/history/family-laundry-placeholder.jpg -->
+            <button class="story-slide" type="button" data-story-slide data-story-caption="Family laundry operations" data-story-title="Generations in Laundry" data-story-era="Family operations" data-story-copy="Every generation of the family has worked in laundry or dry cleaning, carrying forward a standard built on cleaning well, finishing properly, and returning goods ready to use." aria-label="Open details for family laundry operations" aria-controls="story-info-panel" aria-expanded="false">
+              <span class="story-slide__visual" role="img" aria-label="Placeholder for family laundry operations photo" data-placeholder-src="assets/images/history/family-laundry-placeholder.jpg">
+                <span class="story-slide__number">02</span>
+                <strong>Family laundry photo slot</strong>
+              </span>
+            </button>
+            <!-- Replace with current Shelton plant photo: assets/images/history/current-plant-placeholder.jpg -->
+            <button class="story-slide" type="button" data-story-slide data-story-caption="Shelton commercial laundry today" data-story-title="Shelton Today" data-story-era="Today" data-story-copy="Today, Shelton brings that experience into modern commercial laundry service for San Diego hotels, restaurants, spas, event companies, property managers, uniform accounts, and wholesale partners." aria-label="Open details for Shelton commercial laundry today" aria-controls="story-info-panel" aria-expanded="false">
+              <span class="story-slide__visual" role="img" aria-label="Placeholder for current Shelton commercial laundry plant photo" data-placeholder-src="assets/images/history/current-plant-placeholder.jpg">
+                <span class="story-slide__number">03</span>
+                <strong>Current plant photo slot</strong>
+              </span>
+            </button>
+            <!-- Replace with current finishing/linen image: assets/images/history/current-finishing-placeholder.jpg -->
+            <button class="story-slide" type="button" data-story-slide data-story-caption="Modern plant and finishing operations" data-story-title="Finished and Ready" data-story-era="Modern finishing" data-story-copy="Commercial accounts depend on goods coming back clean, finished, organized, and ready for staff to use without extra work." aria-label="Open details for modern plant and finishing operations" aria-controls="story-info-panel" aria-expanded="false">
+              <span class="story-slide__visual" role="img" aria-label="Placeholder for current finishing and linen operations photo" data-placeholder-src="assets/images/history/current-finishing-placeholder.jpg">
+                <span class="story-slide__number">04</span>
+                <strong>Finishing image slot</strong>
+              </span>
+            </button>
+            <!-- Replace with current route service photo: assets/images/history/current-route-placeholder.jpg -->
+            <button class="story-slide" type="button" data-story-slide data-story-caption="Route service built around business accounts" data-story-title="Built Around the Route" data-story-era="Route service" data-story-copy="Our commercial programs are shaped around each account's volume, schedule, packaging needs, and return process." aria-label="Open details for route service built around business accounts" aria-controls="story-info-panel" aria-expanded="false">
+              <span class="story-slide__visual" role="img" aria-label="Placeholder for commercial route service and finished goods photo" data-placeholder-src="assets/images/history/current-route-placeholder.jpg">
+                <span class="story-slide__number">05</span>
+                <strong>Route service photo slot</strong>
+              </span>
+            </button>
+          </div>
+          <div class="story-carousel__footer">
+            <div>
+              <span class="story-carousel__counter" data-story-counter>01 / 05</span>
+              <p id="story-carousel-caption" data-story-caption>White Star Laundry, 1890s</p>
+            </div>
+            <p class="story-carousel__hint">Click the image for context.</p>
+            <div class="story-carousel__controls" aria-label="Story carousel controls">
+              <button type="button" data-story-prev aria-label="Previous story photo">&larr;</button>
+              <div class="story-carousel__dots" aria-label="Choose a story photo">
+                <button class="is-active" type="button" data-story-dot aria-label="Show White Star Laundry" aria-current="true"><span></span></button>
+                <button type="button" data-story-dot aria-label="Show family laundry operations"><span></span></button>
+                <button type="button" data-story-dot aria-label="Show Shelton commercial laundry today"><span></span></button>
+                <button type="button" data-story-dot aria-label="Show modern plant and finishing operations"><span></span></button>
+                <button type="button" data-story-dot aria-label="Show route service built around business accounts"><span></span></button>
+              </div>
+              <button type="button" data-story-next aria-label="Next story photo">&rarr;</button>
+            </div>
+          </div>
         </div>
-        <figcaption>White Star Laundry, 1890s</figcaption>
-      </figure>
-      <!-- Replace with real family laundry photo: assets/images/history/family-laundry-placeholder.jpg -->
-      <figure class="story-photo story-photo--placeholder story-photo--historic" data-photo-slot="historic-photo-2" data-placeholder-src="assets/images/history/family-laundry-placeholder.jpg">
-        <div class="story-photo__slot" role="img" aria-label="Historic photo placeholder for family laundry operations">
-          <span>Then</span>
-          <strong>Family laundry photo slot</strong>
-        </div>
-        <figcaption>Family laundry operations</figcaption>
-      </figure>
-      <!-- Replace with current Shelton plant photo: assets/images/history/current-plant-placeholder.jpg -->
-      <figure class="story-photo story-photo--placeholder story-photo--current" data-photo-slot="current-photo-1" data-placeholder-src="assets/images/history/current-plant-placeholder.jpg">
-        <div class="story-photo__slot" role="img" aria-label="Current photo placeholder for Shelton commercial laundry today">
-          <span>Now</span>
-          <strong>Current plant photo slot</strong>
-        </div>
-        <figcaption>Shelton commercial laundry today</figcaption>
-      </figure>
-      <!-- Replace with current finishing/linen image: assets/images/history/current-finishing-placeholder.jpg -->
-      <figure class="story-photo story-photo--placeholder story-photo--current" data-photo-slot="current-photo-2" data-placeholder-src="assets/images/history/current-finishing-placeholder.jpg">
-        <div class="story-photo__slot" role="img" aria-label="Current photo placeholder for modern plant and finishing operations">
-          <span>Now</span>
-          <strong>Finishing image slot</strong>
-        </div>
-        <figcaption>Modern plant and finishing operations</figcaption>
-      </figure>
+        <aside class="story-info-panel" id="story-info-panel" data-story-info-panel role="dialog" aria-modal="false" aria-labelledby="story-info-title" hidden>
+          <button class="story-info-panel__close" type="button" data-story-close aria-label="Close story details">Close</button>
+          <p class="story-info-panel__era" data-story-info-era>1890s</p>
+          <h3 id="story-info-title" data-story-info-title>White Star Laundry</h3>
+          <p data-story-info-copy>Our family opened White Star Laundry in the 1890s. More than a century later, that laundry background still shapes how Shelton serves commercial accounts today.</p>
+        </aside>
+      </div>
     </div>
   </section>
 
@@ -254,7 +262,7 @@
         <h3 data-ownership-title>Customer-Owned Goods</h3>
         <p data-ownership-copy>If you already own your linens, towels, uniforms, or event goods, Shelton can clean, finish, package, and route them back according to your account's needs.</p>
         <ul data-ownership-list>
-          <li>Applies to hotels, STRs, spas, towel accounts, event linens, uniforms, and other commercial textile accounts.</li>
+          <li>Applies to hotels, STRs, spas, towel accounts, event linens, uniforms, and other commercial laundry accounts.</li>
           <li>Keeps customer inventory separated and handled by account expectations.</li>
           <li>Works well when you have established goods but need better finishing, packaging, and route support.</li>
         </ul>
@@ -262,7 +270,7 @@
       <noscript>
         <article class="ownership-panel ownership-panel--fallback">
           <h3>Rental Program</h3>
-          <p>Shelton supplies and manages textile inventory for accounts that want a more complete program. This can help reduce upfront purchasing, simplify replacements, and keep recurring service more predictable.</p>
+          <p>Shelton supplies and manages inventory for accounts that want a more complete program. This can help reduce upfront purchasing, simplify replacements, and keep recurring service more predictable.</p>
         </article>
       </noscript>
     </div>
@@ -304,7 +312,6 @@
         <a href="quote.html">Request a quote</a>
         <a href="quote.html?request=plant-tour">Schedule a plant tour</a>
         <a href="https://www.sheltoncleanerssd.com/" target="_blank" rel="noopener">Shelton Cleaners</a>
-        <span>Commercial accounts only</span>
       </div>
     </div>
     <div class="footer-bottom">
