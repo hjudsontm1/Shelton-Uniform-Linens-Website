@@ -96,14 +96,22 @@
       setStoryExpanded(false);
       if (restoreFocus && lastStoryFocus instanceof HTMLElement) lastStoryFocus.focus({ preventScroll: true });
     };
-    const openStoryInfo = () => {
+    const openStoryInfo = ({ focusClose = false } = {}) => {
       if (!infoPanel) return;
       lastStoryFocus = document.activeElement;
       syncStoryPanel();
       infoPanel.hidden = false;
       storyCarousel.classList.add("is-info-open");
       setStoryExpanded(true);
-      if (infoClose) infoClose.focus({ preventScroll: true });
+      if (focusClose && infoClose) infoClose.focus({ preventScroll: true });
+    };
+    const toggleStoryInfo = () => {
+      if (!infoPanel) return;
+      if (infoPanel.hidden) {
+        openStoryInfo();
+      } else {
+        closeStoryInfo(false);
+      }
     };
     const renderStorySlide = (index) => {
       if (!slides.length) return;
@@ -129,8 +137,13 @@
 
     slides.forEach((slide, index) => {
       slide.addEventListener("click", () => {
+        const isActiveClick = index === activeStoryIndex;
         renderStorySlide(index);
-        openStoryInfo();
+        if (isActiveClick) {
+          toggleStoryInfo();
+        } else {
+          openStoryInfo();
+        }
       });
       slide.addEventListener("keydown", (event) => {
         if (event.key === "ArrowRight") renderStorySlide(activeStoryIndex + 1);
