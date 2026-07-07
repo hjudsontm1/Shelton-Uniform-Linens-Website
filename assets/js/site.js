@@ -62,6 +62,34 @@
     insightPanels.forEach((panel) => panel.removeAttribute("open"));
   });
 
+  const ownershipCards = document.querySelectorAll("[data-ownership-card]");
+  const setOwnershipCard = (card, isFlipped) => {
+    card.classList.toggle("is-flipped", isFlipped);
+    const faces = card.querySelectorAll(".ownership-card__face");
+    faces.forEach((face) => {
+      const isBack = face.classList.contains("ownership-card__face--back");
+      face.setAttribute("aria-hidden", String(isBack !== isFlipped));
+    });
+    card.querySelectorAll("[data-ownership-toggle]").forEach((button) => {
+      button.setAttribute("aria-expanded", String(isFlipped));
+    });
+  };
+  ownershipCards.forEach((card) => {
+    card.querySelectorAll("[data-ownership-toggle]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const shouldFlip = !card.classList.contains("is-flipped");
+        ownershipCards.forEach((otherCard) => {
+          if (otherCard !== card) setOwnershipCard(otherCard, false);
+        });
+        setOwnershipCard(card, shouldFlip);
+      });
+    });
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    ownershipCards.forEach((card) => setOwnershipCard(card, false));
+  });
+
   const storyCarousel = document.querySelector("[data-story-carousel]");
   if (storyCarousel) {
     const slides = Array.from(storyCarousel.querySelectorAll("[data-story-slide]"));

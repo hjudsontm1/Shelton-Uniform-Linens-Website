@@ -311,22 +311,48 @@
   </section>
 
   <section class="section-block ownership-section reveal" aria-label="Customer-Owned Goods vs. Rental Program comparison">
-    <div class="ownership-tool">
-      <article class="ownership-panel ownership-panel--cog">
-        <h2>Customer-Owned Goods</h2>
-        <ul>
-          <li>For businesses that already own linens, towels, uniforms, or event goods.</li>
-          <li>Shelton cleans, finishes, packages, and returns your items on your schedule.</li>
-          <li>Ideal when you control inventory and pay only for service.</li>
-        </ul>
+    <div class="ownership-tool" data-ownership-comparison>
+      <article class="ownership-card ownership-card--cog" data-ownership-card>
+        <div class="ownership-card__inner">
+          <div class="ownership-card__face ownership-card__face--front">
+            <span class="ownership-card__ring" aria-hidden="true"></span>
+            <h2>Customer-Owned Goods</h2>
+            <p>For businesses that already own linens, towels, uniforms, or event goods.</p>
+            <button class="ownership-card__toggle" type="button" data-ownership-toggle aria-expanded="false">
+              <span>View details</span><span aria-hidden="true">+</span>
+            </button>
+          </div>
+          <div class="ownership-card__face ownership-card__face--back" aria-hidden="true">
+            <h3>Customer-Owned Goods</h3>
+            <ul>
+              <li><strong>Inventory:</strong> You own the goods.</li>
+              <li><strong>Service:</strong> Shelton cleans, finishes, packages, and returns them.</li>
+              <li><strong>Best for:</strong> Teams that control inventory and pay only for service.</li>
+            </ul>
+            <button class="ownership-card__toggle" type="button" data-ownership-toggle aria-expanded="true">Flip back</button>
+          </div>
+        </div>
       </article>
-      <article class="ownership-panel ownership-panel--rental">
-        <h2>Rental Program</h2>
-        <ul>
-          <li>Shelton supplies and manages your inventory of linens, towels, robes, uniforms.</li>
-          <li>Consistent delivery, cleaning, and replacement at one predictable rate.</li>
-          <li>Best when you don't want to purchase or store goods.</li>
-        </ul>
+      <article class="ownership-card ownership-card--rental" data-ownership-card>
+        <div class="ownership-card__inner">
+          <div class="ownership-card__face ownership-card__face--front">
+            <span class="ownership-card__ring" aria-hidden="true"></span>
+            <h2>Rental Program</h2>
+            <p>Shelton supplies and manages recurring inventory for your account.</p>
+            <button class="ownership-card__toggle" type="button" data-ownership-toggle aria-expanded="false">
+              <span>View details</span><span aria-hidden="true">+</span>
+            </button>
+          </div>
+          <div class="ownership-card__face ownership-card__face--back" aria-hidden="true">
+            <h3>Rental Program</h3>
+            <ul>
+              <li><strong>Inventory:</strong> Shelton supplies linens, towels, robes, or uniforms.</li>
+              <li><strong>Service:</strong> Delivery, cleaning, and replacement stay predictable.</li>
+              <li><strong>Best for:</strong> Accounts that do not want to purchase or store goods.</li>
+            </ul>
+            <button class="ownership-card__toggle" type="button" data-ownership-toggle aria-expanded="true">Flip back</button>
+          </div>
+        </div>
       </article>
     </div>
   </section>

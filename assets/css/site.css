@@ -1146,39 +1146,47 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
 }
 .check-list.large { font-size: 1.02rem; gap: 1rem; }
 .program-builder {
-  padding-top: clamp(6.5rem, 9vw, 8rem);
-  padding-bottom: clamp(3.25rem, 4.6vw, 4rem);
+  padding-top: clamp(6.75rem, 9vw, 8.25rem);
+  padding-bottom: clamp(4.25rem, 6vw, 5.25rem);
   border-top: 1px solid rgba(184,150,90,0.12);
   background:
     linear-gradient(180deg, rgba(13,27,46,0.26), rgba(8,19,33,0.06) 58%, rgba(13,27,46,0.16)),
     var(--navy);
 }
 .program-builder .section-head {
-  margin-bottom: clamp(3.5rem, 5vw, 4rem);
+  display: grid;
+  grid-template-columns: minmax(0, 0.94fr) minmax(20rem, 0.72fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: end;
+  margin-bottom: clamp(4.75rem, 6.5vw, 6rem);
+}
+.program-builder .section-head > div,
+.program-builder .section-head > p {
+  margin-inline: 0;
 }
 .program-builder .section-head > p {
-  max-width: 64rem;
+  max-width: 34rem;
   margin-top: clamp(1.8rem, 3vw, 2.4rem);
   font-size: clamp(1rem, 1.35vw, 1.12rem);
   line-height: 1.75;
 }
 .program-builder__layout {
   display: grid;
-  grid-template-columns: minmax(22rem, 0.95fr) minmax(0, 1.05fr);
-  gap: clamp(1.5rem, 4vw, 2.35rem);
+  grid-template-columns: 1fr;
+  gap: clamp(2.25rem, 4vw, 3.5rem);
   align-items: stretch;
-  margin-top: clamp(2.5rem, 4vw, 3.5rem);
+  margin-top: 0;
 }
 .program-selector {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.9rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.8rem, 1.4vw, 1rem);
   align-items: stretch;
 }
 .program-card {
   position: relative;
-  min-height: clamp(9.6rem, 11vw, 10.75rem);
-  padding: clamp(1.1rem, 1.6vw, 1.4rem);
+  min-height: clamp(8.35rem, 9vw, 9.8rem);
+  padding: clamp(1rem, 1.45vw, 1.25rem);
   display: grid;
   grid-template-rows: auto minmax(3rem, 1fr) auto;
   align-content: stretch;
@@ -1224,10 +1232,10 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   background: rgba(184,150,90,0.62);
 }
 .program-card strong {
-  max-width: 12rem;
+  max-width: none;
   color: var(--cream-2);
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(1.2rem, 1.65vw, 1.62rem);
+  font-size: clamp(1.12rem, 1.45vw, 1.46rem);
   font-weight: 500;
   line-height: 1.08;
 }
@@ -1240,9 +1248,9 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   text-transform: uppercase;
 }
 .program-detail {
-  min-height: 100%;
-  height: 100%;
-  padding: clamp(1.35rem, 3vw, 2rem);
+  min-height: auto;
+  height: auto;
+  padding: clamp(1.45rem, 3vw, 2.2rem);
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border-strong);
@@ -1264,14 +1272,14 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
 .program-detail__grid {
   margin: 1.6rem 0;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
 }
 .program-detail__grid > div {
-  min-height: 12rem;
-  padding: 1.35rem;
+  min-height: 10.5rem;
+  padding: 1.25rem;
   background: rgba(8,19,33,0.7);
 }
 .program-detail h4 {
@@ -1282,22 +1290,19 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
-.program-detail ul,
-.ownership-panel ul {
+.program-detail ul {
   margin: 0;
   padding: 0;
   display: grid;
   gap: 0.55rem;
   list-style: none;
 }
-.program-detail li,
-.ownership-panel li {
+.program-detail li {
   position: relative;
   padding-left: 1.05rem;
   color: var(--muted);
 }
-.program-detail li::before,
-.ownership-panel li::before {
+.program-detail li::before {
   content: "";
   position: absolute;
   left: 0;
@@ -1372,50 +1377,140 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   padding-inline: 0;
 }
 .ownership-section {
-  padding: clamp(4rem, 6vw, 5.5rem) 0;
+  margin: clamp(2.75rem, 5vw, 4.5rem) auto;
+  padding: clamp(0.9rem, 1.7vw, 1.15rem) 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   background:
-    radial-gradient(circle at 78% 18%, rgba(184,150,90,0.08), transparent 24rem),
-    rgba(255,255,255,0.018);
+    radial-gradient(circle at 78% 18%, rgba(184,150,90,0.07), transparent 24rem),
+    rgba(255,255,255,0.014);
 }
 .ownership-tool {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1px;
-  overflow: hidden;
-  border: 1px solid var(--border-strong);
-  background: var(--border);
-  box-shadow: var(--shadow);
+  gap: clamp(0.9rem, 2vw, 1.25rem);
 }
-.ownership-panel {
-  min-height: clamp(19rem, 25vw, 24rem);
-  padding: clamp(2rem, 4vw, 3.25rem);
+.ownership-card {
+  min-height: clamp(12.75rem, 22vh, 13.1rem);
+  perspective: 1200px;
+}
+.ownership-card__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  transform-style: preserve-3d;
+  transition: transform 0.54s cubic-bezier(0.2, 0.72, 0.22, 1);
+}
+.ownership-card.is-flipped .ownership-card__inner {
+  transform: rotateY(180deg);
+}
+.ownership-card__face {
+  position: absolute;
+  inset: 0;
+  padding: clamp(1rem, 1.9vw, 1.35rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgba(210,176,113,0.46);
   background:
-    linear-gradient(145deg, rgba(184,150,90,0.1), transparent 42%),
-    rgba(13,27,46,0.92);
+    linear-gradient(145deg, rgba(184,150,90,0.09), transparent 44%),
+    rgba(13,27,46,0.9);
+  box-shadow: 0 22px 58px rgba(0,0,0,0.18);
+  backface-visibility: hidden;
 }
-.ownership-panel--rental {
+.ownership-card--rental .ownership-card__face {
   background:
-    linear-gradient(145deg, rgba(250,246,238,0.045), transparent 48%),
+    linear-gradient(145deg, rgba(250,246,238,0.04), transparent 48%),
     rgba(8,19,33,0.9);
 }
-.ownership-panel h2 {
-  margin-bottom: clamp(1.35rem, 2.5vw, 2rem);
-  font-size: clamp(2.35rem, 4vw, 3.55rem);
+.ownership-card__face--back {
+  gap: 0.38rem;
+  transform: rotateY(180deg);
 }
-.ownership-panel ul {
-  gap: clamp(0.85rem, 1.6vw, 1.15rem);
+.ownership-card__ring {
+  position: absolute;
+  right: clamp(1rem, 2.5vw, 1.7rem);
+  top: clamp(1rem, 2.5vw, 1.7rem);
+  width: clamp(2.65rem, 5vw, 3.4rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(210,176,113,0.62);
+  border-radius: 50%;
+  opacity: 0.68;
+  pointer-events: none;
 }
-.ownership-panel li {
+.ownership-card h2,
+.ownership-card h3 {
+  max-width: 22rem;
+  margin-bottom: 0.65rem;
+  font-size: clamp(1.8rem, 3vw, 2.65rem);
+}
+.ownership-card h3 {
+  margin-bottom: 0.38rem;
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+}
+.ownership-card p {
   max-width: 31rem;
+  color: rgba(242,235,217,0.76);
+  font-size: clamp(0.86rem, 1vw, 0.96rem);
+  line-height: 1.55;
+}
+.ownership-card ul {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.38rem;
+  list-style: none;
+}
+.ownership-card li {
+  position: relative;
+  padding-left: 1rem;
   color: rgba(242,235,217,0.78);
-  font-size: clamp(0.96rem, 1.18vw, 1.06rem);
-  line-height: 1.65;
+  font-size: clamp(0.76rem, 0.9vw, 0.86rem);
+  line-height: 1.38;
+}
+.ownership-card li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.3rem;
+  height: 0.3rem;
+  border: 1px solid rgba(210,176,113,0.82);
+  transform: rotate(45deg);
+}
+.ownership-card strong {
+  color: var(--cream-2);
+  font-weight: 700;
+}
+.ownership-card__toggle {
+  width: fit-content;
+  margin-top: clamp(0.75rem, 1.6vw, 1rem);
+  padding: 0.45rem 0.64rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid rgba(210,176,113,0.42);
+  border-radius: 999px;
+  background: rgba(8,19,33,0.18);
+  color: var(--gold-2);
+  cursor: pointer;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+.ownership-card__face--back .ownership-card__toggle {
+  margin-top: 0.55rem;
+}
+.ownership-card__toggle:hover,
+.ownership-card__toggle:focus-visible {
+  border-color: rgba(250,246,238,0.72);
+  background: rgba(210,176,113,0.14);
+  outline: 0;
 }
 .program-panel {
   display: grid;
@@ -1669,6 +1764,7 @@ fieldset {
   .timeline { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
   .program-selector { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .program-detail__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 900px) {
   .menu-toggle { display: block; }
@@ -1730,15 +1826,19 @@ fieldset {
   .route-timeline { grid-template-columns: 1fr; }
   .program-builder {
     padding-top: clamp(5.75rem, 10vw, 6.75rem);
-    padding-bottom: clamp(3.4rem, 6vw, 4.25rem);
+    padding-bottom: clamp(4rem, 7vw, 5rem);
   }
-  .program-builder .section-head { margin-bottom: clamp(3rem, 7vw, 4rem); }
+  .program-builder .section-head {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: clamp(3.75rem, 8vw, 4.75rem);
+  }
   .program-builder .section-head > p { margin-top: clamp(1.35rem, 4vw, 1.9rem); }
-  .program-builder__layout { align-items: start; margin-top: clamp(2rem, 5vw, 2.75rem); }
+  .program-builder__layout { align-items: start; gap: clamp(2rem, 5vw, 2.75rem); margin-top: 0; }
   .program-detail { height: auto; }
   .program-flow { margin-top: 0; }
   .ownership-tool { grid-template-columns: 1fr; }
-  .ownership-panel { min-height: auto; }
+  .ownership-card { min-height: 14.5rem; }
   .cleaning-quality__inner { grid-template-areas: "copy" "fabric" "detail"; }
   .quality-detail { max-width: none; }
   .quality-fabric { min-height: clamp(24rem, 62vw, 31rem); }
@@ -1773,7 +1873,6 @@ fieldset {
   .hero-visual figcaption { left: 1rem; right: 1rem; bottom: 1rem; width: auto; }
   .program-selector,
   .program-detail__grid,
-  .ownership-toggle,
   .values-grid,
   .route-grid,
   .timeline,
@@ -1786,14 +1885,15 @@ fieldset {
   .timeline-item { min-height: auto; }
   .program-builder {
     padding-top: 5.25rem;
-    padding-bottom: 3.25rem;
+    padding-bottom: 4rem;
   }
-  .program-builder .section-head { margin-bottom: 2.5rem; }
+  .program-builder .section-head { margin-bottom: 3rem; }
   .program-builder .section-head > p { margin-top: 1.25rem; }
-  .program-builder__layout { margin-top: 1.5rem; }
+  .program-builder__layout { gap: 2rem; margin-top: 0; }
   .program-card { min-height: 9.25rem; }
-  .ownership-section { padding-block: 3.25rem; }
-  .ownership-panel { padding: 1.45rem; }
+  .ownership-section { margin-block: 2.5rem; padding-block: 2rem; }
+  .ownership-card { min-height: 16.25rem; }
+  .ownership-card__face { padding: 1.2rem; }
   .then-now-story { padding-block: 1.75rem; }
   .story-carousel { width: 100%; }
   .story-carousel::before { width: min(86vw, 23rem); top: 39%; }
