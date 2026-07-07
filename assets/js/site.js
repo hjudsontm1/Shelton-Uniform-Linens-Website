@@ -70,61 +70,44 @@
     const nextButton = storyCarousel.querySelector("[data-story-next]");
     const counter = storyCarousel.querySelector("[data-story-counter]");
     const caption = storyCarousel.querySelector("[data-story-current-caption]");
-    const infoPanel = storyCarousel.querySelector("[data-story-info-panel]");
-    const infoClose = storyCarousel.querySelector("[data-story-close]");
-    const storyPrompt = storyCarousel.querySelector("[data-story-prompt]");
     let activeStoryIndex = Math.max(0, slides.findIndex((slide) => slide.classList.contains("is-active")));
-    let lastStoryFocus = null;
+    let isStoryFlipped = false;
 
     const storyNumber = (value) => String(value).padStart(2, "0");
     const activeStorySlide = () => slides[activeStoryIndex];
-    const syncStoryPanel = () => {
-      const slide = activeStorySlide();
-      if (!slide || !infoPanel) return;
-      setText(infoPanel, "[data-story-info-era]", slide.dataset.storyEra || "");
-      setText(infoPanel, "[data-story-info-title]", slide.dataset.storyTitle || "");
-      setText(infoPanel, "[data-story-info-copy]", slide.dataset.storyCopy || "");
+    const visibleQueueCount = () => (window.matchMedia("(max-width: 980px)").matches ? 2 : 3);
+    const storyLabel = (slide, action = "Flip story card for") => {
+      const captionText = slide.dataset.storyCaption || slide.dataset.storyTitle || "story photo";
+      return `${action} ${captionText}`;
     };
-    const setStoryExpanded = (isOpen) => {
+    const setStoryFlipped = (isFlipped) => {
+      isStoryFlipped = isFlipped;
+      storyCarousel.classList.toggle("is-flipped", isStoryFlipped);
       slides.forEach((slide, index) => {
-        slide.setAttribute("aria-expanded", String(isOpen && index === activeStoryIndex));
+        const isActive = index === activeStoryIndex;
+        slide.classList.toggle("is-flipped", isActive && isStoryFlipped);
+        slide.setAttribute("aria-pressed", String(isActive && isStoryFlipped));
+        if (isActive) {
+          slide.setAttribute("aria-label", storyLabel(slide, isStoryFlipped ? "Flip back to photo for" : "Flip story card for"));
+        }
       });
-      if (storyPrompt) storyPrompt.textContent = isOpen ? "CLICK IMAGE TO CLOSE" : "CLICK OR TAP IMAGE FOR STORY";
-    };
-    const closeStoryInfo = (restoreFocus = false) => {
-      if (!infoPanel || infoPanel.hidden) return;
-      infoPanel.hidden = true;
-      storyCarousel.classList.remove("is-info-open");
-      setStoryExpanded(false);
-      if (restoreFocus && lastStoryFocus instanceof HTMLElement) lastStoryFocus.focus({ preventScroll: true });
-    };
-    const openStoryInfo = ({ focusClose = false } = {}) => {
-      if (!infoPanel) return;
-      lastStoryFocus = document.activeElement;
-      syncStoryPanel();
-      infoPanel.hidden = false;
-      storyCarousel.classList.add("is-info-open");
-      setStoryExpanded(true);
-      if (focusClose && infoClose) infoClose.focus({ preventScroll: true });
-    };
-    const toggleStoryInfo = () => {
-      if (!infoPanel) return;
-      if (infoPanel.hidden) {
-        openStoryInfo();
-      } else {
-        closeStoryInfo(false);
-      }
     };
     const renderStorySlide = (index) => {
       if (!slides.length) return;
-      const nextIndex = (index + slides.length) % slides.length;
-      if (nextIndex !== activeStoryIndex) closeStoryInfo(false);
-      activeStoryIndex = nextIndex;
+      activeStoryIndex = (index + slides.length) % slides.length;
+      const maxQueue = visibleQueueCount();
       slides.forEach((slide, slideIndex) => {
-        const isActive = slideIndex === activeStoryIndex;
+        const offset = (slideIndex - activeStoryIndex + slides.length) % slides.length;
+        const isActive = offset === 0;
+        const isQueued = offset > 0 && offset <= maxQueue;
         slide.classList.toggle("is-active", isActive);
-        slide.setAttribute("aria-hidden", String(!isActive));
-        slide.tabIndex = isActive ? 0 : -1;
+        slide.classList.toggle("is-queued", isQueued);
+        slide.classList.toggle("is-queue-1", offset === 1 && isQueued);
+        slide.classList.toggle("is-queue-2", offset === 2 && isQueued);
+        slide.classList.toggle("is-queue-3", offset === 3 && isQueued);
+        slide.setAttribute("aria-hidden", String(!isActive && !isQueued));
+        slide.tabIndex = isActive || isQueued ? 0 : -1;
+        if (!isActive) slide.setAttribute("aria-label", storyLabel(slide, "Show"));
       });
       dots.forEach((dot, dotIndex) => {
         const isActive = dotIndex === activeStoryIndex;
@@ -133,23 +116,26 @@
       });
       if (counter) counter.textContent = `${storyNumber(activeStoryIndex + 1)} / ${storyNumber(slides.length)}`;
       if (caption) caption.textContent = activeStorySlide()?.dataset.storyCaption || "";
-      if (infoPanel && !infoPanel.hidden) syncStoryPanel();
-      setStoryExpanded(infoPanel ? !infoPanel.hidden : false);
+      setStoryFlipped(false);
     };
 
     slides.forEach((slide, index) => {
       slide.addEventListener("click", () => {
-        const isActiveClick = index === activeStoryIndex;
-        renderStorySlide(index);
-        if (isActiveClick) {
-          toggleStoryInfo();
+        if (index === activeStoryIndex) {
+          setStoryFlipped(!isStoryFlipped);
         } else {
-          openStoryInfo();
+          renderStorySlide(index);
         }
       });
       slide.addEventListener("keydown", (event) => {
-        if (event.key === "ArrowRight") renderStorySlide(activeStoryIndex + 1);
-        if (event.key === "ArrowLeft") renderStorySlide(activeStoryIndex - 1);
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          renderStorySlide(activeStoryIndex + 1);
+        }
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          renderStorySlide(activeStoryIndex - 1);
+        }
       });
     });
     dots.forEach((dot, index) => {
@@ -157,14 +143,10 @@
     });
     if (previousButton) previousButton.addEventListener("click", () => renderStorySlide(activeStoryIndex - 1));
     if (nextButton) nextButton.addEventListener("click", () => renderStorySlide(activeStoryIndex + 1));
-    if (infoClose) infoClose.addEventListener("click", () => closeStoryInfo(true));
-    document.addEventListener("click", (event) => {
-      if (!infoPanel || infoPanel.hidden || storyCarousel.contains(event.target)) return;
-      closeStoryInfo();
-    });
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") closeStoryInfo(true);
+      if (event.key === "Escape") setStoryFlipped(false);
     });
+    window.addEventListener("resize", () => renderStorySlide(activeStoryIndex));
     renderStorySlide(activeStoryIndex);
   }
 
@@ -415,36 +397,6 @@
 
   programButtons.forEach((button) => {
     button.addEventListener("click", () => renderProgram(button.dataset.programKey, true));
-  });
-
-  const ownershipProfiles = {
-    rental: {
-      title: "Rental Program",
-      copy: "Shelton supplies and manages inventory for accounts that want a more complete program. This can help reduce upfront purchasing, simplify replacements, and keep recurring service more predictable.",
-      points: ["Useful for recurring linen, towel, robe, and wellness programs.", "Can support hotels, STRs, spas, towel-heavy accounts, and gyms.", "Helps formalize par levels and replacement planning over time."]
-    },
-    cog: {
-      title: "Customer-Owned Goods",
-      copy: "If you already own your linens, towels, uniforms, or event goods, Shelton can clean, finish, package, and route them back according to your account's needs.",
-      points: ["Applies to hotels, STRs, spas, towel accounts, event linens, uniforms, and other commercial laundry accounts.", "Keeps customer inventory separated and handled by account expectations.", "Works well when you have established goods but need better finishing, packaging, and route support."]
-    }
-  };
-  const ownershipButtons = document.querySelectorAll("[data-ownership-key]");
-  const ownershipPanel = document.querySelector("#ownership-panel");
-  const renderOwnership = (key) => {
-    const profile = ownershipProfiles[key] || ownershipProfiles.cog;
-    if (!ownershipPanel) return;
-    ownershipButtons.forEach((button) => {
-      const isActive = button.dataset.ownershipKey === key;
-      button.classList.toggle("is-active", isActive);
-      button.setAttribute("aria-selected", String(isActive));
-    });
-    setText(ownershipPanel, "[data-ownership-title]", profile.title);
-    setText(ownershipPanel, "[data-ownership-copy]", profile.copy);
-    setItems(ownershipPanel, "[data-ownership-list]", profile.points);
-  };
-  ownershipButtons.forEach((button) => {
-    button.addEventListener("click", () => renderOwnership(button.dataset.ownershipKey));
   });
 
   const params = new URLSearchParams(window.location.search);
