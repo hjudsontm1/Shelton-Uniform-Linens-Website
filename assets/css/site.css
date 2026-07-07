@@ -328,7 +328,8 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   display: flex;
   flex-wrap: wrap;
   gap: 1rem 1.35rem;
-  margin-top: clamp(1.8rem, 4vh, 2.65rem);
+  margin-top: clamp(3rem, 7vh, 4rem);
+  margin-bottom: clamp(1.5rem, 3.5vh, 2.75rem);
   align-items: center;
 }
 .btn-primary,
@@ -1101,19 +1102,22 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
 }
 .check-list.large { font-size: 1.02rem; gap: 1rem; }
 .program-builder {
+  padding-top: clamp(6.5rem, 9vw, 8rem);
+  padding-bottom: clamp(6.5rem, 9vw, 8rem);
   border-top: 1px solid rgba(184,150,90,0.12);
   background:
     linear-gradient(180deg, rgba(13,27,46,0.26), rgba(8,19,33,0.06) 58%, rgba(13,27,46,0.16)),
     var(--navy);
 }
 .program-builder .section-head {
-  margin-bottom: clamp(4rem, 7vw, 5.75rem);
+  margin-bottom: clamp(3.5rem, 5vw, 4rem);
 }
 .program-builder__layout {
   display: grid;
   grid-template-columns: minmax(22rem, 0.95fr) minmax(0, 1.05fr);
   gap: clamp(1.5rem, 4vw, 2.35rem);
   align-items: stretch;
+  margin-top: clamp(2.5rem, 4vw, 3.5rem);
 }
 .program-selector {
   display: grid;
@@ -1673,7 +1677,12 @@ fieldset {
   .service-detail-grid,
   .gallery-row,
   .route-timeline { grid-template-columns: 1fr; }
-  .program-builder__layout { align-items: start; }
+  .program-builder {
+    padding-top: clamp(5.75rem, 10vw, 6.75rem);
+    padding-bottom: clamp(5.75rem, 10vw, 6.75rem);
+  }
+  .program-builder .section-head { margin-bottom: clamp(3rem, 7vw, 4rem); }
+  .program-builder__layout { align-items: start; margin-top: clamp(2rem, 5vw, 2.75rem); }
   .program-detail { height: auto; }
   .program-flow { margin-top: 0; }
   .cleaning-quality__inner { grid-template-areas: "copy" "fabric" "detail"; }
@@ -1698,6 +1707,7 @@ fieldset {
   .hero-copy { padding: 4rem 1.25rem; }
   .hero-copy h1 { font-size: clamp(3.45rem, 14vw, 4.7rem); }
   .hero-copy p:not(.section-eyebrow) { font-size: 0.98rem; }
+  .button-row { margin-top: 2.25rem; margin-bottom: 1.5rem; }
   .button-row,
   .cta-band { grid-template-columns: 1fr; }
   .button-row a,
@@ -1720,6 +1730,12 @@ fieldset {
   .value-card,
   .route-card,
   .timeline-item { min-height: auto; }
+  .program-builder {
+    padding-top: 5.25rem;
+    padding-bottom: 5.25rem;
+  }
+  .program-builder .section-head { margin-bottom: 2.5rem; }
+  .program-builder__layout { margin-top: 1.5rem; }
   .program-card { min-height: 9.25rem; }
   .then-now-story { padding-block: 3.25rem; }
   .story-carousel { width: 100%; }
