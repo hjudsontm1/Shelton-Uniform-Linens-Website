@@ -75,7 +75,11 @@
 
     const storyNumber = (value) => String(value).padStart(2, "0");
     const activeStorySlide = () => slides[activeStoryIndex];
-    const visibleQueueCount = () => (window.matchMedia("(max-width: 980px)").matches ? 2 : 3);
+    const visibleQueueCount = () => {
+      if (window.matchMedia("(max-width: 620px)").matches) return 1;
+      if (window.matchMedia("(max-width: 980px)").matches) return 2;
+      return 4;
+    };
     const storyLabel = (slide, action = "Flip story card for") => {
       const captionText = slide.dataset.storyCaption || slide.dataset.storyTitle || "story photo";
       return `${action} ${captionText}`;
@@ -95,16 +99,19 @@
     const renderStorySlide = (index) => {
       if (!slides.length) return;
       activeStoryIndex = (index + slides.length) % slides.length;
-      const maxQueue = visibleQueueCount();
+      const maxQueue = Math.min(visibleQueueCount(), Math.floor((slides.length - 1) / 2));
       slides.forEach((slide, slideIndex) => {
-        const offset = (slideIndex - activeStoryIndex + slides.length) % slides.length;
-        const isActive = offset === 0;
-        const isQueued = offset > 0 && offset <= maxQueue;
+        const rawOffset = (slideIndex - activeStoryIndex + slides.length) % slides.length;
+        const signedOffset = rawOffset > slides.length / 2 ? rawOffset - slides.length : rawOffset;
+        const distance = Math.abs(signedOffset);
+        const isActive = signedOffset === 0;
+        const isQueued = distance > 0 && distance <= maxQueue;
         slide.classList.toggle("is-active", isActive);
         slide.classList.toggle("is-queued", isQueued);
-        slide.classList.toggle("is-queue-1", offset === 1 && isQueued);
-        slide.classList.toggle("is-queue-2", offset === 2 && isQueued);
-        slide.classList.toggle("is-queue-3", offset === 3 && isQueued);
+        for (let queueIndex = 1; queueIndex <= 4; queueIndex += 1) {
+          slide.classList.toggle(`is-prev-${queueIndex}`, signedOffset === -queueIndex && isQueued);
+          slide.classList.toggle(`is-next-${queueIndex}`, signedOffset === queueIndex && isQueued);
+        }
         slide.setAttribute("aria-hidden", String(!isActive && !isQueued));
         slide.tabIndex = isActive || isQueued ? 0 : -1;
         if (!isActive) slide.setAttribute("aria-label", storyLabel(slide, "Show"));
