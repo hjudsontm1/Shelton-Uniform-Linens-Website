@@ -1,8 +1,8 @@
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
 :root {
-  --navy: #081321;
-  --navy-2: #0d1b2e;
+  --navy: #0d1b2e;
+  --navy-2: #0b1727;
   --navy-3: #14253b;
   --cream: #f2ebd9;
   --cream-2: #faf6ee;
@@ -659,9 +659,9 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   width: min(100%, clamp(21rem, 38vw, 30.75rem));
   margin: clamp(1.05rem, 2vw, 1.35rem) auto 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: clamp(1rem, 2.4vw, 1.6rem);
-  align-items: center;
+  gap: 0.72rem;
+  justify-items: center;
+  text-align: center;
   color: var(--cream-2);
 }
 .story-carousel__caption {
@@ -674,6 +674,7 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   font-size: 0.64rem;
   font-weight: 700;
   letter-spacing: 0.18em;
+  opacity: 0.38;
 }
 .story-carousel__footer p {
   color: rgba(250,246,238,0.82);
@@ -707,22 +708,22 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   gap: 0.45rem;
 }
 .story-carousel__controls {
-  justify-self: end;
-  padding: 0.2rem;
-  border: 1px solid rgba(210,176,113,0.16);
+  justify-self: center;
+  padding: 0.16rem;
+  border: 1px solid rgba(210,176,113,0.14);
   border-radius: 999px;
-  background: rgba(8,19,33,0.18);
+  background: rgba(8,19,33,0.12);
 }
 .story-carousel__controls button {
-  width: 2.05rem;
-  height: 2.05rem;
+  width: 1.86rem;
+  height: 1.86rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(210,176,113,0.38);
+  border: 1px solid rgba(210,176,113,0.32);
   border-radius: 50%;
-  background: rgba(8,19,33,0.28);
-  font-size: 0.72rem;
+  background: rgba(8,19,33,0.18);
+  font-size: 0.66rem;
   color: var(--cream-2);
   cursor: pointer;
   transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
@@ -734,14 +735,14 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   outline: 0;
 }
 .story-carousel__dots button {
-  width: 0.92rem;
-  height: 2.05rem;
+  width: 0.78rem;
+  height: 1.86rem;
   border: 0;
   background: transparent;
 }
 .story-carousel__dots span {
-  width: 0.3rem;
-  height: 0.3rem;
+  width: 0.28rem;
+  height: 0.28rem;
   display: block;
   border: 1px solid rgba(250,246,238,0.72);
   background: transparent;
@@ -1102,10 +1103,12 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
 .program-builder {
   border-top: 1px solid rgba(184,150,90,0.12);
   background:
-    linear-gradient(180deg, rgba(8,19,33,0.12), rgba(255,255,255,0.018)),
+    linear-gradient(180deg, rgba(255,255,255,0.018), rgba(8,19,33,0.1)),
     var(--navy);
 }
-.program-builder .section-head { margin-bottom: clamp(2.25rem, 4vw, 2.8rem); }
+.program-builder .section-head {
+  margin-bottom: clamp(3.25rem, 5.8vw, 4.5rem);
+}
 .program-builder__layout {
   display: grid;
   grid-template-columns: minmax(22rem, 0.95fr) minmax(0, 1.05fr);
@@ -1726,7 +1729,7 @@ fieldset {
   .story-slide { width: min(100%, 77vw); }
   .story-slide__mat { padding: 0.55rem; }
   .story-slide__stamp { top: 0.95rem; }
-  .story-carousel__footer { width: min(100%, 77vw); grid-template-columns: 1fr; align-items: start; }
+  .story-carousel__footer { width: min(100%, 77vw); justify-items: start; text-align: left; }
   .story-carousel__hint { bottom: 1.05rem; max-width: 76%; font-size: 0.54rem !important; }
   .story-carousel__controls { justify-self: start; width: auto; justify-content: flex-start; }
   .story-info-panel { width: 100%; margin-top: 1rem; }
