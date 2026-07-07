@@ -1,8 +1,8 @@
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
 :root {
-  --navy: #0d1b2e;
-  --navy-2: #0b1727;
+  --navy: #081321;
+  --navy-2: #0d1b2e;
   --navy-3: #14253b;
   --cream: #f2ebd9;
   --cream-2: #faf6ee;
@@ -509,10 +509,10 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   margin-inline: auto;
 }
 .then-now-story {
-  padding: clamp(3rem, 5.8vw, 5.25rem) 0 clamp(3.6rem, 6.5vw, 5.75rem);
+  padding: clamp(3.25rem, 5.8vw, 5.25rem) 0 clamp(3.6rem, 6.5vw, 5.75rem);
   background:
     radial-gradient(circle at 50% 44%, rgba(184,150,90,0.1), transparent 30rem),
-    linear-gradient(180deg, rgba(8,19,33,0), rgba(8,19,33,0.34) 48%, rgba(8,19,33,0));
+    linear-gradient(180deg, rgba(8,19,33,0.06), rgba(13,27,46,0.4) 48%, rgba(8,19,33,0.08));
 }
 .story-carousel {
   position: relative;
@@ -659,9 +659,9 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   width: min(100%, clamp(21rem, 38vw, 30.75rem));
   margin: clamp(1.05rem, 2vw, 1.35rem) auto 0;
   display: grid;
-  gap: 0.72rem;
-  justify-items: center;
-  text-align: center;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1rem, 2.4vw, 1.6rem);
+  align-items: center;
   color: var(--cream-2);
 }
 .story-carousel__caption {
@@ -685,7 +685,7 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   position: absolute;
   z-index: 5;
   left: 50%;
-  bottom: clamp(1.25rem, 3vw, 1.9rem);
+  bottom: clamp(1.7rem, 3.6vw, 2.35rem);
   max-width: min(74%, 18rem);
   padding: 0.48rem 0.72rem;
   border: 1px solid rgba(250,246,238,0.28);
@@ -708,7 +708,7 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   gap: 0.45rem;
 }
 .story-carousel__controls {
-  justify-self: center;
+  justify-self: end;
   padding: 0.16rem;
   border: 1px solid rgba(210,176,113,0.14);
   border-radius: 999px;
@@ -1103,11 +1103,11 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
 .program-builder {
   border-top: 1px solid rgba(184,150,90,0.12);
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.018), rgba(8,19,33,0.1)),
+    linear-gradient(180deg, rgba(13,27,46,0.26), rgba(8,19,33,0.06) 58%, rgba(13,27,46,0.16)),
     var(--navy);
 }
 .program-builder .section-head {
-  margin-bottom: clamp(3.25rem, 5.8vw, 4.5rem);
+  margin-bottom: clamp(4rem, 7vw, 5.75rem);
 }
 .program-builder__layout {
   display: grid;
@@ -1729,8 +1729,8 @@ fieldset {
   .story-slide { width: min(100%, 77vw); }
   .story-slide__mat { padding: 0.55rem; }
   .story-slide__stamp { top: 0.95rem; }
-  .story-carousel__footer { width: min(100%, 77vw); justify-items: start; text-align: left; }
-  .story-carousel__hint { bottom: 1.05rem; max-width: 76%; font-size: 0.54rem !important; }
+  .story-carousel__footer { width: min(100%, 77vw); grid-template-columns: 1fr; align-items: start; }
+  .story-carousel__hint { bottom: 1.35rem; max-width: 76%; font-size: 0.54rem !important; }
   .story-carousel__controls { justify-self: start; width: auto; justify-content: flex-start; }
   .story-info-panel { width: 100%; margin-top: 1rem; }
   .cleaning-quality { padding: 1.25rem; }
