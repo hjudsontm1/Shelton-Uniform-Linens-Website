@@ -10,18 +10,18 @@
 - Quote endpoint audit: live `quote.html` posts to Formspree; the preview will not call or modify it
 
 ## Current Phase
-- Phase number: 2
-- Phase name: Landing, Operation, and Page Flow
-- Status: Complete
+- Phase number: 3
+- Phase name: All Adaptive Goods Branches
+- Status: In progress
 
 ## Last Known Good Checkpoint
-- Commit hash: `fce85988ab03eab1b66c04385158fcd7853859e4`
-- Commit message: `checkpoint(pricing): complete and select landing concepts`
-- Date/time: 2026-07-11 00:11:00 CDT
+- Commit hash: `ae8b35a2588ecea96c06f29f76eaa9f4d1a378c2`
+- Commit message: `checkpoint(pricing): complete landing and operation journey`
+- Date/time: 2026-07-11 00:53:00 CDT
 - Build command: Static site; no build step
 - Test command: `node --check assets/js/pricing-journey-config.js && node --check assets/js/pricing-journey.js && git diff --check`
 - Preview command: `python3 -m http.server 8045 --bind 127.0.0.1`
-- Screenshot artifact paths: `docs/pricing-journey-artifacts/checkpoint-1/pricing-cp1-label-1440x900.png`, `docs/pricing-journey-artifacts/checkpoint-1/pricing-cp1-label-390x844.png`, `docs/pricing-journey-artifacts/checkpoint-1/pricing-cp1-operation-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-1/pricing-cp1-operation-390x844.png`
+- Screenshot artifact paths: `docs/pricing-journey-artifacts/checkpoint-2/pricing-cp2-operation-selected-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-2/pricing-cp2-goods-active-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-2/pricing-cp2-foundation-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-2/pricing-cp2-goods-active-390x844.png`
 
 ## Completed Work
 - Confirmed the real repository and current dirty `main` state.
@@ -45,8 +45,8 @@
 - Corrected chapter focus/scroll offsets so fixed navigation never covers active headings.
 
 ## Current Working State
-- Files currently being changed: `pricing-journey-preview.html`, `assets/css/pricing-journey.css`, `assets/js/pricing-journey-config.js`, `assets/js/pricing-journey.js`, Pricing journey rubric/progress, and Checkpoint 2 artifacts
-- Uncommitted work: complete Checkpoint 2 implementation pending checkpoint commit
+- Files currently being changed: none at the start of Checkpoint 3
+- Uncommitted work: none
 - Whether the page builds: Yes; static pages load on localhost
 - Whether smoke tests pass: Yes; syntax, noindex, Begin timing, all-operation branching, chapter condensation, Edit, dependency cleanup, state restoration, Start Over, keyboard navigation, reduced motion, targeted viewport, overflow, and console checks pass
 
