@@ -10,18 +10,18 @@
 - Quote endpoint audit: live `quote.html` posts to Formspree; the preview will not call or modify it
 
 ## Current Phase
-- Phase number: 1
-- Phase name: Three Landing Concepts
-- Status: Complete
+- Phase number: 2
+- Phase name: Landing, Operation, and Page Flow
+- Status: In progress
 
 ## Last Known Good Checkpoint
-- Commit hash: `74c7444b6937942bb95c920b3bfdf89252b60583`
-- Commit message: `checkpoint(pricing): establish adaptive journey architecture`
-- Date/time: 2026-07-10 23:23:09 CDT
+- Commit hash: `fce85988ab03eab1b66c04385158fcd7853859e4`
+- Commit message: `checkpoint(pricing): complete and select landing concepts`
+- Date/time: 2026-07-11 00:11:00 CDT
 - Build command: Static site; no build step
-- Test command: `node --check assets/js/pricing-builder-data.js && node --check assets/js/pricing-builder.js && node --check assets/js/pricing-flow-prototype.js`
+- Test command: `node --check assets/js/pricing-journey-config.js && node --check assets/js/pricing-journey.js && git diff --check`
 - Preview command: `python3 -m http.server 8045 --bind 127.0.0.1`
-- Screenshot artifact paths: `docs/pricing-journey-artifacts/checkpoint-0/live-pricing-baseline-1440x900.png`, `docs/pricing-journey-artifacts/checkpoint-0/private-preview-baseline-1440x900.png`
+- Screenshot artifact paths: `docs/pricing-journey-artifacts/checkpoint-1/pricing-cp1-label-1440x900.png`, `docs/pricing-journey-artifacts/checkpoint-1/pricing-cp1-label-390x844.png`, `docs/pricing-journey-artifacts/checkpoint-1/pricing-cp1-operation-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-1/pricing-cp1-operation-390x844.png`
 
 ## Completed Work
 - Confirmed the real repository and current dirty `main` state.
@@ -39,8 +39,8 @@
 - Captured the complete Checkpoint 1 viewport matrix and documented the concept comparison and rationale.
 
 ## Current Working State
-- Files currently being changed: `pricing-journey-preview.html`, `assets/css/pricing-journey.css`, `assets/js/pricing-journey.js`, `assets/js/pricing-journey-config.js`, and Pricing journey docs/artifacts
-- Uncommitted work: complete Checkpoint 1 implementation pending checkpoint commit
+- Files currently being changed: none at the start of Checkpoint 2
+- Uncommitted work: none
 - Whether the page builds: Yes; static pages load on localhost
 - Whether smoke tests pass: Yes; syntax, noindex, concept-route, Begin transition, keyboard selection, reduced motion, viewport, overflow, live-page, and console checks pass
 
@@ -49,11 +49,11 @@
 - No Checkpoint 1 visual or functional defects remain. The orb's slight consumer-product ambiguity and portal's quieter Begin action are documented reasons they were not selected.
 
 ## Next Exact Actions
-1. Commit Checkpoint 1 as `checkpoint(pricing): complete and select landing concepts`.
-2. Expand the state model to persistent chapter state and completed summaries.
-3. Implement Operation completion, inline Edit, chapter condensation, and the program thread.
-4. Add the Goods chapter shell driven by the selected operation without yet completing all branch illustrations.
-5. Verify the complete Landing-to-Operation flow at 1366x768 and 390x844.
+1. Expand the state model to persistent chapter state and completed summaries.
+2. Implement Operation completion, inline Edit, chapter condensation, and the program thread.
+3. Add the Goods chapter shell driven by the selected operation without yet completing all branch illustrations.
+4. Verify the complete Landing-to-Operation flow at 1366x768 and 390x844.
+5. Commit Checkpoint 2 only after the flow is independently runnable.
 
 ## Business-Data Blockers
 - Real Shelton pricing rates, volume bands, finishing factors, route-zone factors, and inventory-model factors are not supplied. Development-only deterministic fixtures are permitted and will remain visibly labeled.
