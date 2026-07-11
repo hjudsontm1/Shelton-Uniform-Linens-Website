@@ -54,8 +54,9 @@ The retained recording completes an Event / Venue / Convention Center journey wi
 5. `197886c` - `checkpoint(pricing): complete adaptive program inputs`
 6. `2a3a116` - `checkpoint(pricing): complete review result and quote handoff`
 7. `1bf6efb` - `checkpoint(pricing): complete responsive accessibility and performance QA`
+8. `3c0d02d` - `checkpoint(pricing): finalize adaptive journey preview`
 
-Each checkpoint also has a separate progress handoff commit. The final Checkpoint 7 hash is recorded in `pricing-journey-progress.md` after the final commit.
+Each completed checkpoint is committed and has a separate progress handoff. No checkpoint was merged or pushed.
 
 ## Final Verification
 

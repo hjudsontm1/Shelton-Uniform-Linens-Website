@@ -12,16 +12,16 @@
 ## Current Phase
 - Phase number: 7
 - Phase name: Final Visual and Functional Review
-- Status: Complete; checkpoint commit pending
+- Status: Complete
 
 ## Last Known Good Checkpoint
-- Commit hash: `1bf6efb2a09a1ea26d63ab98db90d5e93e7cca0f`
-- Commit message: `checkpoint(pricing): complete responsive accessibility and performance QA`
-- Date/time: 2026-07-11 05:02:36 CDT
+- Commit hash: `3c0d02d05068f94f6db8b67125261cf5f038f309`
+- Commit message: `checkpoint(pricing): finalize adaptive journey preview`
+- Date/time: 2026-07-11 05:41:15 CDT
 - Build command: Static site; no build step
-- Test command: `node tests/pricing-journey-config.test.cjs && node tests/pricing-rules-dev.test.cjs`; browser matrix: `NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-cp6.e2e.cjs`
+- Test command: `node tests/pricing-journey-config.test.cjs && node tests/pricing-rules-dev.test.cjs`; browser acceptance: `NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-cp6.e2e.cjs && NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-final.e2e.cjs`
 - Preview command: `python3 -m http.server 8045 --bind 127.0.0.1`
-- Screenshot artifact paths: `docs/pricing-journey-artifacts/checkpoint-6/cp6-result-1440x900.png`, `cp6-result-1366x768.png`, `cp6-result-1280x800.png`, `cp6-result-tablet-768x1024.png`, `cp6-result-mobile-390x844.png`, `cp6-result-mobile-430x932.png`, `cp6-review-touch-targets-390x844.png`, `cp6-zoom-200-percent-equivalent.png`
+- Screenshot artifact paths: `docs/pricing-journey-artifacts/checkpoint-7/cp7-01-winning-landing-1366x768.png` through `cp7-07-payload-ready-1366x768.png`; recording: `cp7-complete-interaction.webm`
 
 ## Completed Work
 - Confirmed the real repository and current dirty `main` state.
@@ -75,8 +75,8 @@
 - Added the final review/evidence map, final acceptance rubric, checkpoint list, and production-blocker report.
 
 ## Current Working State
-- Files currently being changed: `tests/pricing-journey-final.e2e.cjs`, Checkpoint 7 artifacts, final review, progress, and rubric documents
-- Uncommitted work: coherent Checkpoint 7 final acceptance unit; ready for final static/browser/diff verification and checkpoint commit
+- Files currently being changed: this final progress status only
+- Uncommitted work: final progress status pending its documentation commit
 - Whether the page builds: Yes; static pages load on localhost
 - Whether smoke tests pass: Yes; syntax, configuration, rules, Checkpoint 4 regression, and the complete Checkpoint 6 browser suite pass
 
@@ -88,11 +88,11 @@
 - Public release is intentionally blocked by missing approved Shelton pricing rules, route-zone data, an authorized submission endpoint, and final public estimate/legal approval. Severity: release blocker, not private-preview defect. Rubric: Production claims and business data.
 
 ## Next Exact Actions
-1. Run all static configuration, syntax, deterministic-rules, Checkpoint 4 regression, Checkpoint 6 matrix, and final recording tests once.
-2. Reconfirm live `pricing.html` byte identity, no public preview links, noindex metadata, and a clean diff check.
-3. Commit Checkpoint 7 as `checkpoint(pricing): finalize adaptive journey preview`.
-4. Record the final checkpoint hash and clean working-tree state in this progress file.
-5. Leave the isolated branch unmerged and unpushed for manual review.
+1. Open the private preview and review the three concept query states and selected journey.
+2. Keep the branch unmerged and unpushed until the user manually chooses the next Git action.
+3. When approved business inputs arrive, replace `assets/js/pricing-rules.dev.js` through the documented calculation interface.
+4. Integrate an authorized endpoint only after submission, privacy, loading, and failure requirements are confirmed.
+5. Remove development warnings/noindex only as part of a separately approved public-release task.
 
 ## Business-Data Blockers
 - Real Shelton pricing rates, volume bands, finishing factors, route-zone factors, and inventory-model factors are not supplied. Development-only deterministic fixtures are permitted and will remain visibly labeled.
@@ -103,4 +103,4 @@
 - Exact first command: `git status --short --branch`
 - Exact first file to inspect: `docs/pricing-journey-progress.md`
 - Exact next test to run: `node tests/pricing-journey-config.test.cjs && node tests/pricing-rules-dev.test.cjs && NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-final.e2e.cjs`
-- Exact next visual state to render: `docs/pricing-journey-artifacts/checkpoint-7/cp7-06-recommended-program-1366x768.png`; no further rerender is needed unless a final test changes UI code
+- Exact next visual state to render: none; the private prototype is complete. Begin any future public-release work from the development rules and endpoint blockers above.
