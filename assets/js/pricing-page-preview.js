@@ -90,6 +90,43 @@
     model: 0
   };
 
+  const doc = document.documentElement;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const updateScrollProgress = () => {
+    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const progress = Math.min(1, Math.max(0, window.scrollY / max));
+    doc.style.setProperty("--pricing-scroll-progress", progress.toFixed(4));
+  };
+
+  const updatePointerWash = (event) => {
+    if (reducedMotion) return;
+    const x = `${Math.round((event.clientX / window.innerWidth) * 100)}%`;
+    const y = `${Math.round((event.clientY / window.innerHeight) * 100)}%`;
+    doc.style.setProperty("--pricing-pointer-x", x);
+    doc.style.setProperty("--pricing-pointer-y", y);
+  };
+
+  const observeSections = () => {
+    const sections = Array.from(root.querySelectorAll("section"));
+    if (!("IntersectionObserver" in window)) {
+      sections.forEach((section) => section.classList.add("is-in-view"));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        entry.target.classList.toggle("is-in-view", entry.isIntersecting);
+      });
+    }, { rootMargin: "-18% 0px -36%", threshold: 0.08 });
+    sections.forEach((section) => observer.observe(section));
+  };
+
+  window.addEventListener("scroll", updateScrollProgress, { passive: true });
+  window.addEventListener("resize", updateScrollProgress);
+  root.addEventListener("pointermove", updatePointerWash, { passive: true });
+  updateScrollProgress();
+  observeSections();
+
   const buildTabs = (wrap, items, activeIndex, prefix, onClick) => {
     if (!wrap) return;
     wrap.replaceChildren();
