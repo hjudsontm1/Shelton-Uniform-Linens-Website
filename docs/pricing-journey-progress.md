@@ -12,7 +12,7 @@
 ## Current Phase
 - Phase number: 6
 - Phase name: Responsive, Accessibility, and Performance
-- Status: In progress
+- Status: Complete; checkpoint commit pending
 
 ## Last Known Good Checkpoint
 - Commit hash: `2a3a1165ac8e6e9eaec30d55612945e01119a490`
@@ -62,24 +62,30 @@
 - Added an exact-quote contact shell that preserves all answers and prepares a local payload without a live endpoint.
 - Added loading, payload-ready, and private failure states with explicit no-submission language.
 - Added formula documentation, deterministic unit tests, and end-to-end assertions proving zero non-GET requests.
+- Added a keyboard-only full-journey test with active-editor focus assertions at every chapter.
+- Added semantic, touch-target, 200% reflow, restoration, Start Over, invalid-location, and contact-error recovery audits.
+- Verified 1440x900, 1366x768, 1280x800, 768x1024, 390x844, and 430x932 result states with no document overflow or console errors.
+- Corrected the tablet result composition so the selected-goods scene and planning range stack within the shared container.
+- Measured zero cumulative layout shift, seven local resources, and 19 mobile actions at or above 44x44 CSS pixels.
 
 ## Current Working State
-- Files currently being changed: none at the start of Checkpoint 6
-- Uncommitted work: progress handoff update only
+- Files currently being changed: `assets/css/pricing-journey.css`, `assets/js/pricing-journey.js`, `tests/pricing-journey-cp6.e2e.cjs`, Checkpoint 6 artifacts, progress and rubric documents
+- Uncommitted work: coherent Checkpoint 6 responsive, accessibility, restoration, and performance unit; ready for checkpoint commit
 - Whether the page builds: Yes; static pages load on localhost
-- Whether smoke tests pass: Yes; syntax, configuration assertions, selected-only return compatibility, Hotel/Robes end-to-end completion, inline Edit, browser console, and mobile overflow checks pass
+- Whether smoke tests pass: Yes; syntax, configuration, rules, Checkpoint 4 regression, and the complete Checkpoint 6 browser suite pass
 
 ## Outstanding Defects
 - The base repository has no package/build tooling. Affected viewport/branch: all / feature branch. Severity: low. Rubric: repeatability. Intended correction: continue using documented Node syntax and browser smoke commands rather than adding a framework.
 - No Checkpoint 1 visual or functional defects remain. The orb's slight consumer-product ambiguity and portal's quieter Begin action are documented reasons they were not selected.
-- Full responsive matrix, 200% zoom, keyboard-only completion, screen-reader semantics audit, touch-target audit, layout-shift review, and complete performance cleanup remain for Checkpoint 6. Severity: planned. Rubric: Responsive, Accessibility, and Performance.
+- No Checkpoint 6 functional, responsive, accessibility, or performance defects remain in the tested matrix. The tablet result clipping found during visual review was corrected and rerendered.
+- Full interaction recording, first-time-prospect review, final visual review, full-suite rerun, final diff audit, and final acceptance rubric remain for Checkpoint 7. Severity: planned. Rubric: Final Review.
 
 ## Next Exact Actions
-1. Run static configuration, pricing-rules, Checkpoint 4 regression, and Checkpoint 5 browser tests.
-2. Commit Checkpoint 5 as `checkpoint(pricing): complete review result and quote handoff`.
-3. Build the Checkpoint 6 viewport, keyboard, zoom, reduced-motion, touch-target, state-restoration, and performance harness.
-4. Correct only evidence-backed responsive/accessibility/performance defects.
-5. Commit Checkpoint 6 after the complete matrix passes without clipping, overflow, console errors, or visible layout shift.
+1. Commit the complete Checkpoint 6 unit as `checkpoint(pricing): complete responsive accessibility and performance QA`.
+2. Record the Checkpoint 6 commit hash and begin Checkpoint 7 in this progress file.
+3. Capture one complete first-time interaction recording with the selected Label concept and exact-quote payload-ready ending.
+4. Run the final static, deterministic-rules, keyboard/browser, and frozen-live-page checks once.
+5. Perform the final diff/rubric/business-blocker audit and commit the independently reviewable private preview.
 
 ## Business-Data Blockers
 - Real Shelton pricing rates, volume bands, finishing factors, route-zone factors, and inventory-model factors are not supplied. Development-only deterministic fixtures are permitted and will remain visibly labeled.
@@ -89,5 +95,5 @@
 ## Resume Instructions
 - Exact first command: `git status --short --branch`
 - Exact first file to inspect: `docs/pricing-journey-progress.md`
-- Exact next test to run: `node tests/pricing-rules-dev.test.cjs && NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-cp5.e2e.cjs`
-- Exact next visual state to render: Complete selected Label journey at 1440x900, 1366x768, 1280x800, tablet, 390x844, and 430x932, followed by 200% zoom and keyboard-only completion
+- Exact next test to run: `NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-cp6.e2e.cjs`
+- Exact next visual state to render: Selected Label journey from landing through payload-ready exact-quote handoff at 1366x768 for the final interaction recording

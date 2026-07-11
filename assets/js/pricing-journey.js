@@ -750,7 +750,9 @@
       : chapter === "handoff"
         ? quoteHandoff
         : document.querySelector(`[data-chapter="${chapter}"]`);
-    const heading = target?.querySelector("h2");
+    const heading = target?.matches("[data-result], [data-quote-handoff]")
+      ? target.querySelector("h2")
+      : target?.querySelector('[data-chapter-editor]:not([hidden]) h2[tabindex="-1"]');
     window.setTimeout(() => {
       heading?.focus({ preventScroll: true });
       if (chapter === "operation") {

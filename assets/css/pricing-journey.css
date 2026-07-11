@@ -1806,6 +1806,8 @@ summary:focus-visible {
   .quote-handoff { grid-template-columns: 1fr; }
   .result-intro { gap: 1.5rem; }
   .result-intro > p { max-width: 36rem; }
+  .result-scene { width: 100%; margin-top: 2rem; }
+  .result-range { width: 100%; min-height: 16rem; margin: 0; }
   .model-comparison { gap: 1.5rem; }
   .quote-handoff { grid-template-areas: "intro" "form" "status" "payload"; }
 }
@@ -1814,10 +1816,11 @@ summary:focus-visible {
   :root { --journey-header: 4.45rem; --journey-gutter: 1rem; }
 
   .journey-private-bar { gap: 0.75rem; }
+  .journey-brand { min-height: 2.75rem; }
   .journey-brand strong { font-size: 0.7rem; }
   .journey-brand small { font-size: 0.48rem; }
   .journey-brand img { width: 2rem; height: 2rem; }
-  .concept-switcher summary { min-height: 2.6rem; font-size: 0.55rem; }
+  .concept-switcher summary { min-height: 2.75rem; font-size: 0.55rem; }
   .concept-switcher summary span { width: 1.65rem; height: 1.65rem; }
 
   .journey-landing { min-height: 100svh; padding-top: calc(var(--journey-header) + 1.5rem); }
@@ -1941,6 +1944,9 @@ summary:focus-visible {
   .review-scene { height: 14rem; }
   .review-selections { grid-template-columns: 1fr; }
   .review-selections article { min-height: 5.7rem; }
+  .review-selections button { min-width: 2.75rem; min-height: 2.75rem; }
+  .chapter-summary button,
+  .journey-flow-tools button { min-width: 2.75rem; }
   .journey-result,
   .quote-handoff { min-height: auto; padding: 4rem 0 5rem 1rem; }
   .result-warning { margin-right: 0; font-size: 0.49rem; line-height: 1.45; }
@@ -1964,6 +1970,7 @@ summary:focus-visible {
   .quote-handoff > header h2 { font-size: 3.4rem; }
   .quote-fields { grid-template-columns: 1fr; }
   .quote-fields label { min-height: 7.25rem; }
+  .concept-reset { min-height: 2.75rem; }
   .foundation-handoff { min-height: 68svh; padding: 5rem 1rem 5rem 2rem; }
   .foundation-handoff h2 { font-size: 3.5rem; }
   .foundation-handoff > h2,

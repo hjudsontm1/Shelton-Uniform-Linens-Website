@@ -1,0 +1,110 @@
+{
+  "semanticAudit": {
+    "duplicateIds": [],
+    "unlabeledInputs": [],
+    "invalidStates": 0,
+    "unnamedButtons": 0
+  },
+  "touchTargets": [
+    {
+      "name": "Shelton private Pricing journey preview",
+      "width": 220.796875,
+      "height": 44
+    },
+    {
+      "name": "Concept B",
+      "width": 96.015625,
+      "height": 44
+    },
+    {
+      "name": "A Textile Begin Orb",
+      "width": 303.625,
+      "height": 51.1875
+    },
+    {
+      "name": "B Suspended Program Label",
+      "width": 303.625,
+      "height": 51.1875
+    },
+    {
+      "name": "C Typographic Portal",
+      "width": 303.625,
+      "height": 51.1875
+    },
+    {
+      "name": "Edit operation",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "name": "Edit goods",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "name": "Edit scale",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "name": "Edit finish and return",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "name": "Edit inventory ownership",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "name": "Edit location",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "name": "Edit Operation",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "name": "Edit Goods",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "name": "Edit Operating signals",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "name": "Edit Finish and care",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "name": "Edit Inventory ownership",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "name": "Edit Location",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "name": "Build recommended program →",
+      "width": 342,
+      "height": 51.1875
+    },
+    {
+      "name": "Start over",
+      "width": 76.6875,
+      "height": 44
+    }
+  ],
+  "performance": {
+    "cls": 0,
+    "localTransferBytes": 0,
+    "localResourceCount": 7
+  }
+}

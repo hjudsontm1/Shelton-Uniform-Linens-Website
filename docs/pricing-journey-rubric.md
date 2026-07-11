@@ -102,7 +102,25 @@ Checkpoint 5 gate: **Pass**. Static tests prove deterministic formulas and branc
 
 ## Checkpoint 6 - Responsive, Accessibility, And Performance
 
-Not started.
+| Category | Score | Evidence |
+| --- | ---: | --- |
+| 1440x900 | 5 | Result viewport capture fits the shared grid with no clipping or document overflow |
+| 1366x768 | 5 | Laptop result capture keeps the assembled scene, range, and development warning legible in the intended first view |
+| 1280x800 | 5 | Compact desktop capture preserves typography, scene proportions, and result hierarchy |
+| Tablet | 5 | 768x1024 capture uses a contained stacked scene/range composition after the tablet-specific correction |
+| 390x844 | 5 | Mobile result and Review captures stack cleanly with natural document scroll and no horizontal page overflow |
+| 430x932 | 5 | Wider phone capture preserves the development warning, headline, selected-only scene, and planning range |
+| No clipping | 5 | Visual matrix and browser geometry checks show all content within its intended containers at tested viewports |
+| No overflow | 5 | Automated document-width checks pass at six required viewports and the 200% reflow equivalent |
+| Keyboard completion | 5 | Native keyboard-only test completes Begin through payload-ready handoff and verifies active-editor focus after every transition |
+| Screen-reader communication | 5 | Semantic audit reports zero duplicate IDs, unlabeled inputs, invalid live states, or unnamed buttons; chapter status changes use the live announcer |
+| Reduced motion | 5 | Existing `prefers-reduced-motion` path removes transition and animated-scroll dependence while preserving every interaction |
+| Performance | 5 | CLS is 0, active scenes are bounded inline SVG, only seven local resources load, and the complete matrix reports no console errors |
+| No visible layout shift | 5 | Automated CLS measurement is 0 and chapter/result state changes retain stable containers and deterministic focus targets |
+| Touch and zoom | 5 | All 19 audited mobile actions are at least 44x44 CSS pixels; 640x400 200% reflow equivalent remains keyboard-usable without document overflow |
+| Restoration and recovery | 5 | Reload restores the completed result, Location/contact errors recover in place, and Start Over returns to the clean no-manifest landing state |
+
+Checkpoint 6 gate: **Pass**. `tests/pricing-journey-cp6.e2e.cjs` completes the journey by keyboard, audits semantics and touch targets, verifies restoration/error recovery/Start Over, records zero non-GET requests and console errors, and captures the required viewport matrix. Metrics and screenshots are under `docs/pricing-journey-artifacts/checkpoint-6/`.
 
 ## Checkpoint 7 - Final Review
 
