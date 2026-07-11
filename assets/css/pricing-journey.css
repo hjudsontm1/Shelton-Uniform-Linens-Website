@@ -1,0 +1,98 @@
+:root {
+  color-scheme: dark;
+  --journey-navy: #071321;
+  --journey-ink: #050b13;
+  --journey-cream: #f4edde;
+  --journey-muted: #a6b0ba;
+  --journey-gold: #c6a365;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background: var(--journey-ink); }
+
+body {
+  min-width: 0;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--journey-cream);
+  background:
+    radial-gradient(circle at 50% 40%, rgba(198, 163, 101, 0.1), transparent 32rem),
+    linear-gradient(180deg, var(--journey-navy), var(--journey-ink));
+  font-family: "Inter", sans-serif;
+}
+
+a { color: inherit; }
+
+a:focus-visible {
+  outline: 2px solid var(--journey-gold);
+  outline-offset: 5px;
+}
+
+.journey-skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 20;
+  padding: 0.7rem 1rem;
+  color: var(--journey-ink);
+  background: var(--journey-cream);
+  transform: translateY(-180%);
+}
+
+.journey-skip-link:focus { transform: none; }
+
+.journey-baseline {
+  width: min(calc(100% - 2rem), 74rem);
+  min-height: 100svh;
+  margin-inline: auto;
+  padding: clamp(4rem, 10vw, 8rem) 0;
+  display: grid;
+  align-content: center;
+  gap: 1.2rem;
+}
+
+.journey-baseline__status {
+  margin: 0;
+  color: var(--journey-gold);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.journey-baseline h1 {
+  max-width: 55rem;
+  margin: 0;
+  font: 500 clamp(3.5rem, 9vw, 8rem) / 0.9 "Cormorant Garamond", serif;
+  letter-spacing: 0;
+}
+
+.journey-baseline > p:not(.journey-baseline__status) {
+  max-width: 38rem;
+  margin: 0;
+  color: var(--journey-muted);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.7;
+}
+
+.journey-baseline nav {
+  margin-top: 1.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+}
+
+.journey-baseline nav a {
+  color: var(--journey-gold);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.4rem;
+  text-transform: uppercase;
+}
+
+@media (max-width: 620px) {
+  .journey-baseline h1 { font-size: clamp(3.4rem, 18vw, 5.5rem); }
+  .journey-baseline nav { display: grid; }
+}
