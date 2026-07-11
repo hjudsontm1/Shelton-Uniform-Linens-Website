@@ -124,4 +124,33 @@ Checkpoint 6 gate: **Pass**. `tests/pricing-journey-cp6.e2e.cjs` completes the j
 
 ## Checkpoint 7 - Final Review
 
-Not started.
+| Category | Score | Evidence |
+| --- | ---: | --- |
+| Full interaction recording | 5 | `checkpoint-7/cp7-complete-interaction.webm` records the selected concept through payload-ready handoff |
+| First-time-prospect clarity | 5 | One Begin action, plain-language chapters, operation-specific education, answered-only summaries, and explicit next actions |
+| Visual review | 5 | Seven final 1366x768 captures preserve one editorial grid, custom vector language, selected-only scenes, and restrained gold hierarchy |
+| Accessibility review | 5 | Checkpoint 6 keyboard, semantic, touch, reduced-motion, error, restoration, and zoom audits remain green in the final code |
+| Performance review | 5 | Zero CLS, seven local resources, no image generation or raster journey assets, and no console errors |
+| Functional review | 5 | Final Event/Tablecloths path proves narrowing, event-specific inputs, recommendation, comparison, and payload continuity |
+| Isolation and preservation | 5 | Preview is unlinked/noindex; live `pricing.html` is byte-identical to the real repository; branch remains isolated and unmerged |
+| Production-claim safety | 5 | Development warning remains prominent, formulas are isolated, no POST occurs, and handoff states that nothing was submitted |
+
+Checkpoint 7 gate: **Pass**. The final acceptance path, screenshots, recording, commands, checkpoint history, and unresolved business dependencies are collected in `pricing-journey-final-review.md` and `docs/pricing-journey-artifacts/checkpoint-7/`.
+
+## Final Added Acceptance Categories
+
+| Category | Score | Evidence |
+| --- | ---: | --- |
+| Landing concepts | 5 | Three complete, distinct, accessible concepts remain query-reviewable; evidence selected Label and production continued through all chapters |
+| Service rhythm | 5 | No desired-frequency question exists; ten operation schemas feed deterministic, replaceable rhythm recommendations with visible reasons |
+| Educational journey | 5 | Every active chapter provides concise operational guidance; Goods education changes by selected item and never exceeds three capability details |
+| Vector goods | 5 | One custom SVG system provides recognizable fabric/garment objects, branch-specific compositions, selected focus, and finish-state transformations without emoji/stock-icon styling |
+| Adaptive narrowing | 5 | Single-item selection removes irrelevant objects and finish options; compatible answers persist and incompatible downstream answers are invalidated transparently |
+| Inventory model | 5 | Plain ownership language, no preselection, one result recommendation with reason, and equal-basis COG/Hybrid/Rental development comparisons |
+| Location | 5 | ZIP/city only after Ownership, persisted for Review/handoff, with no unsupported route promise |
+| Navigation | 5 | Normal browser scroll, visible condensed chapters, inline Edit, discreet focus transfer, no scroll trap, and no prominent Back dependency |
+| Pricing fixtures | 5 | Deterministic, documented, visibly labeled development values are isolated behind `calculatePlanningRange(state, rules)` and cannot reach the frozen live page |
+| Competitive positioning | 5 | Centralized quality-first/competitive message appears at Landing and Result without cheapest/savings claims or repetitive sales copy |
+| Exact-quote continuity | 5 | Prior answers persist; only missing contact fields are collected; local payload preserves state; no endpoint or fake success is introduced |
+
+Final added-category gate: **Pass**. Each score is backed by implementation, automated assertions, screenshots, or the complete interaction recording. The only remaining blockers are real Shelton business data and endpoint authorization, not prototype defects.

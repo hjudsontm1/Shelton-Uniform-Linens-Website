@@ -12,7 +12,7 @@
 ## Current Phase
 - Phase number: 7
 - Phase name: Final Visual and Functional Review
-- Status: In progress
+- Status: Complete; checkpoint commit pending
 
 ## Last Known Good Checkpoint
 - Commit hash: `1bf6efb2a09a1ea26d63ab98db90d5e93e7cca0f`
@@ -67,10 +67,16 @@
 - Verified 1440x900, 1366x768, 1280x800, 768x1024, 390x844, and 430x932 result states with no document overflow or console errors.
 - Corrected the tablet result composition so the selected-goods scene and planning range stack within the shared container.
 - Measured zero cumulative layout shift, seven local resources, and 19 mobile actions at or above 44x44 CSS pixels.
+- Captured a complete first-time Event/Tablecloths interaction recording from the winning landing through payload-ready handoff.
+- Captured seven final 1366x768 visual states and reviewed the selected concept, Operation, Goods, Finish, Review, Result, and Handoff compositions.
+- Verified selected-only narrowing removes irrelevant finish controls and nonselected vector goods from the final scene.
+- Verified the preview remains noindex/unlinked, makes no non-GET request, and produces no browser console error.
+- Verified `pricing.html` remains byte-identical to the real repository's current live Pricing page.
+- Added the final review/evidence map, final acceptance rubric, checkpoint list, and production-blocker report.
 
 ## Current Working State
-- Files currently being changed: progress handoff for Checkpoint 7
-- Uncommitted work: progress handoff only
+- Files currently being changed: `tests/pricing-journey-final.e2e.cjs`, Checkpoint 7 artifacts, final review, progress, and rubric documents
+- Uncommitted work: coherent Checkpoint 7 final acceptance unit; ready for final static/browser/diff verification and checkpoint commit
 - Whether the page builds: Yes; static pages load on localhost
 - Whether smoke tests pass: Yes; syntax, configuration, rules, Checkpoint 4 regression, and the complete Checkpoint 6 browser suite pass
 
@@ -78,14 +84,15 @@
 - The base repository has no package/build tooling. Affected viewport/branch: all / feature branch. Severity: low. Rubric: repeatability. Intended correction: continue using documented Node syntax and browser smoke commands rather than adding a framework.
 - No Checkpoint 1 visual or functional defects remain. The orb's slight consumer-product ambiguity and portal's quieter Begin action are documented reasons they were not selected.
 - No Checkpoint 6 functional, responsive, accessibility, or performance defects remain in the tested matrix. The tablet result clipping found during visual review was corrected and rerendered.
-- Full interaction recording, first-time-prospect review, final visual review, full-suite rerun, final diff audit, and final acceptance rubric remain for Checkpoint 7. Severity: planned. Rubric: Final Review.
+- No objective prototype defects remain in the tested acceptance matrix.
+- Public release is intentionally blocked by missing approved Shelton pricing rules, route-zone data, an authorized submission endpoint, and final public estimate/legal approval. Severity: release blocker, not private-preview defect. Rubric: Production claims and business data.
 
 ## Next Exact Actions
-1. Commit the complete Checkpoint 6 unit as `checkpoint(pricing): complete responsive accessibility and performance QA`.
-2. Record the Checkpoint 6 commit hash and begin Checkpoint 7 in this progress file.
-3. Capture one complete first-time interaction recording with the selected Label concept and exact-quote payload-ready ending.
-4. Run the final static, deterministic-rules, keyboard/browser, and frozen-live-page checks once.
-5. Perform the final diff/rubric/business-blocker audit and commit the independently reviewable private preview.
+1. Run all static configuration, syntax, deterministic-rules, Checkpoint 4 regression, Checkpoint 6 matrix, and final recording tests once.
+2. Reconfirm live `pricing.html` byte identity, no public preview links, noindex metadata, and a clean diff check.
+3. Commit Checkpoint 7 as `checkpoint(pricing): finalize adaptive journey preview`.
+4. Record the final checkpoint hash and clean working-tree state in this progress file.
+5. Leave the isolated branch unmerged and unpushed for manual review.
 
 ## Business-Data Blockers
 - Real Shelton pricing rates, volume bands, finishing factors, route-zone factors, and inventory-model factors are not supplied. Development-only deterministic fixtures are permitted and will remain visibly labeled.
@@ -95,5 +102,5 @@
 ## Resume Instructions
 - Exact first command: `git status --short --branch`
 - Exact first file to inspect: `docs/pricing-journey-progress.md`
-- Exact next test to run: `NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-cp6.e2e.cjs`
-- Exact next visual state to render: Selected Label journey from landing through payload-ready exact-quote handoff at 1366x768 for the final interaction recording
+- Exact next test to run: `node tests/pricing-journey-config.test.cjs && node tests/pricing-rules-dev.test.cjs && NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-final.e2e.cjs`
+- Exact next visual state to render: `docs/pricing-journey-artifacts/checkpoint-7/cp7-06-recommended-program-1366x768.png`; no further rerender is needed unless a final test changes UI code
