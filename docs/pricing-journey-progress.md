@@ -10,18 +10,18 @@
 - Quote endpoint audit: live `quote.html` posts to Formspree; the preview will not call or modify it
 
 ## Current Phase
-- Phase number: 3
-- Phase name: All Adaptive Goods Branches
-- Status: Complete
+- Phase number: 4
+- Phase name: Scale, Finish, Ownership, and Location
+- Status: In progress
 
 ## Last Known Good Checkpoint
-- Commit hash: `ae8b35a2588ecea96c06f29f76eaa9f4d1a378c2`
-- Commit message: `checkpoint(pricing): complete landing and operation journey`
-- Date/time: 2026-07-11 00:53:00 CDT
+- Commit hash: `339d8558fe3980c74e6e7afcf63259abcce15268`
+- Commit message: `checkpoint(pricing): complete adaptive goods branches`
+- Date/time: 2026-07-11 01:34:00 CDT
 - Build command: Static site; no build step
 - Test command: `node --check assets/js/pricing-journey-config.js && node --check assets/js/pricing-journey.js && git diff --check`
 - Preview command: `python3 -m http.server 8045 --bind 127.0.0.1`
-- Screenshot artifact paths: `docs/pricing-journey-artifacts/checkpoint-2/pricing-cp2-operation-selected-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-2/pricing-cp2-goods-active-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-2/pricing-cp2-foundation-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-2/pricing-cp2-goods-active-390x844.png`
+- Screenshot artifact paths: `docs/pricing-journey-artifacts/checkpoint-3/pricing-cp3-branch-event-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-3/pricing-cp3-event-390x844.png`, `docs/pricing-journey-artifacts/checkpoint-3/pricing-cp3-hotel-robes-selected-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-3/pricing-cp3-hotel-robes-narrowed-1366x768.png`
 
 ## Completed Work
 - Confirmed the real repository and current dirty `main` state.
@@ -51,8 +51,8 @@
 - Completed the required Checkpoint 3 viewport matrix with zero horizontal overflow and no browser console errors.
 
 ## Current Working State
-- Files currently being changed: `pricing-journey-preview.html`, `assets/css/pricing-journey.css`, `assets/js/pricing-journey-config.js`, `assets/js/pricing-journey-vectors.js`, `assets/js/pricing-journey.js`, tests, docs, and Checkpoint 3 artifacts
-- Uncommitted work: complete Checkpoint 3 implementation pending checkpoint commit
+- Files currently being changed: none at the start of Checkpoint 4
+- Uncommitted work: none
 - Whether the page builds: Yes; static pages load on localhost
 - Whether smoke tests pass: Yes; syntax, static Goods/config assertions, all-operation vector rendering, item education, selection focus, one-item narrowing, dependency cleanup, full viewport matrix, overflow, and console checks pass
 
