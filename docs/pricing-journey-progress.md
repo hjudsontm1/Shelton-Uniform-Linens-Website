@@ -10,18 +10,18 @@
 - Quote endpoint audit: live `quote.html` posts to Formspree; the preview will not call or modify it
 
 ## Current Phase
-- Phase number: 5
-- Phase name: Review, Development Result, and Quote Shell
-- Status: Complete; checkpoint commit pending
+- Phase number: 6
+- Phase name: Responsive, Accessibility, and Performance
+- Status: In progress
 
 ## Last Known Good Checkpoint
-- Commit hash: `197886cc0302db99839541cb8bf03ff18cbdcf43`
-- Commit message: `checkpoint(pricing): complete adaptive program inputs`
-- Date/time: 2026-07-11 03:18:16 CDT
+- Commit hash: `2a3a1165ac8e6e9eaec30d55612945e01119a490`
+- Commit message: `checkpoint(pricing): complete review result and quote handoff`
+- Date/time: 2026-07-11 04:11:28 CDT
 - Build command: Static site; no build step
-- Test command: `node tests/pricing-journey-config.test.cjs`; browser smoke: `NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-cp4.e2e.cjs`
+- Test command: `node tests/pricing-journey-config.test.cjs && node tests/pricing-rules-dev.test.cjs`; browser smoke: `NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-cp5.e2e.cjs`
 - Preview command: `python3 -m http.server 8045 --bind 127.0.0.1`
-- Screenshot artifact paths: `docs/pricing-journey-artifacts/checkpoint-4/cp4-scale-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-4/cp4-finish-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-4/cp4-ownership-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-4/cp4-location-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-4/cp4-review-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-4/cp4-finish-390x844.png`
+- Screenshot artifact paths: `docs/pricing-journey-artifacts/checkpoint-5/cp5-review-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-5/cp5-result-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-5/cp5-recommendations-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-5/cp5-model-comparison-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-5/cp5-result-390x844.png`, `docs/pricing-journey-artifacts/checkpoint-5/cp5-payload-ready-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-5/cp5-handoff-failure-1366x768.png`
 
 ## Completed Work
 - Confirmed the real repository and current dirty `main` state.
@@ -64,8 +64,8 @@
 - Added formula documentation, deterministic unit tests, and end-to-end assertions proving zero non-GET requests.
 
 ## Current Working State
-- Files currently being changed: Pricing result HTML/CSS/JavaScript, development rules, tests, artifacts, and documentation
-- Uncommitted work: complete Checkpoint 5 implementation awaiting its checkpoint commit
+- Files currently being changed: none at the start of Checkpoint 6
+- Uncommitted work: progress handoff update only
 - Whether the page builds: Yes; static pages load on localhost
 - Whether smoke tests pass: Yes; syntax, configuration assertions, selected-only return compatibility, Hotel/Robes end-to-end completion, inline Edit, browser console, and mobile overflow checks pass
 
