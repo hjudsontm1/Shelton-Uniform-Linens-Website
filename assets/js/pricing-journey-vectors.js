@@ -242,12 +242,15 @@
     }).join("");
 
     const returnOverlay = returnOverlayFor(options.returnOptions);
+    const transformedBackdrop = Array.isArray(options.returnOptions) && options.returnOptions.length
+      ? `<path class="scene-structure" d="M55 285 H845" />`
+      : backdropFor(operation.id);
 
     container.innerHTML = `
       <svg class="goods-scene-svg" viewBox="0 0 900 330" role="presentation" focusable="false">
         ${definitions}
         <rect width="900" height="330" fill="url(#vectorGrid)" />
-        <g class="scene-backdrop">${backdropFor(operation.id)}</g>
+        <g class="scene-backdrop">${transformedBackdrop}</g>
         <g class="scene-goods">${objects}</g>
         <g class="return-overlay">${returnOverlay}</g>
         <text class="scene-operation" x="840" y="310" text-anchor="end">${escapeText(operation.label.toUpperCase())}</text>

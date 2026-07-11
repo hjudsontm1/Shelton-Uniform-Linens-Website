@@ -300,11 +300,122 @@
           </form>
         </section>
 
-        <section class="review-handoff" data-review-handoff aria-labelledby="review-handoff-title" hidden>
-          <p class="chapter-index">Program inputs complete</p>
-          <h2 id="review-handoff-title" tabindex="-1">Your program is ready to assemble.</h2>
-          <p>Review will connect the selected operation, goods, operating signals, return states, ownership, and location before any development planning range appears.</p>
-          <button type="button" data-edit-chapter="location">Review location</button>
+        <section class="journey-chapter journey-chapter--review" data-chapter="review" aria-labelledby="review-title" hidden>
+          <div class="chapter-line" aria-hidden="true"><span></span></div>
+          <div class="chapter-summary" data-chapter-summary="review" hidden>
+            <div>
+              <p>07 · Review</p>
+              <h2 data-review-summary-label></h2>
+              <span>The assembled inputs remain available before the development result.</span>
+            </div>
+            <button type="button" data-edit-chapter="review">Edit<span class="sr-only"> review</span></button>
+          </div>
+          <div class="chapter-editor review-editor" data-chapter-editor="review">
+            <header class="review-intro">
+              <p class="chapter-index">07 · Review</p>
+              <h2 id="review-title" tabindex="-1">See the program take shape.</h2>
+              <p>The selected goods, operating signals, return state, ownership, and location are assembled here before any development planning range is calculated.</p>
+            </header>
+            <div class="review-scene" data-review-scene aria-hidden="true"></div>
+            <div class="review-selections" data-review-selections aria-label="Assembled program selections"></div>
+            <div class="chapter-action-row review-action-row">
+              <p>Nothing here is submitted.</p>
+              <button type="button" data-build-result>Build recommended program <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="journey-result" data-result aria-labelledby="result-title" hidden>
+          <div class="result-warning" data-result-warning></div>
+          <header class="result-intro">
+            <div>
+              <p class="chapter-index">Recommended program</p>
+              <h2 id="result-title" tabindex="-1">A planning range built around the operation.</h2>
+            </div>
+            <p data-result-positioning></p>
+          </header>
+
+          <div class="result-scene" data-result-scene aria-hidden="true"></div>
+
+          <div class="result-range" aria-label="Development planning range">
+            <span>Development planning range</span>
+            <strong data-result-weekly></strong>
+            <small>per week</small>
+            <p data-result-monthly></p>
+          </div>
+
+          <div class="result-recommendations">
+            <article>
+              <span>Recommended service rhythm</span>
+              <h3 data-result-rhythm></h3>
+              <p data-result-rhythm-reason></p>
+            </article>
+            <article>
+              <span>Recommended supply model</span>
+              <h3 data-result-model></h3>
+              <p data-result-model-reason></p>
+            </article>
+          </div>
+
+          <section class="model-comparison" aria-labelledby="model-comparison-title">
+            <header>
+              <p class="chapter-index">Compare program structures</p>
+              <h3 id="model-comparison-title">Price is one part of the recommendation.</h3>
+              <p>Each structure includes the same selected service and care assumptions, with development-only inventory factors layered separately.</p>
+            </header>
+            <div data-model-comparison></div>
+          </section>
+
+          <div class="result-evidence">
+            <div>
+              <span data-result-confidence></span>
+              <p data-result-confidence-copy></p>
+            </div>
+            <ul data-result-factors></ul>
+          </div>
+
+          <div class="result-actions">
+            <button type="button" class="result-primary" data-exact-quote>Prepare exact-quote handoff <span aria-hidden="true">→</span></button>
+            <button type="button" class="result-secondary" data-edit-chapter="review">Review selections</button>
+          </div>
+        </section>
+
+        <section class="quote-handoff" data-quote-handoff aria-labelledby="quote-title" hidden>
+          <header>
+            <p class="chapter-index">Exact-quote handoff</p>
+            <h2 id="quote-title" tabindex="-1">Add only what is still missing.</h2>
+            <p>Your program answers remain attached. This private preview prepares a payload but does not contact a live submission endpoint.</p>
+          </header>
+          <form data-quote-form novalidate>
+            <div class="quote-fields">
+              <label>
+                <span>Your name</span>
+                <input type="text" name="name" autocomplete="name" required />
+              </label>
+              <label>
+                <span>Business name</span>
+                <input type="text" name="business" autocomplete="organization" required />
+              </label>
+              <label>
+                <span>Work email</span>
+                <input type="email" name="email" autocomplete="email" required />
+              </label>
+              <label>
+                <span>Phone <em>optional</em></span>
+                <input type="tel" name="phone" autocomplete="tel" />
+              </label>
+            </div>
+            <p class="chapter-error" data-quote-error role="alert" hidden>Complete the required contact details.</p>
+            <div class="quote-actions">
+              <button type="submit" data-quote-submit>Prepare quote payload <span aria-hidden="true">→</span></button>
+              <button type="button" data-return-result>Return to development result</button>
+            </div>
+          </form>
+          <div class="quote-status" data-quote-status role="status" aria-live="polite" tabindex="-1" hidden></div>
+          <details class="quote-payload" data-quote-payload-wrap hidden>
+            <summary>Inspect development payload</summary>
+            <pre data-quote-payload></pre>
+          </details>
         </section>
       </div>
 
@@ -317,8 +428,9 @@
 
   <p class="journey-announcer" data-journey-announcer aria-live="polite"></p>
 
-  <script src="assets/js/pricing-journey-config.js?v=20260711-inputs-1"></script>
-  <script src="assets/js/pricing-journey-vectors.js?v=20260711-inputs-1"></script>
-  <script src="assets/js/pricing-journey.js?v=20260711-inputs-1"></script>
+  <script src="assets/js/pricing-journey-config.js?v=20260711-result-1"></script>
+  <script src="assets/js/pricing-journey-vectors.js?v=20260711-result-1"></script>
+  <script src="assets/js/pricing-rules.dev.js?v=20260711-result-1"></script>
+  <script src="assets/js/pricing-journey.js?v=20260711-result-1"></script>
 </body>
 </html>

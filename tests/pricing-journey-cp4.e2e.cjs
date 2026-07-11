@@ -61,7 +61,7 @@ const main = async () => {
   await page.locator("[data-location-form]").evaluate((form) => form.requestSubmit());
   await page.waitForTimeout(80);
 
-  assert.equal(await page.locator("[data-review-handoff]").isVisible(), true);
+  assert.equal(await page.locator('[data-chapter-editor="review"]').isVisible(), true);
   const state = await page.evaluate(() => window.SheltonPricingJourney.getState());
   assert.deepEqual(state.goods, ["robes"]);
   assert.deepEqual(state.finish, ["hanging", "poly"]);

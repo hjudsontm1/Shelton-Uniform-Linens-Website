@@ -1484,6 +1484,203 @@ summary:focus-visible {
 .review-handoff > p:not(.chapter-index) { max-width: 43rem; margin: 1.5rem 0 2rem; color: rgba(188, 199, 210, 0.74); line-height: 1.7; }
 .review-handoff button { min-height: 2.75rem; padding: 0 0.2rem; color: var(--journey-gold-bright); background: transparent; border: 0; border-bottom: 1px solid rgba(196, 160, 97, 0.48); cursor: pointer; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
 
+/* Assembled review, development result, and quote handoff */
+
+.review-editor {
+  min-height: calc(100svh - var(--journey-header) - 4.25rem);
+  padding: clamp(3rem, 7vh, 6rem) 0 clamp(4rem, 8vh, 7rem) 2rem;
+  display: grid;
+  grid-template-columns: minmax(20rem, 0.7fr) minmax(32rem, 1.3fr);
+  grid-template-areas:
+    "intro scene"
+    "selections selections"
+    "action action";
+  align-content: center;
+  gap: 2rem 3rem;
+}
+
+.review-intro { grid-area: intro; align-self: center; }
+.review-intro h2 { margin: 0.7rem 0 1rem; color: var(--journey-cream); font: 500 4.6rem/0.92 "Cormorant Garamond", serif; }
+.review-intro h2:focus { outline: none; }
+.review-intro > p:last-child { max-width: 38rem; margin: 0; color: rgba(188, 199, 210, 0.74); font-size: 0.86rem; line-height: 1.65; }
+.review-scene { grid-area: scene; height: clamp(15rem, 31vh, 20rem); overflow: hidden; background: rgba(3, 10, 18, 0.44); border: 1px solid rgba(196, 160, 97, 0.22); }
+
+.review-selections {
+  grid-area: selections;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid rgba(196, 160, 97, 0.24);
+  border-left: 1px solid rgba(196, 160, 97, 0.12);
+}
+
+.review-selections article {
+  position: relative;
+  min-width: 0;
+  min-height: 6.5rem;
+  padding: 1rem 4rem 1rem 1rem;
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.7rem;
+  border-right: 1px solid rgba(196, 160, 97, 0.14);
+  border-bottom: 1px solid rgba(196, 160, 97, 0.2);
+}
+
+.review-selections article > span { color: rgba(196, 160, 97, 0.65); font-size: 0.5rem; font-weight: 700; letter-spacing: 0.1em; }
+.review-selections article > div { min-width: 0; display: grid; gap: 0.35rem; }
+.review-selections small { color: var(--journey-gold); font-size: 0.5rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.review-selections strong { overflow-wrap: anywhere; color: rgba(244, 237, 222, 0.85); font: 500 1.15rem/1.15 "Cormorant Garamond", serif; }
+.review-selections button { position: absolute; right: 0.8rem; bottom: 0.75rem; min-height: 2rem; padding: 0; color: rgba(196, 160, 97, 0.78); background: transparent; border: 0; border-bottom: 1px solid rgba(196, 160, 97, 0.35); cursor: pointer; font-size: 0.48rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+.review-action-row { grid-area: action; }
+
+.journey-result,
+.quote-handoff {
+  position: relative;
+  min-height: calc(100svh - var(--journey-header) - 4.25rem);
+  padding: clamp(4rem, 8vh, 7rem) 2rem clamp(5rem, 10vh, 9rem);
+  border-top: 1px solid rgba(196, 160, 97, 0.24);
+  scroll-margin-top: calc(var(--journey-header) + 5rem);
+}
+
+.result-warning {
+  margin-bottom: 2rem;
+  padding: 0.8rem 1rem;
+  color: #071321;
+  background: var(--journey-gold-bright);
+  border: 1px solid var(--journey-gold-bright);
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-align: center;
+}
+
+.result-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+  align-items: end;
+  gap: 3rem;
+}
+
+.result-intro h2 { max-width: 54rem; margin: 0.7rem 0 0; color: var(--journey-cream); font: 500 5rem/0.92 "Cormorant Garamond", serif; }
+.result-intro h2:focus { outline: none; }
+.result-intro > p { margin: 0 0 0.35rem; color: var(--journey-gold-bright); font: 500 1.55rem/1.15 "Cormorant Garamond", serif; }
+
+.result-scene {
+  width: calc(68% - 1rem);
+  height: clamp(18rem, 38vh, 27rem);
+  margin-top: 2.5rem;
+  overflow: hidden;
+  background: rgba(3, 10, 18, 0.5);
+  border: 1px solid rgba(196, 160, 97, 0.22);
+}
+
+.result-range {
+  width: 32%;
+  min-height: clamp(18rem, 38vh, 27rem);
+  margin: clamp(-27rem, -38vh, -18rem) 0 0 auto;
+  padding: 2rem;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  background: var(--journey-paper);
+  border: 1px solid var(--journey-gold-bright);
+  color: var(--journey-ink);
+}
+
+.result-range > span { font-size: 0.55rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+.result-range strong { margin-top: 1rem; font: 500 clamp(2.8rem, 4vw, 5rem)/0.92 "Cormorant Garamond", serif; letter-spacing: 0; }
+.result-range small { margin-top: 0.65rem; color: rgba(7, 19, 33, 0.62); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.result-range p { margin: 2rem 0 0; padding-top: 1rem; border-top: 1px solid rgba(7, 19, 33, 0.18); color: rgba(7, 19, 33, 0.7); font-size: 0.7rem; line-height: 1.55; }
+
+.result-recommendations {
+  margin-top: 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid rgba(196, 160, 97, 0.24);
+  border-left: 1px solid rgba(196, 160, 97, 0.12);
+}
+
+.result-recommendations article { min-height: 13rem; padding: 1.5rem; border-right: 1px solid rgba(196, 160, 97, 0.16); border-bottom: 1px solid rgba(196, 160, 97, 0.22); }
+.result-recommendations span,
+.result-evidence span { color: var(--journey-gold); font-size: 0.55rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
+.result-recommendations h3 { max-width: 34rem; margin: 0.8rem 0 0; color: var(--journey-cream); font: 500 2.1rem/1 "Cormorant Garamond", serif; }
+.result-recommendations p { max-width: 40rem; margin: 1rem 0 0; color: rgba(188, 199, 210, 0.7); font-size: 0.76rem; line-height: 1.6; }
+
+.model-comparison {
+  margin-top: clamp(4rem, 9vh, 7rem);
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.7fr) minmax(34rem, 1.3fr);
+  gap: 3rem;
+}
+
+.model-comparison > header h3 { max-width: 34rem; margin: 0.7rem 0 0; color: var(--journey-cream); font: 500 3.25rem/0.98 "Cormorant Garamond", serif; }
+.model-comparison > header > p:last-child { max-width: 34rem; color: rgba(188, 199, 210, 0.68); font-size: 0.78rem; line-height: 1.65; }
+.model-comparison > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-self: start; border-top: 1px solid rgba(196, 160, 97, 0.28); border-left: 1px solid rgba(196, 160, 97, 0.14); }
+.model-comparison article { min-height: 15rem; padding: 1.25rem; display: grid; align-content: start; border-right: 1px solid rgba(196, 160, 97, 0.16); border-bottom: 1px solid rgba(196, 160, 97, 0.24); }
+.model-comparison article > span { color: rgba(196, 160, 97, 0.58); font-size: 0.5rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+.model-comparison article h4 { margin: 1.5rem 0 0; color: var(--journey-cream); font: 500 1.6rem/1 "Cormorant Garamond", serif; }
+.model-comparison article strong { margin-top: 0.8rem; color: var(--journey-gold-bright); font-size: 0.68rem; letter-spacing: 0.02em; }
+.model-comparison article p { margin: 1.4rem 0 0; color: rgba(165, 176, 188, 0.62); font-size: 0.63rem; line-height: 1.55; }
+.model-comparison article.is-recommended { color: var(--journey-ink); background: var(--journey-paper); box-shadow: inset 0 0 0 1px var(--journey-gold-bright); }
+.model-comparison article.is-recommended > span,
+.model-comparison article.is-recommended strong { color: #806127; }
+.model-comparison article.is-recommended h4 { color: var(--journey-ink); }
+.model-comparison article.is-recommended p { color: rgba(7, 19, 33, 0.66); }
+
+.result-evidence {
+  margin-top: 3rem;
+  padding: 1.5rem 0;
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.7fr) minmax(32rem, 1.3fr);
+  gap: 3rem;
+  border-top: 1px solid rgba(196, 160, 97, 0.22);
+  border-bottom: 1px solid rgba(196, 160, 97, 0.22);
+}
+
+.result-evidence p { max-width: 32rem; color: rgba(188, 199, 210, 0.7); font-size: 0.7rem; line-height: 1.6; }
+.result-evidence ul { margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); list-style: none; }
+.result-evidence li { min-height: 4rem; padding: 0.8rem 1rem 0.8rem 1.4rem; display: flex; align-items: center; color: rgba(244, 237, 222, 0.74); border-left: 1px solid rgba(196, 160, 97, 0.18); font-size: 0.66rem; line-height: 1.45; }
+.result-evidence li::before { content: "◇"; margin-right: 0.7rem; color: var(--journey-gold); }
+
+.result-actions,
+.quote-actions { margin-top: 2.5rem; display: flex; align-items: center; justify-content: flex-end; gap: 1rem; }
+.result-actions button,
+.quote-actions button { min-height: 3.4rem; padding: 0 1.4rem; cursor: pointer; font-size: 0.56rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+.result-primary,
+.quote-actions button[type="submit"] { color: var(--journey-ink); background: var(--journey-gold-bright); border: 1px solid var(--journey-gold-bright); }
+.result-secondary,
+.quote-actions button[type="button"] { color: var(--journey-gold-bright); background: transparent; border: 0; border-bottom: 1px solid rgba(196, 160, 97, 0.42); }
+
+.quote-handoff {
+  display: grid;
+  grid-template-columns: minmax(20rem, 0.72fr) minmax(32rem, 1.28fr);
+  grid-template-areas:
+    "intro form"
+    "status status"
+    "payload payload";
+  align-content: center;
+  gap: 3rem;
+}
+
+.quote-handoff > header { grid-area: intro; }
+.quote-handoff > header h2 { margin: 0.7rem 0 1rem; color: var(--journey-cream); font: 500 4.6rem/0.92 "Cormorant Garamond", serif; }
+.quote-handoff > header h2:focus { outline: none; }
+.quote-handoff > header > p:last-child { max-width: 36rem; color: rgba(188, 199, 210, 0.7); font-size: 0.78rem; line-height: 1.65; }
+.quote-handoff form { grid-area: form; }
+.quote-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid rgba(196, 160, 97, 0.28); border-left: 1px solid rgba(196, 160, 97, 0.14); }
+.quote-fields label { min-height: 8.5rem; padding: 1.1rem; display: grid; align-content: center; gap: 0.8rem; border-right: 1px solid rgba(196, 160, 97, 0.16); border-bottom: 1px solid rgba(196, 160, 97, 0.24); }
+.quote-fields label > span { color: var(--journey-gold); font-size: 0.54rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.quote-fields label em { color: rgba(165, 176, 188, 0.55); font-style: normal; }
+.quote-fields input { width: 100%; min-height: 3rem; color: var(--journey-cream); background: transparent; border: 0; border-bottom: 1px solid rgba(196, 160, 97, 0.5); border-radius: 0; outline: 0; font: 500 1.35rem/1 "Cormorant Garamond", serif; }
+.quote-fields input:focus { border-bottom-color: var(--journey-gold-bright); box-shadow: 0 1px 0 var(--journey-gold-bright); }
+.quote-fields input[aria-invalid="true"] { border-bottom-color: #d39a82; }
+.quote-status { grid-area: status; min-height: 4.5rem; padding: 1rem 1.2rem; display: flex; align-items: center; color: rgba(244, 237, 222, 0.78); border: 1px solid rgba(196, 160, 97, 0.28); font-size: 0.72rem; line-height: 1.55; }
+.quote-status[data-status="ready"] { color: var(--journey-ink); background: var(--journey-paper); border-color: var(--journey-gold-bright); }
+.quote-status[data-status="failure"] { border-color: rgba(211, 154, 130, 0.62); }
+.quote-payload { grid-area: payload; border-top: 1px solid rgba(196, 160, 97, 0.24); }
+.quote-payload summary { min-height: 3rem; display: flex; align-items: center; color: var(--journey-gold); cursor: pointer; font-size: 0.54rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.quote-payload pre { max-height: 22rem; margin: 0; padding: 1.25rem; overflow: auto; color: rgba(244, 237, 222, 0.76); background: rgba(3, 10, 18, 0.55); border: 1px solid rgba(196, 160, 97, 0.2); font: 0.68rem/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+
 .journey-flow-tools {
   position: relative;
   z-index: 2;
@@ -1524,6 +1721,10 @@ summary:focus-visible {
   .input-editor { gap: 1.75rem 2rem; }
   .adaptive-fields { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .adaptive-choice-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .review-editor { gap: 1.75rem 2rem; }
+  .result-intro h2 { font-size: 4.4rem; }
+  .model-comparison { grid-template-columns: minmax(17rem, 0.62fr) minmax(32rem, 1.38fr); gap: 2rem; }
+  .model-comparison article { padding: 1rem; }
 }
 
 @media (max-height: 790px) and (min-width: 761px) {
@@ -1556,6 +1757,17 @@ summary:focus-visible {
   .adaptive-choice { min-height: 5.25rem; padding: 0.7rem; }
   .ownership-choice { min-height: 6.7rem; padding: 0.9rem; }
   .chapter-action-row { min-height: 3.8rem; }
+  .review-editor { padding-top: 1.5rem; padding-bottom: 2rem; gap: 1rem 1.5rem; }
+  .review-intro h2 { font-size: 3.5rem; }
+  .review-scene { height: 13rem; }
+  .review-selections article { min-height: 5.5rem; }
+  .journey-result,
+  .quote-handoff { padding-top: 2.5rem; padding-bottom: 4rem; }
+  .result-intro h2 { font-size: 3.9rem; }
+  .result-scene,
+  .result-range { height: 18rem; min-height: 18rem; }
+  .result-range { margin-top: -18rem; }
+  .result-recommendations article { min-height: 10.5rem; }
 }
 
 @media (max-width: 860px) {
@@ -1586,6 +1798,16 @@ summary:focus-visible {
   .scale-goods-scene,
   .finish-transform-stage { height: 15rem; }
   .location-field { min-height: 14rem; }
+  .review-editor { grid-template-columns: 1fr; grid-template-areas: "intro" "scene" "selections" "action"; }
+  .review-selections { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .result-intro,
+  .model-comparison,
+  .result-evidence,
+  .quote-handoff { grid-template-columns: 1fr; }
+  .result-intro { gap: 1.5rem; }
+  .result-intro > p { max-width: 36rem; }
+  .model-comparison { gap: 1.5rem; }
+  .quote-handoff { grid-template-areas: "intro" "form" "status" "payload"; }
 }
 
 @media (max-width: 760px) {
@@ -1714,6 +1936,34 @@ summary:focus-visible {
   .location-field input { min-height: 4rem; font-size: 2.1rem; }
   .review-handoff { min-height: 62svh; padding: 5rem 1rem 5rem 2rem; }
   .review-handoff h2 { font-size: 3.5rem; }
+  .review-editor { min-height: auto; padding: 5.25rem 0 5rem 1rem; gap: 1.5rem; }
+  .review-intro h2 { font-size: 3.25rem; }
+  .review-scene { height: 14rem; }
+  .review-selections { grid-template-columns: 1fr; }
+  .review-selections article { min-height: 5.7rem; }
+  .journey-result,
+  .quote-handoff { min-height: auto; padding: 4rem 0 5rem 1rem; }
+  .result-warning { margin-right: 0; font-size: 0.49rem; line-height: 1.45; }
+  .result-intro h2 { font-size: 3.4rem; }
+  .result-intro > p { font-size: 1.25rem; }
+  .result-scene { width: 100%; height: 14rem; min-height: 14rem; margin-top: 2rem; }
+  .result-range { width: 100%; min-height: 15rem; margin: 0; }
+  .result-recommendations { grid-template-columns: 1fr; }
+  .result-recommendations article { min-height: 11rem; }
+  .model-comparison { margin-top: 4rem; }
+  .model-comparison > header h3 { font-size: 2.6rem; }
+  .model-comparison > div { grid-template-columns: 1fr; }
+  .model-comparison article { min-height: 10.5rem; }
+  .result-evidence { grid-template-columns: 1fr; gap: 1rem; }
+  .result-evidence ul { grid-template-columns: 1fr; }
+  .result-actions,
+  .quote-actions { align-items: stretch; flex-direction: column; }
+  .result-actions button,
+  .quote-actions button { width: 100%; }
+  .quote-handoff { grid-template-columns: 1fr; grid-template-areas: "intro" "form" "status" "payload"; gap: 1.5rem; }
+  .quote-handoff > header h2 { font-size: 3.4rem; }
+  .quote-fields { grid-template-columns: 1fr; }
+  .quote-fields label { min-height: 7.25rem; }
   .foundation-handoff { min-height: 68svh; padding: 5rem 1rem 5rem 2rem; }
   .foundation-handoff h2 { font-size: 3.5rem; }
   .foundation-handoff > h2,

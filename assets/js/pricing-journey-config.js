@@ -312,8 +312,8 @@
   const operation = (id, number, label, context, goodsIds) => ({ id, number, label, context, goods: goodsIds });
 
   const config = {
-    version: 3,
-    storageKey: "shelton-pricing-journey-v3",
+    version: 4,
+    storageKey: "shelton-pricing-journey-v4",
     concepts: {
       orb: { number: "A", label: "Textile Begin Orb" },
       label: { number: "B", label: "Suspended Program Label" },

@@ -85,7 +85,20 @@ Checkpoint 4 gate: **Pass**. The Hotel/Robes path proves one-good narrowing, rob
 
 ## Checkpoint 5 - Review, Result, And Handoff
 
-Not started.
+| Category | Score | Evidence |
+| --- | ---: | --- |
+| Review feels assembled rather than tabulated | 5 | Selected-only transformed SVG, six concise bordered bands, and inline Edit compose one program scene without a dashboard manifest |
+| Service-rhythm recommendation | 5 | Hotel/Robes test recommends twice-weekly service from turns, goods weight, and storage; Event rules use return windows instead |
+| Model recommendation clarity | 5 | One recommended structure, plain-language reason, and no “cheapest is best” treatment |
+| Comparative pricing clarity | 5 | Customer-Owned Goods, Hybrid, and Rental render together with identical service/care assumptions and separate inventory factors |
+| Development-pricing isolation | 5 | `pricing-rules.dev.js`, deterministic unit tests, formula documentation, rules version, and prominent development warning |
+| Result visual payoff | 5 | Selected-only return scene, large planning-range paper field, rhythm/model recommendations, and restrained comparison composition |
+| Exact-quote continuity | 5 | All prior answers and recommendation are preserved in the local payload; contact fields collect only missing details |
+| No repeated questions | 5 | Handoff requests name, business, email, and optional phone only; operation, goods, inputs, ownership, and location are carried forward |
+| No fake production claims | 5 | Ready state says payload is ready for integration and nothing was submitted; failure state preserves answers; no POST/fetch/XHR exists |
+| Accessibility | 5 | Review Edit labels, native contact fields, validation, status region, focus transfer, semantic comparison/result headings, and keyboard controls |
+
+Checkpoint 5 gate: **Pass**. Static tests prove deterministic formulas and branch-specific rhythm logic. The browser suite reaches Review, result, model comparison, ready handoff, and private failure mode; it records zero non-GET requests and zero console errors. Evidence is under `docs/pricing-journey-artifacts/checkpoint-5/`; formulas and replacement boundaries are in `pricing-rules-development.md`.
 
 ## Checkpoint 6 - Responsive, Accessibility, And Performance
 

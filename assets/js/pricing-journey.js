@@ -4,12 +4,14 @@
   const root = document.querySelector("[data-pricing-journey]");
   const config = window.SheltonPricingJourneyConfig;
   const vectors = window.SheltonPricingJourneyVectors;
-  if (!root || !config || !vectors) return;
+  const pricingEngine = window.SheltonPricingDevelopmentRules;
+  if (!root || !config || !vectors || !pricingEngine) return;
 
   const searchParams = new URLSearchParams(window.location.search);
   const allowedConcepts = new Set(Object.keys(config.concepts));
   const requestedConcept = searchParams.get("concept");
   const explicitConcept = allowedConcepts.has(requestedConcept) ? requestedConcept : null;
+  const quoteMode = searchParams.get("quote") === "fail" ? "fail" : "ready";
   const reducedMotion = searchParams.get("motion") === "reduce" || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const concept = explicitConcept || "label";
 
@@ -41,7 +43,19 @@
   const programSummary = document.querySelector("[data-program-summary]");
   const programSummaryCount = document.querySelector("[data-program-summary-count]");
   const programSummaryList = document.querySelector("[data-program-summary-list]");
-  const reviewHandoff = document.querySelector("[data-review-handoff]");
+  const reviewScene = document.querySelector("[data-review-scene]");
+  const reviewSelections = document.querySelector("[data-review-selections]");
+  const resultSection = document.querySelector("[data-result]");
+  const resultScene = document.querySelector("[data-result-scene]");
+  const modelComparison = document.querySelector("[data-model-comparison]");
+  const resultFactors = document.querySelector("[data-result-factors]");
+  const quoteHandoff = document.querySelector("[data-quote-handoff]");
+  const quoteForm = document.querySelector("[data-quote-form]");
+  const quoteError = document.querySelector("[data-quote-error]");
+  const quoteStatus = document.querySelector("[data-quote-status]");
+  const quoteSubmit = document.querySelector("[data-quote-submit]");
+  const quotePayloadWrap = document.querySelector("[data-quote-payload-wrap]");
+  const quotePayload = document.querySelector("[data-quote-payload]");
   const announcer = document.querySelector("[data-journey-announcer]");
 
   const createInitialState = () => ({
@@ -60,6 +74,8 @@
     location: { type: null, value: "" },
     recommendation: null,
     contact: {},
+    quoteStatus: "idle",
+    quotePayload: null,
     developmentMode: true
   });
 
@@ -100,6 +116,11 @@
     const start = config.chapterOrder.indexOf(chapter);
     if (start < 0) return;
     config.chapterOrder.slice(start).forEach((item) => setComplete(item, false));
+    if (start <= config.chapterOrder.indexOf("review")) {
+      state.recommendation = null;
+      state.quoteStatus = "idle";
+      state.quotePayload = null;
+    }
   };
 
   const setComplete = (chapter, complete = true) => {
@@ -487,6 +508,175 @@
     document.querySelector("[data-location-summary-label]").textContent = state.location.value || "";
   };
 
+  const finishLabels = () => [
+    ...state.finish.map((id) => config.finishOptions.find((item) => item.id === id)?.label),
+    ...state.specialtyNeeds.map((id) => config.specialtyOptions.find((item) => item.id === id)?.label)
+  ].filter(Boolean);
+
+  const reviewRows = () => {
+    const operation = activeOperation();
+    const ownership = config.ownershipChoices.find((item) => item.id === state.ownership);
+    return [
+      { chapter: "operation", number: "01", label: "Operation", value: operation?.label || "" },
+      { chapter: "goods", number: "02", label: "Goods", value: state.goods.map((id) => config.goods[id].label).join(" · ") },
+      { chapter: "scale", number: "03", label: "Operating signals", value: document.querySelector("[data-scale-summary-label]").textContent },
+      { chapter: "finish", number: "04", label: "Finish and care", value: finishLabels().join(" · ") },
+      { chapter: "ownership", number: "05", label: "Inventory ownership", value: ownership?.label || "" },
+      { chapter: "location", number: "06", label: "Location", value: state.location.value }
+    ];
+  };
+
+  const buildReviewSelections = () => {
+    reviewSelections.replaceChildren();
+    reviewRows().forEach((item) => {
+      const article = document.createElement("article");
+      const number = document.createElement("span");
+      const copy = document.createElement("div");
+      const label = document.createElement("small");
+      const value = document.createElement("strong");
+      const edit = document.createElement("button");
+      number.textContent = item.number;
+      label.textContent = item.label;
+      value.textContent = item.value;
+      edit.type = "button";
+      edit.dataset.editChapter = item.chapter;
+      edit.textContent = "Edit";
+      edit.setAttribute("aria-label", `Edit ${item.label}`);
+      copy.append(label, value);
+      article.append(number, copy, edit);
+      reviewSelections.append(article);
+    });
+  };
+
+  const renderReviewState = () => {
+    const operation = activeOperation();
+    const chapter = document.querySelector('[data-chapter="review"]');
+    chapter.hidden = !isComplete("location") || !operation;
+    if (chapter.hidden) return;
+    const editor = document.querySelector('[data-chapter-editor="review"]');
+    const summary = document.querySelector('[data-chapter-summary="review"]');
+    const editing = state.activeChapter === "review" || !isComplete("review");
+    editor.hidden = !editing;
+    summary.hidden = editing;
+    document.querySelector("[data-review-summary-label]").textContent = `${operation.label} · ${state.goods.length} ${state.goods.length === 1 ? "good" : "goods"}`;
+    if (editing) {
+      buildReviewSelections();
+      vectors.renderScene(reviewScene, {
+        operation,
+        goodsIds: state.goods,
+        selectedIds: state.goods,
+        selectedOnly: true,
+        returnOptions: state.finish,
+        catalog: config.goods
+      });
+    } else {
+      reviewScene.replaceChildren();
+    }
+  };
+
+  const formatMoney = (value) => `$${Number(value).toLocaleString("en-US")}`;
+
+  const buildModelComparison = (recommendation) => {
+    modelComparison.replaceChildren();
+    recommendation.comparisons.forEach((item) => {
+      const article = document.createElement("article");
+      const marker = document.createElement("span");
+      const title = document.createElement("h4");
+      const range = document.createElement("strong");
+      const detail = document.createElement("p");
+      marker.textContent = item.recommended ? "Recommended" : "Compare";
+      title.textContent = item.label;
+      range.textContent = `${formatMoney(item.weeklyLow)}-${formatMoney(item.weeklyHigh)} / week`;
+      detail.textContent = {
+        cog: "Service is planned around inventory the customer already owns.",
+        hybrid: "Owned goods and selected supplied inventory are planned together.",
+        rental: "The planning range includes a development inventory-supply factor."
+      }[item.id];
+      article.classList.toggle("is-recommended", item.recommended);
+      article.dataset.modelId = item.id;
+      article.append(marker, title, range, detail);
+      modelComparison.append(article);
+    });
+  };
+
+  const renderResultState = () => {
+    const recommendation = state.recommendation;
+    const visible = isComplete("review") && recommendation && ["result", "handoff"].includes(state.activeChapter);
+    resultSection.hidden = !visible;
+    if (!visible) {
+      resultScene.replaceChildren();
+      return;
+    }
+    document.querySelector("[data-result-warning]").textContent = recommendation.warning;
+    document.querySelector("[data-result-positioning]").textContent = recommendation.positioning;
+    document.querySelector("[data-result-weekly]").textContent = `${formatMoney(recommendation.range.weeklyLow)}-${formatMoney(recommendation.range.weeklyHigh)}`;
+    document.querySelector("[data-result-monthly]").textContent = `${formatMoney(recommendation.range.monthlyLow)}-${formatMoney(recommendation.range.monthlyHigh)} projected per month`;
+    document.querySelector("[data-result-rhythm]").textContent = recommendation.rhythm.label;
+    document.querySelector("[data-result-rhythm-reason]").textContent = recommendation.rhythm.reason;
+    document.querySelector("[data-result-model]").textContent = recommendation.model.label;
+    document.querySelector("[data-result-model-reason]").textContent = recommendation.model.reason;
+    document.querySelector("[data-result-confidence]").textContent = recommendation.confidence.level;
+    document.querySelector("[data-result-confidence-copy]").textContent = recommendation.confidence.explanation;
+    resultFactors.replaceChildren();
+    recommendation.factors.forEach((factor) => {
+      const item = document.createElement("li");
+      item.textContent = factor;
+      resultFactors.append(item);
+    });
+    buildModelComparison(recommendation);
+    vectors.renderScene(resultScene, {
+      operation: activeOperation(),
+      goodsIds: state.goods,
+      selectedIds: state.goods,
+      selectedOnly: true,
+      returnOptions: state.finish,
+      catalog: config.goods
+    });
+  };
+
+  const buildQuotePayload = () => ({
+    preview: true,
+    endpointIntegrated: false,
+    journeyVersion: config.version,
+    pricingRulesVersion: state.recommendation?.rulesVersion || null,
+    operation: state.operation,
+    operationLabel: activeOperation()?.label || "",
+    goods: [...state.goods],
+    scale: { ...state.scale },
+    finish: [...state.finish],
+    specialtyNeeds: [...state.specialtyNeeds],
+    ownership: state.ownership,
+    location: { ...state.location },
+    recommendation: state.recommendation ? {
+      rhythm: state.recommendation.rhythm.label,
+      model: state.recommendation.model.id,
+      weeklyRange: [state.recommendation.range.weeklyLow, state.recommendation.range.weeklyHigh]
+    } : null,
+    contact: { ...state.contact }
+  });
+
+  const renderQuoteState = () => {
+    const visible = state.activeChapter === "handoff" && isComplete("review");
+    quoteHandoff.hidden = !visible;
+    if (!visible) return;
+    Object.entries(state.contact).forEach(([name, value]) => {
+      const input = quoteForm.elements.namedItem(name);
+      if (input && input.value !== value) input.value = value;
+    });
+    quoteSubmit.disabled = state.quoteStatus === "loading";
+    quoteSubmit.firstChild.textContent = state.quoteStatus === "loading" ? "Preparing payload " : "Prepare quote payload ";
+    quoteError.hidden = true;
+    quoteStatus.hidden = state.quoteStatus === "idle";
+    quoteStatus.dataset.status = state.quoteStatus;
+    quoteStatus.textContent = {
+      loading: "Preparing the development payload. No network request is being made.",
+      failure: "The development handoff could not be prepared. Your program and contact details remain available; try again when ready.",
+      ready: "Quote payload ready for endpoint integration. Nothing has been submitted."
+    }[state.quoteStatus] || "";
+    quotePayloadWrap.hidden = state.quoteStatus !== "ready" || !state.quotePayload;
+    quotePayload.textContent = state.quotePayload ? JSON.stringify(state.quotePayload, null, 2) : "";
+  };
+
   const renderThread = () => {
     document.querySelectorAll("[data-thread-step]").forEach((item) => {
       const chapter = item.dataset.threadStep;
@@ -518,7 +708,7 @@
       isComplete("ownership"),
       isComplete("location")
     ].filter(Boolean).length;
-    programSummary.hidden = count === 0 || state.view !== "flow";
+    programSummary.hidden = count === 0 || state.view !== "flow" || ["result", "handoff"].includes(state.activeChapter);
     programSummaryCount.textContent = String(count);
     programSummaryList.replaceChildren();
     if (operation) addSummaryItem("Operation", operation.label);
@@ -541,9 +731,11 @@
     renderFinishState();
     renderOwnershipState();
     renderLocationState();
+    renderReviewState();
+    renderResultState();
+    renderQuoteState();
     renderThread();
     renderProgramSummary();
-    reviewHandoff.hidden = state.activeChapter !== "review" || !isComplete("location");
   };
 
   const render = () => {
@@ -553,9 +745,11 @@
   };
 
   const focusChapter = (chapter) => {
-    const target = chapter === "review"
-      ? reviewHandoff
-      : document.querySelector(`[data-chapter="${chapter}"]`);
+    const target = chapter === "result"
+      ? resultSection
+      : chapter === "handoff"
+        ? quoteHandoff
+        : document.querySelector(`[data-chapter="${chapter}"]`);
     const heading = target?.querySelector("h2");
     window.setTimeout(() => {
       heading?.focus({ preventScroll: true });
@@ -767,8 +961,73 @@
     announce("Location saved. Your program inputs are ready to review.");
   };
 
+  const completeReview = () => {
+    state.recommendation = pricingEngine.calculatePlanningRange(state, pricingEngine.pricingRules);
+    setComplete("review");
+    state.activeChapter = "result";
+    state.quoteStatus = "idle";
+    state.quotePayload = null;
+    render();
+    focusChapter("result");
+    announce(`Development recommendation ready. ${state.recommendation.rhythm.label}; ${state.recommendation.model.label}.`);
+  };
+
+  const openQuoteHandoff = () => {
+    state.activeChapter = "handoff";
+    state.quoteStatus = "idle";
+    render();
+    focusChapter("handoff");
+    announce("Exact-quote handoff ready. Add only the missing contact details.");
+  };
+
+  const returnToResult = () => {
+    state.activeChapter = "result";
+    render();
+    focusChapter("result");
+    announce("Returned to the development result.");
+  };
+
+  const validateQuoteContact = () => {
+    let valid = true;
+    Array.from(quoteForm.elements).forEach((control) => {
+      if (!(control instanceof HTMLInputElement)) return;
+      const controlValid = !control.required || control.value.trim() !== "";
+      const emailValid = control.type !== "email" || control.value === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(control.value);
+      const finalValid = controlValid && emailValid;
+      control.setAttribute("aria-invalid", String(!finalValid));
+      if (!finalValid) valid = false;
+    });
+    quoteError.hidden = valid;
+    return valid;
+  };
+
+  const prepareQuotePayload = () => {
+    if (!validateQuoteContact()) {
+      quoteForm.querySelector('[aria-invalid="true"]')?.focus();
+      announce("Complete the required contact details before preparing the payload.");
+      return;
+    }
+    state.quoteStatus = "loading";
+    state.quotePayload = null;
+    render();
+    announce("Preparing the development payload. No network request is being made.");
+    window.setTimeout(() => {
+      if (quoteMode === "fail") {
+        state.quoteStatus = "failure";
+        render();
+        announce("The development payload could not be prepared. Your answers remain available.");
+        return;
+      }
+      state.quotePayload = buildQuotePayload();
+      state.quoteStatus = "ready";
+      render();
+      quoteStatus.focus?.({ preventScroll: true });
+      announce("Quote payload ready for endpoint integration. Nothing has been submitted.");
+    }, reducedMotion ? 80 : 650);
+  };
+
   const editChapter = (chapter) => {
-    if (!config.chapterOrder.includes(chapter) || chapter === "review") return;
+    if (!config.chapterOrder.includes(chapter)) return;
     invalidateFrom(chapter);
     state.activeChapter = chapter;
     state.view = "flow";
@@ -810,6 +1069,9 @@
     if (event.target.closest("[data-goods-continue]")) return completeGoods();
     if (event.target.closest("[data-finish-continue]")) return completeFinish();
     if (event.target.closest("[data-ownership-continue]")) return completeOwnership();
+    if (event.target.closest("[data-build-result]")) return completeReview();
+    if (event.target.closest("[data-exact-quote]")) return openQuoteHandoff();
+    if (event.target.closest("[data-return-result]")) return returnToResult();
     if (event.target.closest("[data-start-over]")) return startOver();
 
     const edit = event.target.closest("[data-edit-chapter]");
@@ -844,6 +1106,22 @@
     locationInput.setAttribute("aria-invalid", "false");
     locationError.hidden = true;
     saveState();
+  });
+
+  quoteForm?.addEventListener("input", (event) => {
+    const control = event.target.closest("input[name]");
+    if (!control) return;
+    state.contact[control.name] = control.value;
+    state.quoteStatus = "idle";
+    state.quotePayload = null;
+    control.setAttribute("aria-invalid", "false");
+    quoteError.hidden = true;
+    saveState();
+  });
+
+  quoteForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    prepareQuotePayload();
   });
 
   operationChoices?.addEventListener("keydown", (event) => {
@@ -889,6 +1167,9 @@
     selectOwnership,
     completeOwnership,
     completeLocation,
+    completeReview,
+    openQuoteHandoff,
+    prepareQuotePayload,
     editChapter,
     startOver
   };

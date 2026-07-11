@@ -12,7 +12,7 @@
 ## Current Phase
 - Phase number: 5
 - Phase name: Review, Development Result, and Quote Shell
-- Status: In progress
+- Status: Complete; checkpoint commit pending
 
 ## Last Known Good Checkpoint
 - Commit hash: `197886cc0302db99839541cb8bf03ff18cbdcf43`
@@ -55,24 +55,31 @@
 - Added ZIP/city-only Location validation with no route-availability promise.
 - Added completed summaries, inline Edit, downstream invalidation, state persistence, and mobile-specific layouts for all program-input chapters.
 - Added deterministic Checkpoint 4 browser smoke coverage and desktop/mobile screenshot evidence.
+- Added an assembled Review scene with six concise answer bands and inline Edit actions.
+- Added deterministic development-only weekly/monthly planning ranges through a replaceable rules interface.
+- Added operation-aware recommended service rhythm, one recommended supply model, and a three-way COG/Hybrid/Rental comparison.
+- Added visible development-pricing warnings, confidence explanation, and factors shaping the range.
+- Added an exact-quote contact shell that preserves all answers and prepares a local payload without a live endpoint.
+- Added loading, payload-ready, and private failure states with explicit no-submission language.
+- Added formula documentation, deterministic unit tests, and end-to-end assertions proving zero non-GET requests.
 
 ## Current Working State
-- Files currently being changed: none at the start of Checkpoint 5
-- Uncommitted work: progress handoff update only
+- Files currently being changed: Pricing result HTML/CSS/JavaScript, development rules, tests, artifacts, and documentation
+- Uncommitted work: complete Checkpoint 5 implementation awaiting its checkpoint commit
 - Whether the page builds: Yes; static pages load on localhost
 - Whether smoke tests pass: Yes; syntax, configuration assertions, selected-only return compatibility, Hotel/Robes end-to-end completion, inline Edit, browser console, and mobile overflow checks pass
 
 ## Outstanding Defects
 - The base repository has no package/build tooling. Affected viewport/branch: all / feature branch. Severity: low. Rubric: repeatability. Intended correction: continue using documented Node syntax and browser smoke commands rather than adding a framework.
 - No Checkpoint 1 visual or functional defects remain. The orb's slight consumer-product ambiguity and portal's quieter Begin action are documented reasons they were not selected.
-- Review, recommendation, development planning ranges, model comparison, and exact-quote handoff are not yet implemented. Affected phase: Checkpoint 5. Severity: planned. Rubric: Result and Handoff. Intended correction: add an assembled review and isolated deterministic development rules without touching the live Pricing page or endpoint.
+- Full responsive matrix, 200% zoom, keyboard-only completion, screen-reader semantics audit, touch-target audit, layout-shift review, and complete performance cleanup remain for Checkpoint 6. Severity: planned. Rubric: Responsive, Accessibility, and Performance.
 
 ## Next Exact Actions
-1. Create `assets/js/pricing-rules.dev.js` with deterministic replaceable rates, factors, and `calculatePlanningRange(pricingJourneyState, pricingRules)`.
-2. Build the assembled Review scene and inline Edit links without a tabular dashboard treatment.
-3. Add recommended rhythm, supply model, COG/Hybrid/Rental comparison, development warning, and planning range.
-4. Add the exact-quote contact shell, payload preview, loading/failure simulation, and endpoint-ready completion state without a live request.
-5. Add formula documentation and Checkpoint 5 browser assertions before creating the checkpoint commit.
+1. Run static configuration, pricing-rules, Checkpoint 4 regression, and Checkpoint 5 browser tests.
+2. Commit Checkpoint 5 as `checkpoint(pricing): complete review result and quote handoff`.
+3. Build the Checkpoint 6 viewport, keyboard, zoom, reduced-motion, touch-target, state-restoration, and performance harness.
+4. Correct only evidence-backed responsive/accessibility/performance defects.
+5. Commit Checkpoint 6 after the complete matrix passes without clipping, overflow, console errors, or visible layout shift.
 
 ## Business-Data Blockers
 - Real Shelton pricing rates, volume bands, finishing factors, route-zone factors, and inventory-model factors are not supplied. Development-only deterministic fixtures are permitted and will remain visibly labeled.
@@ -82,5 +89,5 @@
 ## Resume Instructions
 - Exact first command: `git status --short --branch`
 - Exact first file to inspect: `docs/pricing-journey-progress.md`
-- Exact next test to run: `node tests/pricing-journey-config.test.cjs && node --check assets/js/pricing-journey.js`
-- Exact next visual state to render: Hotel with Robes selected as one assembled Review scene, followed by its deterministic development result and quote payload-ready state at 1366x768
+- Exact next test to run: `node tests/pricing-rules-dev.test.cjs && NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-cp5.e2e.cjs`
+- Exact next visual state to render: Complete selected Label journey at 1440x900, 1366x768, 1280x800, tablet, 390x844, and 430x932, followed by 200% zoom and keyboard-only completion
