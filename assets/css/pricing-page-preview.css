@@ -868,6 +868,10 @@ body[data-page="pricing-page-preview"] .site-nav {
   align-items: center;
 }
 
+.pricing-rebuild .estimate-transition {
+  display: grid;
+}
+
 .estimate-transition > * {
   width: auto;
   margin: 0;
@@ -969,6 +973,304 @@ body[data-page="pricing-page-preview"] .site-nav {
   flex-wrap: wrap;
   gap: 1rem 1.2rem;
   align-items: center;
+}
+
+.pricing-vector {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.pricing-hero__support--secondary {
+  margin-top: 0.7rem;
+  color: rgba(197, 207, 216, 0.7);
+  font-size: 0.96rem;
+}
+
+.pricing-hero__actions {
+  margin-top: clamp(1.7rem, 4vh, 2.6rem);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem 1.15rem;
+  align-items: center;
+}
+
+.hero-program--map {
+  position: relative;
+  z-index: 2;
+  right: auto;
+  top: auto;
+  grid-column: 2;
+  grid-row: 1;
+  width: min(100%, 34rem);
+  max-width: 34rem;
+  aspect-ratio: auto;
+  justify-self: end;
+  align-self: center;
+  opacity: 1;
+  transform: none;
+}
+
+.pricing-rebuild .pricing-hero > .hero-program--map {
+  width: min(100%, 34rem);
+  max-width: 34rem;
+}
+
+.hero-program--map::before {
+  display: none;
+}
+
+.hero-vector {
+  filter: drop-shadow(0 2rem 4rem rgba(0, 0, 0, 0.32));
+}
+
+.vector-orbit,
+.hero-vector__fold,
+.hero-vector__node path,
+.factor-vector__thread,
+.factor-vector__fold,
+.factor-vector__route,
+.quality-vector__halo,
+.model-vector__route,
+.model-vector path,
+.transition-vector__thread,
+.transition-vector__fold {
+  fill: none;
+  stroke: rgba(216, 185, 120, 0.36);
+  stroke-width: 1;
+}
+
+.vector-orbit--inner {
+  stroke-dasharray: 4 9;
+  opacity: 0.64;
+}
+
+.hero-vector__cloth,
+.factor-vector__sheet,
+.quality-vector__item,
+.model-vector__owned rect,
+.model-vector__shelton rect,
+.transition-vector__sheet {
+  stroke: rgba(244, 237, 222, 0.36);
+  stroke-width: 1;
+}
+
+.hero-vector__cloth {
+  opacity: 0.92;
+}
+
+.hero-vector__node circle,
+.factor-vector__node,
+.factor-vector__dot,
+.model-vector__center circle {
+  fill: rgba(216, 185, 120, 0.78);
+  stroke: rgba(244, 237, 222, 0.28);
+  stroke-width: 1;
+}
+
+.hero-vector__node text,
+.hero-vector__center text,
+.model-vector text,
+.journey-vector text,
+.transition-vector__label {
+  fill: rgba(244, 237, 222, 0.68);
+  font: 800 0.62rem/1 Inter, sans-serif;
+  letter-spacing: 0.14em;
+  text-anchor: middle;
+  text-transform: uppercase;
+}
+
+.hero-vector__center text,
+.transition-vector__label {
+  fill: rgba(216, 185, 120, 0.82);
+}
+
+.hero-program__notes {
+  margin-top: -0.6rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(216, 185, 120, 0.24);
+}
+
+.hero-program__notes span {
+  display: block;
+  color: rgba(216, 185, 120, 0.78);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero-program__notes strong {
+  display: block;
+  max-width: 22rem;
+  margin-top: 0.35rem;
+  color: rgba(244, 237, 222, 0.86);
+  font: 500 1.55rem/1.06 "Cormorant Garamond", serif;
+}
+
+.pricing-journey {
+  background:
+    radial-gradient(circle at 84% 18%, rgba(216, 185, 120, 0.07), transparent 25rem),
+    linear-gradient(180deg, rgba(3, 8, 15, 0.18), rgba(7, 19, 33, 0.34));
+}
+
+.journey-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(18rem, 0.72fr);
+  gap: clamp(2.25rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.journey-steps {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.35rem) clamp(1.4rem, 3vw, 2.1rem);
+  list-style: none;
+}
+
+.journey-steps li {
+  min-height: 12.5rem;
+  padding: 1.15rem 0 1.25rem;
+  border-top: 1px solid rgba(216, 185, 120, 0.28);
+}
+
+.journey-steps span {
+  color: rgba(216, 185, 120, 0.86);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.journey-steps strong {
+  display: block;
+  margin-top: 0.6rem;
+  color: var(--pricing-cream);
+  font: 500 clamp(1.55rem, 2.2vw, 2rem)/1.02 "Cormorant Garamond", serif;
+}
+
+.journey-steps p {
+  margin-top: 0.6rem;
+  color: rgba(197, 207, 216, 0.72);
+  font-size: 0.83rem;
+  line-height: 1.65;
+}
+
+.journey-vector-wrap {
+  position: relative;
+  min-height: 34rem;
+  display: grid;
+  place-items: center;
+}
+
+.journey-vector {
+  max-width: 26rem;
+}
+
+.journey-vector__rail {
+  fill: none;
+  stroke: rgba(216, 185, 120, 0.34);
+  stroke-width: 1;
+}
+
+.journey-vector__station circle,
+.journey-vector__station rect,
+.journey-vector__station path {
+  fill: rgba(7, 19, 33, 0.52);
+  stroke: rgba(216, 185, 120, 0.42);
+  stroke-width: 1;
+}
+
+.journey-vector__station path {
+  fill: none;
+}
+
+.journey-vector__range text {
+  fill: var(--pricing-ink);
+}
+
+.factor-vector {
+  max-width: 21rem;
+  margin-inline: auto;
+}
+
+.factor-vector__sheet {
+  fill: #dfcca0;
+}
+
+.factor-vector__node {
+  fill: rgba(195, 160, 97, 0.2);
+}
+
+.quality-vector {
+  max-width: 23rem;
+  margin-inline: auto;
+}
+
+.quality-vector__item {
+  fill: #dfcca0;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.quality-vector__halo {
+  opacity: 0.7;
+}
+
+.quality-object[data-quality="chef"] .quality-vector__chef,
+.quality-object[data-quality="linen"] .quality-vector__linen,
+.quality-object[data-quality="event"] .quality-vector__event,
+.quality-object[data-quality="towel"] .quality-vector__towel {
+  opacity: 1;
+}
+
+.model-vector {
+  max-width: 26rem;
+  margin-inline: auto;
+}
+
+.model-vector__owned rect,
+.model-vector__shelton rect {
+  fill: #dfcca0;
+}
+
+.model-vector__shelton {
+  opacity: 0.42;
+}
+
+.model-illustration[data-model="hybrid"] .model-vector__shelton,
+.model-illustration[data-model="rental"] .model-vector__shelton {
+  opacity: 1;
+}
+
+.model-illustration[data-model="rental"] .model-vector__owned {
+  opacity: 0.3;
+}
+
+.model-vector text {
+  fill: rgba(216, 185, 120, 0.78);
+  font-size: 0.5rem;
+}
+
+.transition-vector {
+  max-width: 30rem;
+  margin-inline: auto;
+}
+
+.transition-vector__range rect {
+  fill: rgba(216, 185, 120, 0.12);
+  stroke: rgba(216, 185, 120, 0.42);
+}
+
+.transition-vector__range path {
+  stroke: rgba(244, 237, 222, 0.52);
+  stroke-width: 1;
+}
+
+.transition-vector__range circle {
+  fill: var(--pricing-gold-2);
 }
 
 @media (prefers-reduced-motion: reduce) {

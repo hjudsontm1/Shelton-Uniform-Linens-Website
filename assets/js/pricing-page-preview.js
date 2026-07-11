@@ -4,82 +4,6 @@
   const root = document.querySelector("[data-pricing-page]");
   if (!root) return;
 
-  const storageKey = "sheltonPricingHeroState";
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const operations = [
-    {
-      id: "hotel",
-      label: "Hotel / Boutique Stay",
-      helper: "Hotels usually price around rooms, turns, presentation goods, storage, and pickup/return rhythm.",
-      goods: ["Sheets", "Towels", "Robes", "Blankets", "Mixed Program"],
-      visual: "Hospitality program"
-    },
-    {
-      id: "str",
-      label: "STR / Property Manager",
-      helper: "STR programs often depend on centralized staging, property turns, seasonality, and clean-goods storage.",
-      goods: ["Sheets", "Towels", "Duvet Covers", "Bath Mats", "Mixed Program"],
-      visual: "Turnover staging"
-    },
-    {
-      id: "spa",
-      label: "Spa / Wellness",
-      helper: "Spa pricing is shaped by appointments, treatment-room volume, towels, robes, feel, and compact storage.",
-      goods: ["Towels", "Sheets", "Robes", "Face Cradle Covers", "Mixed Program"],
-      visual: "Soft-goods care"
-    },
-    {
-      id: "gym",
-      label: "Gym / Fitness",
-      helper: "Fitness programs usually center on towel volume, odor control, peak use, and consistent restocking.",
-      goods: ["Towels", "Hand Towels", "Bath Mats", "Mops", "Mixed Program"],
-      visual: "Towel volume"
-    },
-    {
-      id: "event",
-      label: "Event / Venue / Convention Center",
-      helper: "Event linen pricing can change with presentation standards, stains, deadlines, color retention, and protection.",
-      goods: ["Tablecloths", "Napkins", "Runners", "Skirting", "Mixed Program"],
-      visual: "Event return"
-    },
-    {
-      id: "restaurant",
-      label: "Restaurant / Food Service",
-      helper: "Restaurants combine recurring kitchen soil, dining-room presentation, staff goods, and service consistency.",
-      goods: ["Chef Coats", "Aprons", "Napkins", "Table Linens", "Mixed Program"],
-      visual: "Kitchen and dining"
-    },
-    {
-      id: "casino",
-      label: "Casino / Entertainment",
-      helper: "Casino programs can span departments, shifts, banquets, uniforms, restaurants, and presentation goods.",
-      goods: ["Uniforms", "Chef Coats", "Banquet Linens", "Towels", "Mixed Program"],
-      visual: "Department sorting"
-    },
-    {
-      id: "uniform",
-      label: "Uniform Account",
-      helper: "Uniform pricing is influenced by headcount, shifts, finishing, departments, and organized return.",
-      goods: ["Uniform Shirts", "Chef Coats", "Workwear", "Jackets", "Mixed Program"],
-      visual: "Garment return"
-    },
-    {
-      id: "wholesale",
-      label: "Wholesale Dry Cleaning",
-      helper: "Wholesale support is shaped by batch volume, turnaround, finishing capacity, and specialty handling.",
-      goods: ["Shirts", "Suits", "Dresses", "Specialty Garments", "Mixed Program"],
-      visual: "Wholesale finishing"
-    },
-    {
-      id: "other",
-      label: "Other / Not Sure",
-      helper: "Start with the closest goods. Shelton can help shape the right questions for unusual commercial programs.",
-      goods: ["Towels", "Table Linens", "Uniforms", "Robes", "Mixed Program"],
-      visual: "Custom program"
-    }
-  ];
-
   const factors = [
     ["Goods", "The type of item changes handling, finishing, inspection, packaging, and replacement concerns.", ["Flatwork, towels, garments, and specialty event goods move through different workflows.", "Higher presentation requirements can add finishing work."]],
     ["Volume", "Volume matters, but it is not the only pricing signal. Predictability and concentration can matter too.", ["Steady recurring work is different from spike-heavy event work.", "Known pounds or pieces improve planning accuracy."]],
@@ -160,189 +84,14 @@
   ];
 
   const state = {
-    operation: null,
-    goods: [],
     factor: 0,
     market: 2,
     quality: 0,
     model: 0
   };
 
-  const operationWrap = root.querySelector("[data-operation-options]");
-  const goodsWrap = root.querySelector("[data-goods-options]");
-  const goodsFieldset = root.querySelector("[data-goods-fieldset]");
-  const helper = root.querySelector("[data-hero-helper]");
-  const status = root.querySelector("[data-hero-status]");
-  const submit = root.querySelector("[data-hero-submit]");
-  const visualGoods = root.querySelector("[data-hero-visual-goods]");
-  const visualCaption = root.querySelector("[data-hero-visual-caption]");
-  const transitionGoods = root.querySelector("[data-transition-goods]");
-  const estimateSummary = root.querySelector("[data-estimate-summary]");
-  const estimateLink = root.querySelector("[data-estimate-link]");
-  const announcer = document.querySelector("[data-pricing-announcer]");
-
-  const announce = (message) => {
-    if (announcer) announcer.textContent = message;
-  };
-
-  const slug = (value) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-  const activeOperation = () => operations.find((item) => item.id === state.operation);
-
-  const selectedGoodsLabels = () => state.goods
-    .map((id) => activeOperation()?.goods.find((item) => slug(item) === id))
-    .filter(Boolean);
-
-  const saveHeroState = () => {
-    const payload = {
-      source: "pricing-hero",
-      operation: state.operation,
-      operationLabel: activeOperation()?.label || "",
-      goods: state.goods,
-      goodsLabels: selectedGoodsLabels(),
-      timestamp: new Date().toISOString()
-    };
-    try {
-      window.sessionStorage.setItem(storageKey, JSON.stringify(payload));
-    } catch (error) {
-      // The URL handoff still carries non-sensitive operation/goods keys.
-    }
-    return payload;
-  };
-
-  const estimatorHref = () => {
-    const params = new URLSearchParams();
-    params.set("source", "pricing-hero");
-    if (state.operation) params.set("operation", state.operation);
-    if (state.goods.length) params.set("goods", state.goods.join(","));
-    return `estimate-preview.html?${params.toString()}`;
-  };
-
-  const updateSummary = () => {
-    const operation = activeOperation();
-    const goodsLabels = selectedGoodsLabels();
-    const hasState = Boolean(operation && goodsLabels.length);
-    submit.disabled = !hasState;
-    estimateSummary.hidden = !hasState;
-    if (hasState) {
-      const goodsText = goodsLabels.join(" · ");
-      status.textContent = `${operation.label}: ${goodsText}`;
-      estimateSummary.innerHTML = `<span>Continue with</span><strong>${operation.label}</strong><small>${goodsText}</small>`;
-      transitionGoods.textContent = goodsText;
-      estimateLink.textContent = "Continue My Estimate";
-      estimateLink.href = estimatorHref();
-    } else if (operation) {
-      status.textContent = `${operation.label} selected. Choose at least one primary good.`;
-      transitionGoods.textContent = operation.visual;
-      estimateLink.textContent = "Launch Interactive Estimator";
-      estimateLink.href = estimatorHref();
-    } else {
-      status.textContent = "Select an operation to reveal likely goods.";
-      transitionGoods.textContent = "Program planning range";
-      estimateLink.textContent = "Launch Interactive Estimator";
-      estimateLink.href = "estimate-preview.html";
-    }
-  };
-
-  const renderHeroVisual = () => {
-    const operation = activeOperation();
-    const goodsLabels = selectedGoodsLabels();
-    visualGoods.replaceChildren();
-    const count = Math.max(3, Math.min(5, goodsLabels.length || 4));
-    Array.from({ length: count }).forEach(() => {
-      const mark = document.createElement("span");
-      mark.className = "hero-good-mark";
-      visualGoods.append(mark);
-    });
-    visualCaption.textContent = goodsLabels.length
-      ? `${operation.label} · ${goodsLabels.join(" · ")}`
-      : operation
-        ? `${operation.visual}: choose the goods to continue.`
-        : "Choose an operation to shape the program.";
-  };
-
-  const renderOperations = () => {
-    operationWrap.replaceChildren();
-    operations.forEach((operation, index) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "operation-choice";
-      button.dataset.operation = operation.id;
-      button.setAttribute("role", "radio");
-      button.setAttribute("aria-checked", "false");
-      button.tabIndex = index === 0 ? 0 : -1;
-      button.textContent = operation.label;
-      operationWrap.append(button);
-    });
-  };
-
-  const renderGoods = () => {
-    const operation = activeOperation();
-    goodsWrap.replaceChildren();
-    goodsFieldset.disabled = !operation;
-    if (!operation) return;
-    operation.goods.forEach((good) => {
-      const id = slug(good);
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "goods-choice";
-      button.dataset.good = id;
-      button.setAttribute("aria-pressed", String(state.goods.includes(id)));
-      button.textContent = good;
-      goodsWrap.append(button);
-    });
-  };
-
-  const renderHero = () => {
-    operationWrap.querySelectorAll("[data-operation]").forEach((button, index) => {
-      const selected = button.dataset.operation === state.operation;
-      button.classList.toggle("is-selected", selected);
-      button.setAttribute("aria-checked", String(selected));
-      button.tabIndex = selected || (!state.operation && index === 0) ? 0 : -1;
-    });
-    goodsWrap.querySelectorAll("[data-good]").forEach((button) => {
-      const selected = state.goods.includes(button.dataset.good);
-      button.classList.toggle("is-selected", selected);
-      button.setAttribute("aria-pressed", String(selected));
-    });
-    helper.textContent = activeOperation()?.helper || "Choose your operation. The goods and pricing signals will adjust immediately.";
-    renderHeroVisual();
-    updateSummary();
-  };
-
-  const selectOperation = (id) => {
-    const operation = operations.find((item) => item.id === id);
-    if (!operation) return;
-    state.operation = id;
-    state.goods = [];
-    renderGoods();
-    renderHero();
-    announce(`${operation.label} selected. Relevant goods are now available.`);
-  };
-
-  const toggleGood = (id) => {
-    if (state.goods.includes(id)) {
-      state.goods = state.goods.filter((item) => item !== id);
-    } else {
-      state.goods = [...state.goods, id];
-    }
-    renderHero();
-    announce(state.goods.length ? `${selectedGoodsLabels().join(", ")} selected.` : "Goods selection cleared.");
-  };
-
-  const resetHero = () => {
-    state.operation = null;
-    state.goods = [];
-    renderGoods();
-    renderHero();
-    try {
-      window.sessionStorage.removeItem(storageKey);
-    } catch (error) {
-      // In-memory reset is enough when storage is unavailable.
-    }
-    announce("Pricing hero selections cleared.");
-  };
-
   const buildTabs = (wrap, items, activeIndex, prefix, onClick) => {
+    if (!wrap) return;
     wrap.replaceChildren();
     items.forEach((item, index) => {
       const button = document.createElement("button");
@@ -352,22 +101,26 @@
       button.setAttribute("role", "tab");
       button.setAttribute("aria-selected", String(index === activeIndex));
       button.classList.toggle("is-active", index === activeIndex);
+
       const number = document.createElement("span");
       const label = document.createElement("strong");
       number.textContent = String(index + 1).padStart(2, "0");
       label.textContent = Array.isArray(item) ? item[0] : item.label;
       button.append(number, label);
+
       if (prefix === "market") {
         const small = document.createElement("small");
         small.textContent = item[1];
         button.append(small);
       }
+
       button.addEventListener("click", () => onClick(index));
       wrap.append(button);
     });
   };
 
   const setActiveTab = (wrap, activeIndex) => {
+    if (!wrap) return;
     wrap.querySelectorAll("[role='tab']").forEach((button) => {
       const active = Number(button.dataset.index) === activeIndex;
       button.classList.toggle("is-active", active);
@@ -375,18 +128,21 @@
     });
   };
 
+  const renderList = (points) => points.map((point) => `<li>${point}</li>`).join("");
+
   const renderFactor = () => {
     const item = factors[state.factor];
     const detail = root.querySelector("[data-factor-detail]");
-    root.querySelector("[data-factor-visual-label]").textContent = item[0];
-    detail.innerHTML = `<h3>${item[0]}</h3><p>${item[1]}</p><ul>${item[2].map((point) => `<li>${point}</li>`).join("")}</ul>`;
+    const label = root.querySelector("[data-factor-visual-label]");
+    if (label) label.textContent = item[0];
+    if (detail) detail.innerHTML = `<h3>${item[0]}</h3><p>${item[1]}</p><ul>${renderList(item[2])}</ul>`;
     setActiveTab(root.querySelector("[data-factor-list]"), state.factor);
   };
 
   const renderMarket = () => {
     const item = market[state.market];
     const detail = root.querySelector("[data-market-detail]");
-    detail.innerHTML = `<h3>${item[0]}</h3><p>${item[2]}</p>`;
+    if (detail) detail.innerHTML = `<h3>${item[0]}</h3><p>${item[2]}</p>`;
     setActiveTab(root.querySelector("[data-market-list]"), state.market);
   };
 
@@ -394,8 +150,8 @@
     const item = quality[state.quality];
     const detail = root.querySelector("[data-quality-detail]");
     const object = root.querySelector("[data-quality-object]");
-    object.dataset.quality = item.id;
-    detail.innerHTML = `<h3>${item.title}</h3><p>${item.body}</p><ul>${item.points.map((point) => `<li>${point}</li>`).join("")}</ul>`;
+    if (object) object.dataset.quality = item.id;
+    if (detail) detail.innerHTML = `<h3>${item.title}</h3><p>${item.body}</p><ul>${renderList(item.points)}</ul>`;
     setActiveTab(root.querySelector("[data-quality-list]"), state.quality);
   };
 
@@ -403,54 +159,11 @@
     const item = models[state.model];
     const detail = root.querySelector("[data-model-detail]");
     const visual = root.querySelector("[data-model-visual]");
-    visual.dataset.model = item.id;
-    detail.innerHTML = `<h3>${item.title}</h3><p>${item.body}</p><ul>${item.points.map((point) => `<li>${point}</li>`).join("")}</ul>`;
+    if (visual) visual.dataset.model = item.id;
+    if (detail) detail.innerHTML = `<h3>${item.title}</h3><p>${item.body}</p><ul>${renderList(item.points)}</ul>`;
     setActiveTab(root.querySelector("[data-model-list]"), state.model);
   };
 
-  operationWrap.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-operation]");
-    if (button) selectOperation(button.dataset.operation);
-  });
-
-  operationWrap.addEventListener("keydown", (event) => {
-    const button = event.target.closest("[data-operation]");
-    if (!button || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-    const choices = Array.from(operationWrap.querySelectorAll("[data-operation]"));
-    let index = choices.indexOf(button);
-    if (event.key === "Home") index = 0;
-    if (event.key === "End") index = choices.length - 1;
-    if (event.key === "ArrowRight") index = (index + 1) % choices.length;
-    if (event.key === "ArrowLeft") index = (index - 1 + choices.length) % choices.length;
-    event.preventDefault();
-    choices[index].focus();
-    selectOperation(choices[index].dataset.operation);
-  });
-
-  goodsWrap.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-good]");
-    if (button) toggleGood(button.dataset.good);
-  });
-
-  root.querySelector("[data-hero-estimator]").addEventListener("submit", (event) => {
-    event.preventDefault();
-    if (!state.operation || !state.goods.length) return;
-    saveHeroState();
-    window.location.href = estimatorHref();
-  });
-
-  root.querySelector("[data-hero-reset]").addEventListener("click", resetHero);
-  root.querySelector("[data-final-reset]").addEventListener("click", () => {
-    resetHero();
-    window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
-  });
-
-  estimateLink.addEventListener("click", () => {
-    if (state.operation || state.goods.length) saveHeroState();
-  });
-
-  renderOperations();
-  renderGoods();
   buildTabs(root.querySelector("[data-factor-list]"), factors, state.factor, "factor", (index) => {
     state.factor = index;
     renderFactor();
@@ -467,13 +180,13 @@
     state.model = index;
     renderModel();
   });
-  renderHero();
+
   renderFactor();
   renderMarket();
   renderQuality();
   renderModel();
 
   window.SheltonPricingPagePreview = {
-    getState: () => ({ ...state, goodsLabels: selectedGoodsLabels() })
+    getState: () => ({ ...state })
   };
 }());

@@ -14,8 +14,20 @@ const pause = (page, duration = 160) => page.waitForTimeout(duration);
 
 const capture = async (page, name, selector) => {
   if (selector) {
+    if (selector !== ".pricing-hero") {
+      if (!page.__sectionCaptureStyleAdded) {
+        await page.addStyleTag({
+          content: "html.section-capture .site-nav, html.section-capture .skip-link { display: none !important; }"
+        });
+        page.__sectionCaptureStyleAdded = true;
+      }
+      await page.evaluate(() => document.documentElement.classList.add("section-capture"));
+      await page.locator(selector).screenshot({ path: path.join(artifactDir, name) });
+      await page.evaluate(() => document.documentElement.classList.remove("section-capture"));
+      return;
+    }
     await page.locator(selector).evaluate((element) => {
-      const top = element.getBoundingClientRect().top + window.scrollY - 240;
+      const top = element.getBoundingClientRect().top + window.scrollY - 104;
       window.scrollTo(0, Math.max(0, top));
     });
     await pause(page, 120);
@@ -68,20 +80,12 @@ const main = async () => {
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   assert.match(await page.locator('meta[name="robots"]').getAttribute("content"), /noindex/);
   assert.match(await page.locator("h1").first().innerText(), /Commercial pricing built around your operation/i);
+  assert.equal(await page.locator("[data-hero-estimator]").count(), 0);
+  assert.equal(await page.locator(".pricing-vector").count(), 6);
   await capture(page, "pricing-hero-initial-1366x768.png", ".pricing-hero");
 
-  await page.locator('[data-operation="event"]').click();
-  await pause(page);
-  assert.match(await page.locator("[data-hero-helper]").innerText(), /Event linen pricing/i);
-  assert.equal(await page.locator('[data-good="tablecloths"]').isVisible(), true);
-  await capture(page, "pricing-hero-operation-selected-1366x768.png", ".pricing-hero");
-
-  await page.locator('[data-good="tablecloths"]').click();
-  await page.locator('[data-good="napkins"]').click();
-  await pause(page);
-  assert.equal(await page.locator("[data-hero-submit]").isEnabled(), true);
-  assert.match(await page.locator("[data-hero-status]").innerText(), /Tablecloths/i);
-  await capture(page, "pricing-hero-goods-selected-1366x768.png", ".pricing-hero");
+  assert.match(await page.locator("#pricing-journey-title").innerText(), /stronger quote starts/i);
+  await capture(page, "pricing-journey-1366x768.png", ".pricing-journey");
 
   await page.locator("[data-factor-list] [data-index='3']").click();
   await capture(page, "pricing-how-pricing-works-1366x768.png", ".pricing-factors");
@@ -95,10 +99,8 @@ const main = async () => {
 
   await page.locator("[data-estimate-link]").click();
   await page.waitForURL(/estimate-preview\.html/);
-  assert.equal(await page.locator("[data-hero-carryover]").isVisible(), true);
-  assert.match(await page.locator("[data-hero-carryover]").innerText(), /Event \/ Venue \/ Convention Center/);
-  assert.match(await page.locator("[data-hero-carryover]").innerText(), /Tablecloths/);
-  assert.equal(await page.locator('[data-flow-step="operation"]').getAttribute("data-state"), "complete");
+  assert.equal(await page.locator("[data-hero-carryover]").isVisible(), false);
+  assert.notEqual(await page.locator('[data-flow-step="operation"]').getAttribute("data-state"), "complete");
   await capture(page, "pricing-estimator-handoff-1366x768.png", "[data-pricing-flow]");
 
   const viewports = [
@@ -128,7 +130,7 @@ const main = async () => {
     noindex: true,
     browserErrors: errors,
     checkedViewports: viewports.map((item) => item[2]),
-    handoff: "pricing hero operation/goods carried into estimate-preview.html"
+    strategy: "landing page explains pricing logic first; estimator starts fresh from the lower transition"
   }, null, 2));
   console.log("Pricing page preview browser acceptance passed.");
 };
