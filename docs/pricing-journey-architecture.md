@@ -31,8 +31,8 @@ Journey order:
 
 ```js
 {
-  version: 1,
-  concept: "orb",
+  version: 3,
+  concept: "label",
   activeChapter: "landing",
   completedChapters: [],
   operation: null,
@@ -44,7 +44,6 @@ Journey order:
   location: { type: null, value: "" },
   recommendation: null,
   contact: {},
-  touched: {},
   developmentMode: true
 }
 ```
@@ -91,6 +90,8 @@ Each branch defines:
 - `assets/js/pricing-journey-vectors.js`: reusable inline SVG factories.
 - `assets/js/pricing-journey.js`: state, rendering, validation, focus, and interaction.
 - `assets/js/pricing-rules.dev.js`: deterministic replaceable development formulas.
+
+Scale fields, finish compatibility, specialty compatibility, and ownership choices are canonical configuration rather than rendering conditionals. See `pricing-journey-input-map.md`.
 
 No framework is introduced. Rendering uses semantic DOM APIs and event delegation.
 

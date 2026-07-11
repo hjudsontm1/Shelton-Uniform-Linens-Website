@@ -6,10 +6,11 @@
   <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>Private Adaptive Pricing Journey | Shelton Linen &amp; Uniform Services</title>
   <meta name="description" content="Private development preview for Shelton's adaptive commercial laundry planning journey." />
+  <link rel="icon" type="image/png" href="assets/images/shelton-s-mark-white.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/pricing-journey.css?v=20260711-goods-1" />
+  <link rel="stylesheet" href="assets/css/pricing-journey.css?v=20260711-inputs-1" />
 </head>
 <body class="pricing-journey-page" data-pricing-journey data-phase="concepts" data-view="landing">
   <a class="journey-skip-link" href="#journey-main">Skip to pricing journey</a>
@@ -186,12 +187,124 @@
           </div>
         </section>
 
-        <section class="foundation-handoff" data-foundation-handoff aria-labelledby="foundation-title" hidden>
-          <p class="chapter-index">Program foundation</p>
-          <h2 id="foundation-title" tabindex="-1">Your operation and goods are connected.</h2>
-          <p>Scale and operating signals will be the next chapter. Shelton will use them to recommend a likely service rhythm rather than asking you to choose one.</p>
-          <div class="foundation-scene" data-foundation-scene aria-hidden="true"></div>
-          <button type="button" data-edit-chapter="goods">Review selected goods</button>
+        <section class="journey-chapter journey-chapter--scale" data-chapter="scale" aria-labelledby="scale-title" hidden>
+          <div class="chapter-line" aria-hidden="true"><span></span></div>
+          <div class="chapter-summary" data-chapter-summary="scale" hidden>
+            <div>
+              <p>03 · Scale</p>
+              <h2 data-scale-summary-label></h2>
+              <span>These operating signals will shape a likely service-rhythm recommendation.</span>
+            </div>
+            <button type="button" data-edit-chapter="scale">Edit<span class="sr-only"> scale</span></button>
+          </div>
+          <form class="chapter-editor input-editor scale-editor" data-chapter-editor="scale" data-scale-form novalidate>
+            <header class="input-intro">
+              <p class="chapter-index">03 · Scale and operating rhythm</p>
+              <h2 id="scale-title" tabindex="-1">Help us understand the work behind the load.</h2>
+              <p data-scale-context>We ask about the operation, not your preferred pickup frequency. Shelton will use these signals to recommend a likely route rhythm.</p>
+            </header>
+            <div class="scale-goods-scene" data-scale-scene aria-hidden="true"></div>
+            <div class="adaptive-fields" data-scale-fields></div>
+            <p class="chapter-error" data-scale-error role="alert" hidden>Complete the required operating details to continue.</p>
+            <div class="chapter-action-row">
+              <p>Cadence will be recommended later.</p>
+              <button type="submit">Continue to finish and return <span aria-hidden="true">→</span></button>
+            </div>
+          </form>
+        </section>
+
+        <section class="journey-chapter journey-chapter--finish" data-chapter="finish" aria-labelledby="finish-title" hidden>
+          <div class="chapter-line" aria-hidden="true"><span></span></div>
+          <div class="chapter-summary" data-chapter-summary="finish" hidden>
+            <div>
+              <p>04 · Finish</p>
+              <h2 data-finish-summary-label></h2>
+              <span>Only return states compatible with the selected goods are retained.</span>
+            </div>
+            <button type="button" data-edit-chapter="finish">Edit<span class="sr-only"> finish and return</span></button>
+          </div>
+          <div class="chapter-editor input-editor finish-editor" data-chapter-editor="finish">
+            <header class="input-intro">
+              <p class="chapter-index">04 · Finish, return, and specialty needs</p>
+              <h2 id="finish-title" tabindex="-1">How should the goods come back?</h2>
+              <p>Choose every return state or care need that matters. The scene updates around the selected goods only.</p>
+            </header>
+            <div class="finish-transform-stage" data-finish-scene aria-hidden="true"></div>
+            <fieldset class="choice-fieldset">
+              <legend>Finish and return</legend>
+              <div class="adaptive-choice-grid" data-finish-options></div>
+            </fieldset>
+            <fieldset class="choice-fieldset" data-specialty-fieldset>
+              <legend>Specialty needs</legend>
+              <div class="adaptive-choice-grid" data-specialty-options></div>
+            </fieldset>
+            <p class="chapter-error" data-finish-error role="alert" hidden>Select at least one finish or return state.</p>
+            <div class="chapter-action-row">
+              <p>Specialty care changes with fabric, soil, color, and use.</p>
+              <button type="button" data-finish-continue>Continue to inventory <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="journey-chapter journey-chapter--ownership" data-chapter="ownership" aria-labelledby="ownership-title" hidden>
+          <div class="chapter-line" aria-hidden="true"><span></span></div>
+          <div class="chapter-summary" data-chapter-summary="ownership" hidden>
+            <div>
+              <p>05 · Ownership</p>
+              <h2 data-ownership-summary-label></h2>
+              <span>The result will recommend a structure after considering the whole program.</span>
+            </div>
+            <button type="button" data-edit-chapter="ownership">Edit<span class="sr-only"> inventory ownership</span></button>
+          </div>
+          <div class="chapter-editor input-editor ownership-editor" data-chapter-editor="ownership">
+            <header class="input-intro">
+              <p class="chapter-index">05 · Inventory ownership</p>
+              <h2 id="ownership-title" tabindex="-1">What do you already own?</h2>
+              <p>Answer in plain language. Shelton will compare Customer-Owned Goods, Hybrid, and Rental at the result rather than favoring a model here.</p>
+            </header>
+            <div class="ownership-choices" role="radiogroup" aria-label="Inventory ownership" data-ownership-options></div>
+            <p class="chapter-error" data-ownership-error role="alert" hidden>Choose the closest ownership situation to continue.</p>
+            <div class="chapter-action-row">
+              <p>No option is preselected.</p>
+              <button type="button" data-ownership-continue>Continue to location <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="journey-chapter journey-chapter--location" data-chapter="location" aria-labelledby="location-title" hidden>
+          <div class="chapter-line" aria-hidden="true"><span></span></div>
+          <div class="chapter-summary" data-chapter-summary="location" hidden>
+            <div>
+              <p>06 · Location</p>
+              <h2 data-location-summary-label></h2>
+              <span>Route feasibility still requires Shelton review; no service-area promise is made here.</span>
+            </div>
+            <button type="button" data-edit-chapter="location">Edit<span class="sr-only"> location</span></button>
+          </div>
+          <form class="chapter-editor input-editor location-editor" data-chapter-editor="location" data-location-form novalidate>
+            <header class="input-intro">
+              <p class="chapter-index">06 · Location</p>
+              <h2 id="location-title" tabindex="-1">Where would the commercial route serve you?</h2>
+              <p>A ZIP code or city is enough for planning. A street address is not needed for this estimate.</p>
+            </header>
+            <label class="location-field">
+              <span>ZIP code or city</span>
+              <input type="text" name="location" data-location-input autocomplete="postal-code" placeholder="92101 or San Diego" maxlength="80" />
+              <small>Used later for route review and the exact-quote handoff. This preview does not promise route availability.</small>
+            </label>
+            <p class="chapter-error" data-location-error role="alert" hidden>Enter a five-digit ZIP code or a city name.</p>
+            <div class="chapter-action-row">
+              <p>No full address required.</p>
+              <button type="submit">Continue to review <span aria-hidden="true">→</span></button>
+            </div>
+          </form>
+        </section>
+
+        <section class="review-handoff" data-review-handoff aria-labelledby="review-handoff-title" hidden>
+          <p class="chapter-index">Program inputs complete</p>
+          <h2 id="review-handoff-title" tabindex="-1">Your program is ready to assemble.</h2>
+          <p>Review will connect the selected operation, goods, operating signals, return states, ownership, and location before any development planning range appears.</p>
+          <button type="button" data-edit-chapter="location">Review location</button>
         </section>
       </div>
 
@@ -204,8 +317,8 @@
 
   <p class="journey-announcer" data-journey-announcer aria-live="polite"></p>
 
-  <script src="assets/js/pricing-journey-config.js?v=20260711-goods-1"></script>
-  <script src="assets/js/pricing-journey-vectors.js?v=20260711-goods-1"></script>
-  <script src="assets/js/pricing-journey.js?v=20260711-goods-1"></script>
+  <script src="assets/js/pricing-journey-config.js?v=20260711-inputs-1"></script>
+  <script src="assets/js/pricing-journey-vectors.js?v=20260711-inputs-1"></script>
+  <script src="assets/js/pricing-journey.js?v=20260711-inputs-1"></script>
 </body>
 </html>

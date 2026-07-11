@@ -12,7 +12,7 @@
 ## Current Phase
 - Phase number: 4
 - Phase name: Scale, Finish, Ownership, and Location
-- Status: In progress
+- Status: Complete; checkpoint commit pending
 
 ## Last Known Good Checkpoint
 - Commit hash: `339d8558fe3980c74e6e7afcf63259abcce15268`
@@ -49,24 +49,30 @@
 - Added one concise item explanation and up to three capability details for every configured good.
 - Added automated Goods/configuration tests and documented the branch copy map and vector system.
 - Completed the required Checkpoint 3 viewport matrix with zero horizontal overflow and no browser console errors.
+- Added operation-specific Scale schemas for all ten branches without a desired-frequency question.
+- Added selected-goods-only finish/return transformation scenes and compatible specialty prompts.
+- Added the approved plain-language inventory-ownership question with no preselection.
+- Added ZIP/city-only Location validation with no route-availability promise.
+- Added completed summaries, inline Edit, downstream invalidation, state persistence, and mobile-specific layouts for all program-input chapters.
+- Added deterministic Checkpoint 4 browser smoke coverage and desktop/mobile screenshot evidence.
 
 ## Current Working State
-- Files currently being changed: none at the start of Checkpoint 4
-- Uncommitted work: none
+- Files currently being changed: Pricing journey HTML, isolated CSS/JavaScript, tests, artifacts, and documentation
+- Uncommitted work: complete Checkpoint 4 implementation awaiting its checkpoint commit
 - Whether the page builds: Yes; static pages load on localhost
-- Whether smoke tests pass: Yes; syntax, static Goods/config assertions, all-operation vector rendering, item education, selection focus, one-item narrowing, dependency cleanup, full viewport matrix, overflow, and console checks pass
+- Whether smoke tests pass: Yes; syntax, configuration assertions, selected-only return compatibility, Hotel/Robes end-to-end completion, inline Edit, browser console, and mobile overflow checks pass
 
 ## Outstanding Defects
 - The base repository has no package/build tooling. Affected viewport/branch: all / feature branch. Severity: low. Rubric: repeatability. Intended correction: continue using documented Node syntax and browser smoke commands rather than adding a framework.
 - No Checkpoint 1 visual or functional defects remain. The orb's slight consumer-product ambiguity and portal's quieter Begin action are documented reasons they were not selected.
-- Scale, finish, ownership, and location chapters are not yet implemented. Affected phase: Checkpoint 4. Severity: planned. Rubric: Program Inputs. Intended correction: add operation-specific inputs and selected-goods-only transformation scenes without changing the completed Operation/Goods contracts.
+- Review, recommendation, development planning ranges, model comparison, and exact-quote handoff are not yet implemented. Affected phase: Checkpoint 5. Severity: planned. Rubric: Result and Handoff. Intended correction: add an assembled review and isolated deterministic development rules without touching the live Pricing page or endpoint.
 
 ## Next Exact Actions
-1. Commit Checkpoint 3 as `checkpoint(pricing): complete adaptive goods branches`.
-2. Define operation-specific scale and operating-rhythm schemas in the canonical configuration.
-3. Implement Scale inputs without a desired-frequency question and calculate recommendation signals only.
-4. Implement selected-goods-only Finish/Return transformation, specialty prompts, ownership, and location.
-5. Verify completed summaries, Edit, state dependencies, and mobile flow before committing Checkpoint 4.
+1. Run `node tests/pricing-journey-config.test.cjs` and the Checkpoint 4 Playwright smoke test.
+2. Commit Checkpoint 4 as `checkpoint(pricing): complete adaptive program inputs`.
+3. Create the isolated deterministic development pricing-rules layer and formula documentation.
+4. Build the assembled Review, recommended rhythm/model, comparison, planning-range, and exact-quote payload shell.
+5. Verify no live endpoint is called and no fake success state is displayed before committing Checkpoint 5.
 
 ## Business-Data Blockers
 - Real Shelton pricing rates, volume bands, finishing factors, route-zone factors, and inventory-model factors are not supplied. Development-only deterministic fixtures are permitted and will remain visibly labeled.
@@ -77,4 +83,4 @@
 - Exact first command: `git status --short --branch`
 - Exact first file to inspect: `docs/pricing-journey-progress.md`
 - Exact next test to run: `node tests/pricing-journey-config.test.cjs && node --check assets/js/pricing-journey-vectors.js && node --check assets/js/pricing-journey.js`
-- Exact next visual state to render: Hotel with only Robes selected in the assembled foundation scene at 1366x768, then the same state at 390x844
+- Exact next visual state to render: Hotel with Robes selected at the assembled Review, followed by its development result and quote payload state at 1366x768

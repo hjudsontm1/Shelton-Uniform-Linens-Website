@@ -1130,6 +1130,19 @@ summary:focus-visible {
 .vector-good.is-selected .vector-body { fill: url(#vectorFabricSelected); stroke: rgba(244, 237, 222, 0.95); }
 .vector-good.is-selected .vector-caption { fill: var(--journey-gold-bright); }
 .vector-good.is-selected .vector-baseline { stroke: var(--journey-gold-bright); }
+.return-structure,
+.return-signal,
+.return-strap,
+.return-cart { fill: none; stroke: rgba(196, 160, 97, 0.7); stroke-width: 1.25; vector-effect: non-scaling-stroke; }
+.return-signal { stroke-dasharray: 4 5; }
+.return-strap { stroke-width: 3; opacity: 0.72; }
+.return-poly { fill: rgba(214, 224, 226, 0.08); stroke: rgba(214, 224, 226, 0.52); stroke-width: 1; }
+.return-bag { fill: rgba(38, 49, 60, 0.52); stroke: rgba(196, 160, 97, 0.62); stroke-width: 1.2; }
+.return-wheel { fill: #050d16; stroke: rgba(196, 160, 97, 0.8); stroke-width: 1.2; }
+.return-tag { fill: rgba(214, 184, 120, 0.9); stroke: rgba(244, 237, 222, 0.72); stroke-width: 1; }
+.return-tag-hole { fill: #071321; }
+.return-label { fill: rgba(214, 184, 120, 0.78); font: 700 8px/1 "Inter", sans-serif; letter-spacing: 1.7px; }
+.return-label--dark { fill: rgba(7, 19, 33, 0.9); font-size: 7px; }
 
 .goods-choice-grid {
   grid-area: choices;
@@ -1213,6 +1226,264 @@ summary:focus-visible {
 .foundation-handoff > p:not(.chapter-index) { margin: 1.5rem 0 2rem; color: rgba(188, 199, 210, 0.75); line-height: 1.7; }
 .foundation-scene { position: absolute; top: 50%; right: 2rem; width: 53%; height: min(25rem, 52vh); overflow: hidden; background: rgba(3, 10, 18, 0.38); border-left: 1px solid rgba(196, 160, 97, 0.24); transform: translateY(-50%); }
 
+/* Adaptive program inputs */
+
+.input-editor {
+  min-height: calc(100svh - var(--journey-header) - 4.25rem);
+  padding: clamp(3rem, 7vh, 6rem) 0 clamp(4rem, 8vh, 7rem) 2rem;
+  display: grid;
+  align-content: center;
+  gap: 2rem 3rem;
+}
+
+.input-intro {
+  grid-area: intro;
+  max-width: 44rem;
+}
+
+.input-intro h2 {
+  margin: 0.7rem 0 1rem;
+  color: var(--journey-cream);
+  font: 500 4.5rem/0.94 "Cormorant Garamond", serif;
+}
+
+.input-intro h2:focus { outline: none; }
+.input-intro > p:last-child { max-width: 40rem; margin: 0; color: rgba(188, 199, 210, 0.74); font-size: 0.88rem; line-height: 1.65; }
+
+.scale-editor {
+  grid-template-columns: minmax(20rem, 0.72fr) minmax(31rem, 1.28fr);
+  grid-template-areas:
+    "intro scene"
+    "fields fields"
+    "error error"
+    "action action";
+}
+
+.scale-goods-scene,
+.finish-transform-stage {
+  grid-area: scene;
+  height: clamp(13rem, 28vh, 18rem);
+  min-height: 0;
+  overflow: hidden;
+  align-self: center;
+  background: rgba(3, 10, 18, 0.44);
+  border: 1px solid rgba(196, 160, 97, 0.2);
+}
+
+.adaptive-fields {
+  grid-area: fields;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-top: 1px solid rgba(196, 160, 97, 0.26);
+  border-left: 1px solid rgba(196, 160, 97, 0.14);
+}
+
+.adaptive-field {
+  min-width: 0;
+  min-height: 9.2rem;
+  padding: 1rem;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  align-content: start;
+  gap: 0.7rem;
+  border-right: 1px solid rgba(196, 160, 97, 0.16);
+  border-bottom: 1px solid rgba(196, 160, 97, 0.22);
+}
+
+.adaptive-field > span:first-child {
+  color: var(--journey-gold-bright);
+  font-size: 0.57rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.adaptive-field__control {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.adaptive-field input,
+.adaptive-field select {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.85rem;
+  padding: 0 0.15rem;
+  color: var(--journey-cream);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(196, 160, 97, 0.5);
+  border-radius: 0;
+  outline: 0;
+  font: 500 1.25rem/1 "Cormorant Garamond", serif;
+}
+
+.adaptive-field select { font-size: 1rem; }
+.adaptive-field select option { color: #071321; background: #eee6d6; }
+.adaptive-field input:focus,
+.adaptive-field select:focus { border-bottom-color: var(--journey-gold-bright); box-shadow: 0 1px 0 var(--journey-gold-bright); }
+.adaptive-field__control em { flex: 0 0 auto; color: rgba(165, 176, 188, 0.56); font-size: 0.54rem; font-style: normal; letter-spacing: 0.08em; text-transform: uppercase; }
+.adaptive-field small { color: rgba(165, 176, 188, 0.58); font-size: 0.58rem; line-height: 1.45; }
+.adaptive-field.has-error { background: rgba(180, 90, 70, 0.08); }
+.adaptive-field [aria-invalid="true"] { border-bottom-color: #d39a82; }
+
+.chapter-action-row {
+  grid-area: action;
+  min-height: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  border-top: 1px solid rgba(196, 160, 97, 0.2);
+}
+
+.chapter-action-row > p { margin: 0; color: rgba(165, 176, 188, 0.58); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.chapter-action-row > button {
+  min-height: 3.2rem;
+  padding: 0 1.25rem;
+  color: var(--journey-ink);
+  background: var(--journey-gold-bright);
+  border: 1px solid var(--journey-gold-bright);
+  cursor: pointer;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.input-editor > .chapter-error { grid-area: error; margin: -1rem 0 0; }
+
+.finish-editor {
+  grid-template-columns: minmax(20rem, 0.72fr) minmax(31rem, 1.28fr);
+  grid-template-areas:
+    "intro scene"
+    "finish finish"
+    "specialty specialty"
+    "error error"
+    "action action";
+}
+
+.finish-editor > .choice-fieldset:first-of-type { grid-area: finish; }
+.finish-editor > .choice-fieldset:last-of-type { grid-area: specialty; }
+
+.choice-fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.choice-fieldset legend {
+  width: 100%;
+  padding: 0 0 0.7rem;
+  color: var(--journey-gold);
+  border-bottom: 1px solid rgba(196, 160, 97, 0.24);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.adaptive-choice-grid,
+.ownership-choices {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-left: 1px solid rgba(196, 160, 97, 0.14);
+}
+
+.adaptive-choice,
+.ownership-choice {
+  position: relative;
+  min-width: 0;
+  min-height: 6.1rem;
+  padding: 0.9rem;
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.65rem;
+  text-align: left;
+  color: rgba(244, 237, 222, 0.75);
+  background: rgba(7, 19, 33, 0.22);
+  border: 0;
+  border-right: 1px solid rgba(196, 160, 97, 0.16);
+  border-bottom: 1px solid rgba(196, 160, 97, 0.22);
+  cursor: pointer;
+}
+
+.adaptive-choice:hover,
+.ownership-choice:hover { color: var(--journey-cream); background: rgba(196, 160, 97, 0.06); }
+.adaptive-choice > span:first-child,
+.ownership-choice > span:first-child { padding-top: 0.15rem; color: rgba(196, 160, 97, 0.65); font-size: 0.5rem; font-weight: 700; letter-spacing: 0.1em; }
+.adaptive-choice > span:last-child,
+.ownership-choice > span:last-child { min-width: 0; display: grid; gap: 0.28rem; }
+.adaptive-choice strong,
+.ownership-choice strong { font: 500 1.2rem/1.05 "Cormorant Garamond", serif; }
+.adaptive-choice small,
+.ownership-choice small { color: rgba(165, 176, 188, 0.56); font-size: 0.55rem; line-height: 1.4; }
+.adaptive-choice.is-selected,
+.ownership-choice.is-selected { color: #071321; background: var(--journey-paper); box-shadow: inset 0 0 0 1px var(--journey-gold-bright); }
+.adaptive-choice.is-selected small,
+.ownership-choice.is-selected small { color: rgba(7, 19, 33, 0.62); }
+.adaptive-choice.is-selected::after,
+.ownership-choice.is-selected::after { content: "Selected"; position: absolute; right: 0.55rem; bottom: 0.35rem; color: #071321; font-size: 0.44rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.ownership-editor {
+  grid-template-columns: minmax(21rem, 0.7fr) minmax(32rem, 1.3fr);
+  grid-template-areas:
+    "intro ownership"
+    "error error"
+    "action action";
+}
+
+.ownership-choices { grid-area: ownership; grid-template-columns: repeat(2, minmax(0, 1fr)); align-self: center; }
+.ownership-choice { min-height: 8.2rem; padding: 1.15rem; }
+.ownership-choice em { color: var(--journey-gold); font-size: 0.52rem; font-style: normal; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.location-editor {
+  grid-template-columns: minmax(22rem, 0.82fr) minmax(28rem, 1.18fr);
+  grid-template-areas:
+    "intro location"
+    "error error"
+    "action action";
+}
+
+.location-field {
+  grid-area: location;
+  align-self: center;
+  min-height: 17rem;
+  padding: 2rem;
+  display: grid;
+  align-content: center;
+  gap: 1rem;
+  background: rgba(4, 12, 21, 0.38);
+  border: 1px solid rgba(196, 160, 97, 0.24);
+}
+
+.location-field > span { color: var(--journey-gold); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
+.location-field input { width: 100%; min-height: 5rem; padding: 0; color: var(--journey-cream); background: transparent; border: 0; border-bottom: 1px solid rgba(196, 160, 97, 0.58); border-radius: 0; outline: 0; font: 500 2.7rem/1 "Cormorant Garamond", serif; }
+.location-field input:focus { border-bottom-color: var(--journey-gold-bright); box-shadow: 0 1px 0 var(--journey-gold-bright); }
+.location-field input[aria-invalid="true"] { border-bottom-color: #d39a82; }
+.location-field small { max-width: 35rem; color: rgba(165, 176, 188, 0.58); font-size: 0.66rem; line-height: 1.55; }
+
+.review-handoff {
+  min-height: 72svh;
+  padding: clamp(5rem, 11vh, 9rem) min(8vw, 7rem);
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  border-top: 1px solid rgba(196, 160, 97, 0.24);
+  scroll-margin-top: calc(var(--journey-header) + 5rem);
+}
+
+.review-handoff h2 { max-width: 52rem; margin: 0.7rem 0 0; color: var(--journey-cream); font: 500 5.2rem/0.94 "Cormorant Garamond", serif; }
+.review-handoff h2:focus { outline: none; }
+.review-handoff > p:not(.chapter-index) { max-width: 43rem; margin: 1.5rem 0 2rem; color: rgba(188, 199, 210, 0.74); line-height: 1.7; }
+.review-handoff button { min-height: 2.75rem; padding: 0 0.2rem; color: var(--journey-gold-bright); background: transparent; border: 0; border-bottom: 1px solid rgba(196, 160, 97, 0.48); cursor: pointer; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
+
 .journey-flow-tools {
   position: relative;
   z-index: 2;
@@ -1250,6 +1521,9 @@ summary:focus-visible {
   .operation-editor { gap: 2rem 3rem; }
   .goods-editor { gap: 2rem 2.5rem; }
   .goods-intro { grid-template-columns: 1fr; gap: 1rem; }
+  .input-editor { gap: 1.75rem 2rem; }
+  .adaptive-fields { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .adaptive-choice-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (max-height: 790px) and (min-width: 761px) {
@@ -1274,6 +1548,14 @@ summary:focus-visible {
   .goods-choice { min-height: 4.2rem; }
   .goods-visual-stage { height: 12.5rem; }
   .goods-selection { min-height: 3.4rem; }
+  .input-editor { padding-top: 1.5rem; padding-bottom: 2rem; gap: 1rem 1.5rem; }
+  .input-intro h2 { font-size: 3.4rem; }
+  .scale-goods-scene,
+  .finish-transform-stage { height: 11rem; }
+  .adaptive-field { min-height: 7.4rem; padding: 0.8rem; gap: 0.45rem; }
+  .adaptive-choice { min-height: 5.25rem; padding: 0.7rem; }
+  .ownership-choice { min-height: 6.7rem; padding: 0.9rem; }
+  .chapter-action-row { min-height: 3.8rem; }
 }
 
 @media (max-width: 860px) {
@@ -1289,6 +1571,21 @@ summary:focus-visible {
   .operation-editor .operation-selection { grid-column: 1; }
   .goods-editor { grid-template-columns: 1fr; grid-template-areas: "intro" "scene" "education" "choices" "error" "selection"; }
   .goods-choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .scale-editor,
+  .finish-editor,
+  .ownership-editor,
+  .location-editor {
+    grid-template-columns: 1fr;
+  }
+  .scale-editor { grid-template-areas: "intro" "scene" "fields" "error" "action"; }
+  .finish-editor { grid-template-areas: "intro" "scene" "finish" "specialty" "error" "action"; }
+  .ownership-editor { grid-template-areas: "intro" "ownership" "error" "action"; }
+  .location-editor { grid-template-areas: "intro" "location" "error" "action"; }
+  .adaptive-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .adaptive-choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .scale-goods-scene,
+  .finish-transform-stage { height: 15rem; }
+  .location-field { min-height: 14rem; }
 }
 
 @media (max-width: 760px) {
@@ -1370,14 +1667,14 @@ summary:focus-visible {
   .program-canvas { width: calc(100% - 2rem); }
   .chapter-editor { padding-left: 1rem; }
   .chapter-line { left: 0; }
-  .operation-editor { min-height: calc(100svh - var(--journey-header) - 4.25rem); padding: 3rem 0 4rem 1rem; display: block; }
+  .operation-editor { min-height: calc(100svh - var(--journey-header) - 4.25rem); padding: 5.25rem 0 4rem 1rem; display: block; }
   .operation-editor .operation-rail { margin-top: 2rem; }
   .chapter-summary { min-height: 9rem; padding: 1.5rem 0 1.5rem 1rem; align-items: flex-end; }
   .chapter-summary > div { grid-template-columns: 1fr; gap: 0.35rem; }
   .chapter-summary p { grid-row: auto; }
   .chapter-summary h2 { font-size: 1.75rem; }
   .chapter-summary span { display: none; }
-  .goods-editor { min-height: auto; padding: 4rem 0 5rem 1rem; display: grid; grid-template-columns: 1fr; grid-template-areas: "intro" "scene" "education" "choices" "error" "selection"; gap: 1.5rem; }
+  .goods-editor { min-height: auto; padding: 5.25rem 0 5rem 1rem; display: grid; grid-template-columns: 1fr; grid-template-areas: "intro" "scene" "education" "choices" "error" "selection"; gap: 1.5rem; }
   .goods-intro { display: grid; grid-template-columns: 1fr; gap: 1rem; }
   .goods-intro h2 { font-size: 3.25rem; }
   .goods-intro > p { font-size: 0.82rem; }
@@ -1390,6 +1687,33 @@ summary:focus-visible {
   .goods-choice { min-height: 5.5rem; }
   .goods-selection { align-items: stretch; flex-direction: column; gap: 0.8rem; padding-top: 1rem; }
   .goods-selection button { justify-content: center; min-height: 3.25rem; }
+  .input-editor {
+    min-height: auto;
+    padding: 5.25rem 0 5rem 1rem;
+    align-content: start;
+    gap: 1.5rem;
+  }
+  .input-intro h2 { font-size: 3.25rem; }
+  .input-intro > p:last-child { font-size: 0.8rem; }
+  .scale-goods-scene,
+  .finish-transform-stage { height: 14rem; }
+  .adaptive-fields,
+  .adaptive-choice-grid,
+  .ownership-choices { grid-template-columns: 1fr; }
+  .adaptive-field { min-height: 7.2rem; }
+  .adaptive-choice,
+  .ownership-choice { min-height: 5.8rem; }
+  .chapter-action-row {
+    padding-top: 1rem;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .chapter-action-row > button { justify-content: center; width: 100%; }
+  .location-field { min-height: 12rem; padding: 1.25rem; }
+  .location-field input { min-height: 4rem; font-size: 2.1rem; }
+  .review-handoff { min-height: 62svh; padding: 5rem 1rem 5rem 2rem; }
+  .review-handoff h2 { font-size: 3.5rem; }
   .foundation-handoff { min-height: 68svh; padding: 5rem 1rem 5rem 2rem; }
   .foundation-handoff h2 { font-size: 3.5rem; }
   .foundation-handoff > h2,

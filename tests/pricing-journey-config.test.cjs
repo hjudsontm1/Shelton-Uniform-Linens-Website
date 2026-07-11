@@ -32,6 +32,10 @@ config.operations.forEach((operation) => {
     catalog: config.goods
   });
   assert.equal((container.innerHTML.match(/data-vector-good=/g) || []).length, operation.goods.length, `${operation.id} renders every branch good`);
+
+  const scaleSchema = config.scaleSchemas[operation.id];
+  assert.ok(Array.isArray(scaleSchema) && scaleSchema.length >= 4, `${operation.id} has operation-specific scale inputs`);
+  assert.ok(scaleSchema.every((field) => !/pickup|frequency|cadence/i.test(field.id)), `${operation.id} does not ask for a desired route frequency`);
 });
 
 const hotel = config.operations.find((item) => item.id === "hotel");
@@ -47,9 +51,42 @@ assert.equal((narrowed.innerHTML.match(/data-vector-good=/g) || []).length, 1, "
 assert.match(narrowed.innerHTML, /data-vector-good="robes"/);
 assert.doesNotMatch(narrowed.innerHTML, /data-vector-good="sheets"|data-vector-good="towels"/);
 
+const returned = { innerHTML: "" };
+vectors.renderScene(returned, {
+  operation: hotel,
+  goodsIds: ["sheets"],
+  selectedIds: ["sheets"],
+  selectedOnly: true,
+  returnOptions: ["pressed", "linenCart", "labeled"],
+  catalog: config.goods
+});
+assert.match(returned.innerHTML, /return-overlay/);
+assert.match(returned.innerHTML, /PRESSED FINISH/);
+assert.match(returned.innerHTML, /LINEN-CART RETURN/);
+
+assert.deepEqual(
+  config.ownershipChoices.map((item) => item.label),
+  [
+    "We already own the goods",
+    "We own some and need some supplied",
+    "We want Shelton to supply the goods",
+    "We are not sure"
+  ],
+  "ownership uses the approved plain-language choices"
+);
+assert.equal(config.ownershipChoices.some((item) => item.selected), false, "ownership has no preselected model");
+
+const robeFinishIds = config.finishOptions
+  .filter((item) => item.goods.includes("robes"))
+  .map((item) => item.id);
+assert.ok(robeFinishIds.includes("hanging") && robeFinishIds.includes("poly"), "robes retain garment-relevant returns");
+assert.ok(!robeFinishIds.includes("linenCart"), "robes do not retain an irrelevant linen-cart return");
+
 const preview = fs.readFileSync(path.join(root, "pricing-journey-preview.html"), "utf8");
 assert.match(preview, /noindex, nofollow, noarchive/);
 assert.match(preview, /pricing-journey-vectors\.js/);
 assert.doesNotMatch(preview, /Once weekly|Twice weekly|Five times weekly|desired pickup frequency/i);
+assert.match(preview, /ZIP code or city/);
+assert.match(preview, /No option is preselected/);
 
 console.log("Pricing journey configuration and vector tests passed.");

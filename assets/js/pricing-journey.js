@@ -24,11 +24,24 @@
   const goodsCapabilities = document.querySelector("[data-goods-capabilities]");
   const goodsError = document.querySelector("[data-goods-error]");
   const goodsCount = document.querySelector("[data-goods-count]");
+  const scaleForm = document.querySelector("[data-scale-form]");
+  const scaleFields = document.querySelector("[data-scale-fields]");
+  const scaleScene = document.querySelector("[data-scale-scene]");
+  const scaleError = document.querySelector("[data-scale-error]");
+  const finishOptions = document.querySelector("[data-finish-options]");
+  const specialtyOptions = document.querySelector("[data-specialty-options]");
+  const specialtyFieldset = document.querySelector("[data-specialty-fieldset]");
+  const finishScene = document.querySelector("[data-finish-scene]");
+  const finishError = document.querySelector("[data-finish-error]");
+  const ownershipOptions = document.querySelector("[data-ownership-options]");
+  const ownershipError = document.querySelector("[data-ownership-error]");
+  const locationForm = document.querySelector("[data-location-form]");
+  const locationInput = document.querySelector("[data-location-input]");
+  const locationError = document.querySelector("[data-location-error]");
   const programSummary = document.querySelector("[data-program-summary]");
   const programSummaryCount = document.querySelector("[data-program-summary-count]");
   const programSummaryList = document.querySelector("[data-program-summary-list]");
-  const foundationHandoff = document.querySelector("[data-foundation-handoff]");
-  const foundationScene = document.querySelector("[data-foundation-scene]");
+  const reviewHandoff = document.querySelector("[data-review-handoff]");
   const announcer = document.querySelector("[data-journey-announcer]");
 
   const createInitialState = () => ({
@@ -82,6 +95,12 @@
   const activePanel = () => conceptPanels.find((panel) => panel.dataset.conceptPanel === state.concept);
   const activeOperation = () => config.operations.find((item) => item.id === state.operation);
   const isComplete = (chapter) => state.completedChapters.includes(chapter);
+
+  const invalidateFrom = (chapter) => {
+    const start = config.chapterOrder.indexOf(chapter);
+    if (start < 0) return;
+    config.chapterOrder.slice(start).forEach((item) => setComplete(item, false));
+  };
 
   const setComplete = (chapter, complete = true) => {
     const chapters = new Set(state.completedChapters);
@@ -222,10 +241,256 @@
     if (!editing) goodsScene.replaceChildren();
   };
 
+  const scaleValueLabel = (field, value) => {
+    if (value === undefined || value === null || value === "") return "";
+    if (field.type === "select") return field.options.find((item) => item.value === value)?.label || value;
+    return `${value} ${field.unit || ""}`.trim();
+  };
+
+  const buildScaleFields = () => {
+    const operation = activeOperation();
+    const schema = config.scaleSchemas[operation?.id] || [];
+    if (!operation || scaleFields.dataset.operation === operation.id) return schema;
+    scaleFields.replaceChildren();
+    scaleFields.dataset.operation = operation.id;
+
+    schema.forEach((field) => {
+      const label = document.createElement("label");
+      const heading = document.createElement("span");
+      const controlWrap = document.createElement("span");
+      const hint = document.createElement("small");
+      const id = `scale-${operation.id}-${field.id}`;
+      label.className = "adaptive-field";
+      heading.textContent = `${field.label}${field.required ? "" : " (optional)"}`;
+      controlWrap.className = "adaptive-field__control";
+      hint.id = `${id}-hint`;
+      hint.textContent = field.hint;
+
+      let control;
+      if (field.type === "select") {
+        control = document.createElement("select");
+        const empty = document.createElement("option");
+        empty.value = "";
+        empty.textContent = "Choose one";
+        control.append(empty);
+        field.options.forEach((item) => {
+          const option = document.createElement("option");
+          option.value = item.value;
+          option.textContent = item.label;
+          control.append(option);
+        });
+      } else {
+        control = document.createElement("input");
+        control.type = "number";
+        control.inputMode = "numeric";
+        control.min = String(field.min);
+        control.max = String(field.max);
+        control.step = String(field.step || 1);
+        if (field.unit) {
+          const unit = document.createElement("em");
+          unit.textContent = field.unit;
+          controlWrap.append(control, unit);
+        }
+      }
+
+      if (!controlWrap.contains(control)) controlWrap.append(control);
+      control.id = id;
+      control.name = field.id;
+      control.dataset.scaleInput = field.id;
+      control.required = field.required;
+      control.setAttribute("aria-describedby", hint.id);
+      control.value = state.scale[field.id] ?? "";
+      label.append(heading, controlWrap, hint);
+      scaleFields.append(label);
+    });
+    return schema;
+  };
+
+  const renderScaleState = () => {
+    const operation = activeOperation();
+    const chapter = document.querySelector('[data-chapter="scale"]');
+    chapter.hidden = !isComplete("goods") || !operation;
+    if (chapter.hidden) return;
+
+    const schema = buildScaleFields();
+    const editor = document.querySelector('[data-chapter-editor="scale"]');
+    const summary = document.querySelector('[data-chapter-summary="scale"]');
+    const editing = state.activeChapter === "scale" || !isComplete("scale");
+    editor.hidden = !editing;
+    summary.hidden = editing;
+    scaleError.hidden = true;
+
+    const summaryParts = schema
+      .map((field) => scaleValueLabel(field, state.scale[field.id]))
+      .filter(Boolean)
+      .slice(0, 3);
+    document.querySelector("[data-scale-summary-label]").textContent = summaryParts.join(" · ");
+
+    if (editing) {
+      vectors.renderScene(scaleScene, {
+        operation,
+        goodsIds: state.goods,
+        selectedIds: state.goods,
+        selectedOnly: true,
+        catalog: config.goods
+      });
+    } else {
+      scaleScene.replaceChildren();
+    }
+  };
+
+  const compatibleOptions = (items) => {
+    const operation = activeOperation();
+    return items.filter((item) => {
+      const operationMatch = !item.operations || item.operations.includes(operation.id);
+      const goodsMatch = item.goods.some((id) => state.goods.includes(id));
+      return operationMatch && goodsMatch;
+    });
+  };
+
+  const buildAdaptiveChoices = (container, items, type) => {
+    const signature = `${state.operation}:${state.goods.join(",")}`;
+    if (container.dataset.signature === signature) return;
+    container.replaceChildren();
+    container.dataset.signature = signature;
+    items.forEach((item, index) => {
+      const button = document.createElement("button");
+      const number = document.createElement("span");
+      const copy = document.createElement("span");
+      const label = document.createElement("strong");
+      const detail = document.createElement("small");
+      button.type = "button";
+      button.className = "adaptive-choice";
+      button.dataset.choiceType = type;
+      button.dataset.choiceId = item.id;
+      button.setAttribute("role", "checkbox");
+      button.setAttribute("aria-checked", "false");
+      number.textContent = String(index + 1).padStart(2, "0");
+      label.textContent = item.label;
+      detail.textContent = item.description;
+      copy.append(label, detail);
+      button.append(number, copy);
+      container.append(button);
+    });
+  };
+
+  const renderFinishState = () => {
+    const operation = activeOperation();
+    const chapter = document.querySelector('[data-chapter="finish"]');
+    chapter.hidden = !isComplete("scale") || !operation;
+    if (chapter.hidden) return;
+
+    const compatibleFinish = compatibleOptions(config.finishOptions);
+    const compatibleSpecialty = compatibleOptions(config.specialtyOptions);
+    state.finish = state.finish.filter((id) => compatibleFinish.some((item) => item.id === id));
+    state.specialtyNeeds = state.specialtyNeeds.filter((id) => compatibleSpecialty.some((item) => item.id === id));
+    buildAdaptiveChoices(finishOptions, compatibleFinish, "finish");
+    buildAdaptiveChoices(specialtyOptions, compatibleSpecialty, "specialty");
+    specialtyFieldset.hidden = compatibleSpecialty.length === 0;
+
+    document.querySelectorAll('[data-choice-type="finish"]').forEach((button) => {
+      const selected = state.finish.includes(button.dataset.choiceId);
+      button.classList.toggle("is-selected", selected);
+      button.setAttribute("aria-checked", String(selected));
+    });
+    document.querySelectorAll('[data-choice-type="specialty"]').forEach((button) => {
+      const selected = state.specialtyNeeds.includes(button.dataset.choiceId);
+      button.classList.toggle("is-selected", selected);
+      button.setAttribute("aria-checked", String(selected));
+    });
+
+    const editor = document.querySelector('[data-chapter-editor="finish"]');
+    const summary = document.querySelector('[data-chapter-summary="finish"]');
+    const editing = state.activeChapter === "finish" || !isComplete("finish");
+    editor.hidden = !editing;
+    summary.hidden = editing;
+    finishError.hidden = true;
+
+    const labels = [
+      ...state.finish.map((id) => config.finishOptions.find((item) => item.id === id)?.label),
+      ...state.specialtyNeeds.map((id) => config.specialtyOptions.find((item) => item.id === id)?.label)
+    ].filter(Boolean);
+    document.querySelector("[data-finish-summary-label]").textContent = labels.join(" · ");
+
+    if (editing) {
+      vectors.renderScene(finishScene, {
+        operation,
+        goodsIds: state.goods,
+        selectedIds: state.goods,
+        selectedOnly: true,
+        returnOptions: state.finish,
+        catalog: config.goods
+      });
+    } else {
+      finishScene.replaceChildren();
+    }
+  };
+
+  const buildOwnershipChoices = () => {
+    if (ownershipOptions.childElementCount) return;
+    config.ownershipChoices.forEach((item, index) => {
+      const button = document.createElement("button");
+      const number = document.createElement("span");
+      const copy = document.createElement("span");
+      const label = document.createElement("strong");
+      const model = document.createElement("em");
+      const detail = document.createElement("small");
+      button.type = "button";
+      button.className = "ownership-choice";
+      button.dataset.ownershipId = item.id;
+      button.setAttribute("role", "radio");
+      button.setAttribute("aria-checked", "false");
+      button.tabIndex = index === 0 ? 0 : -1;
+      number.textContent = String(index + 1).padStart(2, "0");
+      label.textContent = item.label;
+      model.textContent = item.model;
+      detail.textContent = item.description;
+      copy.append(label, model, detail);
+      button.append(number, copy);
+      ownershipOptions.append(button);
+    });
+  };
+
+  const renderOwnershipState = () => {
+    const chapter = document.querySelector('[data-chapter="ownership"]');
+    chapter.hidden = !isComplete("finish");
+    if (chapter.hidden) return;
+    buildOwnershipChoices();
+
+    ownershipOptions.querySelectorAll("[data-ownership-id]").forEach((button, index) => {
+      const selected = button.dataset.ownershipId === state.ownership;
+      button.classList.toggle("is-selected", selected);
+      button.setAttribute("aria-checked", String(selected));
+      button.tabIndex = selected || (!state.ownership && index === 0) ? 0 : -1;
+    });
+    const choice = config.ownershipChoices.find((item) => item.id === state.ownership);
+    document.querySelector("[data-ownership-summary-label]").textContent = choice?.label || "";
+    ownershipError.hidden = true;
+    const editor = document.querySelector('[data-chapter-editor="ownership"]');
+    const summary = document.querySelector('[data-chapter-summary="ownership"]');
+    const editing = state.activeChapter === "ownership" || !isComplete("ownership");
+    editor.hidden = !editing;
+    summary.hidden = editing || !choice;
+  };
+
+  const renderLocationState = () => {
+    const chapter = document.querySelector('[data-chapter="location"]');
+    chapter.hidden = !isComplete("ownership");
+    if (chapter.hidden) return;
+    const editor = document.querySelector('[data-chapter-editor="location"]');
+    const summary = document.querySelector('[data-chapter-summary="location"]');
+    const editing = state.activeChapter === "location" || !isComplete("location");
+    editor.hidden = !editing;
+    summary.hidden = editing || !state.location.value;
+    locationInput.value = state.location.value || "";
+    locationError.hidden = true;
+    document.querySelector("[data-location-summary-label]").textContent = state.location.value || "";
+  };
+
   const renderThread = () => {
     document.querySelectorAll("[data-thread-step]").forEach((item) => {
       const chapter = item.dataset.threadStep;
-      const current = state.activeChapter === chapter || (state.activeChapter === "foundation" && chapter === "scale");
+      const current = state.activeChapter === chapter;
       item.classList.toggle("is-current", current);
       item.classList.toggle("is-complete", isComplete(chapter));
       if (current) item.setAttribute("aria-current", "step");
@@ -245,12 +510,23 @@
 
   const renderProgramSummary = () => {
     const operation = activeOperation();
-    const count = Number(Boolean(operation)) + Number(Boolean(state.goods.length));
+    const count = [
+      Boolean(operation),
+      Boolean(state.goods.length),
+      isComplete("scale"),
+      isComplete("finish"),
+      isComplete("ownership"),
+      isComplete("location")
+    ].filter(Boolean).length;
     programSummary.hidden = count === 0 || state.view !== "flow";
     programSummaryCount.textContent = String(count);
     programSummaryList.replaceChildren();
     if (operation) addSummaryItem("Operation", operation.label);
     if (state.goods.length) addSummaryItem("Goods", state.goods.map((id) => config.goods[id].label).join(" · "));
+    if (isComplete("scale")) addSummaryItem("Scale", document.querySelector("[data-scale-summary-label]").textContent);
+    if (isComplete("finish")) addSummaryItem("Finish", state.finish.map((id) => config.finishOptions.find((item) => item.id === id)?.label).filter(Boolean).join(" · "));
+    if (isComplete("ownership")) addSummaryItem("Ownership", config.ownershipChoices.find((item) => item.id === state.ownership)?.label || "");
+    if (isComplete("location")) addSummaryItem("Location", state.location.value);
   };
 
   const renderFlow = () => {
@@ -261,18 +537,13 @@
     }
     renderOperationState();
     renderGoodsState();
+    renderScaleState();
+    renderFinishState();
+    renderOwnershipState();
+    renderLocationState();
     renderThread();
     renderProgramSummary();
-    foundationHandoff.hidden = state.activeChapter !== "foundation";
-    if (!foundationHandoff.hidden) {
-      vectors.renderScene(foundationScene, {
-        operation: activeOperation(),
-        goodsIds: state.goods,
-        selectedIds: state.goods,
-        selectedOnly: true,
-        catalog: config.goods
-      });
-    }
+    reviewHandoff.hidden = state.activeChapter !== "review" || !isComplete("location");
   };
 
   const render = () => {
@@ -282,8 +553,8 @@
   };
 
   const focusChapter = (chapter) => {
-    const target = chapter === "foundation"
-      ? foundationHandoff
+    const target = chapter === "review"
+      ? reviewHandoff
       : document.querySelector(`[data-chapter="${chapter}"]`);
     const heading = target?.querySelector("h2");
     window.setTimeout(() => {
@@ -325,8 +596,16 @@
     if (previous && previous !== id) {
       state.goods = state.goods.filter((goodId) => operation.goods.includes(goodId));
       state.focusedGood = state.goods.includes(state.focusedGood) ? state.focusedGood : null;
-      setComplete("goods", false);
+      invalidateFrom("goods");
+      state.scale = {};
+      state.finish = [];
+      state.specialtyNeeds = [];
+      state.ownership = null;
+      state.location = { type: null, value: "" };
       goodsChoices.dataset.operation = "";
+      scaleFields.dataset.operation = "";
+      finishOptions.dataset.signature = "";
+      specialtyOptions.dataset.signature = "";
     }
 
     state.operation = id;
@@ -362,7 +641,7 @@
       state.goods = [...state.goods, id];
       state.focusedGood = id;
     }
-    setComplete("goods", false);
+    invalidateFrom("goods");
     render();
     announce(`${config.goods[id].label} ${state.goods.includes(id) ? "selected" : "removed"}. ${state.goods.length} goods selected.`);
   };
@@ -375,19 +654,127 @@
       return;
     }
     setComplete("goods");
-    state.activeChapter = "foundation";
+    invalidateFrom("scale");
+    state.activeChapter = "scale";
     render();
-    focusChapter("foundation");
-    announce("Goods saved. Your program foundation is ready for scale inputs.");
+    focusChapter("scale");
+    announce("Goods saved. Scale and operating-rhythm inputs are ready.");
+  };
+
+  const validateScale = () => {
+    const schema = config.scaleSchemas[state.operation] || [];
+    let valid = true;
+    schema.forEach((field) => {
+      const control = scaleFields.querySelector(`[data-scale-input="${field.id}"]`);
+      const value = state.scale[field.id];
+      let fieldValid = !field.required || (value !== undefined && value !== null && value !== "");
+      if (fieldValid && field.type === "number" && value !== "" && value !== undefined) {
+        const numeric = Number(value);
+        fieldValid = Number.isFinite(numeric) && numeric >= field.min && numeric <= field.max;
+      }
+      control?.setAttribute("aria-invalid", String(!fieldValid));
+      control?.closest(".adaptive-field")?.classList.toggle("has-error", !fieldValid);
+      if (!fieldValid) valid = false;
+    });
+    scaleError.hidden = valid;
+    return valid;
+  };
+
+  const completeScale = () => {
+    if (!validateScale()) {
+      scaleFields.querySelector('[aria-invalid="true"]')?.focus();
+      announce("Complete the required operating details before continuing.");
+      return;
+    }
+    setComplete("scale");
+    invalidateFrom("finish");
+    state.activeChapter = "finish";
+    render();
+    focusChapter("finish");
+    announce("Operating details saved. Finish and return options are ready.");
+  };
+
+  const toggleAdaptiveChoice = (type, id) => {
+    const key = type === "finish" ? "finish" : "specialtyNeeds";
+    const current = new Set(state[key]);
+    if (current.has(id)) current.delete(id);
+    else current.add(id);
+    state[key] = [...current];
+    invalidateFrom("finish");
+    render();
+    const source = type === "finish" ? config.finishOptions : config.specialtyOptions;
+    const label = source.find((item) => item.id === id)?.label || id;
+    announce(`${label} ${current.has(id) ? "selected" : "removed"}.`);
+  };
+
+  const completeFinish = () => {
+    if (!state.finish.length) {
+      finishError.hidden = false;
+      finishOptions.querySelector("button")?.focus();
+      announce("Select at least one finish or return state.");
+      return;
+    }
+    setComplete("finish");
+    invalidateFrom("ownership");
+    state.activeChapter = "ownership";
+    render();
+    focusChapter("ownership");
+    announce("Finish and return details saved. Inventory ownership is ready.");
+  };
+
+  const selectOwnership = (id, moveFocus = false) => {
+    const choice = config.ownershipChoices.find((item) => item.id === id);
+    if (!choice) return;
+    state.ownership = id;
+    invalidateFrom("ownership");
+    render();
+    if (moveFocus) ownershipOptions.querySelector(`[data-ownership-id="${id}"]`)?.focus();
+    announce(`${choice.label} selected.`);
+  };
+
+  const completeOwnership = () => {
+    if (!state.ownership) {
+      ownershipError.hidden = false;
+      ownershipOptions.querySelector('[tabindex="0"]')?.focus();
+      announce("Choose the closest ownership situation before continuing.");
+      return;
+    }
+    setComplete("ownership");
+    invalidateFrom("location");
+    state.activeChapter = "location";
+    render();
+    focusChapter("location");
+    announce("Ownership saved. Location is ready.");
+  };
+
+  const completeLocation = () => {
+    const value = state.location.value.trim();
+    const isZip = /^\d{5}$/.test(value);
+    const isCity = /^[A-Za-z][A-Za-z .'-]{1,79}$/.test(value);
+    const valid = isZip || isCity;
+    locationInput.setAttribute("aria-invalid", String(!valid));
+    locationError.hidden = valid;
+    if (!valid) {
+      locationInput.focus();
+      announce("Enter a five-digit ZIP code or a city name.");
+      return;
+    }
+    state.location = { type: isZip ? "zip" : "city", value };
+    setComplete("location");
+    state.activeChapter = "review";
+    render();
+    focusChapter("review");
+    announce("Location saved. Your program inputs are ready to review.");
   };
 
   const editChapter = (chapter) => {
-    if (!['operation', 'goods'].includes(chapter)) return;
+    if (!config.chapterOrder.includes(chapter) || chapter === "review") return;
+    invalidateFrom(chapter);
     state.activeChapter = chapter;
     state.view = "flow";
     render();
     focusChapter(chapter);
-    announce(`${chapter === "operation" ? "Operation" : "Goods"} reopened for editing.`);
+    announce(`${chapter.charAt(0).toUpperCase() + chapter.slice(1)} reopened for editing.`);
   };
 
   const startOver = () => {
@@ -413,12 +800,50 @@
     const goodsChoice = event.target.closest("[data-good-id]");
     if (goodsChoice) return toggleGood(goodsChoice.dataset.goodId);
 
+    const adaptiveChoice = event.target.closest("[data-choice-type]");
+    if (adaptiveChoice) return toggleAdaptiveChoice(adaptiveChoice.dataset.choiceType, adaptiveChoice.dataset.choiceId);
+
+    const ownershipChoice = event.target.closest("[data-ownership-id]");
+    if (ownershipChoice) return selectOwnership(ownershipChoice.dataset.ownershipId);
+
     if (event.target.closest("[data-operation-continue]")) return completeOperation();
     if (event.target.closest("[data-goods-continue]")) return completeGoods();
+    if (event.target.closest("[data-finish-continue]")) return completeFinish();
+    if (event.target.closest("[data-ownership-continue]")) return completeOwnership();
     if (event.target.closest("[data-start-over]")) return startOver();
 
     const edit = event.target.closest("[data-edit-chapter]");
     if (edit) editChapter(edit.dataset.editChapter);
+  });
+
+  scaleForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    completeScale();
+  });
+
+  scaleFields?.addEventListener("input", (event) => {
+    const control = event.target.closest("[data-scale-input]");
+    if (!control) return;
+    state.scale[control.dataset.scaleInput] = control.value;
+    invalidateFrom("scale");
+    control.setAttribute("aria-invalid", "false");
+    control.closest(".adaptive-field")?.classList.remove("has-error");
+    scaleError.hidden = true;
+    saveState();
+  });
+
+  locationForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    completeLocation();
+  });
+
+  locationInput?.addEventListener("input", () => {
+    state.location.value = locationInput.value;
+    state.location.type = null;
+    invalidateFrom("location");
+    locationInput.setAttribute("aria-invalid", "false");
+    locationError.hidden = true;
+    saveState();
   });
 
   operationChoices?.addEventListener("keydown", (event) => {
@@ -434,9 +859,22 @@
     selectOperation(buttons[next].dataset.operationId, true);
   });
 
+  ownershipOptions?.addEventListener("keydown", (event) => {
+    if (!["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    const buttons = Array.from(ownershipOptions.querySelectorAll("[data-ownership-id]"));
+    const current = Math.max(0, buttons.indexOf(document.activeElement));
+    let next = current;
+    if (event.key === "Home") next = 0;
+    if (event.key === "End") next = buttons.length - 1;
+    if (["ArrowDown", "ArrowRight"].includes(event.key)) next = (current + 1) % buttons.length;
+    if (["ArrowUp", "ArrowLeft"].includes(event.key)) next = (current - 1 + buttons.length) % buttons.length;
+    event.preventDefault();
+    selectOwnership(buttons[next].dataset.ownershipId, true);
+  });
+
   renderOperations();
   render();
-  if (state.view === "flow") focusChapter(state.activeChapter === "foundation" ? "foundation" : state.activeChapter);
+  if (state.view === "flow") focusChapter(state.activeChapter);
 
   window.SheltonPricingJourney = {
     getState: () => JSON.parse(JSON.stringify(state)),
@@ -445,6 +883,12 @@
     completeOperation,
     toggleGood,
     completeGoods,
+    completeScale,
+    toggleAdaptiveChoice,
+    completeFinish,
+    selectOwnership,
+    completeOwnership,
+    completeLocation,
     editChapter,
     startOver
   };

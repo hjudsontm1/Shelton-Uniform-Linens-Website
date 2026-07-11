@@ -68,7 +68,20 @@ Checkpoint 3 gate: **Pass**. All operation branches, selected focus, one-item na
 
 ## Checkpoint 4 - Program Inputs
 
-Not started.
+| Category | Score | Evidence |
+| --- | ---: | --- |
+| Scale relevance by operation | 5 | Ten distinct schemas in `pricing-journey-config.js` and `pricing-journey-input-map.md` use branch-specific operating signals |
+| No direct frequency-preference question | 5 | Static test rejects pickup/frequency/cadence field IDs; active Scale copy states cadence will be recommended |
+| Finish-state transformation | 5 | Selected-only SVG scene adds pressed, hanging, poly, bundle, bag, cart, and label return overlays |
+| Inventory language clarity | 5 | Four approved plain-language ownership choices with secondary model education and no default selection |
+| No jargon gate | 5 | COG/Hybrid/Rental are explanatory labels, never the primary question or required prior knowledge |
+| Location placement and clarity | 5 | Location follows Ownership, accepts ZIP/city only, and visibly avoids route promises |
+| Scroll-up review behavior | 5 | Completed summaries remain above; inline Edit reopens the chapter at the fixed-header-safe offset |
+| State consistency | 5 | Browser smoke verifies compatible finish preservation and downstream completion invalidation after Edit |
+| Accessibility | 5 | Native form controls, fieldsets/legends, required validation, radio/checkbox states, focus transfer, errors, and announcements |
+| Performance | 5 | Configuration-driven DOM, one active selected-only SVG per visual chapter, inactive scene removal, and no browser errors |
+
+Checkpoint 4 gate: **Pass**. The Hotel/Robes path proves one-good narrowing, robe-only return compatibility, operation-specific Scale inputs, neutral ownership, ZIP validation, Review handoff, inline Edit, and zero mobile horizontal overflow. Evidence is under `docs/pricing-journey-artifacts/checkpoint-4/`; automated checks are `tests/pricing-journey-config.test.cjs` and `tests/pricing-journey-cp4.e2e.cjs`.
 
 ## Checkpoint 5 - Review, Result, And Handoff
 

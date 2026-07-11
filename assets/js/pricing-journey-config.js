@@ -189,11 +189,131 @@
     });
   });
 
+  const select = (id, label, hint, options, required = true) => ({ id, label, hint, type: "select", options, required });
+  const number = (id, label, unit, hint, min, max, required = true) => ({ id, label, unit, hint, type: "number", min, max, step: 1, required });
+  const option = (value, label) => ({ value, label });
+
+  const storageOptions = [
+    option("ample", "Ample on-site storage"),
+    option("limited", "Limited storage"),
+    option("tight", "Very tight storage")
+  ];
+  const seasonalityOptions = [
+    option("steady", "Mostly steady"),
+    option("seasonal", "Clear seasonal swings"),
+    option("eventDriven", "Event or calendar driven")
+  ];
+  const volumeUnitOptions = [option("pounds", "Pounds"), option("pieces", "Pieces"), option("unknown", "Not sure")];
+
+  const scaleSchemas = {
+    hotel: [
+      number("rooms", "Guest rooms", "rooms", "The number of rooms establishes the potential linen pool.", 1, 5000),
+      select("occupancy", "Approximate occupancy", "Occupancy helps translate rooms into real weekly movement.", [option("under50", "Under 50%"), option("50to74", "50-74%"), option("75to89", "75-89%"), option("90plus", "90% or more")]),
+      number("weeklyTurns", "Average room turns per week", "turns", "Use a typical week rather than a peak holiday.", 1, 35000),
+      select("storage", "Clean-goods storage", "Storage pressure can affect the practical route rhythm.", storageOptions),
+      number("knownVolume", "Known weekly volume", "lb / week", "Optional if your team already tracks pounds.", 1, 250000, false)
+    ],
+    str: [
+      number("properties", "Properties in the program", "properties", "This should reflect the bulk program, not individual household pickup.", 1, 10000),
+      number("weeklyTurns", "Average turns per week", "turns", "Use the total turns routed through the central staging point.", 1, 50000),
+      select("centralPoint", "Central pickup arrangement", "Shelton planning assumes account-level bulk pickup and return.", [option("established", "Central location established"), option("staging", "Laundry staging point planned"), option("planning", "Still determining the central point")]),
+      select("seasonality", "Seasonal movement", "Seasonal changes help avoid planning only around an average month.", seasonalityOptions),
+      number("knownVolume", "Known weekly volume", "lb / week", "Optional if pounds are already tracked.", 1, 250000, false)
+    ],
+    spa: [
+      number("appointments", "Appointments per week", "appointments", "Appointment volume helps estimate treatment-room turnover.", 1, 50000),
+      number("treatmentRooms", "Treatment rooms", "rooms", "Room count provides a second operating signal.", 1, 1000),
+      select("goodsUse", "Soft-goods use per appointment", "Choose the closest overall pattern.", [option("light", "Mostly towels or one sheet"), option("standard", "Towels plus a sheet"), option("high", "Multiple towels, sheets, or robes")]),
+      select("storage", "Clean-goods storage", "Compact storage can increase return pressure.", storageOptions),
+      number("knownVolume", "Known weekly volume", "lb / week", "Optional if pounds are already tracked.", 1, 100000, false)
+    ],
+    gym: [
+      number("weeklyTowelUses", "Weekly towel uses", "uses", "Estimate member and class towel movement together.", 1, 500000),
+      select("peakPattern", "Peak-use pattern", "Peak concentration matters more than simply asking for maximum service.", [option("concentrated", "A few concentrated peaks"), option("balanced", "Balanced across the week"), option("variable", "Highly variable")]),
+      number("activeDays", "Active days per week", "days", "This is an operating signal, not a pickup-frequency request.", 1, 7),
+      select("storage", "Clean-towel storage", "Storage capacity shapes how much clean inventory can sit between returns.", storageOptions)
+    ],
+    event: [
+      number("eventsPerMonth", "Events per month", "events", "Use a typical active month.", 1, 2000),
+      number("piecesPerEvent", "Average pieces per event", "pieces", "Include table, chair, and specialty goods in the estimate.", 1, 500000),
+      select("returnWindow", "Typical return window", "Deadlines influence production planning without asking for a route preference.", [option("urgent", "24-48 hours"), option("standard", "3-4 days"), option("flexible", "Five days or flexible")]),
+      select("seasonality", "Volume pattern", "Event volume often moves with season and venue calendar.", seasonalityOptions)
+    ],
+    restaurant: [
+      number("employees", "Employees using goods", "employees", "Include kitchen and service staff tied to the program.", 1, 10000),
+      number("weeklyCovers", "Approximate weekly covers", "covers", "Dining volume helps scale napkin and table-linen movement.", 1, 1000000),
+      number("shiftsPerDay", "Operating shifts per day", "shifts", "Shift structure helps identify recurring kitchen demand.", 1, 6),
+      select("goodsMix", "Primary goods mix", "This weights kitchen soil and dining-room presentation differently.", [option("kitchen", "Mostly kitchen goods"), option("dining", "Mostly dining-room goods"), option("both", "Kitchen and dining-room goods")]),
+      number("knownVolume", "Known weekly volume", "lb / week", "Optional if pounds are already tracked.", 1, 250000, false)
+    ],
+    casino: [
+      number("employees", "Employees in the program", "employees", "Use the staff population tied to selected goods.", 1, 100000),
+      number("departments", "Departments", "departments", "Department count helps anticipate sorting and organized return.", 1, 200),
+      number("shiftsPerDay", "Operating shifts per day", "shifts", "Multiple shifts create continuous garment movement.", 1, 6),
+      number("banquetEvents", "Banquet or event volume per month", "events", "Use zero only when banquet goods are outside the program.", 0, 5000),
+      number("restaurantOutlets", "Restaurant outlets", "outlets", "Include only outlets whose goods are selected here.", 0, 500)
+    ],
+    uniform: [
+      number("employees", "Employees in the program", "employees", "Headcount establishes the working garment pool.", 1, 100000),
+      number("departments", "Departments", "departments", "Departments can shape labeling and organized return.", 1, 500),
+      number("shiftsPerDay", "Operating shifts per day", "shifts", "Shift structure helps estimate recurring garment demand.", 1, 6),
+      number("piecesPerEmployee", "Pieces used per employee per week", "pieces", "Use an average across included roles.", 1, 100),
+      number("knownVolume", "Known weekly volume", "lb / week", "Optional if pounds are already tracked.", 1, 250000, false)
+    ],
+    wholesale: [
+      number("weeklyVolume", "Weekly wholesale volume", "volume", "Enter the normal combined batch volume.", 1, 1000000),
+      select("volumeUnit", "Volume unit", "Use the unit your plant already tracks.", volumeUnitOptions),
+      number("batchDays", "Production days per week", "days", "This is a capacity signal, not a route preference.", 1, 7),
+      select("turnaround", "Typical turnaround requirement", "Turnaround helps weight cleaning and finishing capacity.", [option("urgent", "Under 48 hours"), option("standard", "3-4 days"), option("flexible", "Five days or flexible")]),
+      select("capacityNeed", "Primary capacity need", "Choose the closest role Shelton would play.", [option("full", "Cleaning and finishing"), option("pressing", "Pressing or finishing"), option("overflow", "Overflow and peak support")])
+    ],
+    other: [
+      number("weeklyVolume", "Approximate weekly volume", "volume", "A rough amount is enough for the private planning model.", 1, 1000000),
+      select("volumeUnit", "Volume unit", "Choose pounds, pieces, or not sure.", volumeUnitOptions),
+      number("activeDays", "Operating days per week", "days", "Operating days help describe demand without choosing pickup frequency.", 1, 7),
+      select("variability", "Volume pattern", "Variability helps Shelton understand peak pressure.", seasonalityOptions),
+      select("storage", "Clean-goods storage", "Storage can affect the recommended return rhythm.", storageOptions)
+    ]
+  };
+
+  const foldedGoods = ["sheets", "towels", "handTowels", "bathMats", "blankets", "duvetCovers", "faceCradleCovers", "tablecloths", "napkins", "runners", "skirting", "chairCovers", "specialtyEventGoods", "barTowels", "tableLinens", "banquetLinens"];
+  const garmentGoods = ["robes", "chefCoats", "aprons", "casinoUniforms", "uniformShirts", "workwear", "jackets", "shirts", "suits", "dresses", "specialtyGarments", "choirRobes"];
+
+  const finishOptions = [
+    { id: "folded", label: "Folded", description: "Finished into stable, ready-to-stage folds.", goods: foldedGoods },
+    { id: "pressed", label: "Pressed", description: "Pressed for presentation where the item supports it.", goods: [...foldedGoods, ...garmentGoods] },
+    { id: "hanging", label: "Hanging", description: "Returned on hangers for garment or presentation goods.", goods: garmentGoods },
+    { id: "poly", label: "Poly protection", description: "Protective poly for selected hanging garments.", goods: garmentGoods },
+    { id: "bundled", label: "Bundled", description: "Grouped for practical account-level staging.", goods: foldedGoods },
+    { id: "bagged", label: "Bagged", description: "Packed for compact towel or utility-goods return.", goods: ["towels", "handTowels", "bathMats", "barTowels"] },
+    { id: "linenCart", label: "Linen-cart return", description: "Stacked into linen carts where the account uses them.", goods: ["sheets", "towels", "bathMats", "blankets", "duvetCovers", "tablecloths", "napkins", "tableLinens", "banquetLinens"] },
+    { id: "labeled", label: "Labeled return", description: "Labeled by property, department, item, or account preference.", goods: [...foldedGoods, ...garmentGoods] }
+  ];
+
+  const specialtyOptions = [
+    { id: "heavySoil", label: "Heavy soil or grease", description: "For kitchen, utility, or repeated high-soil use.", goods: ["chefCoats", "aprons", "barTowels", "workwear"] },
+    { id: "whiteRetention", label: "White retention", description: "For white goods where brightness over time matters.", goods: ["sheets", "towels", "chefCoats", "tablecloths", "napkins", "tableLinens"] },
+    { id: "colorRetention", label: "Color retention", description: "For colored event, dining, or specialty goods.", goods: ["tablecloths", "napkins", "runners", "skirting", "chairCovers", "specialtyEventGoods", "tableLinens", "casinoUniforms"] },
+    { id: "moldTreatment", label: "Specialty mold treatment", description: "For eligible event goods needing additional evaluation.", goods: ["tablecloths", "napkins", "runners", "skirting", "chairCovers", "specialtyEventGoods"], operations: ["event"] },
+    { id: "odor", label: "Odor treatment", description: "For towels, fitness goods, and recurring heavy use.", goods: ["towels", "handTowels", "bathMats", "barTowels"] },
+    { id: "delicate", label: "Delicate or specialty handling", description: "For fabric, construction, or presentation that needs review.", goods: ["robes", "dresses", "specialtyGarments", "choirRobes", "specialtyEventGoods"] },
+    { id: "deadline", label: "Production deadline", description: "For event or wholesale return windows that shape capacity.", goods: [...foldedGoods, ...garmentGoods], operations: ["event", "wholesale"] },
+    { id: "propertySort", label: "Property-level sorting", description: "For central STR staging organized by property or account.", goods: foldedGoods, operations: ["str"] },
+    { id: "departmentSort", label: "Department-level sorting", description: "For uniforms organized around staff groups or departments.", goods: garmentGoods, operations: ["casino", "uniform"] }
+  ];
+
+  const ownershipChoices = [
+    { id: "own", label: "We already own the goods", model: "Customer-Owned Goods", description: "Shelton cleans, finishes, packages, and returns the inventory you own." },
+    { id: "some", label: "We own some and need some supplied", model: "Hybrid Program", description: "Owned goods and supplied inventory can be considered together." },
+    { id: "supply", label: "We want Shelton to supply the goods", model: "Rental Program", description: "Shelton-supplied inventory can be evaluated around the account." },
+    { id: "unsure", label: "We are not sure", model: "Recommend a Model", description: "The result can recommend a starting structure from the completed inputs." }
+  ];
+
   const operation = (id, number, label, context, goodsIds) => ({ id, number, label, context, goods: goodsIds });
 
   const config = {
-    version: 2,
-    storageKey: "shelton-pricing-journey-v2",
+    version: 3,
+    storageKey: "shelton-pricing-journey-v3",
     concepts: {
       orb: { number: "A", label: "Textile Begin Orb" },
       label: { number: "B", label: "Suspended Program Label" },
@@ -212,7 +332,11 @@
       operation("wholesale", "09", "Wholesale Dry Cleaning", "Wholesale support adds behind-the-scenes cleaning and finishing capacity around batch volume and turnaround.", ["shirts", "suits", "dresses", "specialtyGarments"]),
       operation("other", "10", "Other / Not Sure", "Some commercial programs do not fit a standard category. Start with the goods and Shelton can shape the questions from there.", ["towels", "tableLinens", "uniformShirts", "robes", "choirRobes", "specialtyGarments"])
     ],
-    goods
+    goods,
+    scaleSchemas,
+    finishOptions,
+    specialtyOptions,
+    ownershipChoices
   };
 
   window.SheltonPricingJourneyConfig = Object.freeze(config);

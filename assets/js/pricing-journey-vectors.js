@@ -170,6 +170,36 @@
     return layouts[Math.min(6, Math.max(1, count))];
   };
 
+  const returnOverlayFor = (returnOptions) => {
+    const options = new Set(returnOptions || []);
+    const overlays = [];
+    if (options.has("pressed")) {
+      overlays.push(`<path class="return-signal" d="M86 111 H814 M104 122 H796 M126 133 H774" /><text class="return-label" x="86" y="96">PRESSED FINISH</text>`);
+    }
+    if (options.has("hanging")) {
+      overlays.push(`<path class="return-structure" d="M105 80 H795 M132 80 v207 M768 80 v207" /><path class="return-signal" d="M250 80 q12 18 24 0 M438 80 q12 18 24 0 M626 80 q12 18 24 0" /><text class="return-label" x="105" y="64">HANGING RETURN</text>`);
+    }
+    if (options.has("poly")) {
+      overlays.push(`<path class="return-poly" d="M180 95 H720 L756 286 H144 Z" /><text class="return-label" x="700" y="111" text-anchor="end">POLY PROTECTION</text>`);
+    }
+    if (options.has("bundled")) {
+      overlays.push(`<path class="return-strap" d="M312 123 v136 M588 123 v136" /><text class="return-label" x="450" y="278" text-anchor="middle">BUNDLED</text>`);
+    }
+    if (options.has("bagged")) {
+      overlays.push(`<path class="return-bag" d="M212 123 Q450 90 688 123 L726 286 H174 Z" /><path class="return-signal" d="M230 130 Q450 160 670 130" /><text class="return-label" x="450" y="303" text-anchor="middle">BAGGED RETURN</text>`);
+    }
+    if (options.has("linenCart")) {
+      overlays.push(`<path class="return-cart" d="M154 112 H746 L710 280 H190 Z M190 280 h520" /><circle class="return-wheel" cx="250" cy="292" r="9" /><circle class="return-wheel" cx="650" cy="292" r="9" /><text class="return-label" x="450" y="306" text-anchor="middle">LINEN-CART RETURN</text>`);
+    }
+    if (options.has("labeled")) {
+      overlays.push(`<path class="return-tag" d="M714 96 h94 v46 l-47 34 -47-34 Z" /><circle class="return-tag-hole" cx="761" cy="113" r="4" /><text class="return-label return-label--dark" x="761" y="139" text-anchor="middle">LABELED</text>`);
+    }
+    if (options.has("folded")) {
+      overlays.push(`<path class="return-signal" d="M86 269 h118 M696 269 h118" /><text class="return-label" x="86" y="258">FOLDED READY</text>`);
+    }
+    return overlays.join("");
+  };
+
   const definitions = `
     <defs>
       <linearGradient id="vectorFabric" x1="0" y1="0" x2="1" y2="1">
@@ -211,12 +241,15 @@
         </g>`;
     }).join("");
 
+    const returnOverlay = returnOverlayFor(options.returnOptions);
+
     container.innerHTML = `
       <svg class="goods-scene-svg" viewBox="0 0 900 330" role="presentation" focusable="false">
         ${definitions}
         <rect width="900" height="330" fill="url(#vectorGrid)" />
         <g class="scene-backdrop">${backdropFor(operation.id)}</g>
         <g class="scene-goods">${objects}</g>
+        <g class="return-overlay">${returnOverlay}</g>
         <text class="scene-operation" x="840" y="310" text-anchor="end">${escapeText(operation.label.toUpperCase())}</text>
       </svg>`;
   };
