@@ -12,7 +12,7 @@
 ## Current Phase
 - Phase number: 1
 - Phase name: Three Landing Concepts
-- Status: In progress
+- Status: Complete
 
 ## Last Known Good Checkpoint
 - Commit hash: `74c7444b6937942bb95c920b3bfdf89252b60583`
@@ -32,22 +32,28 @@
 - Captured the current live Pricing baseline at 1440x900.
 - Added a noindex, unlinked private preview shell with working `orb`, `label`, and `portal` query states.
 - Confirmed the frozen live page and private preview load without console errors or horizontal overflow.
+- Built all three landing concepts with direct private URLs, desktop/mobile compositions, native Begin controls, focus states, and reduced-motion behavior.
+- Added the shared Operation handoff and all ten operation choices using the approved `Wholesale Dry Cleaning` wording.
+- Verified arrow-key selection, roving focus, live state, and zero horizontal overflow.
+- Selected Concept B, Suspended Program Label, and made it the default private preview state.
+- Captured the complete Checkpoint 1 viewport matrix and documented the concept comparison and rationale.
 
 ## Current Working State
-- Files currently being changed: Pricing-only files and `docs/pricing-journey-*`
-- Uncommitted work: none at the start of Checkpoint 1
+- Files currently being changed: `pricing-journey-preview.html`, `assets/css/pricing-journey.css`, `assets/js/pricing-journey.js`, `assets/js/pricing-journey-config.js`, and Pricing journey docs/artifacts
+- Uncommitted work: complete Checkpoint 1 implementation pending checkpoint commit
 - Whether the page builds: Yes; static pages load on localhost
-- Whether smoke tests pass: Yes; syntax, noindex, concept-route, live-page, overflow, and console smoke checks pass
+- Whether smoke tests pass: Yes; syntax, noindex, concept-route, Begin transition, keyboard selection, reduced motion, viewport, overflow, live-page, and console checks pass
 
 ## Outstanding Defects
 - The base repository has no package/build tooling. Affected viewport/branch: all / feature branch. Severity: low. Rubric: repeatability. Intended correction: continue using documented Node syntax and browser smoke commands rather than adding a framework.
+- No Checkpoint 1 visual or functional defects remain. The orb's slight consumer-product ambiguity and portal's quieter Begin action are documented reasons they were not selected.
 
 ## Next Exact Actions
-1. Create the three complete landing concept DOM/SVG compositions in the shared private preview.
-2. Add an internal development-only concept switcher and preserve direct query URLs.
-3. Implement Begin transitions into the Operation chapter for normal and reduced motion.
-4. Render desktop and mobile comparison screenshots for all concepts.
-5. Score the Checkpoint 1 rubric, select the winner, and document the rationale.
+1. Commit Checkpoint 1 as `checkpoint(pricing): complete and select landing concepts`.
+2. Expand the state model to persistent chapter state and completed summaries.
+3. Implement Operation completion, inline Edit, chapter condensation, and the program thread.
+4. Add the Goods chapter shell driven by the selected operation without yet completing all branch illustrations.
+5. Verify the complete Landing-to-Operation flow at 1366x768 and 390x844.
 
 ## Business-Data Blockers
 - Real Shelton pricing rates, volume bands, finishing factors, route-zone factors, and inventory-model factors are not supplied. Development-only deterministic fixtures are permitted and will remain visibly labeled.
@@ -57,5 +63,5 @@
 ## Resume Instructions
 - Exact first command: `git status --short --branch`
 - Exact first file to inspect: `docs/pricing-journey-progress.md`
-- Exact next test to run: `node --check assets/js/pricing-journey.js`
-- Exact next visual state to render: `pricing-journey-preview.html?concept=orb` at 1440x900, then the same URL at 390x844
+- Exact next test to run: `node --check assets/js/pricing-journey-config.js && node --check assets/js/pricing-journey.js`
+- Exact next visual state to render: default selected Label concept at `pricing-journey-preview.html`, then its Operation state at 1366x768

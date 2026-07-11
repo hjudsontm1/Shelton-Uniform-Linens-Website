@@ -9,20 +9,124 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/pricing-journey.css" />
+  <link rel="stylesheet" href="assets/css/pricing-journey.css?v=20260710-concepts-1" />
 </head>
-<body class="pricing-journey-page" data-pricing-journey data-phase="architecture">
+<body class="pricing-journey-page" data-pricing-journey data-phase="concepts" data-view="landing">
   <a class="journey-skip-link" href="#journey-main">Skip to pricing journey</a>
-  <main id="journey-main" class="journey-baseline" tabindex="-1">
-    <p class="journey-baseline__status">Private development preview · Checkpoint 0</p>
-    <h1>Build the right laundry program.</h1>
-    <p>The adaptive journey architecture is ready. Landing concepts will be available through private query states in Checkpoint 1.</p>
-    <nav aria-label="Private concept routes">
-      <a href="?concept=orb">Textile Begin Orb</a>
-      <a href="?concept=label">Suspended Program Label</a>
-      <a href="?concept=portal">Typographic Portal</a>
-    </nav>
+
+  <header class="journey-private-bar">
+    <a class="journey-brand" href="pricing-journey-preview.html?concept=label" aria-label="Shelton private Pricing journey preview">
+      <img src="assets/images/shelton-s-mark-white.png" width="815" height="815" alt="" />
+      <span>
+        <strong>Shelton Linen &amp; Uniform Services</strong>
+        <small>Private pricing study</small>
+      </span>
+    </a>
+    <details class="concept-switcher">
+      <summary>Concept <span data-concept-number>A</span></summary>
+      <nav aria-label="Private landing concept switcher">
+        <a href="?concept=orb" data-concept-link="orb"><span>A</span> Textile Begin Orb</a>
+        <a href="?concept=label" data-concept-link="label"><span>B</span> Suspended Program Label</a>
+        <a href="?concept=portal" data-concept-link="portal"><span>C</span> Typographic Portal</a>
+      </nav>
+    </details>
+  </header>
+
+  <main id="journey-main" class="journey-main" tabindex="-1">
+    <section class="journey-landing journey-landing--orb" data-concept-panel="orb" aria-labelledby="orb-title">
+      <div class="landing-copy landing-copy--orb">
+        <p class="landing-sequence">Planning range · Route rhythm · Supply model</p>
+        <h1 id="orb-title">Build the right laundry program.</h1>
+        <p class="landing-support">Tell us how your operation moves goods. Shelton will shape a practical planning range and service recommendation around it.</p>
+        <p class="landing-positioning">Quality-first service with pricing built to compete.</p>
+      </div>
+      <div class="orb-stage" aria-hidden="true">
+        <span class="orb-suspension"></span>
+        <span class="orb-shadow"></span>
+        <span class="orb-disc orb-disc--back"></span>
+        <span class="orb-disc orb-disc--middle"></span>
+        <span class="orb-disc orb-disc--front"></span>
+        <span class="orb-seam"></span>
+        <span class="orb-thread orb-thread--one"></span>
+        <span class="orb-thread orb-thread--two"></span>
+      </div>
+      <button class="begin-object begin-object--orb" type="button" data-begin-journey>
+        <span class="begin-object__label">Begin</span>
+        <span class="begin-object__detail">Assemble your program</span>
+      </button>
+      <p class="concept-note">Concept A · Textile Begin Orb</p>
+    </section>
+
+    <section class="journey-landing journey-landing--label" data-concept-panel="label" aria-labelledby="label-title" hidden>
+      <div class="label-grid" aria-hidden="true"></div>
+      <div class="landing-copy landing-copy--label">
+        <p class="landing-sequence">Commercial program planning</p>
+        <h1 id="label-title">Build the right laundry program.</h1>
+        <p class="landing-support">A few clear inputs become a planning range, likely route rhythm, and supply recommendation shaped around your operation.</p>
+        <p class="landing-positioning">Quality-first service with pricing built to compete.</p>
+      </div>
+      <div class="suspended-label" aria-hidden="true">
+        <span class="label-cord label-cord--left"></span>
+        <span class="label-cord label-cord--right"></span>
+        <span class="label-grommet label-grommet--left"></span>
+        <span class="label-grommet label-grommet--right"></span>
+        <span class="label-serial">PROGRAM / 001</span>
+        <span class="label-title">SHELTON COMMERCIAL LAUNDRY</span>
+        <span class="label-rule"></span>
+        <span class="label-copy">OPERATION · GOODS · SCALE · FINISH · RETURN</span>
+        <span class="label-edge"></span>
+      </div>
+      <button class="begin-object begin-object--label" type="button" data-begin-journey>
+        <span class="begin-object__label">Pull to begin</span>
+        <span class="begin-object__detail">Open program 001</span>
+      </button>
+      <p class="concept-note">Concept B · Suspended Program Label</p>
+    </section>
+
+    <section class="journey-landing journey-landing--portal" data-concept-panel="portal" aria-labelledby="portal-title" hidden>
+      <div class="portal-field" aria-hidden="true">
+        <span class="portal-line portal-line--one"></span>
+        <span class="portal-line portal-line--two"></span>
+        <span class="portal-threshold"></span>
+        <span class="portal-weight"></span>
+      </div>
+      <div class="landing-copy landing-copy--portal">
+        <p class="landing-sequence">Your operation sets the program.</p>
+        <h1 id="portal-title">Build the right<br />laundry program.</h1>
+        <div class="portal-support-row">
+          <p class="landing-support">Move through a concise, adaptive planning journey. The questions, goods, and recommendation change with your business.</p>
+          <p class="landing-positioning">Quality-first service with pricing built to compete.</p>
+        </div>
+      </div>
+      <button class="begin-object begin-object--portal" type="button" data-begin-journey>
+        <span class="portal-button-mark" aria-hidden="true"></span>
+        <span>
+          <span class="begin-object__label">Begin</span>
+          <span class="begin-object__detail">Cross into your program</span>
+        </span>
+      </button>
+      <p class="concept-note">Concept C · Minimal Typographic Portal</p>
+    </section>
+
+    <section class="journey-operation" data-operation-stage aria-labelledby="operation-title" hidden>
+      <div class="journey-thread" aria-hidden="true"><span></span></div>
+      <header class="operation-intro">
+        <p class="chapter-index">01 · Operation</p>
+        <h2 id="operation-title" tabindex="-1">What type of operation do you run?</h2>
+        <p>Choose the closest match. Your goods, scale questions, and service recommendation will adapt from here.</p>
+      </header>
+      <div class="operation-rail" role="radiogroup" aria-label="Operation type" data-operation-choices></div>
+      <div class="operation-selection" data-operation-selection hidden>
+        <p><span>Selected operation</span><strong data-operation-selection-label></strong></p>
+        <button type="button" data-operation-continue>Continue to goods <span aria-hidden="true">→</span></button>
+      </div>
+      <button class="concept-reset" type="button" data-reset-concept>Return to concept</button>
+    </section>
   </main>
-  <script src="assets/js/pricing-journey.js"></script>
+
+  <p class="journey-announcer" data-journey-announcer aria-live="polite"></p>
+
+  <script src="assets/js/pricing-journey-config.js?v=20260710-concepts-1"></script>
+  <script src="assets/js/pricing-journey.js?v=20260710-concepts-1"></script>
 </body>
 </html>
