@@ -51,7 +51,20 @@ Checkpoint 2 gate: **Pass**. All ten operations produce a relevant Goods handoff
 
 ## Checkpoint 3 - Adaptive Goods
 
-Not started.
+| Category | Score | Evidence |
+| --- | ---: | --- |
+| Branch relevance | 5 | Ten 1366x768 branch captures and `pricing-journey-goods-map.md` show operation-specific Goods sets and context |
+| Visual adaptation beyond text swapping | 5 | Distinct physical compositions and backdrops for linen cart, staging shelves, treatment flow, towel rack, event rail, kitchen, departments, garment rail, conveyor, and mixed goods |
+| Goods recognition | 5 | Custom folded goods, robe, coat, apron, garment, table, event, and treatment-room primitives remain legible at tested sizes |
+| Vector consistency | 5 | Shared 900x330 coordinate system, stroke weight, fabric treatment, seams, shadows, baselines, and muted palette |
+| No emoji appearance | 5 | Editorial product/garment line art with no faces, stock icon pack, or emoji geometry |
+| No irrelevant goods | 5 | Automated configuration test validates every branch reference; browser audit confirms two to six relevant goods per operation |
+| Educational microcopy | 5 | Each item has one concise positioning sentence and no more than three capability details; focused selection updates the panel |
+| Adaptive narrowing | 5 | Selected objects focus while compatible options recede; selected-only foundation scene renders one robe with no sheets or towels |
+| Accessibility | 5 | Labeled semantic buttons, checkbox state, visible Selected copy, focus outline, and redundant non-color state cues |
+| Performance | 5 | One active inline SVG, maximum six object groups, no dependency/raster assets, inactive scene removal, and no animated paths/filters |
+
+Checkpoint 3 gate: **Pass**. All operation branches, selected focus, one-item narrowing, and the required 1440, 1366, 1280, tablet, 390, and 430 viewport states are captured under `docs/pricing-journey-artifacts/checkpoint-3/`. `node tests/pricing-journey-config.test.cjs` validates configuration completeness and selected-only rendering.
 
 ## Checkpoint 4 - Program Inputs
 

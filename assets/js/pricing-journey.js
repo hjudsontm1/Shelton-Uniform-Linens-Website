@@ -3,7 +3,8 @@
 
   const root = document.querySelector("[data-pricing-journey]");
   const config = window.SheltonPricingJourneyConfig;
-  if (!root || !config) return;
+  const vectors = window.SheltonPricingJourneyVectors;
+  if (!root || !config || !vectors) return;
 
   const searchParams = new URLSearchParams(window.location.search);
   const allowedConcepts = new Set(Object.keys(config.concepts));
@@ -18,13 +19,16 @@
   const operationSelection = document.querySelector("[data-operation-selection]");
   const operationSelectionLabel = document.querySelector("[data-operation-selection-label]");
   const goodsChoices = document.querySelector("[data-goods-choices]");
+  const goodsScene = document.querySelector("[data-goods-scene]");
   const goodsEducation = document.querySelector("[data-goods-education] p");
+  const goodsCapabilities = document.querySelector("[data-goods-capabilities]");
   const goodsError = document.querySelector("[data-goods-error]");
   const goodsCount = document.querySelector("[data-goods-count]");
   const programSummary = document.querySelector("[data-program-summary]");
   const programSummaryCount = document.querySelector("[data-program-summary-count]");
   const programSummaryList = document.querySelector("[data-program-summary-list]");
   const foundationHandoff = document.querySelector("[data-foundation-handoff]");
+  const foundationScene = document.querySelector("[data-foundation-scene]");
   const announcer = document.querySelector("[data-journey-announcer]");
 
   const createInitialState = () => ({
@@ -192,6 +196,19 @@
 
     const focused = config.goods[state.focusedGood] || config.goods[state.goods[state.goods.length - 1]];
     goodsEducation.textContent = focused?.education || operation.context;
+    goodsCapabilities.replaceChildren();
+    (focused?.details || []).slice(0, 3).forEach((detail) => {
+      const item = document.createElement("li");
+      item.textContent = detail;
+      goodsCapabilities.append(item);
+    });
+    vectors.renderScene(goodsScene, {
+      operation,
+      goodsIds: operation.goods,
+      selectedIds: state.goods,
+      selectedOnly: false,
+      catalog: config.goods
+    });
     goodsCount.textContent = String(state.goods.length);
     goodsError.hidden = true;
 
@@ -202,6 +219,7 @@
     const editing = state.activeChapter === "goods" || !isComplete("goods");
     editor.hidden = !editing;
     summary.hidden = editing || !state.goods.length;
+    if (!editing) goodsScene.replaceChildren();
   };
 
   const renderThread = () => {
@@ -246,6 +264,15 @@
     renderThread();
     renderProgramSummary();
     foundationHandoff.hidden = state.activeChapter !== "foundation";
+    if (!foundationHandoff.hidden) {
+      vectors.renderScene(foundationScene, {
+        operation: activeOperation(),
+        goodsIds: state.goods,
+        selectedIds: state.goods,
+        selectedOnly: true,
+        catalog: config.goods
+      });
+    }
   };
 
   const render = () => {

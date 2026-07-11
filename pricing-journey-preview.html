@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/pricing-journey.css?v=20260711-flow-1" />
+  <link rel="stylesheet" href="assets/css/pricing-journey.css?v=20260711-goods-1" />
 </head>
 <body class="pricing-journey-page" data-pricing-journey data-phase="concepts" data-view="landing">
   <a class="journey-skip-link" href="#journey-main">Skip to pricing journey</a>
@@ -171,9 +171,11 @@
               </div>
               <p data-goods-operation-context>Select everything Shelton would clean and return. Later questions will show only compatible finishes and handling.</p>
             </header>
+            <div class="goods-visual-stage" data-goods-scene aria-hidden="true"></div>
             <div class="goods-education" data-goods-education>
               <span>Why this matters</span>
               <p>Goods shape processing, finishing, packaging, and the operating inputs used to recommend route rhythm.</p>
+              <ul data-goods-capabilities></ul>
             </div>
             <div class="goods-choice-grid" role="group" aria-label="Goods to include" data-goods-choices></div>
             <p class="chapter-error" data-goods-error role="alert" hidden>Select at least one good to continue.</p>
@@ -188,6 +190,7 @@
           <p class="chapter-index">Program foundation</p>
           <h2 id="foundation-title" tabindex="-1">Your operation and goods are connected.</h2>
           <p>Scale and operating signals will be the next chapter. Shelton will use them to recommend a likely service rhythm rather than asking you to choose one.</p>
+          <div class="foundation-scene" data-foundation-scene aria-hidden="true"></div>
           <button type="button" data-edit-chapter="goods">Review selected goods</button>
         </section>
       </div>
@@ -201,7 +204,8 @@
 
   <p class="journey-announcer" data-journey-announcer aria-live="polite"></p>
 
-  <script src="assets/js/pricing-journey-config.js?v=20260711-flow-1"></script>
-  <script src="assets/js/pricing-journey.js?v=20260711-flow-1"></script>
+  <script src="assets/js/pricing-journey-config.js?v=20260711-goods-1"></script>
+  <script src="assets/js/pricing-journey-vectors.js?v=20260711-goods-1"></script>
+  <script src="assets/js/pricing-journey.js?v=20260711-goods-1"></script>
 </body>
 </html>

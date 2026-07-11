@@ -12,7 +12,7 @@
 ## Current Phase
 - Phase number: 3
 - Phase name: All Adaptive Goods Branches
-- Status: In progress
+- Status: Complete
 
 ## Last Known Good Checkpoint
 - Commit hash: `ae8b35a2588ecea96c06f29f76eaa9f4d1a378c2`
@@ -43,24 +43,30 @@
 - Added adaptive Goods selection, concise operation/item education, multi-select state, condensation, and the initial scale handoff.
 - Verified operation changes preserve compatible goods and transparently remove incompatible goods.
 - Corrected chapter focus/scroll offsets so fixed navigation never covers active headings.
+- Added a reusable custom inline-SVG system with consistent fabric, seam, stroke, depth, and muted-gold treatment.
+- Built distinct Goods scenes and physical object sets for all ten operations.
+- Added selected-object focus, nonselected recession, one-item narrowing, and selected-only assembled scenes.
+- Added one concise item explanation and up to three capability details for every configured good.
+- Added automated Goods/configuration tests and documented the branch copy map and vector system.
+- Completed the required Checkpoint 3 viewport matrix with zero horizontal overflow and no browser console errors.
 
 ## Current Working State
-- Files currently being changed: none at the start of Checkpoint 3
-- Uncommitted work: none
+- Files currently being changed: `pricing-journey-preview.html`, `assets/css/pricing-journey.css`, `assets/js/pricing-journey-config.js`, `assets/js/pricing-journey-vectors.js`, `assets/js/pricing-journey.js`, tests, docs, and Checkpoint 3 artifacts
+- Uncommitted work: complete Checkpoint 3 implementation pending checkpoint commit
 - Whether the page builds: Yes; static pages load on localhost
-- Whether smoke tests pass: Yes; syntax, noindex, Begin timing, all-operation branching, chapter condensation, Edit, dependency cleanup, state restoration, Start Over, keyboard navigation, reduced motion, targeted viewport, overflow, and console checks pass
+- Whether smoke tests pass: Yes; syntax, static Goods/config assertions, all-operation vector rendering, item education, selection focus, one-item narrowing, dependency cleanup, full viewport matrix, overflow, and console checks pass
 
 ## Outstanding Defects
 - The base repository has no package/build tooling. Affected viewport/branch: all / feature branch. Severity: low. Rubric: repeatability. Intended correction: continue using documented Node syntax and browser smoke commands rather than adding a framework.
 - No Checkpoint 1 visual or functional defects remain. The orb's slight consumer-product ambiguity and portal's quieter Begin action are documented reasons they were not selected.
-- Goods are intentionally typographic in Checkpoint 2. Affected phase: Checkpoint 3. Severity: planned. Rubric: Vector Goods. Intended correction: replace the temporary Goods cards with the shared operation-specific SVG scene system while retaining the tested state behavior.
+- Scale, finish, ownership, and location chapters are not yet implemented. Affected phase: Checkpoint 4. Severity: planned. Rubric: Program Inputs. Intended correction: add operation-specific inputs and selected-goods-only transformation scenes without changing the completed Operation/Goods contracts.
 
 ## Next Exact Actions
-1. Commit Checkpoint 2 as `checkpoint(pricing): complete landing and operation journey`.
-2. Create reusable SVG primitives for linen layers, towel stacks, robes, coats, workwear, event goods, carts, bags, and labels.
-3. Map every operation to a distinct Goods scene composition without changing the tested selection state model.
-4. Add selected/nonselected focus treatment and one-item narrowing evidence.
-5. Run the complete Checkpoint 3 viewport matrix and branch-relevance audit.
+1. Commit Checkpoint 3 as `checkpoint(pricing): complete adaptive goods branches`.
+2. Define operation-specific scale and operating-rhythm schemas in the canonical configuration.
+3. Implement Scale inputs without a desired-frequency question and calculate recommendation signals only.
+4. Implement selected-goods-only Finish/Return transformation, specialty prompts, ownership, and location.
+5. Verify completed summaries, Edit, state dependencies, and mobile flow before committing Checkpoint 4.
 
 ## Business-Data Blockers
 - Real Shelton pricing rates, volume bands, finishing factors, route-zone factors, and inventory-model factors are not supplied. Development-only deterministic fixtures are permitted and will remain visibly labeled.
@@ -70,5 +76,5 @@
 ## Resume Instructions
 - Exact first command: `git status --short --branch`
 - Exact first file to inspect: `docs/pricing-journey-progress.md`
-- Exact next test to run: `node --check assets/js/pricing-journey-config.js && node --check assets/js/pricing-journey.js`
-- Exact next visual state to render: Hotel Goods at `pricing-journey-preview.html?concept=label&motion=reduce` after selecting Hotel and continuing, at 1366x768
+- Exact next test to run: `node tests/pricing-journey-config.test.cjs && node --check assets/js/pricing-journey-vectors.js && node --check assets/js/pricing-journey.js`
+- Exact next visual state to render: Hotel with only Robes selected in the assembled foundation scene at 1366x768, then the same state at 390x844

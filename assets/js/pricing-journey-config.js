@@ -144,6 +144,51 @@
     }
   };
 
+  const capabilityGroups = [
+    {
+      ids: ["sheets", "duvetCovers", "blankets"],
+      details: ["Appearance and feel", "Pressed or folded finishing", "Linen-cart or bundled return"]
+    },
+    {
+      ids: ["towels", "handTowels", "bathMats", "barTowels"],
+      details: ["Soil and odor treatment", "High-volume processing", "Folded, bundled, or bagged return"]
+    },
+    {
+      ids: ["robes"],
+      details: ["Cleanliness and feel", "Guest-facing presentation", "Folded or hanging return"]
+    },
+    {
+      ids: ["faceCradleCovers"],
+      details: ["Treatment-room soil handling", "Compact sorting", "Ready-to-stage return"]
+    },
+    {
+      ids: ["tablecloths", "napkins", "runners", "skirting", "chairCovers", "specialtyEventGoods", "tableLinens", "banquetLinens"],
+      details: ["Color and fabric awareness", "Stain and specialty treatment", "Pressed, folded, or hanging return"]
+    },
+    {
+      ids: ["chefCoats"],
+      details: ["Stain and heavy-soil treatment", "Pressing and professional finishing", "Hanger-and-poly return where selected"]
+    },
+    {
+      ids: ["aprons"],
+      details: ["Food and grease treatment", "Repeat-use processing", "Folded or hanging return"]
+    },
+    {
+      ids: ["casinoUniforms", "uniformShirts", "workwear", "jackets"],
+      details: ["Repeated-wear cleaning", "Professional finishing", "Organized account return"]
+    },
+    {
+      ids: ["shirts", "suits", "dresses", "specialtyGarments", "choirRobes"],
+      details: ["Garment-aware cleaning", "Pressing and presentation", "Batch or account-level return"]
+    }
+  ];
+
+  capabilityGroups.forEach((group) => {
+    group.ids.forEach((id) => {
+      if (goods[id]) goods[id].details = group.details;
+    });
+  });
+
   const operation = (id, number, label, context, goodsIds) => ({ id, number, label, context, goods: goodsIds });
 
   const config = {
