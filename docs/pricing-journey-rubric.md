@@ -35,7 +35,19 @@ Checkpoint 1 gate: **Pass**. Concept B, Suspended Program Label, is selected and
 
 ## Checkpoint 2 - Landing And Operation
 
-Not started.
+| Category | Score | Evidence |
+| --- | ---: | --- |
+| Landing clarity | 5 | Selected suspended-label concept remains the default; alternates remain private query states |
+| Operation clarity | 5 | Ten distinct choices, visible selected state, concise adaptation explanation, and `Wholesale Dry Cleaning` wording |
+| Continuous-page feeling | 5 | Operation condenses in document flow and Goods opens beneath it; normal browser scrolling remains enabled |
+| Completed-step condensation | 5 | Operation and Goods become compact summaries with answer, context, and inline Edit action |
+| Scroll behavior | 5 | Exact fixed-header/progress-rail offset keeps newly opened headings visible; no snap trapping or hidden heading |
+| No static dashboard feeling | 5 | The compact review control appears only after an answer and renders answered fields only |
+| 1366x768 fit | 5 | Operation, Goods, and foundation states fit without horizontal overflow or clipped active headings |
+| Keyboard accessibility | 5 | Native Begin/Continue/Edit controls, radio-group semantics, roving focus, arrow/Home/End selection, and live announcements |
+| Performance | 5 | Configuration-driven DOM, no dependencies or new raster assets, session persistence, and no console errors |
+
+Checkpoint 2 gate: **Pass**. All ten operations produce a relevant Goods handoff, completed chapters remain visible above the active chapter, Edit reopens inline, incompatible goods are removed while compatible goods are preserved, and Start Over restores the landing safely. Evidence is under `docs/pricing-journey-artifacts/checkpoint-2/`.
 
 ## Checkpoint 3 - Adaptive Goods
 

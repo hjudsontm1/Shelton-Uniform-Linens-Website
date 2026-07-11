@@ -12,7 +12,7 @@
 ## Current Phase
 - Phase number: 2
 - Phase name: Landing, Operation, and Page Flow
-- Status: In progress
+- Status: Complete
 
 ## Last Known Good Checkpoint
 - Commit hash: `fce85988ab03eab1b66c04385158fcd7853859e4`
@@ -37,23 +37,30 @@
 - Verified arrow-key selection, roving focus, live state, and zero horizontal overflow.
 - Selected Concept B, Suspended Program Label, and made it the default private preview state.
 - Captured the complete Checkpoint 1 viewport matrix and documented the concept comparison and rationale.
+- Rebuilt the active journey as a continuous, normally scrollable canvas with a compact chapter thread.
+- Added versioned session state, restoration, Start Over, completed summaries, inline Edit, and answered-only Review Selections.
+- Completed all ten Operation routes and verified each produces its configured Goods handoff without horizontal overflow.
+- Added adaptive Goods selection, concise operation/item education, multi-select state, condensation, and the initial scale handoff.
+- Verified operation changes preserve compatible goods and transparently remove incompatible goods.
+- Corrected chapter focus/scroll offsets so fixed navigation never covers active headings.
 
 ## Current Working State
-- Files currently being changed: none at the start of Checkpoint 2
-- Uncommitted work: none
+- Files currently being changed: `pricing-journey-preview.html`, `assets/css/pricing-journey.css`, `assets/js/pricing-journey-config.js`, `assets/js/pricing-journey.js`, Pricing journey rubric/progress, and Checkpoint 2 artifacts
+- Uncommitted work: complete Checkpoint 2 implementation pending checkpoint commit
 - Whether the page builds: Yes; static pages load on localhost
-- Whether smoke tests pass: Yes; syntax, noindex, concept-route, Begin transition, keyboard selection, reduced motion, viewport, overflow, live-page, and console checks pass
+- Whether smoke tests pass: Yes; syntax, noindex, Begin timing, all-operation branching, chapter condensation, Edit, dependency cleanup, state restoration, Start Over, keyboard navigation, reduced motion, targeted viewport, overflow, and console checks pass
 
 ## Outstanding Defects
 - The base repository has no package/build tooling. Affected viewport/branch: all / feature branch. Severity: low. Rubric: repeatability. Intended correction: continue using documented Node syntax and browser smoke commands rather than adding a framework.
 - No Checkpoint 1 visual or functional defects remain. The orb's slight consumer-product ambiguity and portal's quieter Begin action are documented reasons they were not selected.
+- Goods are intentionally typographic in Checkpoint 2. Affected phase: Checkpoint 3. Severity: planned. Rubric: Vector Goods. Intended correction: replace the temporary Goods cards with the shared operation-specific SVG scene system while retaining the tested state behavior.
 
 ## Next Exact Actions
-1. Expand the state model to persistent chapter state and completed summaries.
-2. Implement Operation completion, inline Edit, chapter condensation, and the program thread.
-3. Add the Goods chapter shell driven by the selected operation without yet completing all branch illustrations.
-4. Verify the complete Landing-to-Operation flow at 1366x768 and 390x844.
-5. Commit Checkpoint 2 only after the flow is independently runnable.
+1. Commit Checkpoint 2 as `checkpoint(pricing): complete landing and operation journey`.
+2. Create reusable SVG primitives for linen layers, towel stacks, robes, coats, workwear, event goods, carts, bags, and labels.
+3. Map every operation to a distinct Goods scene composition without changing the tested selection state model.
+4. Add selected/nonselected focus treatment and one-item narrowing evidence.
+5. Run the complete Checkpoint 3 viewport matrix and branch-relevance audit.
 
 ## Business-Data Blockers
 - Real Shelton pricing rates, volume bands, finishing factors, route-zone factors, and inventory-model factors are not supplied. Development-only deterministic fixtures are permitted and will remain visibly labeled.
@@ -64,4 +71,4 @@
 - Exact first command: `git status --short --branch`
 - Exact first file to inspect: `docs/pricing-journey-progress.md`
 - Exact next test to run: `node --check assets/js/pricing-journey-config.js && node --check assets/js/pricing-journey.js`
-- Exact next visual state to render: default selected Label concept at `pricing-journey-preview.html`, then its Operation state at 1366x768
+- Exact next visual state to render: Hotel Goods at `pricing-journey-preview.html?concept=label&motion=reduce` after selecting Hotel and continuing, at 1366x768

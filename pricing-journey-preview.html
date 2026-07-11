@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/pricing-journey.css?v=20260710-concepts-1" />
+  <link rel="stylesheet" href="assets/css/pricing-journey.css?v=20260711-flow-1" />
 </head>
 <body class="pricing-journey-page" data-pricing-journey data-phase="concepts" data-view="landing">
   <a class="journey-skip-link" href="#journey-main">Skip to pricing journey</a>
@@ -108,25 +108,100 @@
       <p class="concept-note">Concept C · Minimal Typographic Portal</p>
     </section>
 
-    <section class="journey-operation" data-operation-stage aria-labelledby="operation-title" hidden>
-      <div class="journey-thread" aria-hidden="true"><span></span></div>
-      <header class="operation-intro">
-        <p class="chapter-index">01 · Operation</p>
-        <h2 id="operation-title" tabindex="-1">What type of operation do you run?</h2>
-        <p>Choose the closest match. Your goods, scale questions, and service recommendation will adapt from here.</p>
-      </header>
-      <div class="operation-rail" role="radiogroup" aria-label="Operation type" data-operation-choices></div>
-      <div class="operation-selection" data-operation-selection hidden>
-        <p><span>Selected operation</span><strong data-operation-selection-label></strong></p>
-        <button type="button" data-operation-continue>Continue to goods <span aria-hidden="true">→</span></button>
+    <section class="journey-flow" data-journey-flow aria-label="Adaptive pricing journey" hidden>
+      <nav class="program-thread" aria-label="Pricing journey progress">
+        <ol>
+          <li data-thread-step="operation"><span>01</span><strong>Operation</strong></li>
+          <li data-thread-step="goods"><span>02</span><strong>Goods</strong></li>
+          <li data-thread-step="scale"><span>03</span><strong>Scale</strong></li>
+          <li data-thread-step="finish"><span>04</span><strong>Finish</strong></li>
+          <li data-thread-step="ownership"><span>05</span><strong>Ownership</strong></li>
+          <li data-thread-step="location"><span>06</span><strong>Location</strong></li>
+          <li data-thread-step="review"><span>07</span><strong>Review</strong></li>
+        </ol>
+      </nav>
+
+      <details class="program-summary" data-program-summary hidden>
+        <summary>Review selections <span data-program-summary-count>0</span></summary>
+        <dl data-program-summary-list></dl>
+      </details>
+
+      <div class="program-canvas">
+        <section class="journey-chapter journey-chapter--operation" data-chapter="operation" aria-labelledby="operation-title">
+          <div class="chapter-line" aria-hidden="true"><span></span></div>
+          <div class="chapter-summary" data-chapter-summary="operation" hidden>
+            <div>
+              <p>01 · Operation</p>
+              <h2 data-operation-summary-label></h2>
+              <span>Your goods, inputs, and recommendation now adapt from this operation.</span>
+            </div>
+            <button type="button" data-edit-chapter="operation">Edit<span class="sr-only"> operation</span></button>
+          </div>
+
+          <div class="chapter-editor operation-editor" data-chapter-editor="operation">
+            <header class="operation-intro">
+              <p class="chapter-index">01 · Operation</p>
+              <h2 id="operation-title" tabindex="-1">What type of operation do you run?</h2>
+              <p>Choose the closest match. Your goods, scale questions, and service recommendation will adapt from here.</p>
+            </header>
+            <div class="operation-rail" role="radiogroup" aria-label="Operation type" data-operation-choices></div>
+            <div class="operation-selection" data-operation-selection hidden>
+              <p><span>Selected operation</span><strong data-operation-selection-label></strong></p>
+              <button type="button" data-operation-continue>Continue to goods <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="journey-chapter journey-chapter--goods" data-chapter="goods" aria-labelledby="goods-title" hidden>
+          <div class="chapter-line" aria-hidden="true"><span></span></div>
+          <div class="chapter-summary" data-chapter-summary="goods" hidden>
+            <div>
+              <p>02 · Goods</p>
+              <h2 data-goods-summary-label></h2>
+              <span>The next chapters will narrow to these selected goods.</span>
+            </div>
+            <button type="button" data-edit-chapter="goods">Edit<span class="sr-only"> goods</span></button>
+          </div>
+
+          <div class="chapter-editor goods-editor" data-chapter-editor="goods">
+            <header class="goods-intro">
+              <div>
+                <p class="chapter-index">02 · Goods</p>
+                <h2 id="goods-title" tabindex="-1">What should move through the program?</h2>
+              </div>
+              <p data-goods-operation-context>Select everything Shelton would clean and return. Later questions will show only compatible finishes and handling.</p>
+            </header>
+            <div class="goods-education" data-goods-education>
+              <span>Why this matters</span>
+              <p>Goods shape processing, finishing, packaging, and the operating inputs used to recommend route rhythm.</p>
+            </div>
+            <div class="goods-choice-grid" role="group" aria-label="Goods to include" data-goods-choices></div>
+            <p class="chapter-error" data-goods-error role="alert" hidden>Select at least one good to continue.</p>
+            <div class="goods-selection">
+              <p><span data-goods-count>0</span> selected</p>
+              <button type="button" data-goods-continue>Save goods <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="foundation-handoff" data-foundation-handoff aria-labelledby="foundation-title" hidden>
+          <p class="chapter-index">Program foundation</p>
+          <h2 id="foundation-title" tabindex="-1">Your operation and goods are connected.</h2>
+          <p>Scale and operating signals will be the next chapter. Shelton will use them to recommend a likely service rhythm rather than asking you to choose one.</p>
+          <button type="button" data-edit-chapter="goods">Review selected goods</button>
+        </section>
       </div>
-      <button class="concept-reset" type="button" data-reset-concept>Return to concept</button>
+
+      <footer class="journey-flow-tools">
+        <button type="button" data-start-over>Start over</button>
+        <span>Private development preview · No live quote submission</span>
+      </footer>
     </section>
   </main>
 
   <p class="journey-announcer" data-journey-announcer aria-live="polite"></p>
 
-  <script src="assets/js/pricing-journey-config.js?v=20260710-concepts-1"></script>
-  <script src="assets/js/pricing-journey.js?v=20260710-concepts-1"></script>
+  <script src="assets/js/pricing-journey-config.js?v=20260711-flow-1"></script>
+  <script src="assets/js/pricing-journey.js?v=20260711-flow-1"></script>
 </body>
 </html>
