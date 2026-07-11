@@ -1,0 +1,13 @@
+{
+  "noindex": true,
+  "browserErrors": [],
+  "checkedViewports": [
+    "desktop-1440x900",
+    "desktop-1366x768",
+    "desktop-1280x800",
+    "tablet-768x1024",
+    "mobile-390x844",
+    "mobile-430x932"
+  ],
+  "handoff": "pricing hero operation/goods carried into estimate-preview.html"
+}

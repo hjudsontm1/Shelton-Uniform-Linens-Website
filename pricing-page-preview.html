@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Commercial Laundry Pricing Preview | Shelton Linen &amp; Uniform Services</title>
+  <meta name="description" content="Private preview of Shelton's rebuilt commercial laundry Pricing page and estimator-led marketing experience." />
+  <meta property="og:title" content="Commercial Laundry Pricing | Shelton Linen &amp; Uniform Services" />
+  <meta property="og:description" content="Learn how commercial laundry pricing is shaped by goods, volume, quality, inventory model, and route needs." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <link rel="stylesheet" href="assets/css/pricing-page-preview.css?v=20260711-1" />
+</head>
+<body data-page="pricing-page-preview">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html" aria-label="Shelton Linen and Uniform Services home">
+        <span class="brand-mark" aria-hidden="true"><img src="assets/images/shelton-s-mark-white.png" alt="" width="815" height="815" /></span>
+        <span class="brand-copy">
+          <span class="brand-main">Shelton Linen &amp; Uniform Services</span>
+          <span class="brand-sub">Commercial Laundry Services · San Diego</span>
+        </span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open navigation">
+        <span></span><span></span>
+      </button>
+      <ul class="nav-links" id="primary-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="process.html">Process</a></li>
+        <li><a class="is-active" href="pricing.html">Pricing</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a class="nav-cta" href="quote.html">Request a Quote</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main-content" class="pricing-rebuild" data-pricing-page>
+    <section class="pricing-hero" aria-labelledby="pricing-hero-title">
+      <div class="pricing-hero__copy">
+        <p class="pricing-kicker">Commercial pricing preview</p>
+        <h1 id="pricing-hero-title">Commercial pricing built around your operation.</h1>
+        <p class="pricing-hero__support">Every commercial laundry program is different. Start with a few simple details and we'll help shape the right service model and planning range.</p>
+        <p class="pricing-hero__positioning">Quality-first service with pricing built to compete.</p>
+        <div class="pricing-hero__signals" aria-label="What the estimator starts to understand">
+          <span>Operation type</span>
+          <span>Goods mix</span>
+          <span>Service model</span>
+        </div>
+      </div>
+
+      <div class="hero-program" aria-hidden="true">
+        <span class="hero-program__thread"></span>
+        <span class="hero-program__orb"></span>
+        <span class="hero-program__sheet"></span>
+        <span class="hero-program__goods" data-hero-visual-goods></span>
+        <span class="hero-program__caption" data-hero-visual-caption>Choose an operation to shape the program.</span>
+      </div>
+
+      <form class="hero-estimator" data-hero-estimator aria-labelledby="hero-entry-title">
+        <div class="hero-estimator__intro">
+          <p class="pricing-kicker">Start the estimator</p>
+          <h2 id="hero-entry-title">Begin with what changes the price first.</h2>
+          <p data-hero-helper>Choose your operation. The goods and pricing signals will adjust immediately.</p>
+        </div>
+
+        <fieldset class="hero-choice hero-choice--operation">
+          <legend>What type of operation do you run?</legend>
+          <div class="operation-rail" role="radiogroup" data-operation-options></div>
+        </fieldset>
+
+        <fieldset class="hero-choice hero-choice--goods" data-goods-fieldset disabled>
+          <legend>What do you primarily need cleaned?</legend>
+          <div class="goods-rail" data-goods-options></div>
+        </fieldset>
+
+        <div class="hero-estimator__status" data-hero-status aria-live="polite">
+          Select an operation to reveal likely goods.
+        </div>
+
+        <div class="hero-estimator__actions">
+          <button class="pricing-button pricing-button--primary" type="submit" data-hero-submit disabled>Continue Building My Estimate</button>
+          <button class="pricing-button pricing-button--text" type="button" data-hero-reset>Start over</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="pricing-factors" aria-labelledby="pricing-factors-title">
+      <div class="section-intro">
+        <p class="pricing-kicker">How pricing works</p>
+        <h2 id="pricing-factors-title">Commercial laundry pricing is shaped by the work behind the clean goods.</h2>
+        <p>There is no universal flat rate because different operations place different demands on sorting, soil treatment, finishing, packaging, inventory, and routes.</p>
+      </div>
+      <div class="factor-field">
+        <div class="factor-visual" aria-hidden="true">
+          <span class="factor-visual__line"></span>
+          <span class="factor-visual__bundle"></span>
+          <span class="factor-visual__tag" data-factor-visual-label>Goods</span>
+        </div>
+        <div class="factor-list" role="tablist" aria-label="Pricing factors" data-factor-list></div>
+        <article class="factor-detail" data-factor-detail aria-live="polite"></article>
+      </div>
+    </section>
+
+    <section class="market-position" aria-labelledby="market-title">
+      <div class="section-intro section-intro--split">
+        <div>
+          <p class="pricing-kicker">Market position</p>
+          <h2 id="market-title">The right comparison is total program value, not the lowest cost per pound.</h2>
+        </div>
+        <p>Shelton is not a laundromat or consumer wash-and-fold option. The program sits in the commercial lane: route-based, quality-focused, professionally finished, and built to compete with larger providers where the service model fits.</p>
+      </div>
+      <div class="market-map" data-market-map>
+        <div class="market-line" role="tablist" aria-label="Laundry service market positions" data-market-list></div>
+        <article class="market-detail" data-market-detail aria-live="polite"></article>
+      </div>
+    </section>
+
+    <section class="quality-economics" aria-labelledby="quality-title">
+      <div class="section-intro">
+        <p class="pricing-kicker">Quality economics</p>
+        <h2 id="quality-title">Better cleaning changes more than the invoice.</h2>
+        <p>Quality can affect appearance, usable life, replacement pressure, staff handling, rejected goods, and customer experience. This is why a commercial program should be evaluated beyond a basic wash price.</p>
+      </div>
+      <div class="quality-stage">
+        <div class="quality-object" aria-hidden="true" data-quality-object>
+          <span></span>
+        </div>
+        <div class="quality-controls" role="tablist" aria-label="Quality examples" data-quality-list></div>
+        <article class="quality-detail" data-quality-detail aria-live="polite"></article>
+      </div>
+    </section>
+
+    <section class="account-models" aria-labelledby="models-title">
+      <div class="section-intro section-intro--split">
+        <div>
+          <p class="pricing-kicker">Inventory model</p>
+          <h2 id="models-title">Customer-Owned Goods, Hybrid, and Rental are service structures, not pricing tiers.</h2>
+        </div>
+        <p>The right model depends on what the customer already owns, what Shelton may need to supply, and how predictable the recurring inventory need is. The estimator can recommend a direction after it understands the operation.</p>
+      </div>
+      <div class="model-stage">
+        <div class="model-paths" role="tablist" aria-label="Inventory model comparison" data-model-list></div>
+        <div class="model-illustration" aria-hidden="true" data-model-visual>
+          <span class="model-illustration__owned"></span>
+          <span class="model-illustration__shelton"></span>
+          <span class="model-illustration__route"></span>
+        </div>
+        <article class="model-detail" data-model-detail aria-live="polite"></article>
+      </div>
+    </section>
+
+    <section class="estimate-transition" aria-labelledby="estimate-transition-title">
+      <div class="estimate-transition__visual" aria-hidden="true">
+        <span class="transition-thread"></span>
+        <span class="transition-sheet"></span>
+        <span class="transition-goods" data-transition-goods></span>
+      </div>
+      <div class="estimate-transition__copy">
+        <p class="pricing-kicker">Interactive estimator</p>
+        <h2 id="estimate-transition-title">Ready to build your planning range?</h2>
+        <p>Continue with the information you already entered or begin a new estimate. The dedicated estimator keeps the marketing page separate from the program-building tool.</p>
+        <div class="estimate-summary" data-estimate-summary hidden></div>
+        <div class="estimate-transition__actions">
+          <a class="pricing-button pricing-button--primary" href="estimate-preview.html" data-estimate-link>Launch Interactive Estimator</a>
+          <button class="pricing-button pricing-button--text" type="button" data-final-reset>Start Over</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="footer-directory">
+        <div class="footer-brand-panel">
+          <a class="footer-logo" href="index.html" aria-label="Shelton Linen and Uniform Services home">
+            <span class="footer-brand-mark" aria-hidden="true"><img src="assets/images/shelton-s-mark-white.png" alt="" width="815" height="815" /></span>
+            <span>
+              <span class="footer-brand">Shelton Linen &amp; Uniform Services</span>
+              <span class="footer-descriptor">Commercial Laundry Services · San Diego</span>
+            </span>
+          </a>
+          <p class="footer-text">Commercial-only laundry, linen, towel, uniform, event linen, and wholesale finishing support for San Diego businesses.</p>
+        </div>
+        <nav class="footer-links" aria-label="Footer pages">
+          <h2>Pages</h2>
+          <a href="services.html">Services</a>
+          <a href="process.html">Process</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="about.html">About</a>
+        </nav>
+        <nav class="footer-links" aria-label="Commercial services">
+          <h2>Commercial Services</h2>
+          <a href="services.html#linens-bedding">Commercial linen</a>
+          <a href="services.html#towels-wellness">Towel service</a>
+          <a href="services.html#uniforms-chef-coats">Uniform cleaning</a>
+          <a href="services.html#event-linens">Event linen</a>
+          <a href="services.html#wholesale-support">Wholesale support</a>
+        </nav>
+        <nav class="footer-links" aria-label="Get started">
+          <h2>Get Started</h2>
+          <a href="quote.html">Request a quote</a>
+          <a href="quote.html?request=plant-tour">Schedule a plant tour</a>
+          <a href="https://www.sheltoncleanerssd.com/" target="_blank" rel="noopener">Shelton Cleaners</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>2026 Shelton Linen &amp; Uniform Services. All rights reserved.</p>
+        <p>Sister company to Shelton Cleaners San Diego.</p>
+      </div>
+    </div>
+  </footer>
+
+  <p class="sr-only" aria-live="polite" data-pricing-announcer></p>
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/pricing-page-preview.js?v=20260711-1"></script>
+</body>
+</html>
