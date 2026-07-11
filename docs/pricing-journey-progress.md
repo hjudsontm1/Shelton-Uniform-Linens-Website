@@ -10,14 +10,14 @@
 - Quote endpoint audit: live `quote.html` posts to Formspree; the preview will not call or modify it
 
 ## Current Phase
-- Phase number: 0
-- Phase name: Baseline and Architecture
-- Status: Complete
+- Phase number: 1
+- Phase name: Three Landing Concepts
+- Status: In progress
 
 ## Last Known Good Checkpoint
-- Commit hash: Pending Checkpoint 0 commit
+- Commit hash: `74c7444b6937942bb95c920b3bfdf89252b60583`
 - Commit message: `checkpoint(pricing): establish adaptive journey architecture`
-- Date/time: 2026-07-10 22:58:58 CDT
+- Date/time: 2026-07-10 23:23:09 CDT
 - Build command: Static site; no build step
 - Test command: `node --check assets/js/pricing-builder-data.js && node --check assets/js/pricing-builder.js && node --check assets/js/pricing-flow-prototype.js`
 - Preview command: `python3 -m http.server 8045 --bind 127.0.0.1`
@@ -35,7 +35,7 @@
 
 ## Current Working State
 - Files currently being changed: Pricing-only files and `docs/pricing-journey-*`
-- Uncommitted work: coherent Checkpoint 0 files awaiting commit
+- Uncommitted work: none at the start of Checkpoint 1
 - Whether the page builds: Yes; static pages load on localhost
 - Whether smoke tests pass: Yes; syntax, noindex, concept-route, live-page, overflow, and console smoke checks pass
 
