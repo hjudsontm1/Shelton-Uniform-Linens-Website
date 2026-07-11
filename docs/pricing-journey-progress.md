@@ -10,18 +10,18 @@
 - Quote endpoint audit: live `quote.html` posts to Formspree; the preview will not call or modify it
 
 ## Current Phase
-- Phase number: 4
-- Phase name: Scale, Finish, Ownership, and Location
-- Status: Complete; checkpoint commit pending
+- Phase number: 5
+- Phase name: Review, Development Result, and Quote Shell
+- Status: In progress
 
 ## Last Known Good Checkpoint
-- Commit hash: `339d8558fe3980c74e6e7afcf63259abcce15268`
-- Commit message: `checkpoint(pricing): complete adaptive goods branches`
-- Date/time: 2026-07-11 01:34:00 CDT
+- Commit hash: `197886cc0302db99839541cb8bf03ff18cbdcf43`
+- Commit message: `checkpoint(pricing): complete adaptive program inputs`
+- Date/time: 2026-07-11 03:18:16 CDT
 - Build command: Static site; no build step
-- Test command: `node --check assets/js/pricing-journey-config.js && node --check assets/js/pricing-journey.js && git diff --check`
+- Test command: `node tests/pricing-journey-config.test.cjs`; browser smoke: `NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-cp4.e2e.cjs`
 - Preview command: `python3 -m http.server 8045 --bind 127.0.0.1`
-- Screenshot artifact paths: `docs/pricing-journey-artifacts/checkpoint-3/pricing-cp3-branch-event-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-3/pricing-cp3-event-390x844.png`, `docs/pricing-journey-artifacts/checkpoint-3/pricing-cp3-hotel-robes-selected-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-3/pricing-cp3-hotel-robes-narrowed-1366x768.png`
+- Screenshot artifact paths: `docs/pricing-journey-artifacts/checkpoint-4/cp4-scale-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-4/cp4-finish-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-4/cp4-ownership-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-4/cp4-location-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-4/cp4-review-1366x768.png`, `docs/pricing-journey-artifacts/checkpoint-4/cp4-finish-390x844.png`
 
 ## Completed Work
 - Confirmed the real repository and current dirty `main` state.
@@ -57,8 +57,8 @@
 - Added deterministic Checkpoint 4 browser smoke coverage and desktop/mobile screenshot evidence.
 
 ## Current Working State
-- Files currently being changed: Pricing journey HTML, isolated CSS/JavaScript, tests, artifacts, and documentation
-- Uncommitted work: complete Checkpoint 4 implementation awaiting its checkpoint commit
+- Files currently being changed: none at the start of Checkpoint 5
+- Uncommitted work: progress handoff update only
 - Whether the page builds: Yes; static pages load on localhost
 - Whether smoke tests pass: Yes; syntax, configuration assertions, selected-only return compatibility, Hotel/Robes end-to-end completion, inline Edit, browser console, and mobile overflow checks pass
 
@@ -68,11 +68,11 @@
 - Review, recommendation, development planning ranges, model comparison, and exact-quote handoff are not yet implemented. Affected phase: Checkpoint 5. Severity: planned. Rubric: Result and Handoff. Intended correction: add an assembled review and isolated deterministic development rules without touching the live Pricing page or endpoint.
 
 ## Next Exact Actions
-1. Run `node tests/pricing-journey-config.test.cjs` and the Checkpoint 4 Playwright smoke test.
-2. Commit Checkpoint 4 as `checkpoint(pricing): complete adaptive program inputs`.
-3. Create the isolated deterministic development pricing-rules layer and formula documentation.
-4. Build the assembled Review, recommended rhythm/model, comparison, planning-range, and exact-quote payload shell.
-5. Verify no live endpoint is called and no fake success state is displayed before committing Checkpoint 5.
+1. Create `assets/js/pricing-rules.dev.js` with deterministic replaceable rates, factors, and `calculatePlanningRange(pricingJourneyState, pricingRules)`.
+2. Build the assembled Review scene and inline Edit links without a tabular dashboard treatment.
+3. Add recommended rhythm, supply model, COG/Hybrid/Rental comparison, development warning, and planning range.
+4. Add the exact-quote contact shell, payload preview, loading/failure simulation, and endpoint-ready completion state without a live request.
+5. Add formula documentation and Checkpoint 5 browser assertions before creating the checkpoint commit.
 
 ## Business-Data Blockers
 - Real Shelton pricing rates, volume bands, finishing factors, route-zone factors, and inventory-model factors are not supplied. Development-only deterministic fixtures are permitted and will remain visibly labeled.
@@ -82,5 +82,5 @@
 ## Resume Instructions
 - Exact first command: `git status --short --branch`
 - Exact first file to inspect: `docs/pricing-journey-progress.md`
-- Exact next test to run: `node tests/pricing-journey-config.test.cjs && node --check assets/js/pricing-journey-vectors.js && node --check assets/js/pricing-journey.js`
-- Exact next visual state to render: Hotel with Robes selected at the assembled Review, followed by its development result and quote payload state at 1366x768
+- Exact next test to run: `node tests/pricing-journey-config.test.cjs && node --check assets/js/pricing-journey.js`
+- Exact next visual state to render: Hotel with Robes selected as one assembled Review scene, followed by its deterministic development result and quote payload-ready state at 1366x768
