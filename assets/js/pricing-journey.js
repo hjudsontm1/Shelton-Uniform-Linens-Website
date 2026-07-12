@@ -9,6 +9,7 @@
 
   const searchParams = new URLSearchParams(window.location.search);
   const quoteMode = searchParams.get("quote") === "fail" ? "fail" : "ready";
+  const liveQuote = root.dataset.quoteMode === "live";
   const reducedMotion = searchParams.get("motion") === "reduce" || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const concept = "orb";
 
@@ -673,8 +674,8 @@
   };
 
   const buildQuotePayload = () => ({
-    preview: true,
-    endpointIntegrated: false,
+    preview: !liveQuote,
+    endpointIntegrated: liveQuote,
     journeyVersion: config.version,
     pricingRulesVersion: state.recommendation?.rulesVersion || null,
     operation: state.operation,
@@ -702,16 +703,24 @@
       if (input && input.value !== value) input.value = value;
     });
     quoteSubmit.disabled = state.quoteStatus === "loading";
-    quoteSubmit.firstChild.textContent = state.quoteStatus === "loading" ? "Preparing payload " : "Prepare quote payload ";
+    quoteSubmit.firstChild.textContent = state.quoteStatus === "loading"
+      ? (liveQuote ? "Sending request " : "Preparing payload ")
+      : (liveQuote ? "Send to Shelton for review " : "Prepare quote payload ");
     quoteError.hidden = true;
     quoteStatus.hidden = state.quoteStatus === "idle";
     quoteStatus.dataset.status = state.quoteStatus;
-    quoteStatus.textContent = {
+    const liveMessages = {
+      loading: "Sending your program to Shelton for review.",
+      failure: "We could not send your request just now. Your details remain available; please try again.",
+      ready: "Your request was sent to Shelton."
+    };
+    const previewMessages = {
       loading: "Preparing the development payload. No network request is being made.",
       failure: "The development handoff could not be prepared. Your program and contact details remain available; try again when ready.",
       ready: "Quote payload ready for endpoint integration. Nothing has been submitted."
-    }[state.quoteStatus] || "";
-    quotePayloadWrap.hidden = state.quoteStatus !== "ready" || !state.quotePayload;
+    };
+    quoteStatus.textContent = (liveQuote ? liveMessages : previewMessages)[state.quoteStatus] || "";
+    quotePayloadWrap.hidden = liveQuote || state.quoteStatus !== "ready" || !state.quotePayload;
     quotePayload.textContent = state.quotePayload ? JSON.stringify(state.quotePayload, null, 2) : "";
   };
 
@@ -1058,12 +1067,52 @@
     return valid;
   };
 
-  const prepareQuotePayload = () => {
+  const prepareQuotePayload = async () => {
     if (!validateQuoteContact()) {
       quoteForm.querySelector('[aria-invalid="true"]')?.focus();
-      announce("Complete the required contact details before preparing the payload.");
+      announce(liveQuote
+        ? "Complete the required contact details before sending your request."
+        : "Complete the required contact details before preparing the payload.");
       return;
     }
+
+    if (liveQuote) {
+      const payload = buildQuotePayload();
+      const formData = new FormData(quoteForm);
+      const recommendation = payload.recommendation;
+      formData.set("company", state.contact.business || "");
+      formData.set("operation", payload.operationLabel);
+      formData.set("goods", payload.goods.map((id) => config.goods[id]?.label).filter(Boolean).join(", "));
+      formData.set("recommended_service_rhythm", recommendation?.rhythm || "");
+      formData.set("recommended_service_model", recommendation?.model || "");
+      formData.set("planning_weekly_range", recommendation
+        ? `${formatMoney(recommendation.weeklyRange[0])}-${formatMoney(recommendation.weeklyRange[1])}`
+        : "");
+      formData.set("pricing_journey", JSON.stringify(payload));
+
+      state.quoteStatus = "loading";
+      state.quotePayload = null;
+      render();
+      announce("Sending your program to Shelton for review.");
+
+      try {
+        const response = await window.fetch(quoteForm.action, {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: formData
+        });
+        if (!response.ok) throw new Error(`Quote request failed with status ${response.status}`);
+        window.sessionStorage.removeItem(config.storageKey);
+        window.location.assign(quoteForm.dataset.quoteSuccess || "thank-you.html");
+      } catch (error) {
+        state.quoteStatus = "failure";
+        render();
+        quoteStatus.focus?.({ preventScroll: true });
+        announce("We could not send your request. Your details remain available; please try again.");
+      }
+      return;
+    }
+
     state.quoteStatus = "loading";
     state.quotePayload = null;
     render();

@@ -14,7 +14,8 @@ Passed:
 6. `tests/pricing-journey-cp6.e2e.cjs`
 7. `tests/pricing-journey-final.e2e.cjs`
 8. `tests/pricing-estimator-final-polish.e2e.cjs`
-9. `git diff --check`
+9. `tests/pricing-live-route.e2e.cjs`
+10. `git diff --check`
 
 The final evidence suite verifies:
 
@@ -28,6 +29,16 @@ The final evidence suite verifies:
 - Scale, Finish, Ownership, Location, summaries, Review, Result, and handoff
 - Quote validation, loading, and honest local-completion state
 - No network submission and no false success
+
+The public-route suite additionally verifies:
+
+- `pricing.html` is indexable and no longer renders the legacy pricing builder
+- Established Shelton navigation and footer are present
+- The complete Hotel/robes journey reaches the result and exact-quote handoff
+- The Formspree request contains the contact and journey payload
+- The endpoint is intercepted during testing, so no real test lead is sent
+- Successful submission navigates to the existing thank-you page
+- The mobile menu and estimator remain usable without horizontal overflow
 
 Browser coverage:
 
