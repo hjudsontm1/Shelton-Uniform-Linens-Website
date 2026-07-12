@@ -79,12 +79,12 @@ const main = async () => {
 
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   assert.match(await page.locator('meta[name="robots"]').getAttribute("content"), /noindex/);
-  assert.match(await page.locator("h1").first().innerText(), /Commercial pricing built around your operation/i);
+  assert.match(await page.locator("h1").first().innerText(), /quote should match/i);
   assert.equal(await page.locator("[data-hero-estimator]").count(), 0);
   assert.equal(await page.locator(".pricing-vector").count(), 10);
   await capture(page, "pricing-hero-initial-1366x768.png", ".pricing-hero");
 
-  assert.match(await page.locator("#pricing-journey-title").innerText(), /stronger quote starts/i);
+  assert.match(await page.locator("#pricing-journey-title").innerText(), /narrow the variables/i);
   await capture(page, "pricing-journey-1366x768.png", ".pricing-journey");
 
   await page.locator("[data-factor-list] [data-index='3']").click();
@@ -130,7 +130,7 @@ const main = async () => {
     noindex: true,
     browserErrors: errors,
     checkedViewports: viewports.map((item) => item[2]),
-    strategy: "landing page explains pricing logic first; estimator starts fresh from the lower transition"
+    strategy: "landing page separates core customer questions before the estimator starts fresh from the lower transition"
   }, null, 2));
   console.log("Pricing page preview browser acceptance passed.");
 };

@@ -9,5 +9,5 @@
     "mobile-390x844",
     "mobile-430x932"
   ],
-  "strategy": "landing page explains pricing logic first; estimator starts fresh from the lower transition"
+  "strategy": "landing page separates core customer questions before the estimator starts fresh from the lower transition"
 }

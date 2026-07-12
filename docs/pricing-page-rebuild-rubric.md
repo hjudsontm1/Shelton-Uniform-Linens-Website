@@ -9,7 +9,7 @@ Private-review checkpoint complete. Scores below are based on the generated scre
 | Category | Score | Current Evidence |
 | --- | ---: | --- |
 | Page strategy | 5 | Private Pricing marketing page is separated from dedicated estimator route. |
-| Hero | 5 | Expanded hero removes the estimator-first form, explains the pricing logic deeply, uses a custom vector program-system diagram, and now ends cleanly in a normal laptop viewport. |
+| Hero | 5 | Expanded hero removes the estimator-first form, states the core promise clearly, uses a custom vector variable diagram, and now ends cleanly in a normal laptop viewport. |
 | Private-client feel | 5 | Uses restrained premium shading, edge lighting, editorial spacing, quieter micro-labels, and advisory language without adding extra trust-copy sections before the quote mechanics. |
 | Pricing journey | 5 | New section explains the quote-building sequence from operation fit through planning range, with a dedicated vector process diagram. |
 | How pricing works | 5 | Interactive factor field explains goods, volume, soil, finishing, sorting, and route burden without a card grid. |

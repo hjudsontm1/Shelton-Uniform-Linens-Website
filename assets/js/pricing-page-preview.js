@@ -6,19 +6,19 @@
 
   const factors = [
     ["Goods", "The type of item changes handling, finishing, inspection, packaging, and replacement concerns.", ["Flatwork, towels, garments, and specialty event goods move through different workflows.", "Higher presentation requirements can add finishing work.", "Fragile, costly, or branded goods need more careful account controls."]],
-    ["Volume", "Volume matters, but it is not the only pricing signal. Predictability and concentration can matter too.", ["Steady recurring work is different from spike-heavy event work.", "Known pounds or pieces improve planning accuracy.", "Concentrated, predictable volume is easier to plan than scattered exceptions."]],
+    ["Volume", "Volume matters, but predictability and concentration matter too.", ["Steady recurring work is different from spike-heavy event work.", "Known pounds or pieces make planning clearer.", "Concentrated volume is easier to handle than scattered exceptions."]],
     ["Soil level", "Heavy food, odor, makeup, oil, or event stains can change treatment and inspection needs.", ["Soil affects chemistry, time, rewash risk, and quality control.", "Not every pound requires the same work.", "High-soil accounts can need different sorting and pre-treatment discipline."]],
-    ["Finishing", "Pressed, hanging, folded, bagged, bundled, or linen-cart return formats carry different labor.", ["Presentation goods often need more controlled finishing.", "Return format affects staging and route handoff.", "The quote should reflect how goods need to look when staff receive them."]],
+    ["Finishing", "Pressed, hanging, folded, bagged, bundled, or linen-cart return formats carry different labor.", ["Presentation goods often need more controlled finishing.", "Return format affects staging and route handoff.", "The account should reflect how goods need to look when staff receive them."]],
     ["Sorting", "Department, property, item, or account labeling adds operational value and handling time.", ["Sorting can reduce customer staff time.", "It also changes production and packing requirements.", "More account-specific separation can be worth it when it prevents confusion on site."]],
-    ["Route burden", "Location, pickup points, access, timing, and delivery complexity all shape the real program.", ["A clean route is different from hard access or tight delivery windows.", "Final route feasibility requires Shelton review.", "Dock access, parking, stairs, and staging expectations can change the real service cost."]]
+    ["Route burden", "Location, pickup points, access, timing, and delivery complexity all shape the work.", ["A clean route is different from hard access or tight delivery windows.", "Final feasibility requires Shelton review.", "Dock access, parking, stairs, and staging expectations can change the real service cost."]]
   ];
 
   const market = [
-    ["Laundromat", "Self-service or basic machine access.", "Lowest-service option; usually not a managed commercial program.", ["No account structure", "No route accountability", "Customer handles the operational burden"]],
+    ["Laundromat", "Self-service or basic machine access.", "Lowest-service option; usually not built for recurring commercial accounts.", ["No account structure", "No route accountability", "Customer handles the operational burden"]],
     ["Consumer Wash & Fold", "Helpful for simple personal laundry.", "May cost less, but usually lacks commercial finishing, route support, and account structure.", ["Useful for simple personal laundry", "Limited commercial controls", "Usually not built around recurring account standards"]],
-    ["Shelton Commercial Program", "Route-based commercial service with quality, finishing, and program support.", "Built to compete where the customer needs more than basic wash service.", ["Commercial route support", "Program-fit pricing", "Quality and finishing included in the comparison"]],
-    ["Traditional Linen Rental", "Large commercial inventory and route programs.", "Often strong for standardized recurring needs, but not always flexible around customer-owned goods.", ["Strong recurring inventory structure", "Less flexible when owned goods matter", "Can be a larger-provider fit for standardized programs"]],
-    ["Luxury / Highly Customized", "High-touch specialty programs.", "Appropriate for demanding boutique needs; can be above what many operations require.", ["Specialty handling", "High-touch expectations", "Often above the practical need for many accounts"]]
+    ["Shelton Commercial", "Route-based service with quality, finishing, and account support.", "Built for customers who need more than basic wash service.", ["Commercial route support", "Fit-based scope", "Quality and finishing included in the comparison"]],
+    ["Traditional Linen Rental", "Large recurring inventory and route structure.", "Often strong for standardized needs, but not always flexible around customer-owned goods.", ["Strong recurring inventory structure", "Less flexible when owned goods matter", "Can be a larger-provider fit for standardized accounts"]],
+    ["Luxury / Highly Customized", "High-touch specialty service.", "Appropriate for demanding boutique needs; can be above what many operations require.", ["Specialty handling", "High-touch expectations", "Often above the practical need for many accounts"]]
   ];
 
   const quality = [
@@ -26,7 +26,7 @@
       id: "chef",
       label: "Chef coats",
       title: "Heavy soil treatment protects appearance and repeat-use value.",
-      body: "Chef coats are not basic white laundry. Grease, heat, repeated wear, white retention, pressing, and hung-in-poly return can all change what the program requires.",
+      body: "Chef coats are not basic white laundry. Grease, heat, repeated wear, white retention, pressing, and hung-in-poly return can all change what the account requires.",
       points: ["Stain and heavy-soil treatment", "White retention and pressing", "Professional presentation on return"]
     },
     {
@@ -47,7 +47,7 @@
       id: "towel",
       label: "Towels",
       title: "Repeated-use towels need consistency, odor control, and practical return.",
-      body: "Towels often look simple, but volume, odor, soil, softness, bagging, bundling, and restocking pressure can shape the economics of the account.",
+      body: "Towels often look simple, but volume, odor, soil, softness, bagging, bundling, and restocking pressure can change the account.",
       points: ["Odor and soil control", "Consistent softness and presentation", "Bundled or bagged return options"]
     }
   ];
@@ -58,20 +58,20 @@
       label: "Customer-Owned Goods",
       title: "You own the inventory. Shelton handles the commercial processing.",
       body: "This can fit operations that already have goods and want cleaning, finishing, packaging, and return without converting every item to rental.",
-      points: ["Customer inventory remains customer-owned", "Quality can affect replacement pressure", "Useful for established goods programs"]
+      points: ["Customer inventory remains customer-owned", "Quality can affect replacement pressure", "Useful for established inventories"]
     },
     {
       id: "hybrid",
       label: "Hybrid",
       title: "Owned goods and supplied goods can work together.",
-      body: "Hybrid programs can make sense when the customer owns some inventory but needs Shelton to supply selected recurring categories.",
+      body: "Hybrid can make sense when the customer owns some inventory but needs Shelton to supply selected recurring categories.",
       points: ["Keeps useful owned inventory in play", "Adds supplied support where needed", "Flexible when needs vary by item"]
     },
     {
       id: "rental",
       label: "Rental",
       title: "Shelton supplies and manages selected recurring inventory.",
-      body: "Rental can fit customers who prefer not to own all goods or need a managed recurring inventory structure. Pricing reflects both inventory and service.",
+      body: "Rental can fit customers who prefer not to own all goods or need a managed recurring inventory structure. The scope reflects both inventory and service.",
       points: ["Shelton-supplied inventory", "Recurring managed structure", "Useful for predictable goods needs"]
     },
     {
@@ -79,7 +79,7 @@
       label: "Not sure?",
       title: "The estimator can recommend a starting model.",
       body: "If the model is unclear, begin with operation and goods. Shelton can use those answers to suggest Customer-Owned Goods, Hybrid, or Rental as a planning direction.",
-      points: ["No jargon required up front", "Recommendation depends on the program", "Final structure is reviewed with Shelton"]
+      points: ["No jargon required up front", "Recommendation depends on the account", "Final structure is reviewed with Shelton"]
     }
   ];
 
