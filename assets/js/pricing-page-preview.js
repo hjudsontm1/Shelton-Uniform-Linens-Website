@@ -5,20 +5,20 @@
   if (!root) return;
 
   const factors = [
-    ["Goods", "The type of item changes handling, finishing, inspection, packaging, and replacement concerns.", ["Flatwork, towels, garments, and specialty event goods move through different workflows.", "Higher presentation requirements can add finishing work."]],
-    ["Volume", "Volume matters, but it is not the only pricing signal. Predictability and concentration can matter too.", ["Steady recurring work is different from spike-heavy event work.", "Known pounds or pieces improve planning accuracy."]],
-    ["Soil level", "Heavy food, odor, makeup, oil, or event stains can change treatment and inspection needs.", ["Soil affects chemistry, time, rewash risk, and quality control.", "Not every pound requires the same work."]],
-    ["Finishing", "Pressed, hanging, folded, bagged, bundled, or linen-cart return formats carry different labor.", ["Presentation goods often need more controlled finishing.", "Return format affects staging and route handoff."]],
-    ["Sorting", "Department, property, item, or account labeling adds operational value and handling time.", ["Sorting can reduce customer staff time.", "It also changes production and packing requirements."]],
-    ["Route burden", "Location, pickup points, access, timing, and delivery complexity all shape the real program.", ["A clean route is different from hard access or tight delivery windows.", "Final route feasibility requires Shelton review."]]
+    ["Goods", "The type of item changes handling, finishing, inspection, packaging, and replacement concerns.", ["Flatwork, towels, garments, and specialty event goods move through different workflows.", "Higher presentation requirements can add finishing work.", "Fragile, costly, or branded goods need more careful account controls."]],
+    ["Volume", "Volume matters, but it is not the only pricing signal. Predictability and concentration can matter too.", ["Steady recurring work is different from spike-heavy event work.", "Known pounds or pieces improve planning accuracy.", "Concentrated, predictable volume is easier to plan than scattered exceptions."]],
+    ["Soil level", "Heavy food, odor, makeup, oil, or event stains can change treatment and inspection needs.", ["Soil affects chemistry, time, rewash risk, and quality control.", "Not every pound requires the same work.", "High-soil accounts can need different sorting and pre-treatment discipline."]],
+    ["Finishing", "Pressed, hanging, folded, bagged, bundled, or linen-cart return formats carry different labor.", ["Presentation goods often need more controlled finishing.", "Return format affects staging and route handoff.", "The quote should reflect how goods need to look when staff receive them."]],
+    ["Sorting", "Department, property, item, or account labeling adds operational value and handling time.", ["Sorting can reduce customer staff time.", "It also changes production and packing requirements.", "More account-specific separation can be worth it when it prevents confusion on site."]],
+    ["Route burden", "Location, pickup points, access, timing, and delivery complexity all shape the real program.", ["A clean route is different from hard access or tight delivery windows.", "Final route feasibility requires Shelton review.", "Dock access, parking, stairs, and staging expectations can change the real service cost."]]
   ];
 
   const market = [
-    ["Laundromat", "Self-service or basic machine access.", "Lowest-service option; usually not a managed commercial program."],
-    ["Consumer Wash & Fold", "Helpful for simple personal laundry.", "May cost less, but usually lacks commercial finishing, route support, and account structure."],
-    ["Shelton Commercial Program", "Route-based commercial service with quality, finishing, and program support.", "Built to compete where the customer needs more than basic wash service."],
-    ["Traditional Linen Rental", "Large commercial inventory and route programs.", "Often strong for standardized recurring needs, but not always flexible around customer-owned goods."],
-    ["Luxury / Highly Customized", "High-touch specialty programs.", "Appropriate for demanding boutique needs; can be above what many operations require."]
+    ["Laundromat", "Self-service or basic machine access.", "Lowest-service option; usually not a managed commercial program.", ["No account structure", "No route accountability", "Customer handles the operational burden"]],
+    ["Consumer Wash & Fold", "Helpful for simple personal laundry.", "May cost less, but usually lacks commercial finishing, route support, and account structure.", ["Useful for simple personal laundry", "Limited commercial controls", "Usually not built around recurring account standards"]],
+    ["Shelton Commercial Program", "Route-based commercial service with quality, finishing, and program support.", "Built to compete where the customer needs more than basic wash service.", ["Commercial route support", "Program-fit pricing", "Quality and finishing included in the comparison"]],
+    ["Traditional Linen Rental", "Large commercial inventory and route programs.", "Often strong for standardized recurring needs, but not always flexible around customer-owned goods.", ["Strong recurring inventory structure", "Less flexible when owned goods matter", "Can be a larger-provider fit for standardized programs"]],
+    ["Luxury / Highly Customized", "High-touch specialty programs.", "Appropriate for demanding boutique needs; can be above what many operations require.", ["Specialty handling", "High-touch expectations", "Often above the practical need for many accounts"]]
   ];
 
   const quality = [
@@ -179,7 +179,7 @@
   const renderMarket = () => {
     const item = market[state.market];
     const detail = root.querySelector("[data-market-detail]");
-    if (detail) detail.innerHTML = `<h3>${item[0]}</h3><p>${item[2]}</p>`;
+    if (detail) detail.innerHTML = `<h3>${item[0]}</h3><p>${item[2]}</p><ul>${renderList(item[3] || [])}</ul>`;
     setActiveTab(root.querySelector("[data-market-list]"), state.market);
   };
 

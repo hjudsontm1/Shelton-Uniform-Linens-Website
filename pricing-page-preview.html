@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/site.css" />
-  <link rel="stylesheet" href="assets/css/pricing-page-preview.css?v=20260712-1" />
+  <link rel="stylesheet" href="assets/css/pricing-page-preview.css?v=20260712-2" />
 </head>
 <body data-page="pricing-page-preview">
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -207,10 +207,47 @@
     </section>
 
     <section class="pricing-factors" aria-labelledby="pricing-factors-title">
-      <div class="section-intro">
-        <p class="pricing-kicker">How pricing works</p>
-        <h2 id="pricing-factors-title">Commercial laundry pricing is shaped by the work behind the clean goods.</h2>
-        <p>There is no universal flat rate because different operations place different demands on sorting, soil treatment, finishing, packaging, inventory, and routes.</p>
+      <div class="section-intro section-intro--visual">
+        <div class="section-intro__copy">
+          <p class="pricing-kicker">How pricing works</p>
+          <h2 id="pricing-factors-title">Commercial laundry pricing is shaped by the work behind the clean goods.</h2>
+          <p>There is no universal flat rate because different operations place different demands on sorting, soil treatment, finishing, packaging, inventory, and routes. Two accounts can send the same weekly volume and still require very different programs.</p>
+        </div>
+        <div class="section-intro__vector section-intro__vector--factors" aria-hidden="true">
+          <svg class="pricing-vector support-vector support-vector--inputs" viewBox="0 0 420 280">
+            <path class="support-vector__rail" d="M72 142h276" />
+            <path class="support-vector__rail support-vector__rail--vertical" d="M210 42v196" />
+            <g class="support-vector__input" transform="translate(88 66)">
+              <circle r="30" />
+              <path d="M-13-4h26M-11 8h22" />
+              <text y="58">Goods</text>
+            </g>
+            <g class="support-vector__input" transform="translate(210 58)">
+              <rect x="-35" y="-25" width="70" height="50" rx="2" />
+              <path d="M-18-4h36M-18 10h36" />
+              <text y="56">Volume</text>
+            </g>
+            <g class="support-vector__input" transform="translate(330 66)">
+              <path d="M-28-22h56l-10 46h-36z" />
+              <path d="M-14-3h28M-10 12h20" />
+              <text y="58">Finish</text>
+            </g>
+            <g class="support-vector__input" transform="translate(140 210)">
+              <path d="M-34 10c16-38 52-38 68 0" />
+              <path d="M-24 10h48" />
+              <text y="48">Soil</text>
+            </g>
+            <g class="support-vector__input" transform="translate(282 210)">
+              <path d="M-42 12C-16-24 16-24 42 12" />
+              <path d="M-30 12h60" />
+              <text y="48">Route</text>
+            </g>
+            <g class="support-vector__range" transform="translate(210 142)">
+              <rect x="-70" y="-24" width="140" height="48" rx="24" />
+              <text y="5">Program range</text>
+            </g>
+          </svg>
+        </div>
       </div>
       <div class="factor-field">
         <div class="factor-visual" aria-hidden="true">
@@ -236,7 +273,33 @@
           <p class="pricing-kicker">Market position</p>
           <h2 id="market-title">The right comparison is total program value, not the lowest cost per pound.</h2>
         </div>
-        <p>Shelton is not a laundromat or consumer wash-and-fold option. The program sits in the commercial lane: route-based, quality-focused, professionally finished, and built to compete with larger providers where the service model fits.</p>
+        <div class="section-intro__side">
+          <p>Shelton is not a laundromat or consumer wash-and-fold option. The program sits in the commercial lane: route-based, quality-focused, professionally finished, and built to compete with larger providers where the service model fits.</p>
+          <div class="section-intro__vector section-intro__vector--market" aria-hidden="true">
+            <svg class="pricing-vector support-vector support-vector--market" viewBox="0 0 420 230">
+              <path class="support-vector__axis" d="M58 170h304" />
+              <g class="support-vector__column support-vector__column--basic" transform="translate(92 170)">
+                <path d="M0 0v-44" />
+                <rect x="-24" y="-44" width="48" height="44" />
+                <text y="32">Basic wash</text>
+              </g>
+              <g class="support-vector__column support-vector__column--shelton" transform="translate(210 170)">
+                <path d="M0 0v-126" />
+                <rect x="-32" y="-126" width="64" height="35" />
+                <rect x="-32" y="-84" width="64" height="35" />
+                <rect x="-32" y="-42" width="64" height="42" />
+                <text y="32">Shelton</text>
+              </g>
+              <g class="support-vector__column support-vector__column--rental" transform="translate(328 170)">
+                <path d="M0 0v-94" />
+                <rect x="-28" y="-94" width="56" height="94" />
+                <text y="32">Rental</text>
+              </g>
+              <path class="support-vector__arc" d="M86 56c70-42 176-42 246 0" />
+              <text class="support-vector__note" x="210" y="28">Managed program value</text>
+            </svg>
+          </div>
+        </div>
       </div>
       <div class="market-map" data-market-map>
         <div class="market-line" role="tablist" aria-label="Laundry service market positions" data-market-list></div>
@@ -245,10 +308,34 @@
     </section>
 
     <section class="quality-economics" aria-labelledby="quality-title">
-      <div class="section-intro">
-        <p class="pricing-kicker">Quality economics</p>
-        <h2 id="quality-title">Better cleaning changes more than the invoice.</h2>
-        <p>Quality can affect appearance, usable life, replacement pressure, staff handling, rejected goods, and customer experience. This is why a commercial program should be evaluated beyond a basic wash price.</p>
+      <div class="section-intro section-intro--visual">
+        <div class="section-intro__copy">
+          <p class="pricing-kicker">Quality economics</p>
+          <h2 id="quality-title">Better cleaning changes more than the invoice.</h2>
+          <p>Quality can affect appearance, usable life, replacement pressure, staff handling, rejected goods, and customer experience. This is why a commercial program should be evaluated beyond a basic wash price.</p>
+        </div>
+        <div class="section-intro__vector section-intro__vector--quality" aria-hidden="true">
+          <svg class="pricing-vector support-vector support-vector--quality" viewBox="0 0 420 260">
+            <path class="support-vector__flow" d="M76 132h268" />
+            <g class="support-vector__quality-step" transform="translate(84 132)">
+              <circle r="44" />
+              <path d="M-20-7h40M-16 8h32" />
+              <text y="72">Inspect</text>
+            </g>
+            <g class="support-vector__quality-step" transform="translate(210 132)">
+              <path d="M-42-36h84l-12 72h-60z" />
+              <path d="M-22-10h44M-18 10h36" />
+              <text y="72">Finish</text>
+            </g>
+            <g class="support-vector__quality-step" transform="translate(336 132)">
+              <rect x="-40" y="-34" width="80" height="68" rx="2" />
+              <path d="M-22-8h44M-22 10h44" />
+              <text y="72">Return</text>
+            </g>
+            <path class="support-vector__halo-line" d="M78 66c72-46 192-46 264 0" />
+            <text class="support-vector__note" x="210" y="34">Fewer rejects. Better presentation.</text>
+          </svg>
+        </div>
       </div>
       <div class="quality-stage">
         <div class="quality-object" aria-hidden="true" data-quality-object>
@@ -283,7 +370,30 @@
           <p class="pricing-kicker">Inventory model</p>
           <h2 id="models-title">Customer-Owned Goods, Hybrid, and Rental are service structures, not pricing tiers.</h2>
         </div>
-        <p>The right model depends on what the customer already owns, what Shelton may need to supply, and how predictable the recurring inventory need is. The estimator can recommend a direction after it understands the operation.</p>
+        <div class="section-intro__side">
+          <p>The right model depends on what the customer already owns, what Shelton may need to supply, and how predictable the recurring inventory need is. The estimator can recommend a direction after it understands the operation.</p>
+          <div class="section-intro__vector section-intro__vector--models" aria-hidden="true">
+            <svg class="pricing-vector support-vector support-vector--models" viewBox="0 0 420 230">
+              <path class="support-vector__axis" d="M70 116h280" />
+              <g class="support-vector__model-node" transform="translate(92 116)">
+                <rect x="-38" y="-34" width="76" height="68" rx="3" />
+                <path d="M-20-8h40M-20 10h40" />
+                <text y="62">Owned</text>
+              </g>
+              <g class="support-vector__model-node support-vector__model-node--hybrid" transform="translate(210 116)">
+                <circle r="42" />
+                <path d="M-20 0h40M0-20v40" />
+                <text y="70">Hybrid</text>
+              </g>
+              <g class="support-vector__model-node" transform="translate(328 116)">
+                <rect x="-38" y="-34" width="76" height="68" rx="3" />
+                <path d="M-20-8h40M-20 10h40" />
+                <text y="62">Rental</text>
+              </g>
+              <text class="support-vector__note" x="210" y="34">Inventory responsibility changes the quote.</text>
+            </svg>
+          </div>
+        </div>
       </div>
       <div class="model-stage">
         <div class="model-paths" role="tablist" aria-label="Inventory model comparison" data-model-list></div>

@@ -17,7 +17,7 @@ const capture = async (page, name, selector) => {
     if (selector !== ".pricing-hero") {
       if (!page.__sectionCaptureStyleAdded) {
         await page.addStyleTag({
-          content: "html.section-capture .site-nav, html.section-capture .skip-link { display: none !important; }"
+          content: "html.section-capture .site-nav, html.section-capture .skip-link, html.section-capture .pricing-atmosphere__progress { display: none !important; }"
         });
         page.__sectionCaptureStyleAdded = true;
       }
@@ -81,7 +81,7 @@ const main = async () => {
   assert.match(await page.locator('meta[name="robots"]').getAttribute("content"), /noindex/);
   assert.match(await page.locator("h1").first().innerText(), /Commercial pricing built around your operation/i);
   assert.equal(await page.locator("[data-hero-estimator]").count(), 0);
-  assert.equal(await page.locator(".pricing-vector").count(), 6);
+  assert.equal(await page.locator(".pricing-vector").count(), 10);
   await capture(page, "pricing-hero-initial-1366x768.png", ".pricing-hero");
 
   assert.match(await page.locator("#pricing-journey-title").innerText(), /stronger quote starts/i);
