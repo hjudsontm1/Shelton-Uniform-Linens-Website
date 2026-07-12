@@ -148,10 +148,10 @@
       str: `<path class="scene-structure" d="M66 285 H834 M78 98 h150 v187 M78 147 h150 M78 203 h150" /><path class="scene-accent" d="M94 115 h48 M94 164 h70 M94 220 h54" /><text class="scene-note" x="78" y="84">CENTRAL TURNOVER STAGING</text>`,
       spa: `<path class="scene-structure" d="M58 285 H842 M650 208 q68-72 136 0 v77 H650 Z" /><path class="scene-accent" d="M675 197 q43-42 86 0" /><text class="scene-note" x="656" y="179">TREATMENT-ROOM FLOW</text>`,
       gym: `<path class="scene-structure" d="M60 285 H840 M120 94 v191 M182 94 v191 M120 128 h62 M120 182 h62 M120 236 h62" /><text class="scene-note" x="112" y="79">PEAK-USE TOWEL RACK</text>`,
-      event: `<path class="scene-structure" d="M55 285 H845 M70 93 H830 M93 93 v32 M807 93 v32" /><circle class="scene-accent-fill" cx="122" cy="93" r="4" /><circle class="scene-accent-fill" cx="778" cy="93" r="4" /><text class="scene-note" x="70" y="78">PRESENTATION · COLOR · DEADLINE</text>`,
+      events: `<path class="scene-structure" d="M55 285 H845 M70 93 H830 M93 93 v32 M807 93 v32" /><circle class="scene-accent-fill" cx="122" cy="93" r="4" /><circle class="scene-accent-fill" cx="778" cy="93" r="4" /><text class="scene-note" x="70" y="78">PRESENTATION · COLOR · DEADLINE</text>`,
       restaurant: `<path class="scene-structure" d="M55 285 H845 M105 95 H795 M146 95 v37 M754 95 v37 M670 230 h130 v55" /><text class="scene-note" x="105" y="79">KITCHEN + DINING ROOM</text>`,
       casino: `<path class="scene-structure" d="M55 285 H845 M80 101 h170 M365 101 h170 M650 101 h170" /><text class="scene-note" x="80" y="84">DEPARTMENTS</text><text class="scene-note" x="365" y="84">MULTIPLE SHIFTS</text><text class="scene-note" x="650" y="84">BANQUET VOLUME</text>`,
-      uniform: `<path class="scene-structure" d="M55 285 H845 M88 94 H812 M116 94 v191 M784 94 v191" /><path class="scene-accent" d="M180 94 q12 18 24 0 M360 94 q12 18 24 0 M540 94 q12 18 24 0" /><text class="scene-note" x="88" y="78">ORGANIZED GARMENT RAIL</text>`,
+      uniforms: `<path class="scene-structure" d="M55 285 H845 M88 94 H812 M116 94 v191 M784 94 v191" /><path class="scene-accent" d="M180 94 q12 18 24 0 M360 94 q12 18 24 0 M540 94 q12 18 24 0" /><text class="scene-note" x="88" y="78">ORGANIZED GARMENT RAIL</text>`,
       wholesale: `<path class="scene-structure" d="M55 285 H845 M76 236 H824 M112 236 v49 M788 236 v49" /><circle class="scene-wheel" cx="180" cy="260" r="10" /><circle class="scene-wheel" cx="450" cy="260" r="10" /><circle class="scene-wheel" cx="720" cy="260" r="10" /><text class="scene-note" x="76" y="220">BATCH CAPACITY · PRESSING · TURNAROUND</text>`,
       other: `<path class="scene-structure" d="M55 285 H845 M88 92 H812 M88 140 H812 M88 188 H812" /><text class="scene-note" x="88" y="76">BUILT AROUND THE GOODS</text>`
     };
@@ -160,8 +160,8 @@
 
   const layoutFor = (count) => {
     const layouts = {
-      1: [{ x: 390, y: 112, scale: 1.42 }],
-      2: [{ x: 225, y: 118, scale: 1.2 }, { x: 560, y: 118, scale: 1.2 }],
+      1: [{ x: 351, y: 68, scale: 1.65 }],
+      2: [{ x: 218, y: 102, scale: 1.3 }, { x: 526, y: 102, scale: 1.3 }],
       3: [{ x: 125, y: 120, scale: 1.08 }, { x: 390, y: 108, scale: 1.2 }, { x: 655, y: 120, scale: 1.08 }],
       4: [{ x: 80, y: 125, scale: 0.98 }, { x: 290, y: 118, scale: 1.04 }, { x: 500, y: 118, scale: 1.04 }, { x: 710, y: 125, scale: 0.98 }],
       5: [{ x: 48, y: 132, scale: 0.84 }, { x: 212, y: 122, scale: 0.9 }, { x: 376, y: 112, scale: 0.98 }, { x: 540, y: 122, scale: 0.9 }, { x: 704, y: 132, scale: 0.84 }],

@@ -141,11 +141,6 @@
     conceptPanels.forEach((panel) => {
       panel.hidden = panel.dataset.conceptPanel !== state.concept || state.view !== "landing";
     });
-    document.querySelectorAll("[data-concept-link]").forEach((link) => {
-      link.setAttribute("aria-current", link.dataset.conceptLink === state.concept ? "page" : "false");
-    });
-    const number = document.querySelector("[data-concept-number]");
-    if (number) number.textContent = config.concepts[state.concept]?.number || "A";
   };
 
   const renderOperations = () => {
@@ -167,6 +162,19 @@
       fragment.append(button);
     });
     operationChoices.append(fragment);
+  };
+
+  const updateRailAffordance = (rail) => {
+    if (!rail) return;
+    const maxScroll = Math.max(0, rail.scrollWidth - rail.clientWidth);
+    rail.classList.toggle("has-overflow", maxScroll > 2);
+    rail.classList.toggle("is-at-start", rail.scrollLeft <= 2);
+    rail.classList.toggle("is-at-end", rail.scrollLeft >= maxScroll - 2);
+  };
+
+  const scheduleRailAffordance = (rail) => {
+    if (!rail) return;
+    window.requestAnimationFrame(() => updateRailAffordance(rail));
   };
 
   const renderOperationState = () => {
@@ -237,6 +245,7 @@
     if (chapter.hidden) return;
 
     buildGoodsChoices();
+    scheduleRailAffordance(goodsChoices);
     goodsChoices.querySelectorAll("[data-good-id]").forEach((button) => {
       const selected = state.goods.includes(button.dataset.goodId);
       button.classList.toggle("is-selected", selected);
@@ -344,7 +353,9 @@
       control.name = field.id;
       control.dataset.scaleInput = field.id;
       control.required = field.required;
-      control.setAttribute("aria-describedby", hint.id);
+      control.setAttribute("aria-label", field.label);
+      control.setAttribute("aria-describedby", `${hint.id} scale-error`);
+      control.setAttribute("aria-errormessage", "scale-error");
       control.value = state.scale[field.id] ?? "";
       label.append(heading, controlWrap, hint);
       scaleFields.append(label);
@@ -432,6 +443,8 @@
     state.specialtyNeeds = state.specialtyNeeds.filter((id) => compatibleSpecialty.some((item) => item.id === id));
     buildAdaptiveChoices(finishOptions, compatibleFinish, "finish");
     buildAdaptiveChoices(specialtyOptions, compatibleSpecialty, "specialty");
+    scheduleRailAffordance(finishOptions);
+    scheduleRailAffordance(specialtyOptions);
     specialtyFieldset.hidden = compatibleSpecialty.length === 0;
 
     document.querySelectorAll('[data-choice-type="finish"]').forEach((button) => {
@@ -780,20 +793,29 @@
       : chapter === "handoff"
         ? quoteHandoff
         : document.querySelector(`[data-chapter="${chapter}"]`);
-    const heading = target?.matches("[data-result], [data-quote-handoff]")
+    if (!target) return;
+    const heading = target.matches("[data-result], [data-quote-handoff]")
       ? target.querySelector("h2")
-      : target?.querySelector('[data-chapter-editor]:not([hidden]) h2[tabindex="-1"]');
-    window.setTimeout(() => {
+      : target.querySelector('[data-chapter-editor]:not([hidden]) h2[tabindex="-1"]');
+    const positionChapter = () => {
       heading?.focus({ preventScroll: true });
-      if (chapter === "operation") {
-        window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
-      } else {
+      window.requestAnimationFrame(() => {
         const headerHeight = document.querySelector(".journey-private-bar")?.getBoundingClientRect().height || 0;
         const threadHeight = document.querySelector(".program-thread")?.getBoundingClientRect().height || 0;
-        const targetTop = target.getBoundingClientRect().top + window.scrollY - headerHeight - threadHeight - 16;
+        const targetTop = target.getBoundingClientRect().top + window.scrollY - headerHeight - threadHeight - 20;
         window.scrollTo({ top: Math.max(0, targetTop), behavior: reducedMotion ? "auto" : "smooth" });
-      }
-    }, reducedMotion ? 0 : 40);
+      });
+    };
+    window.setTimeout(positionChapter, reducedMotion ? 0 : 40);
+  };
+
+  const centerRailChoice = (rail, choice) => {
+    if (!rail || !choice) return;
+    const left = choice.offsetLeft - ((rail.clientWidth - choice.offsetWidth) / 2);
+    rail.scrollTo({
+      left: Math.max(0, left),
+      behavior: reducedMotion ? "auto" : "smooth"
+    });
   };
 
   const openOperation = () => {
@@ -838,11 +860,7 @@
     render();
     const selectedButton = operationChoices.querySelector(`[data-operation-id="${id}"]`);
     if (moveFocus) selectedButton?.focus();
-    selectedButton?.scrollIntoView({
-      behavior: reducedMotion ? "auto" : "smooth",
-      block: "nearest",
-      inline: "center"
-    });
+    centerRailChoice(operationChoices, selectedButton);
 
     const message = removed.length
       ? `${operation.label} selected. ${removed.length} incompatible goods removed; compatible goods were preserved.`
@@ -1192,6 +1210,13 @@
     selectOperation(buttons[next].dataset.operationId, true);
   });
 
+  [operationChoices, goodsChoices, finishOptions, specialtyOptions].forEach((rail) => {
+    rail?.addEventListener("scroll", () => updateRailAffordance(rail), { passive: true });
+  });
+  window.addEventListener("resize", () => {
+    [operationChoices, goodsChoices, finishOptions, specialtyOptions].forEach(scheduleRailAffordance);
+  });
+
   ownershipOptions?.addEventListener("keydown", (event) => {
     if (!["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
     const buttons = Array.from(ownershipOptions.querySelectorAll("[data-ownership-id]"));
@@ -1207,6 +1232,7 @@
 
   renderOperations();
   render();
+  [operationChoices, goodsChoices, finishOptions, specialtyOptions].forEach(scheduleRailAffordance);
   if (state.view === "flow") focusChapter(state.activeChapter);
 
   window.SheltonPricingJourney = {

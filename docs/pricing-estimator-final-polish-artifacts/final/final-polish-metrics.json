@@ -1,0 +1,106 @@
+{
+  "baseUrl": "http://127.0.0.1:8045/pricing-journey-preview.html",
+  "generatedAt": "2026-07-12T12:58:49.914Z",
+  "errors": [],
+  "nonGetRequests": [],
+  "viewportResults": [
+    {
+      "width": 1440,
+      "height": 900,
+      "overflow": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "viewportWidth": 1440,
+        "visibleOverflow": []
+      },
+      "position": {
+        "headingTop": 83.796875,
+        "headerBottom": 80
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "overflow": {
+        "scrollWidth": 1366,
+        "clientWidth": 1366,
+        "viewportWidth": 1366,
+        "visibleOverflow": []
+      },
+      "position": {
+        "headingTop": 83.796875,
+        "headerBottom": 72.796875
+      }
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "overflow": {
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "viewportWidth": 1280,
+        "visibleOverflow": []
+      },
+      "position": {
+        "headingTop": 83.796875,
+        "headerBottom": 80
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "overflow": {
+        "scrollWidth": 1024,
+        "clientWidth": 1024,
+        "viewportWidth": 1024,
+        "visibleOverflow": []
+      },
+      "position": {
+        "headingTop": 83.796875,
+        "headerBottom": 72.796875
+      }
+    },
+    {
+      "width": 834,
+      "height": 1194,
+      "overflow": {
+        "scrollWidth": 834,
+        "clientWidth": 834,
+        "viewportWidth": 834,
+        "visibleOverflow": []
+      },
+      "position": {
+        "headingTop": 99.421875,
+        "headerBottom": 80
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "viewportWidth": 390,
+        "visibleOverflow": []
+      },
+      "position": {
+        "headingTop": 83.796875,
+        "headerBottom": 71.1875
+      }
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "overflow": {
+        "scrollWidth": 430,
+        "clientWidth": 430,
+        "viewportWidth": 430,
+        "visibleOverflow": []
+      },
+      "position": {
+        "headingTop": 83.796875,
+        "headerBottom": 71.1875
+      }
+    }
+  ]
+}

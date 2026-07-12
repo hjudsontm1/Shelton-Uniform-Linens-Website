@@ -38,6 +38,31 @@ config.operations.forEach((operation) => {
   assert.ok(scaleSchema.every((field) => !/pickup|frequency|cadence/i.test(field.id)), `${operation.id} does not ask for a desired route frequency`);
 });
 
+const expectedBackdropCopy = {
+  hotel: "LINEN CART RETURN",
+  str: "CENTRAL TURNOVER STAGING",
+  spa: "TREATMENT-ROOM FLOW",
+  gym: "PEAK-USE TOWEL RACK",
+  events: "PRESENTATION · COLOR · DEADLINE",
+  restaurant: "KITCHEN + DINING ROOM",
+  casino: "MULTIPLE SHIFTS",
+  uniforms: "ORGANIZED GARMENT RAIL",
+  wholesale: "BATCH CAPACITY · PRESSING · TURNAROUND",
+  other: "BUILT AROUND THE GOODS"
+};
+
+config.operations.forEach((operation) => {
+  const container = { innerHTML: "" };
+  vectors.renderScene(container, {
+    operation,
+    goodsIds: operation.goods,
+    selectedIds: [],
+    selectedOnly: false,
+    catalog: config.goods
+  });
+  assert.ok(container.innerHTML.includes(expectedBackdropCopy[operation.id]), `${operation.id} renders its intended operation backdrop`);
+});
+
 const hotel = config.operations.find((item) => item.id === "hotel");
 const narrowed = { innerHTML: "" };
 vectors.renderScene(narrowed, {
@@ -49,6 +74,7 @@ vectors.renderScene(narrowed, {
 });
 assert.equal((narrowed.innerHTML.match(/data-vector-good=/g) || []).length, 1, "single selection narrows the assembled scene");
 assert.match(narrowed.innerHTML, /data-vector-good="robes"/);
+assert.match(narrowed.innerHTML, /translate\(351 68\) scale\(1\.65\)/, "single-item scenes use the resolved focal composition");
 assert.doesNotMatch(narrowed.innerHTML, /data-vector-good="sheets"|data-vector-good="towels"/);
 
 const returned = { innerHTML: "" };

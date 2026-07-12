@@ -1,0 +1,17 @@
+{
+  "concept": "orb",
+  "operation": "events",
+  "goods": [
+    "tablecloths"
+  ],
+  "noindex": true,
+  "nonGetRequests": [],
+  "errors": [],
+  "metrics": {
+    "scrollWidth": 1366,
+    "clientWidth": 1366,
+    "activeElement": "DIV",
+    "resourceCount": 7,
+    "overflow": []
+  }
+}

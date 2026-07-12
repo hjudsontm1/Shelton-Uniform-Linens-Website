@@ -147,7 +147,7 @@
             </header>
             <div class="scale-goods-scene" data-scale-scene aria-hidden="true"></div>
             <div class="adaptive-fields" data-scale-fields></div>
-            <p class="chapter-error" data-scale-error role="alert" hidden>Complete the required operating details to continue.</p>
+            <p class="chapter-error" id="scale-error" data-scale-error role="alert" hidden>Complete the required operating details to continue.</p>
             <div class="chapter-action-row">
               <p>Cadence will be recommended later.</p>
               <button type="submit">Continue to finish and return <span aria-hidden="true">→</span></button>
@@ -232,10 +232,10 @@
             <div class="location-route-mark" aria-hidden="true"><span></span><i></i></div>
             <label class="location-field">
               <span>ZIP code or city</span>
-              <input type="text" name="location" data-location-input autocomplete="postal-code" placeholder="92101 or San Diego" maxlength="80" />
-              <small>Used later for route review and the exact-quote handoff. This preview does not promise route availability.</small>
+              <input type="text" name="location" data-location-input autocomplete="postal-code" placeholder="92101 or San Diego" maxlength="80" aria-describedby="location-help location-error" aria-errormessage="location-error" />
+              <small id="location-help">Used later for route review and the exact-quote handoff. This preview does not promise route availability.</small>
             </label>
-            <p class="chapter-error" data-location-error role="alert" hidden>Enter a five-digit ZIP code or a city name.</p>
+            <p class="chapter-error" id="location-error" data-location-error role="alert" hidden>Enter a five-digit ZIP code or a city name.</p>
             <div class="chapter-action-row">
               <p>No full address required.</p>
               <button type="submit">Continue to review <span aria-hidden="true">→</span></button>
@@ -335,21 +335,21 @@
             <div class="quote-fields">
               <label>
                 <span>Your name</span>
-                <input type="text" name="name" autocomplete="name" required />
+                <input type="text" name="name" autocomplete="name" required aria-describedby="quote-error" aria-errormessage="quote-error" />
               </label>
               <label>
                 <span>Business name</span>
-                <input type="text" name="business" autocomplete="organization" required />
+                <input type="text" name="business" autocomplete="organization" required aria-describedby="quote-error" aria-errormessage="quote-error" />
               </label>
               <label>
                 <span>Work email</span>
-                <input type="email" name="email" autocomplete="email" required />
+                <input type="email" name="email" autocomplete="email" required aria-describedby="quote-error" aria-errormessage="quote-error" />
               </label>
               <label>
                 <span>Phone <em>optional</em></span>
                 <input type="tel" name="phone" autocomplete="tel" />
               </label>
-              <fieldset class="quote-contact-choice">
+              <fieldset class="quote-contact-choice" aria-describedby="quote-error">
                 <legend>Preferred contact method</legend>
                 <label><input type="radio" name="preferredContact" value="email" required /><span>Email</span></label>
                 <label><input type="radio" name="preferredContact" value="phone" /><span>Phone</span></label>
@@ -360,7 +360,7 @@
                 <textarea name="notes" rows="3" maxlength="1200" placeholder="Anything Shelton should know before reviewing the program"></textarea>
               </label>
             </div>
-            <p class="chapter-error" data-quote-error role="alert" hidden>Complete the required contact details.</p>
+            <p class="chapter-error" id="quote-error" data-quote-error role="alert" hidden>Complete the required contact details.</p>
             <div class="quote-actions">
               <button type="submit" data-quote-submit>Prepare quote payload <span aria-hidden="true">→</span></button>
               <button type="button" data-return-result>Return to development result</button>
