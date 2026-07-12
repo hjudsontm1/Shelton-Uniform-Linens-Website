@@ -9,15 +9,15 @@ Private-review checkpoint complete. Scores below are based on the generated scre
 | Category | Score | Current Evidence |
 | --- | ---: | --- |
 | Page strategy | 5 | Private Pricing marketing page is separated from dedicated estimator route. |
-| Hero | 5 | Expanded hero removes the estimator-first form, explains the pricing logic deeply, and uses a custom vector program-system diagram with clear CTAs. |
-| Private-client feel | 5 | Uses restrained premium shading, edge lighting, editorial spacing, and advisory language without adding extra trust-copy sections before the quote mechanics. |
+| Hero | 5 | Expanded hero removes the estimator-first form, explains the pricing logic deeply, uses a custom vector program-system diagram, and now ends cleanly in a normal laptop viewport. |
+| Private-client feel | 5 | Uses restrained premium shading, edge lighting, editorial spacing, quieter micro-labels, and advisory language without adding extra trust-copy sections before the quote mechanics. |
 | Pricing journey | 5 | New section explains the quote-building sequence from operation fit through planning range, with a dedicated vector process diagram. |
 | How pricing works | 5 | Interactive factor field explains goods, volume, soil, finishing, sorting, and route burden without a card grid. |
 | Market position | 5 | Interactive continuum compares laundromat, wash and fold, Shelton, traditional rental, and luxury/custom programs without bargain-positioning claims. |
 | Quality economics | 5 | Interactive examples cover chef coats, sheets/linens, event linens, and towels with economic framing. |
 | Account models | 5 | Customer-Owned Goods, Hybrid, Rental, and Not sure are explained as service structures rather than SaaS pricing plans. |
 | Estimator transition | 5 | Estimator appears after the explanatory landing page and starts fresh from the lower transition instead of dominating the hero. |
-| Visual quality | 5 | Deep navy, cream, muted gold, Cormorant/Inter, thin lines, custom inline SVG vectors, supporting intro diagrams, tactile program objects, inset shadows, refined borders, and reduced boxes. |
+| Visual quality | 5 | Deep navy, cream, muted gold, Cormorant/Inter, thin lines, custom inline SVG vectors, supporting intro diagrams, tactile program objects, unified page wash, refined borders, and reduced boxes. |
 | Interaction | 5 | Each interaction changes explanatory content or moves the visitor toward the estimator; pointer-aware light, scroll progress, section activation, hover states, and vector lift add quiet movement. |
 | Responsiveness | 5 | Playwright screenshots generated for 1440, 1366, 1280, tablet, 390, and 430 viewports with no horizontal overflow. |
 | Accessibility | 5 | Semantic sections, SVG labels/descriptions where meaningful, button states, tablist labels, focus-visible styling, no hover-only content, and no collapsed Pricing-page controls in acceptance checks. |
