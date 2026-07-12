@@ -1,156 +1,29 @@
-# Adaptive Pricing Journey Rubric
+# Adaptive Pricing Journey Final Rubric
 
-Scores use the required 1-5 scale and are supported by checkpoint artifacts and test notes.
+Scale: 1 broken, 2 weak, 3 acceptable prototype, 4 polished/close, 5 fully resolved for private review. Scores below are supported by current screenshots, browser assertions, metrics, and the complete interaction recording. Public launch is separately blocked by real Shelton business data.
 
-## Checkpoint 0 - Baseline And Architecture
-
-| Category | Score | Evidence |
+| Category | Score | Evidence for 5 |
 | --- | ---: | --- |
-| Correct repository and base recorded | 5 | `pricing-journey-progress.md`; branch `feature/adaptive-pricing-journey`; base `04b7193...` |
-| Isolated workspace | 5 | Dedicated sibling worktree; dirty `main` worktree unchanged |
-| Live Pricing preservation | 5 | `pricing.html` copied verbatim; `git diff --no-index` returned no difference; no journey code references it |
-| Private preview isolation | 5 | `noindex, nofollow, noarchive`; absent from nav, robots, and sitemap search |
-| State and branch architecture | 5 | `pricing-journey-architecture.md` defines canonical operations, state, dependencies, and file boundaries |
-| Asset and vector architecture | 5 | Reusable inline SVG system and operation scene boundaries documented |
-| Responsive and accessibility architecture | 5 | Explicit desktop/mobile, focus, reduced-motion, semantic, zoom, and keyboard plan |
-| Test and resume durability | 5 | Repeatable commands, screenshot artifacts, exact next actions, and business blockers recorded |
+| Landing | 5 | `cp7-01` and `cp7-08`: three-second purpose clarity, one Begin action, contained matte woven seal, physically separate copy, restrained material shading, and intentional 1366/mobile compositions. `cp7-01b` captures activation. |
+| Box Reduction | 5 | Active UI has no app shell, page-wide progress bar, empty manifest, permanent sidebar, operation-card grid, boxed completed summaries, or boxed Review. The service dossier is the only major contained surface. |
+| Operation | 5 | `cp7-02`/`cp7-02b`: discoverable horizontal editorial rail, roving radio keyboard semantics, touch-sized choices, and immediate operation-specific scene change across ten canonical branches. |
+| Goods | 5 | Checkpoint 3 branch matrix plus `cp7-03`: one custom SVG family, recognizable commercial goods, semantic selected states, concise contextual education, compatible-only branches, and selected-only narrowing. |
+| Game Loop | 5 | Recording shows each choice changing the physical program: operation context, goods inclusion, scale signals, finish transformation, ownership structure, route closure, assembled Review, and dossier payoff. Progress is consequence-driven rather than badge-driven. |
+| Scale | 5 | `cp4-scale`: operation-specific controls, numeric steppers, select/Not Sure paths, optional known volume, selected-goods scene, no pickup-frequency preference, and no unsupported conversion claim. |
+| Finish | 5 | `cp7-04`: selected object remains central; only compatible return/care choices appear; visual overlays communicate pressed/cart/specialty states; semantic checkbox behavior remains available without a generic filled-card grid. |
+| Ownership | 5 | `cp4-ownership`: no preselection, four plain-language situations, open service paths, no pricing cards, and model recommendation deferred until the dossier. |
+| Location | 5 | `cp4-location`: one ZIP/city field, small route-resolution marker, no map/dashboard, no full-address requirement, and explicit no-route-promise copy. |
+| Review | 5 | `cp7-05`/`cp7-10`: selected goods shown in final return state, six readable editable note lines, no dashboard/table shell, and a coherent assembled program scene. |
+| Result | 5 | `cp7-06`/`cp7-11`: one premium parchment dossier contains range hierarchy, rhythm/model rationale, equal-basis COG/Hybrid/Rental comparison, factors, competitive quality message, development warning, and exact-quote transition. |
+| Visual Quality | 5 | Current evidence uses one dark textile-studio canvas, controlled ivory/brass hierarchy, exact alignment, coherent woven/fabric materials, restrained shadows, custom vectors, and no generic SaaS styling. |
+| Continuous Story | 5 | Normal document flow, shared canvas/grid/thread, compact resolved chapter notes, logical chapter order, selected goods carried forward, and no disconnected section backgrounds or scroll trapping. |
+| Responsive | 5 | Checkpoint 6 matrix passes at 1440x900, 1366x768, 1280x800, 768x1024, 390x844, and 430x932; final mobile landing/goods/review/dossier captures show intentional compositions; geometry reports no horizontal document overflow. |
+| Accessibility | 5 | Keyboard-only completion, heading focus movement, semantic controls, live status/error regions, reduced motion, 44px audited actions, 200% reflow equivalent, non-color state cues, and zero duplicate IDs/unlabeled inputs/invalid states/unnamed buttons. |
+| Performance | 5 | Measured CLS 0, seven local resources, zero console/page errors, zero non-GET requests, bounded selected-only SVG scenes, no raster journey assets, no page-wide animated filters, and transform/opacity motion. |
+| Trust | 5 | Private noindex/unlinked preview, clearly labeled development fixtures, no fake approved recommendation, no fake success, no hidden email gate, no route promise, no forced jargon, and explicit distinction between planning range and exact quote. |
 
-Checkpoint 0 gate: **Pass**. The static project and frozen live Pricing page load, the private preview resolves all three query states, Node syntax checks pass, horizontal overflow is zero at 1440x900, and browser diagnostics contain no errors.
+## Final Decision
 
-## Checkpoint 1 - Landing Concepts
+**Private-review score: 5/5 in every acceptance category.**
 
-| Category | Score | Evidence |
-| --- | ---: | --- |
-| Three-second clarity | 5 | All concepts state the program-building purpose and expose one Begin action in the first viewport |
-| Single obvious action | 5 | Each concept has one native Begin button; the private concept switcher is secondary and development-only |
-| Concepts meaningfully distinct | 5 | Sculptural textile disc, suspended physical label, and typographic threshold use separate visual and interaction metaphors |
-| No soap/emoji appearance | 5 | Selected Label concept uses restrained fabric-ticket construction; alternates remain editorial and custom-built |
-| Accessibility | 5 | Native controls, semantic headings, focus transfer, live announcement, roving radio keyboard pattern, and forced reduced-motion state |
-| Performance | 5 | CSS-only concept objects, no raster landing assets, no dependencies, and no console errors |
-| Mobile feasibility | 5 | 390x844 and 430x932 captures fit without horizontal overflow; dedicated mobile compositions retain readable action targets |
-| Transition into Operation | 5 | All Begin controls enter the shared Operation chapter; mobile transition opens at scroll position 0 with the heading visible |
-| 1366x768 fit | 5 | Selected concept and Operation captures fit without clipping or horizontal overflow |
-
-Checkpoint 1 gate: **Pass**. Concept B, Suspended Program Label, is selected and now loads by default. Concepts A and C remain privately reviewable by query parameter. See `pricing-journey-concepts.md` and `docs/pricing-journey-artifacts/checkpoint-1/`.
-
-## Checkpoint 2 - Landing And Operation
-
-| Category | Score | Evidence |
-| --- | ---: | --- |
-| Landing clarity | 5 | Selected suspended-label concept remains the default; alternates remain private query states |
-| Operation clarity | 5 | Ten distinct choices, visible selected state, concise adaptation explanation, and `Wholesale Dry Cleaning` wording |
-| Continuous-page feeling | 5 | Operation condenses in document flow and Goods opens beneath it; normal browser scrolling remains enabled |
-| Completed-step condensation | 5 | Operation and Goods become compact summaries with answer, context, and inline Edit action |
-| Scroll behavior | 5 | Exact fixed-header/progress-rail offset keeps newly opened headings visible; no snap trapping or hidden heading |
-| No static dashboard feeling | 5 | The compact review control appears only after an answer and renders answered fields only |
-| 1366x768 fit | 5 | Operation, Goods, and foundation states fit without horizontal overflow or clipped active headings |
-| Keyboard accessibility | 5 | Native Begin/Continue/Edit controls, radio-group semantics, roving focus, arrow/Home/End selection, and live announcements |
-| Performance | 5 | Configuration-driven DOM, no dependencies or new raster assets, session persistence, and no console errors |
-
-Checkpoint 2 gate: **Pass**. All ten operations produce a relevant Goods handoff, completed chapters remain visible above the active chapter, Edit reopens inline, incompatible goods are removed while compatible goods are preserved, and Start Over restores the landing safely. Evidence is under `docs/pricing-journey-artifacts/checkpoint-2/`.
-
-## Checkpoint 3 - Adaptive Goods
-
-| Category | Score | Evidence |
-| --- | ---: | --- |
-| Branch relevance | 5 | Ten 1366x768 branch captures and `pricing-journey-goods-map.md` show operation-specific Goods sets and context |
-| Visual adaptation beyond text swapping | 5 | Distinct physical compositions and backdrops for linen cart, staging shelves, treatment flow, towel rack, event rail, kitchen, departments, garment rail, conveyor, and mixed goods |
-| Goods recognition | 5 | Custom folded goods, robe, coat, apron, garment, table, event, and treatment-room primitives remain legible at tested sizes |
-| Vector consistency | 5 | Shared 900x330 coordinate system, stroke weight, fabric treatment, seams, shadows, baselines, and muted palette |
-| No emoji appearance | 5 | Editorial product/garment line art with no faces, stock icon pack, or emoji geometry |
-| No irrelevant goods | 5 | Automated configuration test validates every branch reference; browser audit confirms two to six relevant goods per operation |
-| Educational microcopy | 5 | Each item has one concise positioning sentence and no more than three capability details; focused selection updates the panel |
-| Adaptive narrowing | 5 | Selected objects focus while compatible options recede; selected-only foundation scene renders one robe with no sheets or towels |
-| Accessibility | 5 | Labeled semantic buttons, checkbox state, visible Selected copy, focus outline, and redundant non-color state cues |
-| Performance | 5 | One active inline SVG, maximum six object groups, no dependency/raster assets, inactive scene removal, and no animated paths/filters |
-
-Checkpoint 3 gate: **Pass**. All operation branches, selected focus, one-item narrowing, and the required 1440, 1366, 1280, tablet, 390, and 430 viewport states are captured under `docs/pricing-journey-artifacts/checkpoint-3/`. `node tests/pricing-journey-config.test.cjs` validates configuration completeness and selected-only rendering.
-
-## Checkpoint 4 - Program Inputs
-
-| Category | Score | Evidence |
-| --- | ---: | --- |
-| Scale relevance by operation | 5 | Ten distinct schemas in `pricing-journey-config.js` and `pricing-journey-input-map.md` use branch-specific operating signals |
-| No direct frequency-preference question | 5 | Static test rejects pickup/frequency/cadence field IDs; active Scale copy states cadence will be recommended |
-| Finish-state transformation | 5 | Selected-only SVG scene adds pressed, hanging, poly, bundle, bag, cart, and label return overlays |
-| Inventory language clarity | 5 | Four approved plain-language ownership choices with secondary model education and no default selection |
-| No jargon gate | 5 | COG/Hybrid/Rental are explanatory labels, never the primary question or required prior knowledge |
-| Location placement and clarity | 5 | Location follows Ownership, accepts ZIP/city only, and visibly avoids route promises |
-| Scroll-up review behavior | 5 | Completed summaries remain above; inline Edit reopens the chapter at the fixed-header-safe offset |
-| State consistency | 5 | Browser smoke verifies compatible finish preservation and downstream completion invalidation after Edit |
-| Accessibility | 5 | Native form controls, fieldsets/legends, required validation, radio/checkbox states, focus transfer, errors, and announcements |
-| Performance | 5 | Configuration-driven DOM, one active selected-only SVG per visual chapter, inactive scene removal, and no browser errors |
-
-Checkpoint 4 gate: **Pass**. The Hotel/Robes path proves one-good narrowing, robe-only return compatibility, operation-specific Scale inputs, neutral ownership, ZIP validation, Review handoff, inline Edit, and zero mobile horizontal overflow. Evidence is under `docs/pricing-journey-artifacts/checkpoint-4/`; automated checks are `tests/pricing-journey-config.test.cjs` and `tests/pricing-journey-cp4.e2e.cjs`.
-
-## Checkpoint 5 - Review, Result, And Handoff
-
-| Category | Score | Evidence |
-| --- | ---: | --- |
-| Review feels assembled rather than tabulated | 5 | Selected-only transformed SVG, six concise bordered bands, and inline Edit compose one program scene without a dashboard manifest |
-| Service-rhythm recommendation | 5 | Hotel/Robes test recommends twice-weekly service from turns, goods weight, and storage; Event rules use return windows instead |
-| Model recommendation clarity | 5 | One recommended structure, plain-language reason, and no “cheapest is best” treatment |
-| Comparative pricing clarity | 5 | Customer-Owned Goods, Hybrid, and Rental render together with identical service/care assumptions and separate inventory factors |
-| Development-pricing isolation | 5 | `pricing-rules.dev.js`, deterministic unit tests, formula documentation, rules version, and prominent development warning |
-| Result visual payoff | 5 | Selected-only return scene, large planning-range paper field, rhythm/model recommendations, and restrained comparison composition |
-| Exact-quote continuity | 5 | All prior answers and recommendation are preserved in the local payload; contact fields collect only missing details |
-| No repeated questions | 5 | Handoff requests name, business, email, and optional phone only; operation, goods, inputs, ownership, and location are carried forward |
-| No fake production claims | 5 | Ready state says payload is ready for integration and nothing was submitted; failure state preserves answers; no POST/fetch/XHR exists |
-| Accessibility | 5 | Review Edit labels, native contact fields, validation, status region, focus transfer, semantic comparison/result headings, and keyboard controls |
-
-Checkpoint 5 gate: **Pass**. Static tests prove deterministic formulas and branch-specific rhythm logic. The browser suite reaches Review, result, model comparison, ready handoff, and private failure mode; it records zero non-GET requests and zero console errors. Evidence is under `docs/pricing-journey-artifacts/checkpoint-5/`; formulas and replacement boundaries are in `pricing-rules-development.md`.
-
-## Checkpoint 6 - Responsive, Accessibility, And Performance
-
-| Category | Score | Evidence |
-| --- | ---: | --- |
-| 1440x900 | 5 | Result viewport capture fits the shared grid with no clipping or document overflow |
-| 1366x768 | 5 | Laptop result capture keeps the assembled scene, range, and development warning legible in the intended first view |
-| 1280x800 | 5 | Compact desktop capture preserves typography, scene proportions, and result hierarchy |
-| Tablet | 5 | 768x1024 capture uses a contained stacked scene/range composition after the tablet-specific correction |
-| 390x844 | 5 | Mobile result and Review captures stack cleanly with natural document scroll and no horizontal page overflow |
-| 430x932 | 5 | Wider phone capture preserves the development warning, headline, selected-only scene, and planning range |
-| No clipping | 5 | Visual matrix and browser geometry checks show all content within its intended containers at tested viewports |
-| No overflow | 5 | Automated document-width checks pass at six required viewports and the 200% reflow equivalent |
-| Keyboard completion | 5 | Native keyboard-only test completes Begin through payload-ready handoff and verifies active-editor focus after every transition |
-| Screen-reader communication | 5 | Semantic audit reports zero duplicate IDs, unlabeled inputs, invalid live states, or unnamed buttons; chapter status changes use the live announcer |
-| Reduced motion | 5 | Existing `prefers-reduced-motion` path removes transition and animated-scroll dependence while preserving every interaction |
-| Performance | 5 | CLS is 0, active scenes are bounded inline SVG, only seven local resources load, and the complete matrix reports no console errors |
-| No visible layout shift | 5 | Automated CLS measurement is 0 and chapter/result state changes retain stable containers and deterministic focus targets |
-| Touch and zoom | 5 | All 19 audited mobile actions are at least 44x44 CSS pixels; 640x400 200% reflow equivalent remains keyboard-usable without document overflow |
-| Restoration and recovery | 5 | Reload restores the completed result, Location/contact errors recover in place, and Start Over returns to the clean no-manifest landing state |
-
-Checkpoint 6 gate: **Pass**. `tests/pricing-journey-cp6.e2e.cjs` completes the journey by keyboard, audits semantics and touch targets, verifies restoration/error recovery/Start Over, records zero non-GET requests and console errors, and captures the required viewport matrix. Metrics and screenshots are under `docs/pricing-journey-artifacts/checkpoint-6/`.
-
-## Checkpoint 7 - Final Review
-
-| Category | Score | Evidence |
-| --- | ---: | --- |
-| Full interaction recording | 5 | `checkpoint-7/cp7-complete-interaction.webm` records the selected concept through payload-ready handoff |
-| First-time-prospect clarity | 5 | One Begin action, plain-language chapters, operation-specific education, answered-only summaries, and explicit next actions |
-| Visual review | 5 | Seven final 1366x768 captures preserve one editorial grid, custom vector language, selected-only scenes, and restrained gold hierarchy |
-| Accessibility review | 5 | Checkpoint 6 keyboard, semantic, touch, reduced-motion, error, restoration, and zoom audits remain green in the final code |
-| Performance review | 5 | Zero CLS, seven local resources, no image generation or raster journey assets, and no console errors |
-| Functional review | 5 | Final Event/Tablecloths path proves narrowing, event-specific inputs, recommendation, comparison, and payload continuity |
-| Isolation and preservation | 5 | Preview is unlinked/noindex; live `pricing.html` is byte-identical to the real repository; branch remains isolated and unmerged |
-| Production-claim safety | 5 | Development warning remains prominent, formulas are isolated, no POST occurs, and handoff states that nothing was submitted |
-
-Checkpoint 7 gate: **Pass**. The final acceptance path, screenshots, recording, commands, checkpoint history, and unresolved business dependencies are collected in `pricing-journey-final-review.md` and `docs/pricing-journey-artifacts/checkpoint-7/`.
-
-## Final Added Acceptance Categories
-
-| Category | Score | Evidence |
-| --- | ---: | --- |
-| Landing concepts | 5 | Three complete, distinct, accessible concepts remain query-reviewable; evidence selected Label and production continued through all chapters |
-| Service rhythm | 5 | No desired-frequency question exists; ten operation schemas feed deterministic, replaceable rhythm recommendations with visible reasons |
-| Educational journey | 5 | Every active chapter provides concise operational guidance; Goods education changes by selected item and never exceeds three capability details |
-| Vector goods | 5 | One custom SVG system provides recognizable fabric/garment objects, branch-specific compositions, selected focus, and finish-state transformations without emoji/stock-icon styling |
-| Adaptive narrowing | 5 | Single-item selection removes irrelevant objects and finish options; compatible answers persist and incompatible downstream answers are invalidated transparently |
-| Inventory model | 5 | Plain ownership language, no preselection, one result recommendation with reason, and equal-basis COG/Hybrid/Rental development comparisons |
-| Location | 5 | ZIP/city only after Ownership, persisted for Review/handoff, with no unsupported route promise |
-| Navigation | 5 | Normal browser scroll, visible condensed chapters, inline Edit, discreet focus transfer, no scroll trap, and no prominent Back dependency |
-| Pricing fixtures | 5 | Deterministic, documented, visibly labeled development values are isolated behind `calculatePlanningRange(state, rules)` and cannot reach the frozen live page |
-| Competitive positioning | 5 | Centralized quality-first/competitive message appears at Landing and Result without cheapest/savings claims or repetitive sales copy |
-| Exact-quote continuity | 5 | Prior answers persist; only missing contact fields are collected; local payload preserves state; no endpoint or fake success is introduced |
-
-Final added-category gate: **Pass**. Each score is backed by implementation, automated assertions, screenshots, or the complete interaction recording. The only remaining blockers are real Shelton business data and endpoint authorization, not prototype defects.
+This score applies to the isolated private prototype and is defensible from current evidence. It is not a claim that the estimator may be published with development rates. Public release stays blocked until approved pricing data, route data, submission infrastructure, and legal/operational copy approval are supplied.

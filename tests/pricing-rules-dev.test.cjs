@@ -30,7 +30,7 @@ assert.match(first.rhythm.label, /commercial pickup and return/i);
 assert.ok(first.factors.some((item) => item.includes("92101")));
 
 const event = calculatePlanningRange({
-  operation: "event",
+  operation: "events",
   goods: ["tablecloths", "napkins"],
   scale: { eventsPerMonth: "12", piecesPerEvent: "450", returnWindow: "urgent", seasonality: "seasonal" },
   finish: ["pressed", "folded", "labeled"],

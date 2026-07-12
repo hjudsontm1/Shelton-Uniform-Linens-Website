@@ -117,13 +117,13 @@
       }
       case "gym":
         return Math.max(1, numberValue(state, "weeklyTowelUses") * weight);
-      case "event":
+      case "events":
         return Math.max(1, (numberValue(state, "eventsPerMonth") * numberValue(state, "piecesPerEvent") * weight) / rules.monthlyWeeks);
       case "restaurant":
         return Math.max(1, numberValue(state, "weeklyCovers") * 0.16 + numberValue(state, "employees") * numberValue(state, "shiftsPerDay") * weight);
       case "casino":
         return Math.max(1, numberValue(state, "employees") * numberValue(state, "shiftsPerDay") * weight + numberValue(state, "banquetEvents") * 35 + numberValue(state, "restaurantOutlets") * 75);
-      case "uniform":
+      case "uniforms":
         return Math.max(1, numberValue(state, "employees") * numberValue(state, "piecesPerEmployee") * weight);
       case "wholesale": {
         const unitFactor = state.scale.volumeUnit === "pieces" ? weight : 1;
@@ -178,7 +178,7 @@
   };
 
   const recommendRhythm = (state, weeklyUnits, rules) => {
-    if (state.operation === "event") {
+    if (state.operation === "events") {
       const urgent = state.scale.returnWindow === "urgent";
       return {
         label: urgent ? "Event-scheduled pickup with 24-48 hour return planning" : "Event-scheduled commercial pickup and return",

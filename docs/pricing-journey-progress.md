@@ -1,106 +1,96 @@
 # Adaptive Pricing Journey Progress
 
 ## Base State
+
 - Base branch: `main`
 - Base commit: `04b7193bf0931f277c62e68920bcdd5a4b1480d1`
 - Working branch: `feature/adaptive-pricing-journey`
 - Worktree: `/Users/jordanhudson/Documents/Shelton-Uniform-Linens-Website-pricing-journey`
-- Preview URL/path: `http://127.0.0.1:8045/pricing-journey-preview.html`
-- Live Pricing source: copied verbatim from the real workspace into `pricing.html`; frozen for this branch
-- Quote endpoint audit: live `quote.html` posts to Formspree; the preview will not call or modify it
+- Preview: `http://127.0.0.1:8045/pricing-journey-preview.html`
+- Live Pricing/Home/About: unchanged
+- Merge/push: not performed
 
 ## Current Phase
-- Phase number: 7
-- Phase name: Final Visual and Functional Review
-- Status: Complete
 
-## Last Known Good Checkpoint
-- Commit hash: `3c0d02d05068f94f6db8b67125261cf5f038f309`
-- Commit message: `checkpoint(pricing): finalize adaptive journey preview`
-- Date/time: 2026-07-11 05:41:15 CDT
-- Build command: Static site; no build step
-- Test command: `node tests/pricing-journey-config.test.cjs && node tests/pricing-rules-dev.test.cjs`; browser acceptance: `NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-cp6.e2e.cjs && NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-final.e2e.cjs`
+- Phase: Checkpoint 8 - Memo Reconciliation And Final Visual Rebuild
+- Status: implementation and verification complete; ready for final checkpoint commit
+- Preview type: static site, no build step
 - Preview command: `python3 -m http.server 8045 --bind 127.0.0.1`
-- Screenshot artifact paths: `docs/pricing-journey-artifacts/checkpoint-7/cp7-01-winning-landing-1366x768.png` through `cp7-07-payload-ready-1366x768.png`; recording: `cp7-complete-interaction.webm`
 
-## Completed Work
-- Confirmed the real repository and current dirty `main` state.
-- Recorded base commit and created the isolated feature worktree.
-- Copied only the current Pricing page and Pricing-specific prototype assets into the worktree.
-- Audited the live quote endpoint without integrating it.
-- Defined state, branch, vector, motion, responsive, accessibility, and test architecture.
-- Captured the current live Pricing baseline at 1440x900.
-- Added a noindex, unlinked private preview shell with working `orb`, `label`, and `portal` query states.
-- Confirmed the frozen live page and private preview load without console errors or horizontal overflow.
-- Built all three landing concepts with direct private URLs, desktop/mobile compositions, native Begin controls, focus states, and reduced-motion behavior.
-- Added the shared Operation handoff and all ten operation choices using the approved `Wholesale Dry Cleaning` wording.
-- Verified arrow-key selection, roving focus, live state, and zero horizontal overflow.
-- Selected Concept B, Suspended Program Label, and made it the default private preview state.
-- Captured the complete Checkpoint 1 viewport matrix and documented the concept comparison and rationale.
-- Rebuilt the active journey as a continuous, normally scrollable canvas with a compact chapter thread.
-- Added versioned session state, restoration, Start Over, completed summaries, inline Edit, and answered-only Review Selections.
-- Completed all ten Operation routes and verified each produces its configured Goods handoff without horizontal overflow.
-- Added adaptive Goods selection, concise operation/item education, multi-select state, condensation, and the initial scale handoff.
-- Verified operation changes preserve compatible goods and transparently remove incompatible goods.
-- Corrected chapter focus/scroll offsets so fixed navigation never covers active headings.
-- Added a reusable custom inline-SVG system with consistent fabric, seam, stroke, depth, and muted-gold treatment.
-- Built distinct Goods scenes and physical object sets for all ten operations.
-- Added selected-object focus, nonselected recession, one-item narrowing, and selected-only assembled scenes.
-- Added one concise item explanation and up to three capability details for every configured good.
-- Added automated Goods/configuration tests and documented the branch copy map and vector system.
-- Completed the required Checkpoint 3 viewport matrix with zero horizontal overflow and no browser console errors.
-- Added operation-specific Scale schemas for all ten branches without a desired-frequency question.
-- Added selected-goods-only finish/return transformation scenes and compatible specialty prompts.
-- Added the approved plain-language inventory-ownership question with no preselection.
-- Added ZIP/city-only Location validation with no route-availability promise.
-- Added completed summaries, inline Edit, downstream invalidation, state persistence, and mobile-specific layouts for all program-input chapters.
-- Added deterministic Checkpoint 4 browser smoke coverage and desktop/mobile screenshot evidence.
-- Added an assembled Review scene with six concise answer bands and inline Edit actions.
-- Added deterministic development-only weekly/monthly planning ranges through a replaceable rules interface.
-- Added operation-aware recommended service rhythm, one recommended supply model, and a three-way COG/Hybrid/Rental comparison.
-- Added visible development-pricing warnings, confidence explanation, and factors shaping the range.
-- Added an exact-quote contact shell that preserves all answers and prepares a local payload without a live endpoint.
-- Added loading, payload-ready, and private failure states with explicit no-submission language.
-- Added formula documentation, deterministic unit tests, and end-to-end assertions proving zero non-GET requests.
-- Added a keyboard-only full-journey test with active-editor focus assertions at every chapter.
-- Added semantic, touch-target, 200% reflow, restoration, Start Over, invalid-location, and contact-error recovery audits.
-- Verified 1440x900, 1366x768, 1280x800, 768x1024, 390x844, and 430x932 result states with no document overflow or console errors.
-- Corrected the tablet result composition so the selected-goods scene and planning range stack within the shared container.
-- Measured zero cumulative layout shift, seven local resources, and 19 mobile actions at or above 44x44 CSS pixels.
-- Captured a complete first-time Event/Tablecloths interaction recording from the winning landing through payload-ready handoff.
-- Captured seven final 1366x768 visual states and reviewed the selected concept, Operation, Goods, Finish, Review, Result, and Handoff compositions.
-- Verified selected-only narrowing removes irrelevant finish controls and nonselected vector goods from the final scene.
-- Verified the preview remains noindex/unlinked, makes no non-GET request, and produces no browser console error.
-- Verified `pricing.html` remains byte-identical to the real repository's current live Pricing page.
-- Added the final review/evidence map, final acceptance rubric, checkpoint list, and production-blocker report.
+## Final Implementation State
 
-## Current Working State
-- Files currently being changed: this final progress status only
-- Uncommitted work: final progress status pending its documentation commit
-- Whether the page builds: Yes; static pages load on localhost
-- Whether smoke tests pass: Yes; syntax, configuration, rules, Checkpoint 4 regression, and the complete Checkpoint 6 browser suite pass
+- Contained matte woven-service-seal landing with separated copy and one Begin tab.
+- One continuous dark textile-studio canvas with no active app shell, page-wide progress bar, empty manifest, or permanent sidebar.
+- Horizontal contextual Operation rail for all ten canonical operations: `hotel`, `str`, `spa`, `gym`, `events`, `restaurant`, `casino`, `uniforms`, `wholesale`, and `other`.
+- Shared custom vector-goods system with contextual branch scenes, selected-state focus, selected-only narrowing, and finish/return transformations.
+- Operation-specific Scale controls with numeric steppers, intentional unknown paths, and no pickup-frequency preference question.
+- Plain-language ownership paths with no preselection; ZIP/city-only Location with no route promise.
+- Compact completed notes, assembled Review, and one parchment service dossier containing range, rhythm, model, comparison, evidence, and actions.
+- Local-only exact-quote handoff carrying all prior answers and collecting name, business, email, optional phone, preferred contact method, and optional notes.
+- Versioned session persistence, dependency cleanup, inline Edit, Start Over, focus movement, live announcements, validation, and reduced motion.
+- Visibly isolated deterministic development pricing with no network submission.
 
-## Outstanding Defects
-- The base repository has no package/build tooling. Affected viewport/branch: all / feature branch. Severity: low. Rubric: repeatability. Intended correction: continue using documented Node syntax and browser smoke commands rather than adding a framework.
-- No Checkpoint 1 visual or functional defects remain. The orb's slight consumer-product ambiguity and portal's quieter Begin action are documented reasons they were not selected.
-- No Checkpoint 6 functional, responsive, accessibility, or performance defects remain in the tested matrix. The tablet result clipping found during visual review was corrected and rerendered.
-- No objective prototype defects remain in the tested acceptance matrix.
-- Public release is intentionally blocked by missing approved Shelton pricing rules, route-zone data, an authorized submission endpoint, and final public estimate/legal approval. Severity: release blocker, not private-preview defect. Rubric: Production claims and business data.
+## Final Verification
 
-## Next Exact Actions
-1. Open the private preview and review the three concept query states and selected journey.
-2. Keep the branch unmerged and unpushed until the user manually chooses the next Git action.
-3. When approved business inputs arrive, replace `assets/js/pricing-rules.dev.js` through the documented calculation interface.
-4. Integrate an authorized endpoint only after submission, privacy, loading, and failure requirements are confirmed.
-5. Remove development warnings/noindex only as part of a separately approved public-release task.
+Passed:
 
-## Business-Data Blockers
-- Real Shelton pricing rates, volume bands, finishing factors, route-zone factors, and inventory-model factors are not supplied. Development-only deterministic fixtures are permitted and will remain visibly labeled.
-- No preview submission endpoint is authorized. The exact-quote stage will stop at a payload-ready development state.
-- No service-area route table is supplied. Location validation will accept valid-looking ZIP/city values without route promises.
+```text
+node --check assets/js/pricing-journey.js
+node --check assets/js/pricing-journey-config.js
+node --check assets/js/pricing-journey-vectors.js
+node --check assets/js/pricing-rules.dev.js
+node tests/pricing-journey-config.test.cjs
+node tests/pricing-rules-dev.test.cjs
+NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-cp4.e2e.cjs
+NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-cp5.e2e.cjs
+NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-cp6.e2e.cjs
+NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-final.e2e.cjs
+```
+
+Measured final state:
+
+- CLS: `0`
+- Browser console/page errors: `0`
+- Non-GET requests: `0`
+- Final overflow offenders: `0`
+- Local resources: `7`
+- Semantic audit failures: `0`
+- Audited actions under 44px: `0`
+- Viewports: 1440x900, 1366x768, 1280x800, 768x1024, 390x844, 430x932, and 200% reflow equivalent
+
+## Review Loops
+
+1. Visual-story review failed and corrected copy/seal overlap, glossy material, duplicate Begin, sticky progress navigation, generic grids, disconnected cards, dossier hierarchy, and laptop-height spacing.
+2. Accessibility/performance review corrected result overflow, result-range placement, and preferred-contact keyboard behavior; all final audits pass.
+3. Entry-level-prospect review confirmed plain ownership language, operation-specific Scale prompts, optional known volume, contextual education, no cadence choice, no route promise, and no repeated handoff questions.
+
+Detailed evidence: `docs/pricing-journey-final-review.md`, `docs/pricing-journey-rubric.md`, and `docs/pricing-journey-artifacts/`.
+
+## Checkpoint Commits
+
+1. `74c7444` - establish adaptive journey architecture
+2. `fce8598` - complete and select landing concepts
+3. `ae8b35a` - complete landing and operation journey
+4. `339d855` - complete adaptive goods branches
+5. `197886c` - complete adaptive program inputs
+6. `2a3a116` - complete review result and quote handoff
+7. `1bf6efb` - complete responsive accessibility and performance QA
+8. `3c0d02d` - finalize adaptive journey preview
+9. Final memo-reconciliation checkpoint: pending this commit
+
+## Remaining Blockers
+
+These block public release but do not block private review:
+
+- Approved Shelton pricing rates, bands, finish/model factors, and recommendation thresholds.
+- Approved route-zone/service-area data.
+- Authorized submission endpoint and privacy/error requirements.
+- Final legal and operational approval for public estimate language.
 
 ## Resume Instructions
-- Exact first command: `git status --short --branch`
-- Exact first file to inspect: `docs/pricing-journey-progress.md`
-- Exact next test to run: `node tests/pricing-journey-config.test.cjs && node tests/pricing-rules-dev.test.cjs && NODE_PATH=/private/tmp/pricing-playwright/node_modules node tests/pricing-journey-final.e2e.cjs`
-- Exact next visual state to render: none; the private prototype is complete. Begin any future public-release work from the development rules and endpoint blockers above.
+
+- First command: `git status --short --branch`
+- First document: `docs/pricing-journey-progress.md`
+- Full verification: rerun the commands above
+- Preview path: `pricing-journey-preview.html`
+- Do not merge or push without explicit approval

@@ -233,7 +233,7 @@
       number("activeDays", "Active days per week", "days", "This is an operating signal, not a pickup-frequency request.", 1, 7),
       select("storage", "Clean-towel storage", "Storage capacity shapes how much clean inventory can sit between returns.", storageOptions)
     ],
-    event: [
+    events: [
       number("eventsPerMonth", "Events per month", "events", "Use a typical active month.", 1, 2000),
       number("piecesPerEvent", "Average pieces per event", "pieces", "Include table, chair, and specialty goods in the estimate.", 1, 500000),
       select("returnWindow", "Typical return window", "Deadlines influence production planning without asking for a route preference.", [option("urgent", "24-48 hours"), option("standard", "3-4 days"), option("flexible", "Five days or flexible")]),
@@ -253,7 +253,7 @@
       number("banquetEvents", "Banquet or event volume per month", "events", "Use zero only when banquet goods are outside the program.", 0, 5000),
       number("restaurantOutlets", "Restaurant outlets", "outlets", "Include only outlets whose goods are selected here.", 0, 500)
     ],
-    uniform: [
+    uniforms: [
       number("employees", "Employees in the program", "employees", "Headcount establishes the working garment pool.", 1, 100000),
       number("departments", "Departments", "departments", "Departments can shape labeling and organized return.", 1, 500),
       number("shiftsPerDay", "Operating shifts per day", "shifts", "Shift structure helps estimate recurring garment demand.", 1, 6),
@@ -294,12 +294,12 @@
     { id: "heavySoil", label: "Heavy soil or grease", description: "For kitchen, utility, or repeated high-soil use.", goods: ["chefCoats", "aprons", "barTowels", "workwear"] },
     { id: "whiteRetention", label: "White retention", description: "For white goods where brightness over time matters.", goods: ["sheets", "towels", "chefCoats", "tablecloths", "napkins", "tableLinens"] },
     { id: "colorRetention", label: "Color retention", description: "For colored event, dining, or specialty goods.", goods: ["tablecloths", "napkins", "runners", "skirting", "chairCovers", "specialtyEventGoods", "tableLinens", "casinoUniforms"] },
-    { id: "moldTreatment", label: "Specialty mold treatment", description: "For eligible event goods needing additional evaluation.", goods: ["tablecloths", "napkins", "runners", "skirting", "chairCovers", "specialtyEventGoods"], operations: ["event"] },
+    { id: "moldTreatment", label: "Specialty mold treatment", description: "For eligible event goods needing additional evaluation.", goods: ["tablecloths", "napkins", "runners", "skirting", "chairCovers", "specialtyEventGoods"], operations: ["events"] },
     { id: "odor", label: "Odor treatment", description: "For towels, fitness goods, and recurring heavy use.", goods: ["towels", "handTowels", "bathMats", "barTowels"] },
     { id: "delicate", label: "Delicate or specialty handling", description: "For fabric, construction, or presentation that needs review.", goods: ["robes", "dresses", "specialtyGarments", "choirRobes", "specialtyEventGoods"] },
-    { id: "deadline", label: "Production deadline", description: "For event or wholesale return windows that shape capacity.", goods: [...foldedGoods, ...garmentGoods], operations: ["event", "wholesale"] },
+    { id: "deadline", label: "Production deadline", description: "For event or wholesale return windows that shape capacity.", goods: [...foldedGoods, ...garmentGoods], operations: ["events", "wholesale"] },
     { id: "propertySort", label: "Property-level sorting", description: "For central STR staging organized by property or account.", goods: foldedGoods, operations: ["str"] },
-    { id: "departmentSort", label: "Department-level sorting", description: "For uniforms organized around staff groups or departments.", goods: garmentGoods, operations: ["casino", "uniform"] }
+    { id: "departmentSort", label: "Department-level sorting", description: "For uniforms organized around staff groups or departments.", goods: garmentGoods, operations: ["casino", "uniforms"] }
   ];
 
   const ownershipChoices = [
@@ -315,9 +315,7 @@
     version: 4,
     storageKey: "shelton-pricing-journey-v4",
     concepts: {
-      orb: { number: "A", label: "Textile Begin Orb" },
-      label: { number: "B", label: "Suspended Program Label" },
-      portal: { number: "C", label: "Minimal Typographic Portal" }
+      orb: { number: "A", label: "Textile Begin Orb" }
     },
     chapterOrder: ["operation", "goods", "scale", "finish", "ownership", "location", "review"],
     operations: [
@@ -325,10 +323,10 @@
       operation("str", "02", "STR / Property Manager", "Bulk pickup and return can support central turnover staging without implying house-to-house consumer service.", ["sheets", "towels", "bathMats", "duvetCovers", "blankets"]),
       operation("spa", "03", "Spa / Wellness", "Treatment-room programs are shaped by appointment volume, room turnover, soft-goods feel, and compact storage.", ["towels", "sheets", "robes", "blankets", "faceCradleCovers"]),
       operation("gym", "04", "Gym / Fitness", "Fitness programs usually center on towel volume, peak usage, odor control, and steady restocking.", ["towels", "handTowels"]),
-      operation("event", "05", "Event / Venue / Convention Center", "Event programs balance presentation, fabric and color, event deadlines, variable volume, and specialty cleaning needs.", ["tablecloths", "napkins", "runners", "skirting", "chairCovers", "specialtyEventGoods"]),
+      operation("events", "05", "Event / Venue / Convention Center", "Event programs balance presentation, fabric and color, event deadlines, variable volume, and specialty cleaning needs.", ["tablecloths", "napkins", "runners", "skirting", "chairCovers", "specialtyEventGoods"]),
       operation("restaurant", "06", "Restaurant / Food Service", "Restaurant programs combine recurring kitchen soil with dining-room presentation and service schedules.", ["chefCoats", "aprons", "napkins", "barTowels", "tableLinens"]),
       operation("casino", "07", "Casino / Entertainment", "Casino programs may span staff departments, multiple shifts, restaurants, banquets, and presentation-driven goods.", ["casinoUniforms", "chefCoats", "napkins", "tableLinens", "towels", "banquetLinens"]),
-      operation("uniform", "08", "Uniform Account", "Uniform programs are organized around staff count, departments, shifts, garment presentation, and repeat wear.", ["uniformShirts", "chefCoats", "casinoUniforms", "workwear", "jackets"]),
+      operation("uniforms", "08", "Uniform Account", "Uniform programs are organized around staff count, departments, shifts, garment presentation, and repeat wear.", ["uniformShirts", "chefCoats", "casinoUniforms", "workwear", "jackets"]),
       operation("wholesale", "09", "Wholesale Dry Cleaning", "Wholesale support adds behind-the-scenes cleaning and finishing capacity around batch volume and turnaround.", ["shirts", "suits", "dresses", "specialtyGarments"]),
       operation("other", "10", "Other / Not Sure", "Some commercial programs do not fit a standard category. Start with the goods and Shelton can shape the questions from there.", ["towels", "tableLinens", "uniformShirts", "robes", "choirRobes", "specialtyGarments"])
     ],

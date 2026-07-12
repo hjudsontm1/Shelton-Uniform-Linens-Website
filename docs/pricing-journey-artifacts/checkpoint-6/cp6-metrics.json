@@ -12,53 +12,28 @@
       "height": 44
     },
     {
-      "name": "Concept B",
-      "width": 96.015625,
-      "height": 44
-    },
-    {
-      "name": "A Textile Begin Orb",
-      "width": 303.625,
-      "height": 51.1875
-    },
-    {
-      "name": "B Suspended Program Label",
-      "width": 303.625,
-      "height": 51.1875
-    },
-    {
-      "name": "C Typographic Portal",
-      "width": 303.625,
-      "height": 51.1875
-    },
-    {
-      "name": "Edit operation",
-      "width": 44,
-      "height": 44
-    },
-    {
       "name": "Edit goods",
-      "width": 44,
+      "width": 51.1875,
       "height": 44
     },
     {
       "name": "Edit scale",
-      "width": 44,
+      "width": 51.1875,
       "height": 44
     },
     {
       "name": "Edit finish and return",
-      "width": 44,
+      "width": 51.1875,
       "height": 44
     },
     {
       "name": "Edit inventory ownership",
-      "width": 44,
+      "width": 51.1875,
       "height": 44
     },
     {
       "name": "Edit location",
-      "width": 44,
+      "width": 51.1875,
       "height": 44
     },
     {
@@ -93,7 +68,7 @@
     },
     {
       "name": "Build recommended program →",
-      "width": 342,
+      "width": 341,
       "height": 51.1875
     },
     {
@@ -104,7 +79,7 @@
   ],
   "performance": {
     "cls": 0,
-    "localTransferBytes": 0,
+    "localTransferBytes": 300,
     "localResourceCount": 7
   }
 }

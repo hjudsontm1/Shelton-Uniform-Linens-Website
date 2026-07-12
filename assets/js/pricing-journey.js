@@ -8,18 +8,16 @@
   if (!root || !config || !vectors || !pricingEngine) return;
 
   const searchParams = new URLSearchParams(window.location.search);
-  const allowedConcepts = new Set(Object.keys(config.concepts));
-  const requestedConcept = searchParams.get("concept");
-  const explicitConcept = allowedConcepts.has(requestedConcept) ? requestedConcept : null;
   const quoteMode = searchParams.get("quote") === "fail" ? "fail" : "ready";
   const reducedMotion = searchParams.get("motion") === "reduce" || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const concept = explicitConcept || "label";
+  const concept = "orb";
 
   const conceptPanels = Array.from(document.querySelectorAll("[data-concept-panel]"));
   const flow = document.querySelector("[data-journey-flow]");
   const operationChoices = document.querySelector("[data-operation-choices]");
   const operationSelection = document.querySelector("[data-operation-selection]");
   const operationSelectionLabel = document.querySelector("[data-operation-selection-label]");
+  const operationStage = document.querySelector("[data-operation-stage]");
   const goodsChoices = document.querySelector("[data-goods-choices]");
   const goodsScene = document.querySelector("[data-goods-scene]");
   const goodsEducation = document.querySelector("[data-goods-education] p");
@@ -80,7 +78,6 @@
   });
 
   const restoreState = () => {
-    if (explicitConcept) return createInitialState();
     try {
       const stored = JSON.parse(window.sessionStorage.getItem(config.storageKey));
       if (!stored || stored.version !== config.version) return createInitialState();
@@ -148,7 +145,7 @@
       link.setAttribute("aria-current", link.dataset.conceptLink === state.concept ? "page" : "false");
     });
     const number = document.querySelector("[data-concept-number]");
-    if (number) number.textContent = config.concepts[state.concept].number;
+    if (number) number.textContent = config.concepts[state.concept]?.number || "A";
   };
 
   const renderOperations = () => {
@@ -189,6 +186,18 @@
     const editing = state.activeChapter === "operation" || !isComplete("operation");
     editor.hidden = !editing;
     summary.hidden = editing || !operation;
+    if (editing && operation && operationStage) {
+      const sceneGoods = operation.goods.slice(0, Math.min(4, operation.goods.length));
+      vectors.renderScene(operationStage, {
+        operation,
+        goodsIds: sceneGoods,
+        selectedIds: sceneGoods,
+        selectedOnly: true,
+        catalog: config.goods
+      });
+    } else if (operationStage) {
+      operationStage.replaceChildren();
+    }
   };
 
   const buildGoodsChoices = () => {
@@ -307,11 +316,27 @@
         control.min = String(field.min);
         control.max = String(field.max);
         control.step = String(field.step || 1);
+        const decrement = document.createElement("button");
+        const increment = document.createElement("button");
+        decrement.type = "button";
+        increment.type = "button";
+        decrement.className = "scale-stepper scale-stepper--decrement";
+        increment.className = "scale-stepper scale-stepper--increment";
+        decrement.dataset.scaleStepper = "decrement";
+        increment.dataset.scaleStepper = "increment";
+        decrement.dataset.scaleTarget = field.id;
+        increment.dataset.scaleTarget = field.id;
+        decrement.setAttribute("aria-label", `Decrease ${field.label}`);
+        increment.setAttribute("aria-label", `Increase ${field.label}`);
+        decrement.textContent = "−";
+        increment.textContent = "+";
+        controlWrap.append(decrement, control);
         if (field.unit) {
           const unit = document.createElement("em");
           unit.textContent = field.unit;
-          controlWrap.append(control, unit);
+          controlWrap.append(unit);
         }
+        controlWrap.append(increment);
       }
 
       if (!controlWrap.contains(control)) controlWrap.append(control);
@@ -551,7 +576,7 @@
   const renderReviewState = () => {
     const operation = activeOperation();
     const chapter = document.querySelector('[data-chapter="review"]');
-    chapter.hidden = !isComplete("location") || !operation;
+    chapter.hidden = !isComplete("location") || !operation || ["result", "handoff"].includes(state.activeChapter);
     if (chapter.hidden) return;
     const editor = document.querySelector('[data-chapter-editor="review"]');
     const summary = document.querySelector('[data-chapter-summary="review"]');
@@ -734,6 +759,11 @@
     renderReviewState();
     renderResultState();
     renderQuoteState();
+    if (["result", "handoff"].includes(state.activeChapter)) {
+      document.querySelectorAll("[data-chapter]").forEach((chapter) => {
+        chapter.hidden = true;
+      });
+    }
     renderThread();
     renderProgramSummary();
   };
@@ -806,7 +836,13 @@
 
     state.operation = id;
     render();
-    if (moveFocus) operationChoices.querySelector(`[data-operation-id="${id}"]`)?.focus();
+    const selectedButton = operationChoices.querySelector(`[data-operation-id="${id}"]`);
+    if (moveFocus) selectedButton?.focus();
+    selectedButton?.scrollIntoView({
+      behavior: reducedMotion ? "auto" : "smooth",
+      block: "nearest",
+      inline: "center"
+    });
 
     const message = removed.length
       ? `${operation.label} selected. ${removed.length} incompatible goods removed; compatible goods were preserved.`
@@ -992,8 +1028,9 @@
   const validateQuoteContact = () => {
     let valid = true;
     Array.from(quoteForm.elements).forEach((control) => {
-      if (!(control instanceof HTMLInputElement)) return;
-      const controlValid = !control.required || control.value.trim() !== "";
+      if (!(control instanceof HTMLInputElement || control instanceof HTMLSelectElement || control instanceof HTMLTextAreaElement)) return;
+      const radioValid = control.type !== "radio" || Boolean(quoteForm.elements.namedItem(control.name)?.value);
+      const controlValid = (!control.required || control.value.trim() !== "") && radioValid;
       const emailValid = control.type !== "email" || control.value === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(control.value);
       const finalValid = controlValid && emailValid;
       control.setAttribute("aria-invalid", String(!finalValid));
@@ -1038,6 +1075,19 @@
     announce(`${chapter.charAt(0).toUpperCase() + chapter.slice(1)} reopened for editing.`);
   };
 
+  const adjustScaleValue = (button) => {
+    const control = scaleFields.querySelector(`[data-scale-input="${button.dataset.scaleTarget}"]`);
+    if (!(control instanceof HTMLInputElement)) return;
+    const step = Number(control.step || 1);
+    const min = Number(control.min || 0);
+    const max = Number(control.max || Number.MAX_SAFE_INTEGER);
+    const current = control.value === "" ? min : Number(control.value);
+    const direction = button.dataset.scaleStepper === "increment" ? 1 : -1;
+    control.value = String(Math.min(max, Math.max(min, current + (step * direction))));
+    control.dispatchEvent(new Event("input", { bubbles: true }));
+    control.focus();
+  };
+
   const startOver = () => {
     state = createInitialState();
     try {
@@ -1053,6 +1103,9 @@
   };
 
   document.addEventListener("click", (event) => {
+    const stepper = event.target.closest("[data-scale-stepper]");
+    if (stepper) return adjustScaleValue(stepper);
+
     if (event.target.closest("[data-begin-journey]")) return openOperation();
 
     const operationChoice = event.target.closest("[data-operation-id]");
@@ -1111,7 +1164,7 @@
   });
 
   quoteForm?.addEventListener("input", (event) => {
-    const control = event.target.closest("input[name]");
+    const control = event.target.closest("input[name], select[name], textarea[name]");
     if (!control) return;
     state.contact[control.name] = control.value;
     state.quoteStatus = "idle";

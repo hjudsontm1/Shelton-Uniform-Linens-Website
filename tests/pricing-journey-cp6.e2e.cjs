@@ -67,7 +67,7 @@ const main = async () => {
   assert.equal(await page.locator("[data-pricing-journey]").getAttribute("data-motion"), "reduce");
   assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior), "auto");
 
-  await focusAndPress(page, '[data-concept-panel="label"] [data-begin-journey]');
+  await focusAndPress(page, '[data-concept-panel="orb"] [data-begin-journey]');
   await expectFocused(page, "operation-title");
   await focusAndPress(page, '[data-operation-id="hotel"]', "Space");
   await focusAndPress(page, "[data-operation-continue]");
@@ -122,6 +122,9 @@ const main = async () => {
   await typeInto(page, 'input[name="business"]', "Shelton QA Account");
   await typeInto(page, 'input[name="email"]', "jordan@example.com");
   await typeInto(page, 'input[name="phone"]', "619-555-0100");
+  await page.locator('input[name="preferredContact"][value="email"]').focus();
+  await page.keyboard.press("Space");
+  assert.equal(await page.locator('input[name="preferredContact"][value="email"]').isChecked(), true);
   await focusAndPress(page, "[data-quote-submit]");
   await page.waitForTimeout(180);
   assert.equal(await page.locator("[data-quote-status]").getAttribute("data-status"), "ready");
@@ -220,7 +223,7 @@ const main = async () => {
 
   await focusAndPress(page, "[data-start-over]");
   await page.waitForTimeout(100);
-  assert.equal(await page.locator('[data-concept-panel="label"]').isVisible(), true);
+  assert.equal(await page.locator('[data-concept-panel="orb"]').isVisible(), true);
   const resetState = JSON.parse(await page.evaluate(() => sessionStorage.getItem("shelton-pricing-journey-v4")));
   assert.equal(resetState.view, "landing");
   assert.equal(resetState.operation, null);

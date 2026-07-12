@@ -73,6 +73,9 @@ The handoff constructs a local payload with:
 - operation and goods
 - Scale, finish, specialty, ownership, and location answers
 - recommended rhythm, model, and weekly range
-- missing contact details
+- name and business
+- email and optional phone
+- required preferred contact method
+- optional notes
 
-It makes no `fetch`, XHR, form action, or POST request. The ready state says `Quote payload ready for endpoint integration. Nothing has been submitted.` The private `?quote=fail` mode verifies that a failure preserves all answers.
+It makes no `fetch`, XHR, form action, or POST request. The ready state says `Quote payload ready for endpoint integration. Nothing has been submitted.` The private `?quote=fail` mode verifies that a failure preserves all answers. Public activation requires an approved endpoint, privacy/error requirements, and explicit replacement of this local-only state.

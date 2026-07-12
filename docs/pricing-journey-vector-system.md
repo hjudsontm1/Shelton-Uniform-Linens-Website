@@ -15,6 +15,8 @@
 - Consistent non-scaling strokes, seams, folds, baselines, and caption treatment
 - Restrained fabric gradients and one static drop shadow
 - No faces, emoji styling, stock icon pack, neon treatment, or mismatched illustration families
+- Operation selection reuses the same physical-goods primitives in a contextual stage; changing the rail selection changes the scene immediately.
+- The landing seal is CSS-built woven material, not a raster asset or a repurposed goods icon.
 
 ## Reusable Physical Primitives
 
@@ -48,8 +50,8 @@ Selection is never communicated by color alone. The semantic Goods buttons retai
 - Mobile keeps the scene clipped inside its container, removes micro captions that would be unreadable, and relies on the labeled controls below.
 - Only opacity and transform transition on selection; paths, filters, and backdrops do not animate.
 - Reduced motion shortens all selection transitions to 1ms through the journey-wide motion policy.
+- Mobile scenes preserve the focal object and useful transformation cues while omitting captions that cannot remain legible at phone scale.
 
 ## Performance Boundary
 
-Each active Goods scene contains one SVG, one defs block, one operation backdrop, and no more than six object groups. The inactive Goods SVG is removed before the assembled foundation SVG is created, avoiding duplicate definition collisions and unnecessary rendering work.
-
+Each active Goods scene contains one SVG, one defs block, one operation backdrop, and no more than six object groups. Inactive SVGs are removed before later assembled scenes are created, avoiding duplicate definition collisions and unnecessary rendering work. The final journey loads seven local resources and no journey raster assets.

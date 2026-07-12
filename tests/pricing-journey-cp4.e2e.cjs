@@ -19,11 +19,11 @@ const main = async () => {
   });
   page.on("pageerror", (error) => errors.push(`page: ${error.message}`));
 
-  await page.goto(`${baseUrl}?concept=label&motion=reduce`, { waitUntil: "networkidle" });
+  await page.goto(`${baseUrl}?motion=reduce`, { waitUntil: "networkidle" });
   assert.equal(await page.title(), "Private Adaptive Pricing Journey | Shelton Linen & Uniform Services");
   assert.equal(await page.locator('meta[name="robots"]').getAttribute("content"), "noindex, nofollow, noarchive");
 
-  await page.locator('[data-concept-panel="label"] [data-begin-journey]').click();
+  await page.locator('[data-concept-panel="orb"] [data-begin-journey]').click();
   await page.locator('[data-operation-id="hotel"]').click();
   await page.locator("[data-operation-continue]").click();
   await page.locator('[data-good-id="robes"]').click();

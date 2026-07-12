@@ -1,39 +1,25 @@
-# Pricing Journey Landing Concepts
+# Pricing Journey Landing Direction
 
-All concepts are private, noindex states of `pricing-journey-preview.html` and share the same copy, Operation handoff, keyboard semantics, and reduced-motion path.
+## Selected Direction
 
-## Review URLs
+The private preview uses one active landing direction: a contained matte woven service seal beside sparse program-building copy.
 
-- Textile Begin Orb: `pricing-journey-preview.html?concept=orb`
-- Suspended Program Label: `pricing-journey-preview.html?concept=label`
-- Minimal Typographic Portal: `pricing-journey-preview.html?concept=portal`
-- Forced reduced motion: append `&motion=reduce`
+- Review URL: `pricing-journey-preview.html`
+- Reduced motion: append `?motion=reduce`
+- Primary message: `Build your laundry program.`
+- One action: `Begin`
 
-## Comparison
+The seal occupies roughly one quarter of the useful desktop viewport, remains physically separate from the copy, and carries an integrated woven Begin tab. Fine CSS warp/weft lines, soft tonal shading, restrained brass, and a controlled object shadow make it read as textile rather than soap, a bubble, or a glossy technology sphere.
 
-| Criterion | Orb | Label | Portal |
-| --- | ---: | ---: | ---: |
-| Three-second clarity | 5 | 5 | 5 |
-| Single obvious action | 5 | 5 | 4 |
-| Visual impact | 5 | 5 | 4 |
-| Restraint | 4 | 5 | 5 |
-| Shelton identity | 4 | 5 | 4 |
-| Operation transition | 5 | 5 | 5 |
-| Accessibility | 5 | 5 | 5 |
-| Desktop composition | 5 | 5 | 5 |
-| Mobile feasibility | 5 | 5 | 5 |
-| Performance | 4 | 5 | 5 |
-| No soap/emoji appearance | 4 | 5 | 5 |
+## Retired Exploration
 
-## Selected Concept
+The suspended-label and portal directions are historical checkpoint artifacts only. They are not exposed in the current shell, query state, or navigation. The earlier oversized/glossy orb treatment was also retired after the final visual audit.
 
-**Concept B: Suspended Program Label / Fabric Marker** is the production direction.
+## Current Evidence
 
-It communicates a physical commercial program without resembling a consumer product, soap object, or software dashboard. The label gives Shelton a distinct material metaphor, makes Begin unambiguous, scales cleanly across the tested viewport matrix, and requires only CSS texture and transforms. Its program number, stitched construction, and pull action can continue into the journey's program thread and assembled result without introducing a competing visual system.
+- Desktop landing: `docs/pricing-journey-artifacts/checkpoint-7/cp7-01-winning-landing-1366x768.png`
+- Activation: `docs/pricing-journey-artifacts/checkpoint-7/cp7-01b-orb-activation-1366x768.png`
+- Mobile landing: `docs/pricing-journey-artifacts/checkpoint-7/cp7-08-mobile-landing-390x844.png`
+- Operation arrival: `docs/pricing-journey-artifacts/checkpoint-7/cp7-02-operation-1366x768.png`
 
-The orb has greater sculptural impact but carries a small soap/product-disc ambiguity and uses more layered rendering. The portal is the lightest and most restrained, but its physical start object is less immediately Shelton-specific and the action is less visually dominant.
-
-## Evidence
-
-Desktop and mobile comparison screenshots are stored under `docs/pricing-journey-artifacts/checkpoint-1/`. The selected concept also includes 1366x768, 1280x800, tablet, 390x844, and 430x932 captures plus desktop/mobile Operation states.
-
+Historical alternatives remain under `checkpoint-1/` for decision history, not as recommendations for continued implementation.

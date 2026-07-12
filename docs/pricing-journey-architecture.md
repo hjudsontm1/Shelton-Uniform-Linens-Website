@@ -2,28 +2,30 @@
 
 ## Scope And Isolation
 
-- Production page: `pricing.html` is copied from the current real workspace and frozen.
-- Private preview: `pricing-journey-preview.html` is noindex, absent from navigation, robots, and sitemap.
-- Working branch: `feature/adaptive-pricing-journey`.
-- The preview uses dedicated Pricing-journey CSS and JavaScript. It does not change Homepage or About copy.
-- The existing quote form posts to Formspree. The preview will not call or modify that endpoint.
+- Production page: `pricing.html` is frozen and unchanged.
+- Private preview: `pricing-journey-preview.html` is `noindex, nofollow, noarchive`, absent from public navigation, robots, and sitemap references.
+- Working branch: `feature/adaptive-pricing-journey` in a dedicated sibling worktree.
+- Journey styling, configuration, vectors, controller, rules, tests, and artifacts are isolated to Pricing-journey files.
+- The preview never calls the existing live quote endpoint and makes no non-GET request.
 
 ## Experience Model
 
-The journey is one continuous page. Only the current chapter is immersive. Completed chapters condense into readable summaries with an `Edit` action and remain in normal document flow. Browser scrolling is never trapped or snapped.
+The visitor assembles a commercial laundry program in one continuous dark textile-studio canvas. The page uses normal browser scrolling and does not expose an application shell, sticky progress rail, permanent sidebar, or empty manifest.
 
 Journey order:
 
-1. Landing / Begin
+1. Contained woven-service-seal landing
 2. Operation
 3. Goods
-4. Scale and operating rhythm inputs
+4. Scale and operating signals
 5. Finish, return, and specialty needs
 6. Inventory ownership
 7. Location
-8. Review
-9. Recommended program and planning ranges
+8. Assembled review
+9. Recommended program and development planning range
 10. Exact-quote handoff shell
+
+Completed chapters condense into 72-104px open notes with the answer and an `Edit` action. The only major contained surface is the final parchment service dossier.
 
 ## State Architecture
 
@@ -31,8 +33,8 @@ Journey order:
 
 ```js
 {
-  version: 3,
-  concept: "label",
+  version: 4,
+  concept: "orb",
   activeChapter: "landing",
   completedChapters: [],
   operation: null,
@@ -43,100 +45,75 @@ Journey order:
   ownership: null,
   location: { type: null, value: "" },
   recommendation: null,
-  contact: {},
+  contact: {
+    name: "",
+    business: "",
+    email: "",
+    phone: "",
+    preferredContact: "",
+    notes: ""
+  },
   developmentMode: true
 }
 ```
 
 State rules:
 
-- Canonical config drives labels, choices, education, vectors, validation, and dependency cleanup.
-- Selecting a new operation preserves compatible answers and removes incompatible answers with a visible status message.
-- Selecting one good narrows later visuals and choices to that good.
-- State persists to session storage with a versioned key.
-- `Start Over` clears only the private preview state.
+- Canonical configuration drives labels, choices, education, validation, vectors, and dependency cleanup.
+- Selecting a new operation preserves compatible answers and removes incompatible downstream answers with a live status message.
+- Selected goods alone move into Scale, Finish, Review, and Result scenes.
+- State persists to a versioned session-storage key and restores the active result/handoff safely.
+- `Start Over` clears only private-preview state.
 
-## Operation Branches
-
-Canonical operations:
+## Canonical Operation Branches
 
 - `hotel`: Hotel / Boutique Stay
 - `str`: STR / Property Manager
 - `spa`: Spa / Wellness
 - `gym`: Gym / Fitness
-- `event`: Event / Venue / Convention Center
+- `events`: Event / Venue / Convention Center
 - `restaurant`: Restaurant / Food Service
 - `casino`: Casino / Entertainment
-- `uniform`: Uniform Account
+- `uniforms`: Uniform Account
 - `wholesale`: Wholesale Dry Cleaning
 - `other`: Other / Not Sure
 
-Each branch defines:
+Each branch defines relevant goods, scale inputs and units, operational signals, compatible finish/return states, specialty prompts, educational copy, vector context, and development-only pricing factors.
 
-- relevant goods
-- scale inputs and units
-- operating-rhythm signals
-- finish/return options
-- specialty prompts
-- educational microcopy
-- vector scene composition
-- development pricing factors
+## Rendering Boundaries
 
-## Rendering Architecture
+- `pricing-journey-preview.html`: semantic private shell and noindex metadata.
+- `assets/css/pricing-journey.css`: isolated visual tokens, layouts, interaction states, responsive compositions, and reduced-motion policy.
+- `assets/js/pricing-journey-config.js`: canonical branches and content.
+- `assets/js/pricing-journey-vectors.js`: reusable inline SVG goods and contextual scenes.
+- `assets/js/pricing-journey.js`: rendering, state transitions, validation, focus, persistence, and local quote payload.
+- `assets/js/pricing-rules.dev.js`: deterministic and replaceable development calculations.
 
-- `pricing-journey-preview.html`: semantic shell and noindex metadata.
-- `assets/css/pricing-journey.css`: isolated responsive visual system.
-- `assets/js/pricing-journey-config.js`: canonical branch/content configuration.
-- `assets/js/pricing-journey-vectors.js`: reusable inline SVG factories.
-- `assets/js/pricing-journey.js`: state, rendering, validation, focus, and interaction.
-- `assets/js/pricing-rules.dev.js`: deterministic replaceable development formulas.
+No framework or external runtime was introduced. Rendering uses semantic DOM APIs and event delegation.
 
-Scale fields, finish compatibility, specialty compatibility, and ownership choices are canonical configuration rather than rendering conditionals. See `pricing-journey-input-map.md`.
+## Visual Architecture
 
-No framework is introduced. Rendering uses semantic DOM APIs and event delegation.
+- One near-black navy canvas with subtle woven grain and localized object light.
+- Contained matte woven seal physically separate from the landing copy, with one integrated `Begin` tab.
+- Horizontal editorial rails for Operation, Goods, Finish, and specialty choices.
+- Numeric Scale steppers paired with semantic inputs and branch-specific `Not sure` paths.
+- Open ownership service paths, minimal ZIP/city location field, and a small route-resolution marker.
+- Review uses a selected-goods scene and editable atelier-note lines rather than a dashboard or form table.
+- Result places range, rhythm, model, comparison, evidence, and actions inside one parchment dossier.
 
-## Landing Concepts
+## Motion And Focus
 
-All concepts share copy, state, accessibility, and transition hooks while remaining visually distinct.
-
-1. Textile Begin Orb: a suspended layered-fabric disc with one central Begin action.
-2. Suspended Program Label: a physical fabric marker/label with stitched edge and pull action.
-3. Typographic Portal: editorial type with one weighted physical start object crossing a threshold.
-
-Query values: `?concept=orb`, `?concept=label`, and `?concept=portal`.
-
-## Vector System
-
-- Inline SVG only; no image generation or icon pack.
-- Shared `viewBox`, stroke scale, muted cream/gray/gold palette, and material shading.
-- Objects are composed from reusable garment, linen, cart, hanger, bag, bundle, and label primitives.
-- Selected goods receive contrast and depth; unselected goods recede without disappearing.
-- SVGs are decorative unless they are the actual selection control; labels remain semantic HTML.
-
-## Motion
-
-- Motion communicates selection, condensation, chapter reveal, and goods-to-finish transformation.
-- Transform and opacity are preferred; no animated blur, particles, parallax, bounce, or scroll hijacking.
-- Selection: 160-220ms. Condensation: 300-420ms. Reveal: 380-560ms.
-- Reduced motion removes guided smooth scrolling and uses immediate state changes or short fades.
+- Motion communicates seal activation, selection, chapter completion, narrowing, and finish transformation.
+- Transforms and opacity are preferred; there is no parallax, particle field, bounce, path animation, or scroll hijacking.
+- Focus moves to the revealed chapter heading after user activation.
+- Reduced motion removes smooth-scroll dependence and shortens transitions to effectively immediate state changes.
 
 ## Responsive Strategy
 
-- Desktop: active chapter uses the useful viewport under the fixed header; editorial two-column scenes.
-- Laptop: typography and scene widths compress without clipping at 1366x768 and 1280x800.
-- Tablet: visual scene moves above controls where necessary; summaries remain horizontal when readable.
-- Mobile: dedicated one-column compositions, compact program thread, minimum 44px targets, no horizontal overflow.
-- The full viewport matrix runs only at Checkpoints 1, 3, 6, and 7.
-
-## Accessibility
-
-- Native buttons, inputs, fieldsets, legends, headings, lists, and status regions.
-- Radio-like groups use native radio inputs where possible; multi-select goods use checkboxes.
-- Focus moves to a newly revealed chapter heading only after user activation.
-- Completed summaries remain navigable and their Edit controls reopen inline.
-- Selection never relies on color alone.
-- Dynamic dependency changes and recommendations are announced politely.
-- Keyboard completion, 200% zoom, reduced motion, and touch targets are explicit Checkpoint 6 tests.
+- Desktop/laptop: editorial two-column scenes with controls visible at 1440x900, 1366x768, and 1280x800.
+- Tablet: scenes stack above controls while the continuous grid and hierarchy remain intact.
+- Mobile: intentionally composed single-column landing, horizontal choice rails where useful, full-width actions, 44px minimum audited targets, and no horizontal document overflow.
+- Browser scrolling remains natural at every viewport; controls are not trapped inside internal scroll panes except intentional horizontal rails.
 
 ## Development Pricing Boundary
 
@@ -146,18 +123,13 @@ The UI calls:
 calculatePlanningRange(pricingJourneyState, pricingRules)
 ```
 
-Development rules are deterministic, documented, and isolated. The result always displays `DEVELOPMENT ESTIMATE - NOT APPROVED PRICING`. The exact-quote stage produces a payload preview only and never calls the live Formspree endpoint.
+The renderer contains no rates. Every result displays `DEVELOPMENT ESTIMATE - NOT APPROVED PRICING`. Exact-quote handoff prepares a local payload, explicitly states that nothing was submitted, and never calls Formspree or another endpoint.
 
-## Test Plan
+## Verification Boundary
 
-- Syntax: `node --check` for every journey JavaScript file.
-- Markup/static smoke: localhost response and noindex/unlinked assertions.
-- Interaction smoke: begin, operation selection, goods narrowing, edit, review, result, and handoff.
-- State: compatible preservation, incompatible cleanup, session restore, Start Over.
-- Accessibility: keyboard-only completion, focus order, status announcements, reduced motion, 200% zoom.
-- Responsive: 1440x900, 1366x768, 1280x800, tablet, 390x844, 430x932.
-- Performance: console errors, layout shift, oversized assets, animation property audit.
-
-## Checkpoint Evidence
-
-Each checkpoint records screenshots, tests, rubric scores, and defects under `docs/pricing-journey-artifacts/checkpoint-N/`. A checkpoint is committed only when the preview is runnable and its scoped smoke tests pass.
+- Static syntax and canonical configuration tests.
+- Deterministic pricing-rule tests.
+- Browser paths for inputs, narrowing, editing, result, and no-submit handoff.
+- Keyboard-only completion, semantic audit, error recovery, session restoration, reduced motion, 200% reflow equivalent, and touch-target checks.
+- Viewport matrix at desktop, laptop, tablet, and two mobile sizes.
+- Console, overflow, non-GET request, resource-count, and cumulative-layout-shift checks.

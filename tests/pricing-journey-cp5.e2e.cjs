@@ -8,7 +8,7 @@ const artifactDir = process.env.PRICING_ARTIFACT_DIR || path.resolve(__dirname, 
 fs.mkdirSync(artifactDir, { recursive: true });
 
 const completeHotelRobesProgram = async (page) => {
-  await page.locator('[data-concept-panel="label"] [data-begin-journey]').click();
+  await page.locator('[data-concept-panel="orb"] [data-begin-journey]').click();
   await page.locator('[data-operation-id="hotel"]').click();
   await page.locator("[data-operation-continue]").click();
   await page.locator('[data-good-id="robes"]').click();
@@ -43,7 +43,7 @@ const main = async () => {
     if (request.method() !== "GET") nonGetRequests.push(`${request.method()} ${request.url()}`);
   });
 
-  await page.goto(`${baseUrl}?concept=label&motion=reduce`, { waitUntil: "networkidle" });
+  await page.goto(`${baseUrl}?motion=reduce`, { waitUntil: "networkidle" });
   await completeHotelRobesProgram(page);
   assert.equal(await page.locator('[data-chapter-editor="review"]').isVisible(), true);
   assert.equal(await page.locator("[data-review-selections] article").count(), 6);
@@ -83,6 +83,7 @@ const main = async () => {
   await page.locator('input[name="business"]').fill("Shelton Preview Account");
   await page.locator('input[name="email"]').fill("jordan@example.com");
   await page.locator('input[name="phone"]').fill("619-555-0100");
+  await page.locator('input[name="preferredContact"][value="email"]').check();
   await page.screenshot({ path: path.join(artifactDir, "cp5-handoff-1366x768.png") });
   await page.locator("[data-quote-form]").evaluate((form) => form.requestSubmit());
   await page.waitForTimeout(180);
