@@ -136,7 +136,7 @@ Result: no industry acronym or technical unit is required to complete the journe
 6. `2a3a116` - complete review result and quote handoff
 7. `1bf6efb` - complete responsive accessibility and performance QA
 8. `3c0d02d` - finalize adaptive journey preview
-9. Final memo-reconciliation checkpoint: recorded in `pricing-journey-progress.md` after commit.
+9. `2c70319` - finalize private atelier pricing journey
 
 ## Business-Data Blockers
 

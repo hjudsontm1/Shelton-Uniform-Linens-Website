@@ -13,7 +13,8 @@
 ## Current Phase
 
 - Phase: Checkpoint 8 - Memo Reconciliation And Final Visual Rebuild
-- Status: implementation and verification complete; ready for final checkpoint commit
+- Status: complete
+- Final implementation checkpoint: `2c70319` - `checkpoint(pricing): finalize private atelier pricing journey`
 - Preview type: static site, no build step
 - Preview command: `python3 -m http.server 8045 --bind 127.0.0.1`
 
@@ -76,7 +77,7 @@ Detailed evidence: `docs/pricing-journey-final-review.md`, `docs/pricing-journey
 6. `2a3a116` - complete review result and quote handoff
 7. `1bf6efb` - complete responsive accessibility and performance QA
 8. `3c0d02d` - finalize adaptive journey preview
-9. Final memo-reconciliation checkpoint: pending this commit
+9. `2c70319` - finalize private atelier pricing journey
 
 ## Remaining Blockers
 
