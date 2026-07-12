@@ -10,7 +10,7 @@ Private-review checkpoint complete. Scores below are based on the generated scre
 | --- | ---: | --- |
 | Page strategy | 5 | Private Pricing marketing page is separated from dedicated estimator route. |
 | Hero | 5 | Expanded hero removes the estimator-first form, explains the pricing logic deeply, and uses a custom vector program-system diagram with clear CTAs. |
-| Private-client feel | 5 | Added a private commercial review band, restrained premium shading, edge lighting, and client-advisory language before the estimator. |
+| Private-client feel | 5 | Added a fair-pricing and quality commitment band, restrained premium shading, edge lighting, and trust-building advisory language before the quote mechanics. |
 | Pricing journey | 5 | New section explains the quote-building sequence from operation fit through planning range, with a dedicated vector process diagram. |
 | How pricing works | 5 | Interactive factor field explains goods, volume, soil, finishing, sorting, and route burden without a card grid. |
 | Market position | 5 | Interactive continuum compares laundromat, wash and fold, Shelton, traditional rental, and luxury/custom programs without bargain-positioning claims. |
@@ -27,7 +27,7 @@ Private-review checkpoint complete. Scores below are based on the generated scre
 ## Verification Evidence
 
 - Syntax checks passed for `assets/js/pricing-page-preview.js`, `assets/js/pricing-flow-prototype.js`, and `tests/pricing-page-preview.e2e.cjs`.
-- Browser acceptance passed with no console errors, no page errors, no horizontal overflow, noindex confirmation, no hero estimator form, six inline vectors, private-review screenshot generation, and fresh estimator launch confirmation.
+- Browser acceptance passed with no console errors, no page errors, no horizontal overflow, noindex confirmation, no hero estimator form, six inline vectors, fair-pricing screenshot generation, and fresh estimator launch confirmation.
 - Generated artifacts live in `docs/pricing-page-rebuild-artifacts/`, including desktop/tablet/mobile screenshots and `pricing-hero-to-estimator.webm`.
 
 ## Route And SEO Plan
