@@ -83,7 +83,6 @@ const main = async () => {
   assert.equal(await page.locator("[data-hero-estimator]").count(), 0);
   assert.equal(await page.locator(".pricing-vector").count(), 6);
   await capture(page, "pricing-hero-initial-1366x768.png", ".pricing-hero");
-  await capture(page, "pricing-fair-quality-1366x768.png", ".pricing-commitment");
 
   assert.match(await page.locator("#pricing-journey-title").innerText(), /stronger quote starts/i);
   await capture(page, "pricing-journey-1366x768.png", ".pricing-journey");

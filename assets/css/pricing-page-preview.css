@@ -1290,112 +1290,6 @@ body[data-page="pricing-page-preview"] .site-nav {
     linear-gradient(180deg, rgba(3, 8, 15, 0.18), rgba(7, 19, 33, 0.34));
 }
 
-.pricing-commitment {
-  padding-block: clamp(3rem, 6vw, 5.25rem) !important;
-  background:
-    radial-gradient(circle at 22% 24%, rgba(216, 185, 120, 0.11), transparent 24rem),
-    linear-gradient(90deg, rgba(216, 185, 120, 0.07), transparent 28%, rgba(244, 237, 222, 0.035) 52%, transparent),
-    linear-gradient(180deg, rgba(3, 8, 15, 0.62), rgba(7, 19, 33, 0.26));
-  border-top: 1px solid rgba(216, 185, 120, 0.16);
-  border-bottom: 1px solid rgba(216, 185, 120, 0.12);
-}
-
-.pricing-commitment::before {
-  opacity: 0.6;
-  background:
-    radial-gradient(circle at var(--pricing-pointer-x) 50%, rgba(216, 185, 120, 0.09), transparent 26rem),
-    linear-gradient(90deg, transparent, rgba(244, 237, 222, 0.022), transparent);
-}
-
-.commitment__intro {
-  display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(18rem, 0.64fr);
-  gap: clamp(2rem, 5vw, 5rem);
-  align-items: end;
-  margin-bottom: clamp(1.5rem, 3.5vw, 2.4rem);
-}
-
-.commitment__intro h2 {
-  max-width: 48rem;
-  margin-top: 0.75rem;
-  font-size: clamp(2.45rem, 4.8vw, 4.45rem);
-  line-height: 0.94;
-}
-
-.commitment__intro p {
-  max-width: 31rem;
-  color: rgba(197, 207, 216, 0.76);
-  font-size: 0.96rem;
-  line-height: 1.72;
-}
-
-.commitment__grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1px;
-  border: 1px solid rgba(216, 185, 120, 0.22);
-  background: rgba(216, 185, 120, 0.18);
-  box-shadow: 0 2.5rem 5rem rgba(0, 0, 0, 0.22);
-}
-
-.commitment__grid article {
-  min-height: 15rem;
-  padding: clamp(1.25rem, 2.5vw, 1.9rem);
-  background:
-    linear-gradient(145deg, rgba(7, 19, 33, 0.92), rgba(3, 8, 15, 0.86)),
-    radial-gradient(circle at 80% 0, rgba(216, 185, 120, 0.1), transparent 14rem);
-  transition: background-color 220ms ease, transform 220ms ease, box-shadow 220ms ease;
-}
-
-.commitment__grid article:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 1.6rem 3rem rgba(0, 0, 0, 0.2);
-}
-
-.commitment__grid span {
-  color: rgba(216, 185, 120, 0.84);
-  font-size: 0.58rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.commitment__grid h3 {
-  margin-top: 2.2rem;
-  color: var(--pricing-cream);
-  font-size: clamp(1.7rem, 2.7vw, 2.35rem);
-  line-height: 1;
-}
-
-.commitment__grid p {
-  margin-top: 0.8rem;
-  color: rgba(197, 207, 216, 0.72);
-  font-size: 0.82rem;
-  line-height: 1.68;
-}
-
-.commitment__statement {
-  grid-column: 1 / -1;
-  min-height: 0 !important;
-  display: grid;
-  grid-template-columns: minmax(8rem, 0.24fr) minmax(0, 0.78fr) minmax(18rem, 0.64fr);
-  gap: clamp(1rem, 3vw, 2rem);
-  align-items: center;
-  background:
-    linear-gradient(90deg, rgba(216, 185, 120, 0.16), rgba(216, 185, 120, 0.045) 46%, rgba(3, 8, 15, 0.92)),
-    radial-gradient(circle at 12% 50%, rgba(244, 237, 222, 0.13), transparent 16rem) !important;
-}
-
-.commitment__statement h3 {
-  margin-top: 0;
-  font-size: clamp(1.8rem, 3vw, 2.75rem);
-}
-
-.commitment__statement p {
-  margin-top: 0;
-  color: rgba(244, 237, 222, 0.72);
-}
-
 .journey-stage {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(18rem, 0.72fr);
@@ -1630,9 +1524,6 @@ body[data-page="pricing-page-preview"] .site-nav {
     order: 2;
   }
 
-  .commitment__intro,
-  .commitment__grid,
-  .commitment__statement,
   .journey-stage {
     grid-template-columns: 1fr;
   }
