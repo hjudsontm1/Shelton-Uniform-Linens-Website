@@ -3,19 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="assets/Shelton%20Brand%20Assets/brand/shelton-favicon.svg" type="image/svg+xml" />
   <title>Laundry Process &amp; Quality | Shelton Linen &amp; Uniform Services</title>
-  <meta name="description" content="See how Shelton handles commercial pickup, sorting, cleaning, finishing, inspection, packaging, and delivery for San Diego commercial accounts." />
+  <meta name="description" content="Follow Shelton's commercial laundry route through pickup, sorting, cleaning, finishing, inspection, packaging, and ready return in San Diego." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/site.css" />
+  <link rel="stylesheet" href="assets/css/site.css?v=specialty-accounts-20260708" />
+  <link rel="stylesheet" href="assets/css/process-story.css?v=20260716o" />
+  <link rel="stylesheet" href="assets/css/header.css?v=20260718" />
 </head>
-<body class="" data-page="process">
+<body class="process-command-page" data-page="process">
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <nav class="site-nav" aria-label="Main navigation">
+
+  <nav class="site-nav process-site-nav" aria-label="Main navigation">
     <div class="nav-inner">
       <a class="nav-brand" href="index.html" aria-label="Shelton Linen and Uniform Services home">
-        <span class="brand-mark" aria-hidden="true"><img src="assets/images/shelton-s-mark-white.png" alt="" width="815" height="815" /></span>
+        <span class="brand-mark" aria-hidden="true"><img src="assets/Shelton%20Brand%20Assets/brand/shelton-mark-white.svg" alt="" /></span>
         <span class="brand-copy">
           <span class="brand-main">Shelton Linen &amp; Uniform Services</span>
           <span class="brand-sub">Commercial Laundry Services · San Diego</span>
@@ -25,145 +29,256 @@
         <span></span><span></span>
       </button>
       <ul class="nav-links" id="primary-menu">
-          <li><a class="" href="index.html">Home</a></li>
-          <li><a class="" href="services.html">Services</a></li>
-          <li><a class="" href="industries.html">Industries</a></li>
-          <li><a class="is-active" href="process.html">Process</a></li>
-          <li><a class="" href="about.html">About</a></li>
-          <li><a class="" href="pickup-delivery.html">Pickup &amp; Delivery</a></li>
-        <li><a class="nav-cta " href="quote.html">Request a Quote</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a class="is-active" href="process.html?v=20260716j">Process</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a class="nav-cta" href="quote.html">Request a Quote</a></li>
       </ul>
     </div>
   </nav>
-  <main id="main-content">
-<section class="inner-hero">
-    <div class="inner-copy">
-      <h1>The discipline behind clean, ready-to-use goods.</h1>
-      <p>The best laundry partner is not just the one that washes. It is the one that sorts, finishes, inspects, packages, communicates, and delivers the same way every time.</p>
+
+  <main id="main-content" class="route-command-layout">
+    <aside class="route-command-rail" aria-labelledby="route-guide-title">
+      <header class="route-command-rail__header">
+        <p id="route-guide-title">Your Service Journey</p>
+        <span>Pickup → Return</span>
+        <small data-customer-step>Ready to start the route</small>
+      </header>
+
+      <nav class="customer-journey" aria-label="Laundry process stages" data-customer-tracker>
+        <ol>
+          <li><a href="#pickup" aria-current="step"><span>01</span>Pickup</a></li>
+          <li><a href="#sort"><span>02</span>Sort</a></li>
+          <li><a href="#clean"><span>03</span>Clean</a></li>
+          <li><a href="#finish"><span>04</span>Finish</a></li>
+          <li><a href="#inspect"><span>05</span>Inspect</a></li>
+          <li><a href="#package"><span>06</span>Package</a></li>
+          <li><a href="#return"><span>07</span>Return</a></li>
+        </ol>
+      </nav>
+
+      <div class="route-guide-footer" aria-hidden="true">
+        <span>Route to</span>
+        <strong>San Diego</strong>
+        <i><span data-route-progress></span></i>
+      </div>
+    </aside>
+
+    <div class="route-command-content">
+      <section class="process-route-deck" data-route-deck aria-label="Laundry route journey">
+        <div class="process-route-deck__sticky">
+          <div class="process-route-viewport" data-route-viewport>
+            <div class="process-route-track" data-route-track>
+
+      <section class="process-command-hero process-route-panel is-active" data-route-panel="0" aria-labelledby="process-title">
+        <div class="process-command-hero__blank" aria-hidden="true"></div>
+
+        <div class="process-view-toggle" role="group" aria-label="Choose process viewpoint">
+          <span>View</span>
+          <button type="button" class="is-active" aria-pressed="true" data-view-mode="cab">From Cab</button>
+          <button type="button" aria-pressed="false" data-view-mode="plant">Inside Plant</button>
+        </div>
+
+        <div class="process-command-hero__copy">
+          <p class="process-route-kicker">Route to <strong>San Diego</strong><span>Pickup → Return</span></p>
+          <h1 id="process-title">Your laundry has somewhere to be.</h1>
+          <p>Two route vehicles. One account-specific path. Follow the goods from pickup through ready return.</p>
+
+          <div class="route-command-proof">
+            <span>Follow your service in Route Command</span>
+            <strong data-view-status>In service</strong>
+            <button type="button" data-route-command-open>Open portal <span aria-hidden="true">→</span></button>
+          </div>
+
+          <div class="process-command-hero__actions">
+            <a class="process-command-button" href="#pickup">Start the route</a>
+            <span>Scroll down to follow</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="process-stage process-route-panel" id="pickup" data-route-panel="1" data-route-stage="0" aria-labelledby="pickup-title">
+        <div class="process-stage__copy">
+          <p class="process-stage__eyebrow"><span>01</span>Pickup</p>
+          <h2 id="pickup-title">We arrive where the work happens.</h2>
+          <p>Scheduled commercial pickup is built around your operating hours, handoff point, storage, and weekly volume. Bags, carts, bins, or bundles move onto the route without slowing the team inside.</p>
+          <p class="process-stage__checkpoint"><span>Checkpoint: Arrived</span><time>8:00 AM</time></p>
+        </div>
+        <div class="process-stage__media" aria-hidden="true"></div>
+      </section>
+
+      <section class="process-stage process-route-panel" id="sort" data-route-panel="2" data-route-stage="1" aria-labelledby="sort-title">
+        <div class="process-stage__copy">
+          <p class="process-stage__eyebrow"><span>02</span>Sort</p>
+          <h2 id="sort-title">The right care path starts before the wash.</h2>
+          <p>Goods separate by item, fabric, color, soil, account, and finishing destination. The system protects the details that make a towel program different from event linen or chef coats.</p>
+          <p class="process-stage__checkpoint"><span>Checkpoint: Sort complete</span><time>8:45 AM</time></p>
+        </div>
+        <div class="process-stage__media" aria-hidden="true"></div>
+      </section>
+
+      <section class="process-stage process-route-panel" id="clean" data-route-panel="3" data-route-stage="2" aria-labelledby="clean-title">
+        <div class="process-stage__copy">
+          <p class="process-stage__eyebrow"><span>03</span>Clean</p>
+          <h2 id="clean-title">Cleaned for the item, not just the load.</h2>
+          <p>Commercial washing, wet cleaning, dry cleaning, and specialty care are chosen around soil, fabric, color, repeated use, and the result your team needs back.</p>
+          <p class="process-stage__checkpoint"><span>Checkpoint: Wash complete</span><time>9:35 AM</time></p>
+        </div>
+        <div class="process-stage__media" aria-hidden="true"></div>
+      </section>
+
+      <section class="process-stage process-route-panel" id="finish" data-route-panel="4" data-route-stage="3" data-finish-stage data-finish-mode="pressed" aria-labelledby="finish-title">
+        <div class="process-stage__copy">
+          <p class="process-stage__eyebrow"><span>04</span>Finish</p>
+          <h2 id="finish-title">The finish follows what happens next.</h2>
+          <p data-finish-status>Pressed for presentation-sensitive sheets, table linen, uniforms, and event goods.</p>
+          <div class="finish-options" role="group" aria-label="Explore finishing paths">
+            <button class="is-active" type="button" aria-pressed="true" data-finish-choice="pressed">Pressed</button>
+            <button type="button" aria-pressed="false" data-finish-choice="folded">Folded</button>
+            <button type="button" aria-pressed="false" data-finish-choice="hung">Hung</button>
+            <button type="button" aria-pressed="false" data-finish-choice="bundled">Bundled</button>
+          </div>
+          <p class="process-stage__checkpoint"><span data-finish-caption>Checkpoint: Finish complete</span><time>10:05 AM</time></p>
+        </div>
+        <div class="process-stage__media" aria-hidden="true"></div>
+      </section>
+
+      <section class="process-stage process-route-panel" id="inspect" data-route-panel="5" data-route-stage="4" aria-labelledby="inspect-title">
+        <div class="process-stage__copy">
+          <p class="process-stage__eyebrow"><span>05</span>Inspect</p>
+          <h2 id="inspect-title">A close look before the final handoff.</h2>
+          <p>Inspection checks the visible result and the account instructions behind it: remaining spots, finish quality, condition, sorting accuracy, and return readiness.</p>
+          <p class="process-stage__checkpoint"><span>Checkpoint: Inspection complete</span><time>10:35 AM</time></p>
+        </div>
+        <div class="process-stage__media" aria-hidden="true"></div>
+      </section>
+
+      <section class="process-stage process-route-panel" id="package" data-route-panel="6" data-route-stage="5" aria-labelledby="package-title">
+        <div class="process-stage__copy">
+          <p class="process-stage__eyebrow"><span>06</span>Package</p>
+          <h2 id="package-title">Organized for the way your team receives it.</h2>
+          <p>Finished goods separate into the return format that makes the next shift easier: linen carts, bags, bundles, labels, or protected hangers.</p>
+          <p class="process-stage__checkpoint"><span>Checkpoint: Packaged</span><time>11:20 AM</time></p>
+        </div>
+        <div class="process-stage__media" aria-hidden="true"></div>
+      </section>
+
+      <section class="process-stage process-route-panel" id="return" data-route-panel="7" data-route-stage="6" aria-labelledby="return-title">
+        <div class="process-stage__copy">
+          <p class="process-stage__eyebrow"><span>07</span>Return</p>
+          <h2 id="return-title">Back in your hands. Ready for what comes next.</h2>
+          <p>Rooms, tables, treatment spaces, kitchens, teams, and guests should not have to wait on the laundry. The route closes the loop, then starts it again.</p>
+          <p class="process-stage__checkpoint"><span>Checkpoint: Delivered</span><time>12:15 PM</time></p>
+        </div>
+        <div class="process-stage__media" aria-hidden="true"></div>
+      </section>
+
+      <section class="process-stage process-route-panel process-route-command-stage" id="route-command" data-route-panel="8" data-route-command-panel aria-labelledby="route-command-title">
+        <div class="process-stage__copy">
+          <p class="process-stage__eyebrow process-stage__eyebrow--portal">Route Command</p>
+          <h2 id="route-command-title">Your service, visible from pickup to return.</h2>
+          <p>Route Command brings pickup windows, account details, service updates, and expected return timing into one customer-facing view.</p>
+          <p class="process-stage__checkpoint"><span>Customer portal</span><time>Always in view</time></p>
+        </div>
+        <div class="process-route-command__panel">
+          <div class="process-route-command__status">
+            <p class="route-command-status"><span aria-hidden="true"></span>In service</p>
+            <strong>Your pickup is on the way.</strong>
+            <span>Today · 8:00 AM</span>
+          </div>
+
+          <dl class="process-route-command__details">
+            <div><dt>Next pickup window</dt><dd>6:00 AM – 10:00 AM</dd></div>
+            <div><dt>Account</dt><dd>Coastal Medical Center</dd></div>
+            <div><dt>Account ID</dt><dd>042</dd></div>
+            <div><dt>Expected return</dt><dd>Tomorrow · 8:00 AM – 12:00 PM</dd></div>
+          </dl>
+
+          <div class="route-command-update" aria-live="polite">
+            <span>Latest route update</span>
+            <strong data-next-stage>Complete</strong>
+            <p data-next-update>Your route is complete and ready to begin again.</p>
+            <small>Customer-facing service status</small>
+          </div>
+
+          <div class="process-route-command__actions">
+            <button class="route-command-open" type="button" data-route-command-open>Open Route Command</button>
+            <a class="route-command-change" href="quote.html?request=service-change">Request a service change <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </section>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="process-command-cta" aria-labelledby="process-cta-title">
+        <div>
+          <p>Ready to put the Shelton route to work?</p>
+          <h2 id="process-cta-title">Keeps your operation moving. Keeps your standards high.</h2>
+        </div>
+        <a class="process-command-button" href="quote.html">Request a quote</a>
+        <a href="estimate.html">Build a planning estimate <span aria-hidden="true">→</span></a>
+      </section>
     </div>
-    <figure class="inner-media" style="--photo: url('../images/process-washers.jpg')">
-      <figcaption>Professional processing and account control</figcaption>
-    </figure>
-  </section>
-  <section class="timeline-section">
-    <div class="section-head">
-      <h2>A clear process from pickup to delivery.</h2>
-    </div>
-    <div class="timeline">
-      <article class="timeline-item reveal">
-        <span>01</span>
-        <h3>Account Intake</h3>
-        <p>We learn what you need cleaned, weekly volume, storage constraints, pickup windows, and presentation standards.</p>
-      </article>
-<article class="timeline-item reveal">
-        <span>02</span>
-        <h3>Route Collection</h3>
-        <p>Your goods are collected on the agreed schedule with a clear handoff process for bags, bins, carts, or bundles.</p>
-      </article>
-<article class="timeline-item reveal">
-        <span>03</span>
-        <h3>Sorting &amp; Care Plan</h3>
-        <p>Goods are sorted by item type, soil level, account requirements, and finishing path.</p>
-      </article>
-<article class="timeline-item reveal">
-        <span>04</span>
-        <h3>Professional Cleaning</h3>
-        <p>Commercial washing, wet cleaning, dry cleaning, or specialty care is selected based on the goods and the goal.</p>
-      </article>
-<article class="timeline-item reveal">
-        <span>05</span>
-        <h3>Finishing &amp; Folding</h3>
-        <p>Flatwork, towels, uniforms, and garments move through the finishing standard each item requires.</p>
-      </article>
-<article class="timeline-item reveal">
-        <span>06</span>
-        <h3>Inspection</h3>
-        <p>Items are reviewed for stains, finishing quality, damage notes, and account-specific details before packing.</p>
-      </article>
-<article class="timeline-item reveal">
-        <span>07</span>
-        <h3>Pack &amp; Stage</h3>
-        <p>Orders are bundled, organized, and staged so they are easy for your team to put away and use.</p>
-      </article>
-<article class="timeline-item reveal">
-        <span>08</span>
-        <h3>Delivery</h3>
-        <p>Clean goods return on route, ready for rooms, tables, treatment rooms, teams, or guests.</p>
-      </article>
-    </div>
-  </section>
-  <section class="equipment-process reveal" aria-labelledby="equipment-process-title">
-    <div class="equipment-process__copy">
-      <h2 id="equipment-process-title">Better equipment supports a better process.</h2>
-      <p>Commercial laundry is not only about capacity. The right equipment, sorting, chemistry, finishing, and handling process help goods come back cleaner, more consistent, and ready for use. Shelton&#39;s equipment supports the standards commercial accounts depend on, from sheets and towels to chef coats, uniforms, event linens, and specialty items.</p>
-    </div>
-    <ul class="equipment-process__points" aria-label="How equipment supports Shelton&#39;s process">
-      <li>Consistent washing and drying conditions</li>
-      <li>Finishing equipment for sharper presentation</li>
-      <li>Account-specific handling and packaging</li>
-      <li>Better care for customer-owned goods</li>
-      <li>Support for longer linen and uniform life</li>
-    </ul>
-  </section>
-  <section class="quality-grid reveal">
-    <div>
-      <h2>Where dry-cleaning detail meets commercial laundry volume.</h2>
-      <p>Shelton Cleaners built its reputation on careful cleaning, in-house accountability, and detailed finishing. Shelton Linen &amp; Uniform Services translates those habits into repeatable commercial laundry programs.</p>
-    </div>
-    <div class="quality-list">
-      <article><h3>Inspection Mindset</h3><p>We look for stains, finishing issues, damage notes, and anything that will matter when the goods reach your guest or team.</p></article>
-      <article><h3>Finishing Standards</h3><p>Pressed sheets, clean towel folds, organized uniforms, and account-specific packaging are treated as part of the service, not a bonus.</p></article>
-      <article><h3>Account Preferences</h3><p>Fold style, bundle size, route timing, inventory categories, and special handling notes can be built into the plan.</p></article>
-    </div>
-  </section>
-  <section class="gallery-row">
-    <div class="gallery-photo reveal" style="--photo: url('../images/process-washers.jpg')"></div>
-    <div class="gallery-photo reveal" style="--photo: url('../images/process-ironer.jpg')"></div>
-    <div class="gallery-photo reveal" style="--photo: url('../images/plant-tour.jpg')"></div>
-  </section>
-  <section class="cta-band reveal">
-    <div>
-      <h2>Want to see the operation?</h2>
-      <p>Prospective commercial accounts can request a walkthrough and see how goods are processed, finished, and staged.</p>
-    </div>
-    <a class="btn-primary" href="quote.html?request=plant-tour">Schedule a Plant Tour</a>
-  </section>
   </main>
-  <footer class="site-footer">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand">Shelton Linen &amp; Uniform Services</div>
-        <p class="footer-text">Commercial-only laundry, linen, towel, uniform, event linen, and wholesale finishing support for San Diego businesses.</p>
-        <p class="footer-note">Dedicated laundry phone and email coming soon.</p>
+
+  <footer class="site-footer process-command-footer">
+    <div class="site-footer__inner">
+      <div class="footer-directory">
+        <div class="footer-brand-panel">
+          <a class="footer-logo" href="index.html" aria-label="Shelton Linen and Uniform Services home">
+            <span class="footer-brand-mark" aria-hidden="true"><img src="assets/Shelton%20Brand%20Assets/brand/shelton-mark-white.svg" alt="" /></span>
+            <span>
+              <span class="footer-brand">Shelton Linen &amp; Uniform Services</span>
+              <span class="footer-descriptor">Commercial Laundry Services · San Diego</span>
+            </span>
+          </a>
+        </div>
+        <nav class="footer-links" aria-label="Footer pages">
+          <h2>Pages</h2>
+          <a href="services.html">Services</a>
+          <a href="process.html?v=20260716j">Process</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="about.html">About</a>
+        </nav>
+        <nav class="footer-links" aria-label="Commercial services">
+          <h2>Commercial Services</h2>
+          <a href="services.html#linens-bedding">Commercial linen</a>
+          <a href="services.html#towels-wellness">Towel service</a>
+          <a href="services.html#uniforms-chef-coats">Uniform cleaning</a>
+          <a href="services.html#event-linens">Event linen</a>
+          <a href="services.html#wholesale-support">Wholesale support</a>
+        </nav>
+        <nav class="footer-links" aria-label="Get started">
+          <h2>Get Started</h2>
+          <a href="quote.html">Request a quote</a>
+          <a href="quote.html?request=plant-tour">Schedule a plant tour</a>
+          <button type="button" data-route-command-open>Route Command</button>
+        </nav>
       </div>
-      <div>
-        <h2>Pages</h2>
-        <a href="services.html">Services</a>
-        <a href="industries.html">Industries</a>
-        <a href="process.html">Process</a>
-        <a href="about.html">About</a>
-        <a href="pickup-delivery.html">Pickup &amp; Delivery</a>
+      <div class="footer-bottom">
+        <p>2026 Shelton Linen &amp; Uniform Services. All rights reserved.</p>
+        <p>Sister company to Shelton Cleaners San Diego.</p>
       </div>
-      <div>
-        <h2>Commercial Services</h2>
-        <a href="services.html#linen">Commercial linen</a>
-        <a href="services.html#towels">Towel service</a>
-        <a href="services.html#uniforms">Uniform cleaning</a>
-        <a href="services.html#event">Event linen</a>
-        <a href="services.html#wholesale">Wholesale support</a>
-      </div>
-      <div>
-        <h2>Get Started</h2>
-        <a href="quote.html">Request a quote</a>
-        <a href="quote.html?request=plant-tour">Schedule a plant tour</a>
-        <a href="https://www.sheltoncleanerssd.com/" target="_blank" rel="noopener">Shelton Cleaners</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>2026 Shelton Linen &amp; Uniform Services. All rights reserved.</p>
-      <p>Sister company to Shelton Cleaners San Diego.</p>
     </div>
   </footer>
-  <script src="assets/js/site.js"></script>
+
+  <dialog class="route-command-dialog" data-route-command-dialog aria-labelledby="route-command-dialog-title">
+    <div>
+      <p>Route Command</p>
+      <h2 id="route-command-dialog-title">Customer portal connection</h2>
+      <p>The customer-facing portal experience is ready for the production Route Command account URL. Authentication and live service data are not connected in this static preview.</p>
+      <div class="route-command-dialog__actions">
+        <a href="quote.html?request=route-command">Request account access</a>
+        <button type="button" data-route-command-close>Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="assets/js/site.js?v=specialty-accounts-20260708"></script>
+  <script src="assets/js/process-story.js?v=20260716p"></script>
 </body>
 </html>

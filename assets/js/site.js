@@ -62,33 +62,307 @@
     insightPanels.forEach((panel) => panel.removeAttribute("open"));
   });
 
-  const ownershipCards = document.querySelectorAll("[data-ownership-card]");
-  const setOwnershipCard = (card, isFlipped) => {
-    card.classList.toggle("is-flipped", isFlipped);
-    const faces = card.querySelectorAll(".ownership-card__face");
-    faces.forEach((face) => {
-      const isBack = face.classList.contains("ownership-card__face--back");
-      face.setAttribute("aria-hidden", String(isBack !== isFlipped));
-    });
-    card.querySelectorAll("[data-ownership-toggle]").forEach((button) => {
-      button.setAttribute("aria-expanded", String(isFlipped));
-    });
-  };
-  ownershipCards.forEach((card) => {
-    card.querySelectorAll("[data-ownership-toggle]").forEach((button) => {
+  const pricingShell = document.querySelector("[data-pricing-shell]");
+  if (pricingShell) {
+    const pricingButtons = Array.from(pricingShell.querySelectorAll("[data-pricing-option]"));
+    const pricingSummary = pricingShell.querySelector("[data-pricing-summary]");
+    const renderPricingSummary = () => {
+      if (!pricingSummary) return;
+      const selections = pricingButtons
+        .filter((button) => button.getAttribute("aria-pressed") === "true")
+        .map((button) => button.textContent.trim());
+      if (!selections.length) {
+        const placeholder = document.createElement("span");
+        placeholder.textContent = "Selections will appear as you choose options.";
+        pricingSummary.replaceChildren(placeholder);
+        return;
+      }
+      const nodes = selections.map((selection) => {
+        const node = document.createElement("span");
+        node.className = "is-selection";
+        node.textContent = selection;
+        return node;
+      });
+      pricingSummary.replaceChildren(...nodes);
+    };
+
+    pricingButtons.forEach((button) => {
+      button.setAttribute("aria-pressed", "false");
       button.addEventListener("click", () => {
-        const shouldFlip = !card.classList.contains("is-flipped");
-        ownershipCards.forEach((otherCard) => {
-          if (otherCard !== card) setOwnershipCard(otherCard, false);
-        });
-        setOwnershipCard(card, shouldFlip);
+        const step = button.closest("[data-pricing-step]");
+        const isMultiple = step?.dataset.pricingMode === "multiple";
+        const isActive = button.getAttribute("aria-pressed") === "true";
+        if (!isMultiple && step) {
+          step.querySelectorAll("[data-pricing-option]").forEach((otherButton) => {
+            otherButton.setAttribute("aria-pressed", "false");
+          });
+        }
+        button.setAttribute("aria-pressed", String(!isActive));
+        renderPricingSummary();
       });
     });
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape") return;
-    ownershipCards.forEach((card) => setOwnershipCard(card, false));
-  });
+    renderPricingSummary();
+  }
+
+  const aboutMontage = document.querySelector("[data-about-montage]");
+  if (aboutMontage) {
+    const aboutTiles = Array.from(aboutMontage.querySelectorAll("[data-about-tile]"));
+    const aboutTv = aboutMontage.querySelector("[data-about-tv]");
+    const tvScreen = aboutTv?.querySelector("[data-about-tv-screen]");
+    const tvPhoto = aboutTv?.querySelector("[data-about-tv-photo]");
+    const tvPhotoCanvas = aboutTv?.querySelector("[data-about-tv-photo-canvas]");
+    const nextButton = aboutTv?.querySelector("[data-about-tv-next]");
+    const tvInstruction = {
+      era: "Shelton family archive",
+      title: "Click a photo to tune into the story.",
+      story: "Turn the dial or choose a square from the wall to read a short family laundry story."
+    };
+    let activeAboutTile = null;
+    let aboutTuneId = 0;
+    let aboutAutoplayTimeout = null;
+    let aboutTuneRenderTimeout = null;
+    let aboutTuneClearTimeout = null;
+    let aboutWarmupTimeout = null;
+    let aboutMontageInView = true;
+    let aboutMontageWasObserved = false;
+    const aboutInitialAutoplayDelay = 10000;
+    const aboutManualAutoplayDelay = 15000;
+    const aboutStoryAutoplayInterval = 14500;
+    const aboutTuneRenderDelay = 24;
+    const aboutTuneSettleDelay = 170;
+    const aboutWarmupDuration = 180;
+
+    const visibleAboutTiles = () => aboutTiles.filter((tile) => window.getComputedStyle(tile).display !== "none");
+    const featuredAboutTiles = () => {
+      const realTiles = visibleAboutTiles().filter((tile) => tile.dataset.placeholder !== "true");
+      return realTiles.length ? realTiles : visibleAboutTiles();
+    };
+    const aboutTileData = (tile) => {
+      const tileImage = tile?.querySelector("img");
+      return {
+        title: tile?.dataset.title || "Shelton story",
+        era: tile?.dataset.era || "Shelton history",
+        story: tile?.dataset.story || "A future archive note can live here when this photo is added.",
+        photoSrc: tileImage?.currentSrc || tileImage?.getAttribute("src") || ""
+      };
+    };
+    const drawAboutTvPhoto = (tile) => {
+      if (!(tvPhotoCanvas instanceof HTMLCanvasElement) || !tvPhoto) return;
+      const source = tile?.querySelector("img");
+      const context = tvPhotoCanvas.getContext("2d", { alpha: false });
+      if (!context) return;
+      if (!source || !source.complete || !source.naturalWidth || !source.naturalHeight) {
+        context.clearRect(0, 0, tvPhotoCanvas.width, tvPhotoCanvas.height);
+        if (source) {
+          source.addEventListener("load", () => {
+            if (activeAboutTile === tile) drawAboutTvPhoto(tile);
+          }, { once: true });
+        }
+        return;
+      }
+
+      const targetWidth = Math.max(1, Math.min(900, Math.round(tvPhoto.clientWidth || 720)));
+      const targetHeight = Math.max(1, Math.min(720, Math.round(tvPhoto.clientHeight || 560)));
+      if (tvPhotoCanvas.width !== targetWidth) tvPhotoCanvas.width = targetWidth;
+      if (tvPhotoCanvas.height !== targetHeight) tvPhotoCanvas.height = targetHeight;
+
+      const scale = Math.max(targetWidth / source.naturalWidth, targetHeight / source.naturalHeight);
+      const sourceWidth = targetWidth / scale;
+      const sourceHeight = targetHeight / scale;
+      const sourceX = (source.naturalWidth - sourceWidth) / 2;
+      const sourceY = (source.naturalHeight - sourceHeight) / 2;
+
+      context.filter = "none";
+      context.drawImage(source, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, targetWidth, targetHeight);
+
+      // Safari does not reliably apply CanvasRenderingContext2D.filter. Grade the
+      // drawn pixels once per channel change so every browser gets the same image.
+      const imageData = context.getImageData(0, 0, targetWidth, targetHeight);
+      const pixels = imageData.data;
+      for (let index = 0; index < pixels.length; index += 4) {
+        const luminance = (pixels[index] * 0.299) + (pixels[index + 1] * 0.587) + (pixels[index + 2] * 0.114);
+        const softened = ((luminance - 128) * 0.78) + 128;
+        const darkened = Math.max(0, Math.min(255, softened * 0.72));
+        pixels[index] = Math.min(255, darkened * 1.1);
+        pixels[index + 1] = Math.min(255, darkened * 1.02);
+        pixels[index + 2] = Math.min(255, darkened * 0.86);
+      }
+      context.putImageData(imageData, 0, 0);
+    };
+    const renderAboutTv = (data, tile = null) => {
+      if (!aboutTv) return;
+      aboutTv.classList.toggle("is-instruction", !tile);
+      tvScreen?.classList.toggle("has-photo", Boolean(tile && data.photoSrc));
+      drawAboutTvPhoto(tile);
+      setText(aboutTv, "[data-about-tv-era]", data.era);
+      setText(aboutTv, "[data-about-tv-title]", data.title);
+      setText(aboutTv, "[data-about-tv-story]", data.story);
+    };
+    const setActiveAboutTile = (tile) => {
+      if (activeAboutTile && activeAboutTile !== tile) {
+        activeAboutTile.classList.remove("is-tuned");
+        activeAboutTile.setAttribute("aria-pressed", "false");
+      }
+      activeAboutTile = tile;
+      if (!tile) return;
+      tile.classList.add("is-tuned");
+      tile.setAttribute("aria-pressed", "true");
+    };
+    const clearAboutTune = () => {
+      window.clearTimeout(aboutTuneRenderTimeout);
+      window.clearTimeout(aboutTuneClearTimeout);
+      window.clearTimeout(aboutWarmupTimeout);
+      tvScreen?.classList.remove("is-tuning", "is-warming-up");
+    };
+    const tuneAboutTv = (tile, { flicker = true } = {}) => {
+      const data = tile ? aboutTileData(tile) : tvInstruction;
+      const tuneId = ++aboutTuneId;
+      setActiveAboutTile(tile);
+      clearAboutTune();
+      if (!prefersReducedMotion && flicker && tvScreen) {
+        tvScreen.classList.add("is-tuning");
+        aboutTuneRenderTimeout = window.setTimeout(() => {
+          if (tuneId === aboutTuneId) renderAboutTv(data, tile);
+        }, aboutTuneRenderDelay);
+        aboutTuneClearTimeout = window.setTimeout(() => {
+          if (tuneId === aboutTuneId) tvScreen.classList.remove("is-tuning");
+        }, aboutTuneSettleDelay);
+      } else {
+        renderAboutTv(data, tile);
+      }
+    };
+    const clearAboutAutoplay = () => {
+      window.clearTimeout(aboutAutoplayTimeout);
+      aboutAutoplayTimeout = null;
+    };
+    const nextAboutStory = ({ useFeatured = false } = {}) => {
+      const pool = useFeatured ? featuredAboutTiles() : visibleAboutTiles();
+      if (!pool.length) return;
+      const currentIndex = Math.max(0, pool.indexOf(activeAboutTile));
+      const nextIndex = activeAboutTile && pool.includes(activeAboutTile) ? (currentIndex + 1) % pool.length : 0;
+      tuneAboutTv(pool[nextIndex]);
+    };
+    const scheduleAboutAutoplay = (delay = aboutInitialAutoplayDelay) => {
+      clearAboutAutoplay();
+      if (prefersReducedMotion || !aboutMontageInView) return;
+      aboutAutoplayTimeout = window.setTimeout(() => {
+        nextAboutStory({ useFeatured: true });
+        scheduleAboutAutoplay(aboutStoryAutoplayInterval);
+      }, delay);
+    };
+
+    aboutTiles.forEach((tile) => {
+      const data = aboutTileData(tile);
+      tile.setAttribute("aria-label", `Tune story: ${data.title}`);
+      tile.setAttribute("aria-pressed", "false");
+      tile.addEventListener("click", () => {
+        tuneAboutTv(tile);
+        scheduleAboutAutoplay(aboutManualAutoplayDelay);
+      });
+    });
+
+    nextButton?.addEventListener("click", () => {
+      nextButton.classList.add("is-dialing");
+      window.setTimeout(() => nextButton.classList.remove("is-dialing"), 340);
+      nextAboutStory();
+      scheduleAboutAutoplay(aboutManualAutoplayDelay);
+    });
+
+    if (aboutTv && tvScreen) {
+      renderAboutTv(tvInstruction, null);
+      if (!prefersReducedMotion) {
+        tvScreen.classList.add("is-warming-up");
+        aboutWarmupTimeout = window.setTimeout(() => tvScreen.classList.remove("is-warming-up"), aboutWarmupDuration);
+      }
+      scheduleAboutAutoplay(aboutInitialAutoplayDelay);
+      if ("IntersectionObserver" in window) {
+        const aboutMontageObserver = new IntersectionObserver(([entry]) => {
+          const wasInView = aboutMontageInView;
+          aboutMontageInView = entry.isIntersecting && entry.intersectionRatio > 0.05;
+          if (aboutMontageWasObserved && aboutMontageInView && !wasInView) {
+            scheduleAboutAutoplay(aboutManualAutoplayDelay);
+          } else if (!aboutMontageInView) {
+            clearAboutAutoplay();
+            clearAboutTune();
+          }
+          aboutMontageWasObserved = true;
+        }, { threshold: [0, 0.05] });
+        aboutMontageObserver.observe(aboutMontage);
+      }
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          clearAboutAutoplay();
+          clearAboutTune();
+          return;
+        }
+        scheduleAboutAutoplay(aboutManualAutoplayDelay);
+      });
+    }
+  }
+
+  const aboutLinenTimeline = document.querySelector("[data-about-linen-timeline]");
+  if (aboutLinenTimeline) {
+    const linenFolds = Array.from(aboutLinenTimeline.querySelectorAll("[data-about-linen-fold]"));
+    const linenSummaries = linenFolds.map((fold) => fold.querySelector("[data-about-linen-summary]"));
+
+    const syncLinenStack = (activeFold, { animate = true } = {}) => {
+      const activeIndex = Math.max(0, linenFolds.indexOf(activeFold));
+      linenFolds.forEach((fold, index) => {
+        fold.classList.toggle("is-before-active", index < activeIndex);
+        fold.classList.toggle("is-after-active", index > activeIndex);
+        fold.classList.toggle("is-next-after-active", index === activeIndex + 1);
+        if (fold !== activeFold) fold.classList.remove("is-unfolded");
+      });
+
+      if (!activeFold) return;
+      if (prefersReducedMotion || !animate) {
+        activeFold.classList.add("is-unfolded");
+        return;
+      }
+
+      activeFold.classList.remove("is-unfolded");
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => activeFold.classList.add("is-unfolded"));
+      });
+    };
+
+    linenFolds.forEach((fold, index) => {
+      const summary = linenSummaries[index];
+      summary?.addEventListener("click", (event) => {
+        if (fold.open) event.preventDefault();
+      });
+      summary?.addEventListener("keydown", (event) => {
+        if (["Enter", " ", "Spacebar"].includes(event.key)) {
+          event.preventDefault();
+          if (!fold.open) fold.open = true;
+          return;
+        }
+        if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        const nextIndex = event.key === "Home"
+          ? 0
+          : event.key === "End"
+            ? linenSummaries.length - 1
+            : event.key === "ArrowDown"
+              ? (index + 1) % linenSummaries.length
+              : (index - 1 + linenSummaries.length) % linenSummaries.length;
+        linenSummaries[nextIndex]?.focus();
+      });
+      fold.addEventListener("toggle", () => {
+        if (!fold.open) return;
+        linenFolds.forEach((otherFold) => {
+          if (otherFold !== fold && otherFold.open) otherFold.open = false;
+        });
+        syncLinenStack(fold);
+      });
+    });
+
+    const initialFold = linenFolds.find((fold) => fold.open) || linenFolds[0];
+    if (initialFold) {
+      initialFold.open = true;
+      syncLinenStack(initialFold, { animate: false });
+    }
+  }
 
   const storyCarousel = document.querySelector("[data-story-carousel]");
   if (storyCarousel) {
@@ -185,204 +459,178 @@
     renderStorySlide(activeStoryIndex);
   }
 
-  const qualityFeature = document.querySelector("[data-quality-feature]");
-  if (qualityFeature) {
-    const qualityProfiles = {
-      chef: {
-        count: "01 / 05",
-        title: "Chef coats that keep looking sharp.",
-        copy: "Heavy-use chef coats can still leave our facility looking clean, white, and professional after hundreds of laundering cycles when processed properly."
+  const qualityCinema = document.querySelector("[data-quality-cinema]");
+  if (qualityCinema) {
+    const qualityStages = [
+      {
+        count: "01 / 04",
+        title: "They come in tired.",
+        copy: "Chef coats, linens, and towels arrive with different soil, wear, and return needs."
       },
-      sheets: {
-        count: "02 / 05",
-        title: "Linens that hold their feel.",
-        copy: "Sheets and linens should stay consistent in feel, presentation, and usable life with proper cleaning and finishing."
+      {
+        count: "02 / 04",
+        title: "Cleaned for the item, not just the load.",
+        copy: "Soil, stains, chemistry, cycle choice, and handling all affect what your team receives back."
       },
-      towels: {
-        count: "03 / 05",
-        title: "Towels that come back soft, clean, and ready.",
-        copy: "Better wash chemistry and handling help towels stay presentable for spas, gyms, hospitality, and wellness accounts."
+      {
+        count: "03 / 04",
+        title: "Finished for how your team uses it.",
+        copy: "Coats, linens, and towels are finished according to how they need to return."
       },
-      events: {
-        count: "04 / 05",
-        title: "Event goods that are presentation-ready.",
-        copy: "Tablecloths, napkins, runners, and specialty event goods need cleaning that handles stains, storage issues, and deadline pressure."
-      },
-      mold: {
-        count: "05 / 05",
-        title: "Specialty mold removal.",
-        copy: "Shelton can remove mold from items many laundries cannot handle, including colored event goods and specialty pieces."
+      {
+        count: "04 / 04",
+        title: "Clean goods. Longer life. Fewer headaches.",
+        copy: "Chef coats return hung in poly, linens return stacked in a linen cart, and towels return packed in a bag."
       }
+    ];
+    const countNode = qualityCinema.querySelector("[data-quality-cinema-count]");
+    const titleNode = qualityCinema.querySelector("[data-quality-cinema-title]");
+    const copyNode = qualityCinema.querySelector("[data-quality-cinema-copy]");
+    const stepNodes = Array.from(qualityCinema.querySelectorAll("[data-quality-cinema-step]"));
+    let activeQualityStage = -1;
+    let qualityFrame = null;
+
+    const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
+    const renderQualityCinema = (progress) => {
+      const cleanProgress = clamp((progress - 0.18) / 0.34);
+      const finishProgress = clamp((progress - 0.48) / 0.34);
+      const stageIndex = Math.min(qualityStages.length - 1, Math.floor(clamp(progress) * qualityStages.length));
+      qualityCinema.style.setProperty("--quality-progress", progress.toFixed(3));
+      qualityCinema.style.setProperty("--quality-clean-progress", cleanProgress.toFixed(3));
+      qualityCinema.style.setProperty("--quality-finish-progress", finishProgress.toFixed(3));
+      qualityCinema.dataset.qualityStage = String(stageIndex + 1);
+      if (stageIndex === activeQualityStage) return;
+      activeQualityStage = stageIndex;
+      const stage = qualityStages[stageIndex];
+      if (countNode) countNode.textContent = stage.count;
+      if (titleNode) titleNode.textContent = stage.title;
+      if (copyNode) copyNode.textContent = stage.copy;
+      stepNodes.forEach((node, index) => node.classList.toggle("is-active", index === stageIndex));
     };
-    const qualityProofs = {
-      soil: {
-        label: "Heavy Soil",
-        copy: "Removes deep soil better so goods come back truly clean, not just processed."
-      },
-      wear: {
-        label: "Long-Term Wear",
-        copy: "Better cleaning and handling can help protect fibers, feel, and presentation over time."
-      },
-      mold: {
-        label: "Mold & Mildew",
-        copy: "Specialty removal for mold issues, including colored event goods and specialty pieces many laundries cannot safely handle."
-      },
-      presentation: {
-        label: "Presentation",
-        copy: "Clean, finished goods look better for guests, staff, and event setups."
-      },
-      cost: {
-        label: "Replacement Cost",
-        copy: "Better cleaning can reduce premature replacement, rejected items, and staff headaches."
+    const updateQualityCinema = () => {
+      qualityFrame = null;
+      if (prefersReducedMotion) {
+        renderQualityCinema(1);
+        return;
       }
+      const rect = qualityCinema.getBoundingClientRect();
+      const scrollDistance = Math.max(1, rect.height - window.innerHeight);
+      const progress = clamp(-rect.top / scrollDistance);
+      renderQualityCinema(progress);
     };
-    const qualityTiles = Array.from(qualityFeature.querySelectorAll("[data-quality-key]"));
-    const proofButtons = Array.from(qualityFeature.querySelectorAll("[data-quality-proof]"));
-    const qualityDetail = qualityFeature.querySelector("[data-quality-detail]");
-    const proofPanel = qualityFeature.querySelector("[data-quality-proof-panel]");
-    const renderQuality = (key) => {
-      const profile = qualityProfiles[key] || qualityProfiles.chef;
-      qualityFeature.dataset.qualityActive = key;
-      qualityTiles.forEach((button) => {
-        const isActive = button.dataset.qualityKey === key;
-        button.classList.toggle("is-active", isActive);
-        button.setAttribute("aria-selected", String(isActive));
-        button.tabIndex = isActive ? 0 : -1;
-      });
-      if (!qualityDetail) return;
-      setText(qualityDetail, "[data-quality-count]", profile.count);
-      setText(qualityDetail, "[data-quality-title]", profile.title);
-      setText(qualityDetail, "[data-quality-copy]", profile.copy);
+    const requestQualityUpdate = () => {
+      if (qualityFrame) return;
+      qualityFrame = window.requestAnimationFrame(updateQualityCinema);
     };
-    const renderQualityProof = (key) => {
-      const proof = qualityProofs[key] || qualityProofs.soil;
-      proofButtons.forEach((button) => {
-        const isActive = button.dataset.qualityProof === key;
-        button.classList.toggle("is-active", isActive);
-        button.setAttribute("aria-pressed", String(isActive));
-      });
-      if (!proofPanel) return;
-      setText(proofPanel, "[data-quality-proof-label]", proof.label);
-      setText(proofPanel, "[data-quality-proof-copy]", proof.copy);
-    };
-    qualityTiles.forEach((button, index) => {
-      button.addEventListener("click", () => renderQuality(button.dataset.qualityKey));
-      button.addEventListener("keydown", (event) => {
-        const keyMap = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
-        if (event.key === "Home") {
-          event.preventDefault();
-          qualityTiles[0].focus();
-          renderQuality(qualityTiles[0].dataset.qualityKey);
-          return;
-        }
-        if (event.key === "End") {
-          event.preventDefault();
-          qualityTiles[qualityTiles.length - 1].focus();
-          renderQuality(qualityTiles[qualityTiles.length - 1].dataset.qualityKey);
-          return;
-        }
-        if (!keyMap[event.key]) return;
-        event.preventDefault();
-        const nextIndex = (index + keyMap[event.key] + qualityTiles.length) % qualityTiles.length;
-        qualityTiles[nextIndex].focus();
-        renderQuality(qualityTiles[nextIndex].dataset.qualityKey);
-      });
-    });
-    proofButtons.forEach((button) => {
-      button.addEventListener("click", () => renderQualityProof(button.dataset.qualityProof));
-    });
-    renderQuality(qualityTiles.find((button) => button.classList.contains("is-active"))?.dataset.qualityKey || "chef");
-    renderQualityProof(proofButtons.find((button) => button.classList.contains("is-active"))?.dataset.qualityProof || "soil");
+    window.addEventListener("scroll", requestQualityUpdate, { passive: true });
+    window.addEventListener("resize", requestQualityUpdate);
+    updateQualityCinema();
   }
 
   const programProfiles = {
     hotels: {
       label: "Hotels & Boutique Stays",
-      summary: "A reliable linen flow for guest-facing rooms, housekeeping storage, occupancy swings, and the details that shape the stay.",
-      items: ["Sheets", "Pillowcases", "Towels", "Bath mats", "Robes", "Guest-facing linens"],
-      rhythm: "Recurring pickup and delivery based on occupancy, turn schedules, and storage space.",
-      helps: "We help create a reliable linen flow so housekeeping is not stuck chasing towels, sorting bags, or guessing what is coming back.",
-      finishing: "Folded, bundled, labeled, staged by property, or packed by item type.",
+      summary: "A reliable linen program for hospitality accounts of every size, from boutique stays to larger properties.",
+      items: ["Linens", "Towels", "Bath mats", "Robes", "Blankets"],
+      rhythm: "Pickup and delivery built around your schedule, from once weekly to daily service.",
+      helps: "We help hospitality teams keep linens cleaner, brighter, and more consistent over time, reducing replacement headaches and keeping goods ready for the next stay.",
+      finishing: "Folded, bundled, and delivered back in linen carts.",
       flow: ["Pickup cadence", "Account sorting", "Finishing standards", "Route-ready return"],
       cta: "Build a hotel program",
-      href: "quote.html?program=hotels"
+      href: "quote.html?program=hotels",
+      secondaryCta: "Learn more about hospitality laundry →",
+      secondaryHref: "services.html"
     },
     str: {
       label: "Short-Term Rentals / Property Managers",
-      summary: "A turnover-aware laundry program for property clusters, cleaning teams, guest-ready presentation, and separated owner goods.",
-      items: ["Sheets", "Towels", "Bath mats", "Kitchen towels", "Robes", "Blankets", "Comforters", "Pool towels"],
-      rhythm: "Route-based pickup tied to turns, checkouts, cleaning teams, and property clusters.",
-      helps: "We help reduce laundry friction between cleaners, property managers, and guests with predictable packaging and account-specific handling.",
-      finishing: "Property-labeled bundles, guest-ready folds, and owner goods separated by account or property.",
+      summary: "A bulk laundry program for STR operators and property managers who need clean guest linens moving between turns without tying up staff time.",
+      items: ["Sheets", "Towels", "Bath mats", "Duvet covers", "Blankets"],
+      rhythm: "Bulk pickup and delivery to a central location, built around turnover volume, property schedules, and seasonal demand.",
+      helps: "We take laundry off the turnover checklist, helping your team avoid on-site washing, laundromat runs, and last-minute linen shortages between guests.",
+      finishing: "Folded, pressed, bundled, labeled, and returned by property, item type, or account preference.",
       flow: ["Checkout pickup", "Property labeling", "Guest-ready folds", "Cleaner-friendly return"],
       cta: "Build an STR program",
-      href: "quote.html?program=str"
+      href: "quote.html?program=str",
+      secondaryCta: "Learn more about STR laundry programs →",
+      secondaryHref: "services.html"
     },
     spa: {
       label: "Spas, Massage & Wellness",
-      summary: "Soft, consistent treatment-room linens with handling that supports the calm, polished client experience.",
-      items: ["Massage sheets", "Face cradle covers", "Towels", "Robes", "Blankets", "Wraps", "Wellness linens"],
-      rhythm: "High-frequency pickup for towel and sheet-heavy accounts with consistent finishing and return packaging.",
-      helps: "We help keep treatment rooms stocked with soft, clean, properly folded linens that feel aligned with the client experience.",
-      finishing: "Stacked by room or use, towel bundles, sheet bundles, robe handling, and customer-owned or rental possibilities.",
+      summary: "A soft-goods laundry program for spas, massage studios, wellness clinics, and treatment-based businesses.",
+      items: ["Towels", "Sheets", "Robes", "Blankets", "Face cradle covers"],
+      rhythm: "Recurring pickup and delivery built around appointment volume, room turnover, and storage needs.",
+      helps: "We help keep your team stocked with clean, spotless, consistent goods — including pressed sheets — so staff is not spending time washing towels, folding sheets, or managing laundry between appointments.",
+      finishing: "Folded, pressed, bundled, sorted by item type, and returned ready to use.",
       flow: ["Treatment-room volume", "Softness standards", "Use-based bundles", "Stocked return"],
       cta: "Build a spa program",
-      href: "quote.html?program=spa"
+      href: "quote.html?program=spa",
+      secondaryCta: "Learn more about spa & wellness laundry →",
+      secondaryHref: "services.html"
     },
     fitness: {
       label: "Gyms, Yoga & Fitness Studios",
-      summary: "A towel-forward route program built around class volume, locker-room pressure, and limited studio storage.",
-      items: ["Workout towels", "Shower towels", "Hand towels", "Microfiber", "Specialty studio items"],
-      rhythm: "Frequent route service built around class volume, towel usage, and studio storage.",
-      helps: "We help fitness teams avoid towel shortages, inconsistent returns, and staff time wasted managing laundry.",
-      finishing: "Towel bundles, account-labeled bags or carts, and rental or customer-owned towel programs.",
+      summary: "A towel heavy laundry program for gyms, yoga studios, Pilates studios, fitness clubs, and training facilities.",
+      items: ["Towels", "Hand towels"],
+      rhythm: "Recurring pickup and delivery built around class volume, member usage, storage space, and weekly towel demand.",
+      helps: "We keep clean, odorless towels moving through your studio or facility so staff is not constantly washing, drying, folding, and restocking between classes or peak hours.",
+      finishing: "Folded, bundled, and returned ready to stock.",
       flow: ["Usage planning", "Frequent pickup", "Towel bundles", "Storage-aware return"],
       cta: "Build a fitness program",
-      href: "quote.html?program=fitness"
+      href: "quote.html?program=fitness",
+      secondaryCta: "Learn more about fitness towel service →",
+      secondaryHref: "services.html"
     },
     events: {
       label: "Event Linen Programs",
-      summary: "Event-focused linen support for orders that need polished presentation, clear sorting, and dependable turnaround around event deadlines.",
-      items: ["Tablecloths", "Napkins", "Runners", "Skirting", "Specialty event goods", "Event linens"],
-      rhythm: "Event-based pickup and return tied to order dates, venue schedules, and seasonal volume.",
-      helps: "We help event teams keep table linens and specialty goods clean, pressed, sorted, and ready for setup without last-minute guessing.",
-      finishing: "Pressed, folded, grouped by order or venue, labeled for setup, and handled for specialty cleaning needs.",
+      summary: "A specialty cleaning program for event companies, venues, convention centers, and planners handling presentation goods, colored linens, and tight return windows.",
+      items: ["Tablecloths", "Napkins", "Runners", "Skirting", "Chair covers", "Specialty event goods"],
+      rhythm: "Pickup and delivery built around event schedules, return windows, seasonal volume, and production needs.",
+      helps: "We provide high quality cleaning that helps event linens stay presentation ready longer. Our cleaning programs remove stains while staying gentle on fabric and color, and our specialty mold removal programs help reduce waste and replacement costs on items of all color.",
+      finishing: "Pressed, hung or folded, sorted by item type, and returned ready for your team.",
       flow: ["Event deadline", "Specialty cleaning", "Order sorting", "Presentation-ready return"],
       cta: "Build an event linen program",
-      href: "quote.html?program=events"
+      href: "quote.html?program=events",
+      secondaryCta: "Learn more about event linen care →",
+      secondaryHref: "services.html"
     },
     restaurants: {
       label: "Restaurants & Food Service",
-      summary: "Recurring cleaning and finishing for dining-room and kitchen goods that need consistency through food, grease, and daily service volume.",
-      items: ["Napkins", "Aprons", "Chef coats", "Bar towels", "Table linens", "Dining-room goods"],
-      rhythm: "Recurring route service based on service nights, soil level, staff needs, and weekly volume.",
-      helps: "We help restaurant teams keep napkins, aprons, chef coats, and bar towels clean and consistent through repeated use.",
-      finishing: "Pressed or folded dining-room goods, hung or folded garments, sorted returns, and processing matched to food and grease staining.",
+      summary: "A commercial laundry program for restaurants, catering teams, and kitchens that need clean, professional goods on a recurring schedule.",
+      items: ["Chef coats", "Aprons", "Napkins", "Bar towels", "Table linens"],
+      rhythm: "Recurring pickup and delivery built around weekly volume, service schedule, kitchen usage, and dining room needs.",
+      helps: "We help keep kitchen and dining goods clean, sharp, and ready for service while handling food stains, grease, heavy soil, and repeated use.",
+      finishing: "Pressed, folded, bundled, and returned in linen carts or bags, ready for your kitchen or dining room use.",
       flow: ["Recurring service", "Stain-aware wash", "Dining-room finish", "Consistent return"],
       cta: "Build a restaurant program",
-      href: "quote.html?program=restaurants"
+      href: "quote.html?program=restaurants",
+      secondaryCta: "Learn more about restaurant laundry →",
+      secondaryHref: "services.html"
     },
     uniforms: {
-      label: "Uniform Programs",
-      summary: "Organized workwear support for teams that need clean, presentable garments without managing every handoff detail.",
-      items: ["Chef coats", "Aprons", "Hospitality uniforms", "Casino uniforms", "Service uniforms", "Business uniforms"],
-      rhythm: "Recurring pickup and delivery based on staff count, soil level, and presentation needs.",
-      helps: "We help uniform programs stay organized, clean, and presentable without forcing the customer to manage every detail.",
-      finishing: "Hung, folded, employee or account grouping, route-ready returns, and specialty cleaning when needed.",
+      label: "Uniforms & Casino Programs",
+      summary: "A uniform cleaning program for casinos, hospitality teams, security, valet services, and staff accounts that need workwear returned clean and organized.",
+      items: ["Uniform shirts", "Chef coats", "Casino uniforms", "Workwear", "Jackets"],
+      rhythm: "Recurring pickup and delivery built around staff count, weekly usage, change-outs, and return needs.",
+      helps: "We help keep uniforms looking professional longer, with cleaning and finishing built around repeated wear, staff presentation, and organized return.",
+      finishing: "High-quality presentation, packaged according to your needs.",
       flow: ["Staff count", "Garment grouping", "Hung or folded finish", "Route-ready return"],
       cta: "Build a uniform program",
-      href: "quote.html?program=uniforms"
+      href: "quote.html?program=uniforms",
+      secondaryCta: "Learn more about uniform programs →",
+      secondaryHref: "services.html"
     },
     wholesale: {
-      label: "Wholesale Dry Cleaners",
-      summary: "Behind-the-scenes production support for cleaners that need linen finishing or large-item processing capacity.",
-      items: ["Pressed sheets", "Comforters", "Household items", "Specialty laundry", "Large-item support"],
-      rhythm: "Scheduled wholesale route or drop-off support.",
-      helps: "We provide behind-the-scenes production capacity for cleaners that need reliable linen finishing or large-item support.",
-      finishing: "Pressed, folded, bagged, and labeled by cleaner or customer order.",
-      flow: ["Cleaner intake", "Wholesale processing", "Order labels", "Finished return"],
-      cta: "Discuss wholesale support",
-      href: "quote.html?program=wholesale"
+      label: "Specialty Commercial Accounts",
+      summary: "A flexible cleaning program for theaters, religious organizations, clubs, and commercial accounts with unique fabric, schedule, or presentation needs.",
+      items: ["Costumes", "Choir robes", "Table linens", "Uniforms", "Specialty garments"],
+      rhythm: "Scheduled or as-needed pickup and delivery built around performances, services, events, banquets, and seasonal needs.",
+      helps: "We help specialty accounts clean, finish, and maintain items that do not fit neatly into a standard laundry program, with careful handling based on how each piece is used.",
+      finishing: "Finished to the highest quality and packaged by your needs.",
+      flow: ["Unique goods", "Careful handling", "Presentation finish", "Packaged return"],
+      cta: "Discuss specialty account needs",
+      href: "quote.html?program=wholesale",
+      secondaryCta: "Learn more about specialty accounts →",
+      secondaryHref: "services.html"
     }
   };
 
@@ -405,12 +653,23 @@
       setText(programPanel, "[data-program-field='helps']", profile.helps);
       setText(programPanel, "[data-program-field='finishing']", profile.finishing);
       setItems(programPanel, "[data-program-list='items']", profile.items);
-      setItems(programPanel, "[data-program-list='flow']", profile.flow, "span");
 
       const cta = programPanel.querySelector("[data-program-field='href']");
       if (cta) {
         cta.textContent = profile.cta;
         cta.href = profile.href;
+      }
+
+      const secondaryCta = programPanel.querySelector("[data-program-field='secondaryHref']");
+      if (secondaryCta) {
+        const hasSecondaryCta = Boolean(profile.secondaryCta && profile.secondaryHref);
+        secondaryCta.hidden = !hasSecondaryCta;
+        secondaryCta.textContent = profile.secondaryCta || "";
+        if (hasSecondaryCta) {
+          secondaryCta.href = profile.secondaryHref;
+        } else {
+          secondaryCta.removeAttribute("href");
+        }
       }
 
       programPanel.classList.remove("is-updating");

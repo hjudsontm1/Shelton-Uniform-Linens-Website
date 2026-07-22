@@ -1,0 +1,92 @@
+body.programs-page {
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 82% 24rem, rgba(56, 75, 95, 0.14), transparent 34rem),
+    radial-gradient(circle at 12% 92rem, rgba(196, 164, 99, 0.055), transparent 28rem),
+    #07111e;
+}
+
+body.programs-page::before {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.014) 1px, transparent 1px);
+  background-size: 8.333% 100%;
+}
+
+.programs-page .site-nav {
+  background: linear-gradient(180deg, rgba(5, 11, 20, 0.97), rgba(7, 17, 30, 0.9));
+  border-bottom-color: rgba(196, 164, 99, 0.16);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.18);
+}
+
+.programs-page .catalog-main {
+  width: var(--catalog-width);
+  margin-inline: auto;
+  padding-top: 5.5rem;
+  overflow: visible;
+}
+
+.programs-page .catalog-opening {
+  min-height: 465px;
+}
+
+.programs-page .catalog-opening h1 {
+  max-width: 860px;
+}
+
+.programs-page .service-catalog {
+  position: relative;
+  scroll-margin-top: 6.5rem;
+}
+
+.programs-page .service-entry {
+  scroll-margin-top: 6.5rem;
+}
+
+.catalog-section-alias {
+  position: absolute;
+  top: -6.5rem;
+}
+
+.catalog-anchor-alias {
+  position: absolute;
+  top: -6.5rem;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.programs-page .service-folio__action::after {
+  content: " →";
+}
+
+.programs-page .site-footer {
+  margin-top: 0;
+  border-top-color: rgba(196, 164, 99, 0.16);
+}
+
+@media (min-width: 961px) {
+  .programs-page .service-entry--overview-only {
+    grid-template-columns: 56px minmax(310px, 1.6fr) minmax(235px, 0.8fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .programs-page .catalog-main {
+    padding-top: 4.8rem;
+  }
+
+  .programs-page .catalog-opening {
+    min-height: 0;
+  }
+
+  .programs-page .service-catalog {
+    padding-bottom: 4.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .programs-page .site-nav {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

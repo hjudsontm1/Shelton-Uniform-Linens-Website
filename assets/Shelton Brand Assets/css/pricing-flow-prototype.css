@@ -1,0 +1,722 @@
+:root {
+  --pflow-canvas: #071321;
+  --pflow-canvas-deep: #040b13;
+  --pflow-panel: #0d1c2e;
+  --pflow-cream: #f5efe3;
+  --pflow-muted: #9ba9b8;
+  --pflow-gold: #c8a45f;
+  --pflow-gold-soft: rgba(200, 164, 95, 0.42);
+  --pflow-line: rgba(200, 164, 95, 0.26);
+}
+
+body[data-page="pricing-flow-prototype"] {
+  min-width: 0;
+  background: var(--pflow-canvas-deep);
+}
+
+body[data-page="pricing-flow-prototype"]::before {
+  opacity: 0.28;
+}
+
+body[data-page="pricing-flow-prototype"] .site-nav {
+  background: rgba(4, 11, 19, 0.96);
+  border-bottom-color: rgba(200, 164, 95, 0.18);
+}
+
+.pflow {
+  min-width: 0;
+  color: var(--pflow-cream);
+  background:
+    linear-gradient(90deg, transparent 0 49.95%, rgba(255, 255, 255, 0.012) 50%, transparent 50.05%),
+    linear-gradient(180deg, var(--pflow-canvas-deep), var(--pflow-canvas) 24rem, #06111e 100%);
+  overflow: clip;
+}
+
+.pflow-shell {
+  position: relative;
+  width: min(calc(100% - 2.5rem), 74rem);
+  min-height: 100svh;
+  margin-inline: auto;
+  padding-left: clamp(3.5rem, 6vw, 5.5rem);
+}
+
+.pflow-thread {
+  position: absolute;
+  top: 7rem;
+  bottom: 6rem;
+  left: clamp(1rem, 2.2vw, 1.8rem);
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--pflow-gold) 7rem, rgba(200, 164, 95, 0.7) 76%, transparent);
+  box-shadow: 0 0 1.1rem rgba(200, 164, 95, 0.13);
+}
+
+.pflow-thread::before {
+  content: "";
+  position: absolute;
+  top: 2.2rem;
+  left: 50%;
+  width: 0.42rem;
+  height: 0.42rem;
+  border: 1px solid var(--pflow-gold);
+  border-radius: 50%;
+  background: var(--pflow-canvas-deep);
+  transform: translate(-50%, -50%);
+}
+
+.pflow-step,
+.pflow-goods-preview {
+  position: relative;
+}
+
+.pflow-step::before,
+.pflow-goods-preview::before {
+  content: "";
+  position: absolute;
+  top: clamp(2.1rem, 4vh, 3.1rem);
+  left: calc(clamp(3.5rem, 6vw, 5.5rem) * -1 + clamp(1rem, 2.2vw, 1.8rem));
+  width: 0.58rem;
+  height: 0.58rem;
+  border: 1px solid rgba(200, 164, 95, 0.72);
+  border-radius: 50%;
+  background: var(--pflow-canvas);
+  transform: translateX(-50%);
+  transition: background-color 200ms ease, box-shadow 200ms ease;
+}
+
+.pflow-step[data-state="complete"]::before {
+  background: var(--pflow-gold);
+  box-shadow: 0 0 0 0.3rem rgba(200, 164, 95, 0.09);
+}
+
+.pflow-step--model {
+  min-height: calc(100svh - 5.4rem);
+  padding: clamp(6.4rem, 11vh, 7.4rem) 0 clamp(1.4rem, 3vh, 2.4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pflow-step--model[data-state="complete"] {
+  min-height: 0;
+  padding-bottom: 0;
+}
+
+.pflow-opening {
+  max-width: 50rem;
+  margin-bottom: clamp(1.3rem, 2.7vh, 2rem);
+}
+
+.pflow-opening__label,
+.pflow-question > p:first-child,
+.pflow-summary__label,
+.pflow-goods-preview > p {
+  margin: 0;
+  color: var(--pflow-gold);
+  font: 600 0.68rem/1.4 "Inter", sans-serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.pflow-opening h1 {
+  margin: 0 0 0.55rem;
+  font-size: 4rem;
+  line-height: 0.94;
+  letter-spacing: 0;
+}
+
+.pflow-opening > p:last-child {
+  max-width: 42rem;
+  margin: 0;
+  color: rgba(195, 204, 213, 0.84);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.pflow-carryover,
+.pflow-goods-carryover {
+  max-width: 42rem;
+  margin-top: 1.15rem;
+  padding: 0.9rem 0 0.95rem 1rem;
+  border-left: 1px solid rgba(200, 164, 95, 0.46);
+  background: linear-gradient(90deg, rgba(200, 164, 95, 0.08), transparent 78%);
+}
+
+.pflow-carryover span,
+.pflow-goods-carryover span {
+  display: block;
+  color: var(--pflow-gold);
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.pflow-carryover strong,
+.pflow-goods-carryover strong {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--pflow-cream);
+  font: 500 1.65rem/1.05 "Cormorant Garamond", serif;
+}
+
+.pflow-carryover small,
+.pflow-goods-carryover small {
+  display: block;
+  margin-top: 0.25rem;
+  color: rgba(195, 204, 213, 0.76);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.pflow-step__active {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  opacity: 1;
+  transition: grid-template-rows 380ms cubic-bezier(0.2, 0.72, 0.22, 1), opacity 260ms ease-out;
+}
+
+.pflow-step__active-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pflow-step.is-condensing .pflow-step__active {
+  grid-template-rows: minmax(0, 0fr);
+  opacity: 0;
+}
+
+.pflow-question {
+  margin-bottom: clamp(1rem, 2.1vh, 1.45rem);
+}
+
+.pflow-question > p:first-child span,
+.pflow-goods-preview > p span {
+  display: inline-block;
+  min-width: 2.7rem;
+  color: rgba(245, 239, 227, 0.42);
+}
+
+.pflow-question h2,
+.pflow-goods-preview h2 {
+  max-width: 53rem;
+  margin: 0.28rem 0 0;
+  font-size: 3.35rem;
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.pflow-question h2:focus,
+.pflow-goods-preview h2:focus {
+  outline: none;
+}
+
+.pflow-model-group {
+  min-width: 0;
+}
+
+.pflow-model-choices {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: clamp(0.7rem, 1.35vw, 1rem);
+}
+
+.pflow-model-choice {
+  position: relative;
+  min-width: 0;
+  min-height: clamp(9.2rem, 21vh, 11.2rem);
+  padding: clamp(1rem, 1.7vw, 1.35rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  text-align: left;
+  color: var(--pflow-cream);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.025), transparent 54%),
+    rgba(10, 26, 43, 0.72);
+  border: 1px solid rgba(200, 164, 95, 0.38);
+  border-radius: 2px;
+  box-shadow: 0 1rem 2.6rem rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transform: translateY(0);
+  transition: transform 190ms ease-out, border-color 190ms ease-out, box-shadow 190ms ease-out, background-color 190ms ease-out;
+}
+
+.pflow-model-choice:hover {
+  border-color: rgba(224, 191, 125, 0.78);
+}
+
+.pflow-model-choice--featured {
+  min-height: clamp(9.7rem, 22.5vh, 11.8rem);
+  color: #081524;
+  background:
+    repeating-linear-gradient(92deg, rgba(7, 19, 33, 0.025) 0 1px, transparent 1px 7px),
+    linear-gradient(145deg, #fffaf0, #e7dcc5);
+  border-color: rgba(224, 191, 125, 0.86);
+  box-shadow: 0 1.3rem 3rem rgba(0, 0, 0, 0.16);
+}
+
+.pflow-model-choice.is-selected {
+  transform: translateY(0.3rem);
+  border-color: var(--pflow-gold);
+  box-shadow: inset 0 0 0 2px rgba(200, 164, 95, 0.46), 0 0.35rem 1.1rem rgba(0, 0, 0, 0.26);
+}
+
+.pflow-model-choice--featured.is-selected {
+  box-shadow: inset 0 0 0 2px rgba(7, 19, 33, 0.76), inset 0 0 0 4px rgba(200, 164, 95, 0.82), 0 0.35rem 1.1rem rgba(0, 0, 0, 0.22);
+}
+
+.pflow-choice-state {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.95rem;
+  color: rgba(200, 164, 95, 0.78);
+  font: 700 0.57rem/1 "Inter", sans-serif;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.pflow-model-choice--featured .pflow-choice-state {
+  color: rgba(7, 19, 33, 0.56);
+}
+
+.pflow-model-choice.is-selected .pflow-choice-state::before {
+  content: "✓";
+  margin-right: 0.35rem;
+}
+
+.pflow-model-choice__number {
+  position: absolute;
+  top: 0.95rem;
+  left: 1rem;
+  color: rgba(200, 164, 95, 0.72);
+  font: 500 0.7rem/1 "Inter", sans-serif;
+}
+
+.pflow-model-choice--featured .pflow-model-choice__number {
+  color: rgba(7, 19, 33, 0.48);
+}
+
+.pflow-model-choice strong {
+  display: block;
+  max-width: 14rem;
+  font: 500 1.85rem/0.98 "Cormorant Garamond", serif;
+  letter-spacing: 0;
+}
+
+.pflow-model-choice > span:last-child {
+  display: block;
+  margin-top: 0.62rem;
+  color: rgba(180, 193, 205, 0.82);
+  font-size: 0.8rem;
+  line-height: 1.48;
+}
+
+.pflow-model-choice--featured > span:last-child {
+  color: rgba(7, 19, 33, 0.72);
+}
+
+.pflow-assist-choice {
+  width: 100%;
+  min-height: 2.8rem;
+  margin-top: 0.65rem;
+  padding: 0.65rem 0.8rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+  color: rgba(245, 239, 227, 0.72);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid rgba(200, 164, 95, 0.24);
+  cursor: pointer;
+}
+
+.pflow-assist-choice > span:first-child {
+  color: var(--pflow-gold);
+  font: 600 0.62rem/1 "Inter", sans-serif;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.pflow-assist-choice strong {
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.pflow-assist-choice.is-selected {
+  color: var(--pflow-cream);
+  border-top-color: var(--pflow-gold);
+}
+
+.pflow-assist-choice.is-selected strong::after {
+  content: " · Selected";
+  color: var(--pflow-gold);
+}
+
+.pflow-assist-choice__arrow {
+  font-size: 1rem;
+}
+
+.pflow-actions {
+  min-height: 3.4rem;
+  margin-top: clamp(0.8rem, 1.9vh, 1.2rem);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pflow-actions--end {
+  justify-content: flex-end;
+}
+
+.pflow-continue,
+.pflow-back,
+.pflow-summary button {
+  min-height: 3rem;
+  font: 700 0.66rem/1 "Inter", sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.pflow-continue {
+  min-width: 14rem;
+  padding: 0.95rem 1.2rem;
+  color: #071321;
+  background: var(--pflow-gold);
+  border: 1px solid var(--pflow-gold);
+  transition: opacity 180ms ease-out, color 180ms ease-out, background-color 180ms ease-out, border-color 180ms ease-out;
+}
+
+.pflow-continue:disabled {
+  color: rgba(245, 239, 227, 0.34);
+  background: rgba(13, 28, 46, 0.54);
+  border-color: rgba(200, 164, 95, 0.2);
+  cursor: not-allowed;
+}
+
+.pflow-back {
+  padding: 0.8rem 0;
+  color: rgba(245, 239, 227, 0.66);
+  background: transparent;
+  border: 0;
+}
+
+.pflow-model-choice:focus-visible,
+.pflow-assist-choice:focus-visible,
+.pflow-operation-index button:focus-visible,
+.pflow-continue:focus-visible,
+.pflow-back:focus-visible,
+.pflow-summary button:focus-visible {
+  outline: 2px solid var(--pflow-gold);
+  outline-offset: 4px;
+}
+
+.pflow-summary {
+  min-height: 5.25rem;
+  padding: 0.8rem 0;
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 0.7fr) minmax(0, 2fr) auto;
+  align-items: center;
+  gap: 1rem;
+  border-top: 1px solid rgba(200, 164, 95, 0.28);
+  border-bottom: 1px solid rgba(200, 164, 95, 0.16);
+  animation: pflow-summary-in 300ms ease-out both;
+}
+
+.pflow-summary strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--pflow-cream);
+  font: 500 1.65rem/1 "Cormorant Garamond", serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pflow-summary button {
+  min-width: 4.5rem;
+  padding: 0.65rem 0.8rem;
+  color: var(--pflow-gold);
+  background: transparent;
+  border: 1px solid rgba(200, 164, 95, 0.36);
+}
+
+@keyframes pflow-summary-in {
+  from { opacity: 0; transform: translateY(0.3rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pflow-step--operation {
+  min-height: calc(100svh - 5.4rem);
+  padding: clamp(2.2rem, 5vh, 3.8rem) 0 clamp(2.5rem, 6vh, 4.5rem);
+}
+
+.pflow-step--operation[data-state="complete"] {
+  min-height: 0;
+  padding-block: 0;
+}
+
+.pflow-step--operation.is-revealing {
+  animation: pflow-chapter-reveal 520ms cubic-bezier(0.2, 0.72, 0.22, 1) both;
+}
+
+@keyframes pflow-chapter-reveal {
+  from { opacity: 0; transform: translateY(1.1rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pflow-operation-layout {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.68fr) minmax(0, 1.5fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.pflow-question--operation {
+  position: sticky;
+  top: 7.2rem;
+  margin: 0;
+}
+
+.pflow-question__support {
+  max-width: 24rem;
+  margin: 1rem 0 0;
+  color: rgba(170, 183, 196, 0.8);
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.pflow-operation-index {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(1.4rem, 3vw, 2.6rem);
+  list-style: none;
+}
+
+.pflow-operation-index li {
+  min-width: 0;
+  border-top: 1px solid rgba(200, 164, 95, 0.25);
+}
+
+.pflow-operation-index li:nth-last-child(-n + 2) {
+  border-bottom: 1px solid rgba(200, 164, 95, 0.25);
+}
+
+.pflow-operation-index button {
+  position: relative;
+  width: 100%;
+  min-height: clamp(3.65rem, 8vh, 4.55rem);
+  padding: 0.7rem 0.15rem;
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+  color: rgba(245, 239, 227, 0.76);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transform: translateX(0);
+  transition: color 190ms ease-out, transform 190ms ease-out, background-color 190ms ease-out;
+}
+
+.pflow-operation-index button > span {
+  color: rgba(200, 164, 95, 0.64);
+  font: 500 0.62rem/1 "Inter", sans-serif;
+}
+
+.pflow-operation-index button strong {
+  font: 500 1.35rem/1.08 "Cormorant Garamond", serif;
+  letter-spacing: 0;
+}
+
+.pflow-operation-index button em {
+  color: transparent;
+  font: normal 700 0.54rem/1 "Inter", sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.pflow-operation-index button:hover {
+  color: var(--pflow-cream);
+  transform: translateX(0.25rem);
+}
+
+.pflow-operation-index button.is-selected {
+  color: #071321;
+  background: linear-gradient(90deg, var(--pflow-gold), rgba(200, 164, 95, 0.62));
+  transform: translateX(0.38rem);
+}
+
+.pflow-operation-index button.is-selected > span,
+.pflow-operation-index button.is-selected em {
+  color: #071321;
+}
+
+.pflow-operation-index button.is-selected em::before {
+  content: "✓ ";
+}
+
+.pflow-actions--operation {
+  grid-column: 2;
+  justify-content: space-between;
+  margin-top: 1.1rem;
+}
+
+.pflow-goods-preview {
+  min-height: calc(100svh - 5.4rem);
+  padding: clamp(4rem, 8vh, 6.5rem) 0 7rem;
+  opacity: 0.52;
+  animation: pflow-goods-in 520ms ease-out both;
+}
+
+.pflow-goods-preview h2 {
+  max-width: 38rem;
+}
+
+.pflow-goods-preview__line {
+  display: block;
+  width: min(100%, 42rem);
+  margin-top: 2rem;
+  border-top: 1px solid rgba(200, 164, 95, 0.24);
+}
+
+#pflow-model-heading,
+#pflow-operation-heading,
+#pflow-goods-heading {
+  scroll-margin-top: 7rem;
+}
+
+@keyframes pflow-goods-in {
+  from { opacity: 0; transform: translateY(0.8rem); }
+  to { opacity: 0.52; transform: translateY(0); }
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .pflow-shell {
+    width: min(calc(100% - 2rem), 46rem);
+    padding-left: 3rem;
+  }
+  .pflow-step::before,
+  .pflow-goods-preview::before {
+    left: calc(-3rem + 1rem);
+  }
+  .pflow-thread {
+    left: 1rem;
+  }
+  .pflow-model-choices {
+    grid-template-columns: 1fr;
+  }
+  .pflow-opening h1 {
+    font-size: 3.4rem;
+  }
+  .pflow-question h2,
+  .pflow-goods-preview h2 {
+    font-size: 2.9rem;
+  }
+  .pflow-model-choice,
+  .pflow-model-choice--featured {
+    min-height: 9rem;
+  }
+  .pflow-model-choice strong {
+    font-size: 1.7rem;
+  }
+  .pflow-operation-layout {
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+  .pflow-question--operation {
+    position: static;
+  }
+  .pflow-actions--operation {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 620px) {
+  .pflow-shell {
+    width: calc(100% - 1.25rem);
+    padding-left: 1.75rem;
+  }
+  .pflow-thread {
+    left: 0.42rem;
+  }
+  .pflow-step::before,
+  .pflow-goods-preview::before {
+    left: calc(-1.75rem + 0.42rem);
+  }
+  .pflow-step--model {
+    min-height: auto;
+    padding-top: 6.2rem;
+    padding-bottom: 2.5rem;
+  }
+  .pflow-opening h1 {
+    font-size: 2.65rem;
+  }
+  .pflow-question h2,
+  .pflow-goods-preview h2 {
+    font-size: 2.25rem;
+  }
+  .pflow-model-choice,
+  .pflow-model-choice--featured {
+    min-height: 8.5rem;
+  }
+  .pflow-actions--end,
+  .pflow-actions--operation {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+  .pflow-continue,
+  .pflow-back {
+    width: 100%;
+  }
+  .pflow-summary {
+    min-height: 5.25rem;
+    grid-template-columns: 1fr auto;
+    gap: 0.25rem 0.75rem;
+  }
+  .pflow-summary__label {
+    grid-column: 1;
+  }
+  .pflow-summary strong {
+    grid-column: 1;
+    font-size: 1.25rem;
+  }
+  .pflow-summary button {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+  .pflow-step--operation {
+    min-height: auto;
+    padding-top: 2.5rem;
+  }
+  .pflow-operation-index {
+    grid-template-columns: 1fr;
+  }
+  .pflow-operation-index li:nth-last-child(2) {
+    border-bottom: 0;
+  }
+  .pflow-operation-index button {
+    min-height: 3.8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pflow *,
+  .pflow *::before,
+  .pflow *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

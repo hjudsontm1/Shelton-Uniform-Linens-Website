@@ -76,21 +76,39 @@ const main = async () => {
     if (message.type() === "error") errors.push(message.text());
   });
   page.on("pageerror", (error) => errors.push(error.message));
+  page.on("requestfailed", (request) => errors.push(`Request failed: ${request.url()}`));
+  page.on("response", (response) => {
+    if (response.status() >= 400 && response.url().startsWith(new URL(baseUrl).origin)) {
+      errors.push(`HTTP ${response.status()}: ${response.url()}`);
+    }
+  });
 
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   assert.match(await page.locator('meta[name="robots"]').getAttribute("content"), /noindex/);
   assert.match(await page.locator("h1").first().innerText(), /quote should match/i);
   assert.equal(await page.locator("[data-hero-estimator]").count(), 0);
-  assert.equal(await page.locator(".pricing-vector").count(), 10);
+  assert.equal(await page.locator(".pricing-vector").count(), 9);
+  assert.equal(await page.locator(".market-position, .pricing-commitment, .pricing-client-room").count(), 0);
+  assert.equal(await page.locator(".pricing-rebuild > section").count(), 6);
+  assert.equal(await page.locator(".pricing-kicker").count(), 2);
+  const tabs = page.locator("[role='tab']");
+  for (let index = 0; index < await tabs.count(); index += 1) {
+    const panelId = await tabs.nth(index).getAttribute("aria-controls");
+    assert.equal(await page.locator(`#${panelId}`).count(), 1);
+  }
   await capture(page, "pricing-hero-initial-1366x768.png", ".pricing-hero");
 
   assert.match(await page.locator("#pricing-journey-title").innerText(), /narrow the variables/i);
   await capture(page, "pricing-journey-1366x768.png", ".pricing-journey");
 
+  const firstFactor = page.locator("#factor-tab-0");
+  await firstFactor.focus();
+  await firstFactor.press("End");
+  assert.equal(await page.locator("#factor-tab-5").getAttribute("aria-selected"), "true");
+  assert.equal(await page.locator("[data-factor-detail]").getAttribute("aria-labelledby"), "factor-tab-5");
   await page.locator("[data-factor-list] [data-index='3']").click();
+  assert.equal(await page.locator(".factor-visual").getAttribute("data-factor"), "finishing");
   await capture(page, "pricing-how-pricing-works-1366x768.png", ".pricing-factors");
-  await page.locator("[data-market-list] [data-index='2']").click();
-  await capture(page, "pricing-market-position-1366x768.png", ".market-position");
   await page.locator("[data-quality-list] [data-index='0']").click();
   await capture(page, "pricing-quality-economics-1366x768.png", ".quality-economics");
   await page.locator("[data-model-list] [data-index='1']").click();
@@ -117,6 +135,19 @@ const main = async () => {
     await page.goto(baseUrl, { waitUntil: "networkidle" });
     await assertNoOverflow(page, label);
     await page.screenshot({ path: path.join(artifactDir, `pricing-${label}.png`), fullPage: false });
+    if (label === "desktop-1440x900") {
+      await page.screenshot({ path: path.join(artifactDir, "pricing-full-desktop-1440x900.png"), fullPage: true });
+    }
+    if (label === "mobile-390x844") {
+      await page.locator(".menu-toggle").click();
+      assert.equal(await page.locator(".menu-toggle").getAttribute("aria-expanded"), "true");
+      await pause(page, 280);
+      assert.equal(await page.locator("#primary-menu").isVisible(), true);
+      await page.locator(".menu-toggle").click();
+      await pause(page, 280);
+      assert.equal(await page.locator("#primary-menu").isVisible(), false);
+      await page.screenshot({ path: path.join(artifactDir, "pricing-full-mobile-390x844.png"), fullPage: true });
+    }
   }
 
   assert.deepEqual(errors, [], `browser errors: ${errors.join(" | ")}`);
@@ -130,7 +161,7 @@ const main = async () => {
     noindex: true,
     browserErrors: errors,
     checkedViewports: viewports.map((item) => item[2]),
-    strategy: "landing page separates core customer questions before the estimator starts fresh from the lower transition"
+    strategy: "five distinct customer questions lead from pricing context to a fresh estimator, without the rejected comparison or commitment sections"
   }, null, 2));
   console.log("Pricing page preview browser acceptance passed.");
 };

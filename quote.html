@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/site.css" />
+  <link rel="stylesheet" href="assets/css/quote-experience.css?v=20260713b" />
 </head>
 <body class="" data-page="quote">
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -27,134 +28,192 @@
       <ul class="nav-links" id="primary-menu">
           <li><a class="" href="index.html">Home</a></li>
           <li><a class="" href="services.html">Services</a></li>
-          <li><a class="" href="industries.html">Industries</a></li>
-          <li><a class="" href="process.html">Process</a></li>
+          <li><a class="" href="process.html?v=20260716b">Process</a></li>
+          <li><a class="" href="pricing.html">Pricing</a></li>
           <li><a class="" href="about.html">About</a></li>
-          <li><a class="" href="pickup-delivery.html">Pickup &amp; Delivery</a></li>
         <li><a class="nav-cta is-active" href="quote.html">Request a Quote</a></li>
       </ul>
     </div>
   </nav>
   <main id="main-content">
-<section class="inner-hero">
-    <div class="inner-copy">
-      <h1>Tell us what your business needs cleaned.</h1>
-      <p>Tell us what you need cleaned, how often you need service, and where your current laundry process creates headaches.</p>
+  <section class="quote-intake" aria-labelledby="quote-title">
+    <div class="quote-intake__frame">
+      <aside class="quote-intake__welcome">
+        <header>
+          <p class="quote-kicker">Request a commercial quote</p>
+          <h1 id="quote-title">Tell us how your laundry moves.</h1>
+          <p>Share what you know today. Exact weights and a finished service plan are not required to start the conversation.</p>
+        </header>
+
+        <div class="quote-reassurance">
+          <strong>Not sure about a field?</strong>
+          <p>Choose “Not sure yet” or leave an optional detail open. We can work through it together.</p>
+          <a class="quote-estimate-link" href="estimate.html">
+            <span>Prefer a guided starting point?</span>
+            <b>Build a planning estimate <i aria-hidden="true">→</i></b>
+          </a>
+        </div>
+
+        <div class="quote-next">
+          <h2>What happens after you send this</h2>
+          <ol>
+            <li><span>01</span><p>We review your goods, volume, operating rhythm, and return needs.</p></li>
+            <li><span>02</span><p>We map the right cleaning, finishing, packaging, and route approach.</p></li>
+            <li><span>03</span><p>We follow up with the few remaining questions needed for an account-specific quote.</p></li>
+          </ol>
+        </div>
+        <p class="quote-commercial-note">Commercial accounts only · San Diego route service</p>
+      </aside>
+
+      <form class="quote-form" id="quote-form" name="commercial-laundry-quote" method="POST" action="https://formspree.io/f/mvzjawvl">
+        <input class="hidden-field" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <header class="quote-form__header">
+          <p>Quote brief</p>
+          <h2>Start with the basics.</h2>
+          <span>Required fields are marked with an asterisk.</span>
+        </header>
+
+        <section class="quote-form__group" aria-labelledby="account-details-heading">
+          <header class="quote-form__group-header">
+            <span aria-hidden="true">01</span>
+            <div><h3 id="account-details-heading">Account details</h3><p>Who should we follow up with?</p></div>
+          </header>
+          <div class="form-row">
+            <label>Business Name *<input name="company" autocomplete="organization" required placeholder="Hotel, spa, restaurant, studio..." /></label>
+            <label>Your Name *<input name="name" autocomplete="name" required placeholder="Your name" /></label>
+          </div>
+          <div class="form-row">
+            <label>Email *<input name="email" type="email" autocomplete="email" required placeholder="name@business.com" /></label>
+            <label>Phone<input name="phone" type="tel" autocomplete="tel" placeholder="(000) 000-0000" /></label>
+          </div>
+        </section>
+
+        <section class="quote-form__group" aria-labelledby="program-needs-heading">
+          <header class="quote-form__group-header">
+            <span aria-hidden="true">02</span>
+            <div><h3 id="program-needs-heading">Program needs</h3><p>Help us understand the shape of the account.</p></div>
+          </header>
+          <div class="form-row">
+            <label>Industry *
+              <select name="industry" id="industry-select" required>
+                <option value="">Select industry</option>
+                <option value="hotel">Boutique Hotels</option><option value="str">Short-Term Rentals / Property Managers</option><option value="restaurant">Restaurants &amp; Food Service</option><option value="spa">Spas, Massage &amp; Wellness</option><option value="gym">Gyms, Yoga &amp; Fitness Studios</option><option value="event">Event Companies</option><option value="uniform">Uniform Accounts</option><option value="casino">Casinos &amp; Entertainment</option><option value="wholesale">Dry Cleaner Wholesale</option>
+                <option value="other">Other commercial account</option>
+              </select>
+            </label>
+            <label>Primary Service
+              <select name="service" id="service-select">
+                <option value="">Select service</option>
+                <option value="linen">Commercial Linen Laundering</option><option value="towels">Towel &amp; Spa Linen Service</option><option value="uniforms">Uniform &amp; Workwear Cleaning</option><option value="event">Event Linen &amp; Restaurant Goods</option><option value="route">Commercial Route Support</option><option value="wholesale">Wholesale Laundry &amp; Pressing</option>
+                <option value="not-sure">Not sure yet</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-row">
+            <label>Estimated Weekly Volume
+              <select name="weeklyVolume">
+                <option value="">Select range</option>
+                <option>Under 50 lbs</option>
+                <option>50-150 lbs</option>
+                <option>150-500 lbs</option>
+                <option>500-1,000 lbs</option>
+                <option>1,000+ lbs</option>
+                <option>Not sure yet</option>
+              </select>
+            </label>
+            <label>Current or Expected Route Cadence
+              <select name="pickupFrequency">
+                <option value="">Select cadence</option>
+                <option>1x weekly</option>
+                <option>2x weekly</option>
+                <option>3x weekly</option>
+                <option>5x weekly</option>
+                <option>Event-based or on demand</option>
+                <option>Not sure yet</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section class="quote-form__group" aria-labelledby="account-goods-heading">
+          <header class="quote-form__group-header">
+            <span aria-hidden="true">03</span>
+            <div><h3 id="account-goods-heading">Goods and account details</h3><p>Select what applies, then add anything we should know.</p></div>
+          </header>
+          <fieldset>
+            <legend>Items Needed</legend>
+            <div class="checkbox-grid">
+              <label><input type="checkbox" name="textiles" value="Sheets and bed linens" /> Sheets and bed linens</label>
+              <label><input type="checkbox" name="textiles" value="Towels" /> Towels</label>
+              <label><input type="checkbox" name="textiles" value="Spa or massage linens" /> Spa or massage linens</label>
+              <label><input type="checkbox" name="textiles" value="Uniforms" /> Uniforms</label>
+              <label><input type="checkbox" name="textiles" value="Event linens" /> Event linens</label>
+              <label><input type="checkbox" name="textiles" value="Napkins and tablecloths" /> Napkins and tablecloths</label>
+            </div>
+          </fieldset>
+          <label>Tell Us About Your Account<textarea name="message" id="message-field" rows="6" placeholder="Share turnaround needs, special handling, storage limits, packaging preferences, or the part of your current process that creates headaches."></textarea></label>
+        </section>
+
+        <div class="quote-form__submit">
+          <button class="btn-primary form-submit" type="submit">Send Quote Request</button>
+          <p>We will use these details only to review your commercial laundry needs and follow up about your account.</p>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
     </div>
-    <figure class="inner-media" style="--photo: url('../images/hero-editorial-textiles.jpg')">
-      <figcaption>Commercial quote intake</figcaption>
-    </figure>
-  </section>
-  <section class="quote-section">
-    <div class="quote-copy reveal">
-      <h2>What happens next?</h2>
-      <ul class="check-list large">
-        <li>We review what you need cleaned, estimated weekly volume, storage, turnaround needs, and pickup cadence.</li>
-        <li>We recommend an account model: customer-owned goods, rental support, or hybrid.</li>
-        <li>We confirm route feasibility and the questions needed for accurate pricing.</li>
-        <li>Dedicated laundry phone and email can be added as soon as they are finalized.</li>
-      </ul>
-    </div>
-    <form class="quote-form reveal" id="quote-form" name="commercial-laundry-quote" method="POST" action="https://formspree.io/f/mvzjawvl">
-    <input class="hidden-field" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
-    <div class="form-row">
-      <label>Business Name<input name="company" autocomplete="organization" required placeholder="Hotel, spa, restaurant, studio..." /></label>
-      <label>Your Name<input name="name" autocomplete="name" required placeholder="Jordan Shelton" /></label>
-    </div>
-    <div class="form-row">
-      <label>Email<input name="email" type="email" autocomplete="email" required placeholder="name@business.com" /></label>
-      <label>Phone<input name="phone" type="tel" autocomplete="tel" placeholder="Dedicated laundry phone coming soon" /></label>
-    </div>
-    <div class="form-row">
-      <label>Industry
-        <select name="industry" id="industry-select" required>
-          <option value="">Select industry</option>
-          <option value="hotel">Boutique Hotels</option><option value="str">Short-Term Rentals / Property Managers</option><option value="restaurant">Restaurants &amp; Food Service</option><option value="spa">Spas, Massage &amp; Wellness</option><option value="gym">Gyms, Yoga &amp; Fitness Studios</option><option value="event">Event Companies</option><option value="uniform">Uniform Accounts</option><option value="casino">Casinos &amp; Entertainment</option><option value="wholesale">Dry Cleaner Wholesale</option>
-          <option value="other">Other commercial account</option>
-        </select>
-      </label>
-      <label>Primary Service
-        <select name="service" id="service-select">
-          <option value="">Select service</option>
-          <option value="linen">Commercial Linen Laundering</option><option value="towels">Towel &amp; Spa Linen Service</option><option value="uniforms">Uniform &amp; Workwear Cleaning</option><option value="event">Event Linen &amp; Restaurant Goods</option><option value="route">Route Pickup &amp; Delivery</option><option value="wholesale">Wholesale Laundry &amp; Pressing</option>
-          <option value="not-sure">Not sure yet</option>
-        </select>
-      </label>
-    </div>
-    <div class="form-row">
-      <label>Estimated Weekly Volume
-        <select name="weeklyVolume">
-          <option value="">Select range</option>
-          <option>Under 50 lbs</option>
-          <option>50-150 lbs</option>
-          <option>150-500 lbs</option>
-          <option>500-1,000 lbs</option>
-          <option>1,000+ lbs</option>
-          <option>Not sure yet</option>
-        </select>
-      </label>
-      <label>Pickup Frequency
-        <select name="pickupFrequency">
-          <option value="">Select cadence</option>
-          <option>1x weekly</option>
-          <option>2x weekly</option>
-          <option>3x weekly</option>
-          <option>5x weekly</option>
-          <option>Event-based or on demand</option>
-          <option>Not sure yet</option>
-        </select>
-      </label>
-    </div>
-    <fieldset>
-      <legend>Items Needed</legend>
-      <div class="checkbox-grid">
-        <label><input type="checkbox" name="textiles" value="Sheets and bed linens" /> Sheets and bed linens</label>
-        <label><input type="checkbox" name="textiles" value="Towels" /> Towels</label>
-        <label><input type="checkbox" name="textiles" value="Spa or massage linens" /> Spa or massage linens</label>
-        <label><input type="checkbox" name="textiles" value="Uniforms" /> Uniforms</label>
-        <label><input type="checkbox" name="textiles" value="Event linens" /> Event linens</label>
-        <label><input type="checkbox" name="textiles" value="Napkins and tablecloths" /> Napkins and tablecloths</label>
-      </div>
-    </fieldset>
-    <label>Tell Us About Your Account<textarea name="message" id="message-field" rows="6" placeholder="Share your business type, turnaround needs, special handling, storage limits, and anything that would help us build the right plan."></textarea></label>
-    <button class="btn-primary form-submit" type="submit">Submit Quote Request</button>
-    <p class="form-status" role="status" aria-live="polite"></p>
-  </form>
   </section>
   </main>
   <footer class="site-footer">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand">Shelton Linen &amp; Uniform Services</div>
-        <p class="footer-text">Commercial-only laundry, linen, towel, uniform, event linen, and wholesale finishing support for San Diego businesses.</p>
-        <p class="footer-note">Dedicated laundry phone and email coming soon.</p>
+    <div class="site-footer__inner">
+      <section class="footer-closing" aria-label="Shelton closing statement">
+        <div class="footer-closing__copy">
+          <p class="footer-status">Commercial account support available through the quote process.</p>
+          <h2>Clean goods. Reliable routes. Programs built around your business.</h2>
+          <p>Laundry, linen, towel, uniform, event linen, and wholesale finishing support for San Diego businesses.</p>
+        </div>
+        <div class="footer-actions" aria-label="Footer calls to action">
+          <a class="btn-primary footer-action-primary" href="quote.html">Request a Quote</a>
+          <a class="footer-action-secondary" href="services.html">Explore Services</a>
+        </div>
+      </section>
+      <div class="footer-directory">
+        <div class="footer-brand-panel">
+          <a class="footer-logo" href="index.html" aria-label="Shelton Linen and Uniform Services home">
+            <span class="footer-brand-mark" aria-hidden="true"><img src="assets/images/shelton-s-mark-white.png" alt="" width="815" height="815" /></span>
+            <span>
+              <span class="footer-brand">Shelton Linen &amp; Uniform Services</span>
+              <span class="footer-descriptor">Commercial Laundry Services · San Diego</span>
+            </span>
+          </a>
+          <p class="footer-text">Commercial-only laundry, linen, towel, uniform, event linen, and wholesale finishing support for San Diego businesses.</p>
+        </div>
+        <nav class="footer-links" aria-label="Footer pages">
+          <h2>Pages</h2>
+          <a href="services.html">Services</a>
+          <a href="process.html?v=20260716b">Process</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="about.html">About</a>
+        </nav>
+        <nav class="footer-links" aria-label="Commercial services">
+          <h2>Commercial Services</h2>
+          <a href="services.html#linens-bedding">Commercial linen</a>
+          <a href="services.html#towels-wellness">Towel service</a>
+          <a href="services.html#uniforms-chef-coats">Uniform cleaning</a>
+          <a href="services.html#event-linens">Event linen</a>
+          <a href="services.html#wholesale-support">Wholesale support</a>
+        </nav>
+        <nav class="footer-links" aria-label="Get started">
+          <h2>Get Started</h2>
+          <a href="quote.html">Request a quote</a>
+          <a href="quote.html?request=plant-tour">Schedule a plant tour</a>
+          <a href="https://www.sheltoncleanerssd.com/" target="_blank" rel="noopener">Shelton Cleaners</a>
+        </nav>
       </div>
-      <div>
-        <h2>Pages</h2>
-        <a href="services.html">Services</a>
-        <a href="industries.html">Industries</a>
-        <a href="process.html">Process</a>
-        <a href="about.html">About</a>
-        <a href="pickup-delivery.html">Pickup &amp; Delivery</a>
+      <div class="footer-bottom">
+        <p>2026 Shelton Linen &amp; Uniform Services. All rights reserved.</p>
+        <p>Sister company to Shelton Cleaners San Diego.</p>
       </div>
-      <div>
-        <h2>Commercial Services</h2>
-        <a href="services.html#linen">Commercial linen</a>
-        <a href="services.html#towels">Towel service</a>
-        <a href="services.html#uniforms">Uniform cleaning</a>
-        <a href="services.html#event">Event linen</a>
-        <a href="services.html#wholesale">Wholesale support</a>
-      </div>
-      <div>
-        <h2>Get Started</h2>
-        <a href="quote.html">Request a quote</a>
-        <a href="quote.html?request=plant-tour">Schedule a plant tour</a>
-        <a href="https://www.sheltoncleanerssd.com/" target="_blank" rel="noopener">Shelton Cleaners</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>2026 Shelton Linen &amp; Uniform Services. All rights reserved.</p>
-      <p>Sister company to Shelton Cleaners San Diego.</p>
     </div>
   </footer>
   <script src="assets/js/site.js"></script>
