@@ -10,9 +10,11 @@ require(path.join(root, "assets/js/pricing-journey-vectors.js"));
 const config = global.window.SheltonPricingJourneyConfig;
 const vectors = global.window.SheltonPricingJourneyVectors;
 
-assert.equal(config.operations.length, 10, "all ten operation branches exist");
-assert.equal(new Set(config.operations.map((item) => item.id)).size, 10, "operation IDs are unique");
+assert.equal(config.operations.length, 11, "all eleven operation branches exist");
+assert.equal(new Set(config.operations.map((item) => item.id)).size, 11, "operation IDs are unique");
 assert.equal(config.operations.find((item) => item.id === "wholesale").label, "Wholesale Dry Cleaning");
+assert.equal(config.operations.find((item) => item.id === "spa").label, "Resort / Day Spa");
+assert.equal(config.operations.find((item) => item.id === "medspa").label, "Medspa");
 
 config.operations.forEach((operation) => {
   assert.ok(operation.goods.length >= 2 && operation.goods.length <= 6, `${operation.id} has a usable Goods branch`);
@@ -42,6 +44,7 @@ const expectedBackdropCopy = {
   hotel: "LINEN CART RETURN",
   str: "CENTRAL TURNOVER STAGING",
   spa: "TREATMENT-ROOM FLOW",
+  medspa: "TREATMENT-ROOM FLOW",
   gym: "PEAK-USE TOWEL RACK",
   events: "PRESENTATION · COLOR · DEADLINE",
   restaurant: "KITCHEN + DINING ROOM",
@@ -114,5 +117,7 @@ assert.match(preview, /pricing-journey-vectors\.js/);
 assert.doesNotMatch(preview, /Once weekly|Twice weekly|Five times weekly|desired pickup frequency/i);
 assert.match(preview, /ZIP code or city/);
 assert.match(preview, /No option is preselected/);
+assert.match(preview, /Economy/);
+assert.match(preview, /Boutique/);
 
 console.log("Pricing journey configuration and vector tests passed.");

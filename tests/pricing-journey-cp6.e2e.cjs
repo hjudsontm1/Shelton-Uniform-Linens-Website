@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const { installCommercialEstimatorV2Fixture, isEstimatorCalculationRequest } = require("./commercial-estimator-v2-browser-fixture.cjs");
 
 const baseUrl = process.env.PRICING_PREVIEW_URL || "http://127.0.0.1:8045/pricing-journey-preview.html";
 const artifactDir = process.env.PRICING_ARTIFACT_DIR || path.resolve(__dirname, "../docs/pricing-journey-artifacts/checkpoint-6");
@@ -60,8 +61,9 @@ const main = async () => {
   });
   page.on("pageerror", (error) => errors.push(`page: ${error.message}`));
   page.on("request", (request) => {
-    if (request.method() !== "GET") nonGetRequests.push(`${request.method()} ${request.url()}`);
+    if (request.method() !== "GET" && !isEstimatorCalculationRequest(request)) nonGetRequests.push(`${request.method()} ${request.url()}`);
   });
+  await installCommercialEstimatorV2Fixture(page);
 
   await page.goto(`${baseUrl}?motion=reduce`, { waitUntil: "networkidle" });
   assert.equal(await page.locator("[data-pricing-journey]").getAttribute("data-motion"), "reduce");
@@ -80,12 +82,13 @@ const main = async () => {
   const occupancySelect = page.locator('[data-scale-input="occupancy"]');
   await occupancySelect.focus();
   await occupancySelect.press("7");
-  await typeInto(page, '[data-scale-input="weeklyTurns"]', "220");
-  const storageSelect = page.locator('[data-scale-input="storage"]');
-  await storageSelect.focus();
-  await storageSelect.press("l");
+  await typeInto(page, '[data-scale-input="weeklyRobes"]', "220");
+  const bedSystemSelect = page.locator('[data-scale-input="bedSystem"]');
+  await bedSystemSelect.focus();
+  await bedSystemSelect.selectOption("mixed");
+  await page.locator('[data-scale-input="storage"]').selectOption("limited");
   assert.equal(await page.locator('[data-scale-input="occupancy"]').inputValue(), "75to89");
-  assert.equal(await page.locator('[data-scale-input="storage"]').inputValue(), "limited");
+  assert.equal(await page.locator('[data-scale-input="bedSystem"]').inputValue(), "mixed");
   await focusAndPress(page, '[data-scale-form] button[type="submit"]');
   await expectFocused(page, "finish-title");
 
@@ -98,6 +101,8 @@ const main = async () => {
   await ownershipStart.focus();
   await ownershipStart.press("ArrowRight");
   assert.equal(await page.locator('[data-ownership-id="some"]').getAttribute("aria-checked"), "true");
+  await page.locator("[data-rental-tier]").selectOption("standard");
+  await typeInto(page, "[data-rental-quantity]", "220");
   await focusAndPress(page, "[data-ownership-continue]");
   await expectFocused(page, "location-title");
 
@@ -224,7 +229,7 @@ const main = async () => {
   await focusAndPress(page, "[data-start-over]");
   await page.waitForTimeout(100);
   assert.equal(await page.locator('[data-concept-panel="orb"]').isVisible(), true);
-  const resetState = JSON.parse(await page.evaluate(() => sessionStorage.getItem("shelton-pricing-journey-v4")));
+  const resetState = JSON.parse(await page.evaluate(() => sessionStorage.getItem("shelton-pricing-journey-v5")));
   assert.equal(resetState.view, "landing");
   assert.equal(resetState.operation, null);
   assert.deepEqual(resetState.completedChapters, []);

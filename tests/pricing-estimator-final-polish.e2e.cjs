@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const { installCommercialEstimatorV2Fixture, isEstimatorCalculationRequest } = require("./commercial-estimator-v2-browser-fixture.cjs");
 
 const baseUrl = process.env.PRICING_PREVIEW_URL || "http://127.0.0.1:8045/pricing-journey-preview.html";
 const artifactDir = process.env.PRICING_FINAL_ARTIFACT_DIR || path.resolve(__dirname, "../docs/pricing-estimator-final-polish-artifacts/final");
@@ -125,6 +126,7 @@ const recordTransition = async (browser) => {
     recordVideo: { dir, size: { width: 1366, height: 768 } }
   });
   const page = await context.newPage();
+  await installCommercialEstimatorV2Fixture(page);
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   await wait(page, 350);
   const video = page.video();
@@ -141,6 +143,7 @@ const recordMobileJourney = async (browser) => {
     recordVideo: { dir, size: { width: 390, height: 844 } }
   });
   const page = await context.newPage();
+  await installCommercialEstimatorV2Fixture(page);
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   await capture(page, "17-mobile-landing-390x844.png");
   await click(page, "[data-begin-journey]", 650);
@@ -152,7 +155,8 @@ const recordMobileJourney = async (browser) => {
   await click(page, "[data-goods-continue]", 450);
   await page.locator('[data-scale-input="rooms"]').fill("80");
   await page.locator('[data-scale-input="occupancy"]').selectOption("75to89");
-  await page.locator('[data-scale-input="weeklyTurns"]').fill("220");
+  await page.locator('[data-scale-input="weeklyRobes"]').fill("220");
+  await page.locator('[data-scale-input="bedSystem"]').selectOption("mixed");
   await page.locator('[data-scale-input="storage"]').selectOption("limited");
   await click(page, '[data-scale-form] button[type="submit"]', 450);
   await click(page, '[data-choice-id="hanging"]', 130);
@@ -195,8 +199,9 @@ const main = async () => {
   });
   page.on("pageerror", (error) => errors.push(`page: ${error.message}`));
   page.on("request", (request) => {
-    if (request.method() !== "GET") nonGetRequests.push(`${request.method()} ${request.url()}`);
+    if (request.method() !== "GET" && !isEstimatorCalculationRequest(request)) nonGetRequests.push(`${request.method()} ${request.url()}`);
   });
+  await installCommercialEstimatorV2Fixture(page);
 
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   assert.match(await page.locator('meta[name="robots"]').getAttribute("content"), /noindex/i);
@@ -214,8 +219,7 @@ const main = async () => {
   await selectGoods(page, ["tablecloths"]);
   await capture(page, "07-event-goods-1366x768.png", '[data-chapter-editor="goods"]');
   await click(page, "[data-goods-continue]", 480);
-  await page.locator('[data-scale-input="eventsPerMonth"]').fill("24");
-  await page.locator('[data-scale-input="piecesPerEvent"]').fill("900");
+  await page.locator('[data-scale-input="weeklyTablecloths"]').fill("600");
   await page.locator('[data-scale-input="returnWindow"]').selectOption("urgent");
   await page.locator('[data-scale-input="seasonality"]').selectOption("seasonal");
   await assertChapterActionVisible(page, '[data-chapter-editor="scale"]', 'button[type="submit"]', "Scale");

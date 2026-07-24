@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const { installCommercialEstimatorV2Fixture, isEstimatorCalculationRequest } = require("./commercial-estimator-v2-browser-fixture.cjs");
 
 const baseUrl = process.env.PRICING_PREVIEW_URL || "http://127.0.0.1:8045/pricing-journey-preview.html";
 const artifactDir = process.env.PRICING_ARTIFACT_DIR || path.resolve(__dirname, "../docs/pricing-journey-artifacts/checkpoint-5");
@@ -15,7 +16,8 @@ const completeHotelRobesProgram = async (page) => {
   await page.locator("[data-goods-continue]").click();
   await page.locator('[data-scale-input="rooms"]').fill("80");
   await page.locator('[data-scale-input="occupancy"]').selectOption("75to89");
-  await page.locator('[data-scale-input="weeklyTurns"]').fill("220");
+  await page.locator('[data-scale-input="weeklyRobes"]').fill("220");
+  await page.locator('[data-scale-input="bedSystem"]').selectOption("mixed");
   await page.locator('[data-scale-input="storage"]').selectOption("limited");
   await page.locator("[data-scale-form]").evaluate((form) => form.requestSubmit());
   await page.locator('[data-choice-id="hanging"]').click();
@@ -23,6 +25,8 @@ const completeHotelRobesProgram = async (page) => {
   await page.locator('[data-choice-id="delicate"]').click();
   await page.locator("[data-finish-continue]").click();
   await page.locator('[data-ownership-id="some"]').click();
+  await page.locator("[data-rental-tier]").selectOption("standard");
+  await page.locator("[data-rental-quantity]").fill("220");
   await page.locator("[data-ownership-continue]").click();
   await page.locator("[data-location-input]").fill("92101");
   await page.locator("[data-location-form]").evaluate((form) => form.requestSubmit());
@@ -40,8 +44,9 @@ const main = async () => {
   });
   page.on("pageerror", (error) => errors.push(`page: ${error.message}`));
   page.on("request", (request) => {
-    if (request.method() !== "GET") nonGetRequests.push(`${request.method()} ${request.url()}`);
+    if (request.method() !== "GET" && !isEstimatorCalculationRequest(request)) nonGetRequests.push(`${request.method()} ${request.url()}`);
   });
+  await installCommercialEstimatorV2Fixture(page);
 
   await page.goto(`${baseUrl}?motion=reduce`, { waitUntil: "networkidle" });
   await completeHotelRobesProgram(page);
@@ -53,10 +58,10 @@ const main = async () => {
   await page.locator("[data-build-result]").click();
   await page.waitForTimeout(100);
   assert.equal(await page.locator("[data-result]").isVisible(), true);
-  assert.match(await page.locator("[data-result-warning]").innerText(), /DEVELOPMENT ESTIMATE - NOT APPROVED PRICING/);
+  assert.match(await page.locator("[data-result-warning]").innerText(), /COMMERCIAL PLANNING RANGE/);
   assert.match(await page.locator("[data-result-rhythm]").innerText(), /Twice-weekly commercial pickup and return/);
   assert.equal(await page.locator("[data-result-model]").innerText(), "Hybrid Program");
-  assert.equal(await page.locator("[data-model-comparison] article").count(), 3);
+  assert.equal(await page.locator("[data-model-comparison] article").count(), 1);
   assert.equal(await page.locator('[data-model-id="hybrid"].is-recommended').count(), 1);
   assert.match(await page.locator("[data-result-weekly]").innerText(), /^\$[\d,]+-\$[\d,]+$/);
   await page.screenshot({ path: path.join(artifactDir, "cp5-result-1366x768.png") });

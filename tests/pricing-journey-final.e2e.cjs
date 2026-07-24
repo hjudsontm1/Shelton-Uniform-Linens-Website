@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const { installCommercialEstimatorV2Fixture, isEstimatorCalculationRequest } = require("./commercial-estimator-v2-browser-fixture.cjs");
 
 const baseUrl = process.env.PRICING_PREVIEW_URL || "http://127.0.0.1:8045/pricing-journey-preview.html";
 const artifactDir = process.env.PRICING_ARTIFACT_DIR || path.resolve(__dirname, "../docs/pricing-journey-artifacts/checkpoint-7");
@@ -60,8 +61,9 @@ const main = async () => {
   });
   page.on("pageerror", (error) => errors.push(`page: ${error.message}`));
   page.on("request", (request) => {
-    if (request.method() !== "GET") nonGetRequests.push(`${request.method()} ${request.url()}`);
+    if (request.method() !== "GET" && !isEstimatorCalculationRequest(request)) nonGetRequests.push(`${request.method()} ${request.url()}`);
   });
+  await installCommercialEstimatorV2Fixture(page);
 
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   assert.match(await page.locator('meta[name="robots"]').getAttribute("content"), /noindex/i);
@@ -92,8 +94,7 @@ const main = async () => {
   await page.setViewportSize({ width: 1366, height: 768 });
   await click(page, "[data-goods-continue]", 450);
 
-  await page.locator('[data-scale-input="eventsPerMonth"]').fill("24");
-  await page.locator('[data-scale-input="piecesPerEvent"]').fill("900");
+  await page.locator('[data-scale-input="weeklyTablecloths"]').fill("600");
   await page.locator('[data-scale-input="returnWindow"]').selectOption("urgent");
   await page.locator('[data-scale-input="seasonality"]').selectOption("seasonal");
   await click(page, '[data-scale-form] button[type="submit"]', 450);
@@ -122,7 +123,7 @@ const main = async () => {
   await click(page, "[data-build-result]", 650);
 
   assert.equal(await page.locator("[data-result]").isVisible(), true);
-  assert.match(await page.locator("[data-result-warning]").innerText(), /DEVELOPMENT ESTIMATE/i);
+  assert.match(await page.locator("[data-result-warning]").innerText(), /COMMERCIAL PLANNING RANGE/i);
   assert.match(await page.locator("[data-result-rhythm]").innerText(), /pickup.*return/i);
   assert.equal(await page.locator('[data-result-scene] [data-vector-good="tablecloths"]').count(), 1);
   assert.equal(await page.locator('[data-result-scene] [data-vector-good]:not([data-vector-good="tablecloths"])').count(), 0);

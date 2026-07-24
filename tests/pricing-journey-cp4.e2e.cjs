@@ -36,7 +36,8 @@ const main = async () => {
 
   await page.locator('[data-scale-input="rooms"]').fill("80");
   await page.locator('[data-scale-input="occupancy"]').selectOption("75to89");
-  await page.locator('[data-scale-input="weeklyTurns"]').fill("220");
+  await page.locator('[data-scale-input="weeklyRobes"]').fill("220");
+  await page.locator('[data-scale-input="bedSystem"]').selectOption("mixed");
   await page.locator('[data-scale-input="storage"]').selectOption("limited");
   await page.locator("[data-scale-form]").evaluate((form) => form.requestSubmit());
   await page.waitForTimeout(80);
@@ -54,6 +55,8 @@ const main = async () => {
   assert.equal(await page.locator('[data-ownership-id][aria-checked="true"]').count(), 0, "ownership begins without a favored model");
   await page.screenshot({ path: path.join(artifactDir, "cp4-ownership-1366x768.png") });
   await page.locator('[data-ownership-id="some"]').click();
+  await page.locator("[data-rental-tier]").selectOption("standard");
+  await page.locator("[data-rental-quantity]").fill("220");
   await page.locator("[data-ownership-continue]").click();
   await page.waitForTimeout(80);
   await page.screenshot({ path: path.join(artifactDir, "cp4-location-1366x768.png") });

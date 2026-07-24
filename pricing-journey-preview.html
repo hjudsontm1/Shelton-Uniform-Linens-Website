@@ -6,11 +6,12 @@
   <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>Private Adaptive Pricing Journey | Shelton Linen &amp; Uniform Services</title>
   <meta name="description" content="Private development preview for Shelton's adaptive commercial laundry planning journey." />
+  <meta name="shelton-pricing-api" content="" />
   <link rel="icon" type="image/png" href="assets/images/shelton-s-mark-white.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/pricing-journey.css?v=20260712-atelier-final-1" />
+  <link rel="stylesheet" href="assets/css/pricing-journey.css?v=20260724-v2-1" />
 </head>
 <body class="pricing-journey-page" data-pricing-journey data-phase="orb-story" data-view="landing">
   <a class="journey-skip-link" href="#journey-main">Skip to pricing journey</a>
@@ -205,6 +206,11 @@
               <p>Answer in plain language. Shelton will compare Customer-Owned Goods, Hybrid, and Rental at the result rather than favoring a model here.</p>
             </header>
             <div class="ownership-choices" role="radiogroup" aria-label="Inventory ownership" data-ownership-options></div>
+            <div class="rental-tier-fields" data-rental-tier-fields hidden>
+              <label><span>Rental quality tier</span><select data-rental-tier><option value="">Choose one</option><option value="economy">Economy</option><option value="standard">Standard</option><option value="premium">Premium</option><option value="boutique">Boutique</option></select></label>
+              <label><span>Approximate supplied pieces</span><input type="number" min="1" max="1000000" step="1" data-rental-quantity placeholder="Pieces in the rental pool" /></label>
+              <small>Exact products remain private until Shelton confirms construction, quality, and landed cost.</small>
+            </div>
             <p class="chapter-error" data-ownership-error role="alert" hidden>Choose the closest ownership situation to continue.</p>
             <div class="chapter-action-row">
               <p>No option is preselected.</p>
@@ -249,7 +255,7 @@
             <div>
               <p>07 · Review</p>
               <h2 data-review-summary-label></h2>
-              <span>The assembled inputs remain available before the development result.</span>
+              <span>The assembled inputs remain available before the planning result.</span>
             </div>
             <button type="button" data-edit-chapter="review">Edit<span class="sr-only"> review</span></button>
           </div>
@@ -281,11 +287,12 @@
 
           <div class="result-dossier">
             <div class="result-warning" data-result-warning></div>
-            <div class="result-range" aria-label="Development planning range">
-              <span>Development planning range</span>
+            <div class="result-range" aria-label="Commercial planning range">
+              <span>Commercial planning range</span>
               <strong data-result-weekly></strong>
               <small>per week</small>
               <p data-result-monthly></p>
+              <div class="result-unit-rates" data-result-unit-rates></div>
             </div>
 
             <div class="result-recommendations">
@@ -305,7 +312,7 @@
               <header>
                 <p class="chapter-index">Compare program structures</p>
                 <h3 id="model-comparison-title">Price is one part of the recommendation.</h3>
-                <p>Each structure uses the same selected service and care assumptions, with development-only inventory factors layered separately.</p>
+                <p>The selected ownership structure keeps laundering and any confirmed rental inventory separate.</p>
               </header>
               <div data-model-comparison></div>
             </section>
@@ -363,7 +370,7 @@
             <p class="chapter-error" id="quote-error" data-quote-error role="alert" hidden>Complete the required contact details.</p>
             <div class="quote-actions">
               <button type="submit" data-quote-submit>Prepare quote payload <span aria-hidden="true">→</span></button>
-              <button type="button" data-return-result>Return to development result</button>
+              <button type="button" data-return-result>Return to planning result</button>
             </div>
           </form>
           <div class="quote-status" data-quote-status role="status" aria-live="polite" tabindex="-1" hidden></div>
@@ -383,9 +390,9 @@
 
   <p class="journey-announcer" data-journey-announcer aria-live="polite"></p>
 
-  <script src="assets/js/pricing-journey-config.js?v=20260712-atelier-final-1"></script>
+  <script src="assets/js/pricing-journey-config.js?v=20260724-v2-1"></script>
   <script src="assets/js/pricing-journey-vectors.js?v=20260712-atelier-final-1"></script>
-  <script src="assets/js/pricing-rules.dev.js?v=20260711-result-1"></script>
-  <script src="assets/js/pricing-journey.js?v=20260712-atelier-final-1"></script>
+  <script src="assets/js/pricing-rules.dev.js?v=20260724-v2-1"></script>
+  <script src="assets/js/pricing-journey.js?v=20260724-v2-1"></script>
 </body>
 </html>
