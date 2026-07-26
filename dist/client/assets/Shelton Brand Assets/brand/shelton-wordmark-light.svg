@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2040 220" role="img" aria-labelledby="title desc">
+  <title id="title">Shelton Linen and Uniform Services wordmark</title>
+  <desc id="desc">Company wordmark and San Diego commercial laundry descriptor without the circular S mark.</desc>
+  <style>
+    .brand-name { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 500; }
+    .descriptor { font-family: Inter, Arial, sans-serif; font-weight: 500; }
+  </style>
+  <text class="brand-name" x="30" y="100" fill="#081321" font-size="76" letter-spacing="10">SHELTON LINEN &amp; UNIFORM SERVICES</text>
+  <text class="descriptor" x="34" y="178" fill="#B8965A" font-size="28" letter-spacing="7">COMMERCIAL LAUNDRY SERVICES · SAN DIEGO</text>
+</svg>
