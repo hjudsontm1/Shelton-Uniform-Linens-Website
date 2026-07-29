@@ -20,17 +20,65 @@
   const toggle = document.querySelector(".menu-toggle");
   const menu = document.querySelector("#primary-menu");
   if (toggle && menu) {
+    const nav = toggle.closest(".site-nav");
+    const mobileNavigation = window.matchMedia("(max-width: 1080px)");
+    const menuIsOpen = () => toggle.getAttribute("aria-expanded") === "true";
+    const closeMenu = ({ restoreFocus = false } = {}) => {
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Open navigation");
+      menu.classList.remove("is-open");
+      document.body.classList.remove("has-open-menu");
+      if (restoreFocus) toggle.focus();
+    };
+    const openMenu = () => {
+      toggle.setAttribute("aria-expanded", "true");
+      toggle.setAttribute("aria-label", "Close navigation");
+      menu.classList.add("is-open");
+      document.body.classList.add("has-open-menu");
+      window.setTimeout(() => {
+        if (menuIsOpen()) menu.querySelector("a[href]")?.focus();
+      }, prefersReducedMotion ? 0 : 260);
+    };
+
     toggle.addEventListener("click", () => {
-      const isOpen = toggle.getAttribute("aria-expanded") === "true";
-      toggle.setAttribute("aria-expanded", String(!isOpen));
-      menu.classList.toggle("is-open", !isOpen);
+      if (menuIsOpen()) closeMenu();
+      else openMenu();
     });
     menu.addEventListener("click", (event) => {
-      if (event.target.closest("a")) {
-        toggle.setAttribute("aria-expanded", "false");
-        menu.classList.remove("is-open");
+      if (event.target.closest("a")) closeMenu();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (!menuIsOpen()) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeMenu({ restoreFocus: true });
+        return;
+      }
+      if (event.key !== "Tab" || !nav) return;
+
+      const focusable = Array.from(nav.querySelectorAll('a[href], button:not([disabled])'))
+        .filter((element) => element.getClientRects().length > 0);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     });
+
+    const resetDesktopMenu = (event) => {
+      if (!event.matches) closeMenu();
+    };
+    if (typeof mobileNavigation.addEventListener === "function") {
+      mobileNavigation.addEventListener("change", resetDesktopMenu);
+    } else {
+      mobileNavigation.addListener(resetDesktopMenu);
+    }
   }
 
   const reveals = document.querySelectorAll(".reveal");
@@ -539,7 +587,7 @@
       cta: "Build a hotel program",
       href: "quote.html?program=hotels",
       secondaryCta: "Learn more about hospitality laundry →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#hotels"
     },
     str: {
       label: "Short-Term Rentals / Property Managers",
@@ -552,7 +600,7 @@
       cta: "Build an STR program",
       href: "quote.html?program=str",
       secondaryCta: "Learn more about STR laundry programs →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#str-property-managers"
     },
     spa: {
       label: "Spas, Massage & Wellness",
@@ -565,7 +613,7 @@
       cta: "Build a spa program",
       href: "quote.html?program=spa",
       secondaryCta: "Learn more about spa & wellness laundry →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#spa-wellness"
     },
     fitness: {
       label: "Gyms, Yoga & Fitness Studios",
@@ -578,7 +626,7 @@
       cta: "Build a fitness program",
       href: "quote.html?program=fitness",
       secondaryCta: "Learn more about fitness towel service →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#gyms-fitness"
     },
     events: {
       label: "Event Linen Programs",
@@ -591,7 +639,7 @@
       cta: "Build an event linen program",
       href: "quote.html?program=events",
       secondaryCta: "Learn more about event linen care →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#events-convention-centers"
     },
     restaurants: {
       label: "Restaurants & Food Service",
@@ -604,7 +652,7 @@
       cta: "Build a restaurant program",
       href: "quote.html?program=restaurants",
       secondaryCta: "Learn more about restaurant laundry →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#restaurants-food-service"
     },
     uniforms: {
       label: "Uniforms & Casino Programs",
@@ -617,7 +665,7 @@
       cta: "Build a uniform program",
       href: "quote.html?program=uniforms",
       secondaryCta: "Learn more about uniform programs →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#uniform-accounts"
     },
     wholesale: {
       label: "Specialty Commercial Accounts",
@@ -630,7 +678,7 @@
       cta: "Discuss specialty account needs",
       href: "quote.html?program=wholesale",
       secondaryCta: "Learn more about specialty accounts →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#specialty-accounts"
     }
   };
 
@@ -751,8 +799,24 @@
   }
   if (industrySelect && industry) industrySelect.value = industry;
   if (serviceSelect && service) serviceSelect.value = service;
-  if (messageField && request === "plant-tour") {
-    messageField.value = "I would like to schedule a plant tour and discuss a commercial laundry account.";
+  const requestQuoteMap = {
+    "plant-tour": {
+      service: "route",
+      message: "I would like to schedule a plant tour and discuss a commercial laundry account."
+    },
+    "service-change": {
+      service: "route",
+      message: "I would like to request a change to my current commercial route service."
+    },
+    "route-command": {
+      service: "route",
+      message: "I would like to request access to Route Command for my commercial account."
+    }
+  };
+  const requestQuote = requestQuoteMap[request];
+  if (requestQuote) {
+    if (serviceSelect) serviceSelect.value = requestQuote.service;
+    if (messageField) messageField.value = requestQuote.message;
   }
 
   const form = document.querySelector("#quote-form");

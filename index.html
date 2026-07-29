@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="assets/Shelton%20Brand%20Assets/brand/website/shelton-favicon.svg" type="image/svg+xml" />
   <title>Shelton Linen &amp; Uniform Services | Commercial Laundry San Diego</title>
   <meta name="description" content="Premium commercial laundry, linen, towel, uniform, event linen, pickup and delivery, and wholesale finishing services for San Diego businesses." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/site.css?v=specialty-accounts-20260708" />
+  <link rel="stylesheet" href="assets/css/header.css?v=20260723-logo-packet" />
+  <link rel="stylesheet" href="assets/css/home-hero-ready.css?v=20260725-integrated-coat" />
+  <link rel="stylesheet" href="assets/css/home-proof.css?v=20260725-integrated-coat" />
+  <link rel="stylesheet" href="assets/css/home-tailored-transition.css?v=20260726" />
 </head>
 <body class="home-page" data-page="home">
   <a class="skip-link" href="#main-content">Skip to content</a>
   <nav class="site-nav" aria-label="Main navigation">
     <div class="nav-inner">
       <a class="nav-brand" href="index.html" aria-label="Shelton Linen and Uniform Services home">
-        <span class="brand-mark" aria-hidden="true"><img src="assets/images/shelton-s-mark-white.png" alt="" width="815" height="815" /></span>
-        <span class="brand-copy">
-          <span class="brand-main">Shelton Linen &amp; Uniform Services</span>
-          <span class="brand-sub">Commercial Laundry Services · San Diego</span>
-        </span>
+        <img class="nav-brand-logo" src="assets/Shelton%20Brand%20Assets/brand/website/shelton-primary-horizontal-dark.svg" alt="" width="1900" height="480" aria-hidden="true" />
       </a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open navigation">
         <span></span><span></span>
@@ -27,7 +28,7 @@
       <ul class="nav-links" id="primary-menu">
           <li><a class="is-active" href="index.html">Home</a></li>
           <li><a class="" href="services.html">Services</a></li>
-          <li><a class="" href="process.html?v=20260716b">Process</a></li>
+          <li><a class="" href="industries.html">Who We Serve</a></li>
           <li><a class="" href="pricing.html">Pricing</a></li>
           <li><a class="" href="about.html">About</a></li>
         <li><a class="nav-cta " href="quote.html">Request a Quote</a></li>
@@ -35,20 +36,61 @@
     </div>
   </nav>
   <main id="main-content">
-<section class="home-hero home-hero--partner">
-    <div class="hero-copy">
-      <h1>Commercial laundry, tailored to your needs.</h1>
-      <p>Commercial laundry, route pickup, and professional finishing for San Diego businesses across hospitality, events, wellness, restaurants, property management, uniforms, and wholesale cleaning.</p>
-      <div class="button-row">
-        <a class="btn-primary" href="quote.html">Request a Quote</a>
-        <a class="hero-link" href="#build-program">Build Your Program</a>
+  <div class="home-opening" data-home-proof>
+    <div class="home-opening__scene" role="img" aria-label="One chef coat continuing from its received condition into its clean, professionally finished return condition">
+      <img class="home-opening__scene-image home-opening__scene-image--returned" src="assets/images/generated/home-opening-coat-returned-v1.jpg" alt="" width="1254" height="1254" fetchpriority="high" aria-hidden="true" />
+      <div class="home-opening__received" aria-hidden="true">
+        <img class="home-opening__scene-image home-opening__scene-image--received" src="assets/images/generated/home-opening-coat-received-v1.jpg" alt="" width="1254" height="1254" fetchpriority="high" />
       </div>
     </div>
-    <figure class="hero-visual">
-      <img class="hero-visual__image hero-visual__image--main" src="assets/images/hero-editorial-textiles.jpg" alt="Pressed chef coat, folded hotel sheets, towels, and event napkin arranged for commercial service" width="1672" height="941" fetchpriority="high" />
-      <img class="hero-visual__image hero-visual__image--detail" src="assets/images/hero-linen-stack.jpg" alt="" width="1440" height="960" aria-hidden="true" />
-    </figure>
+
+  <section class="home-hero home-hero--ready" aria-labelledby="home-hero-title">
+    <div class="ready-hero__frame">
+      <div class="ready-hero__copy">
+        <h1 id="home-hero-title">
+          <span>Cleaned right.</span>
+          <span>Returned ready.</span>
+        </h1>
+        <p class="ready-hero__intro">Commercial laundry for uniforms, towels, and linens&mdash;carefully finished and reliably delivered for the way your operation runs.</p>
+        <div class="ready-hero__actions">
+          <a class="ready-hero__primary" href="#build-program">Build Your Program</a>
+          <a class="ready-hero__secondary" href="quote.html">Request a Quote</a>
+        </div>
+      </div>
+    </div>
   </section>
+
+  <section class="home-proof" id="home-proof" aria-labelledby="home-proof-title">
+    <div class="home-proof__comparison" role="group" aria-label="Compare the single chef coat when received and returned ready">
+      <div class="home-proof__labels" aria-hidden="true">
+        <span>Received</span>
+        <span>Returned ready</span>
+      </div>
+
+      <div class="home-proof__control">
+        <span class="home-proof__line" aria-hidden="true"></span>
+        <input type="range" min="8" max="92" value="50" aria-label="Compare the chef coat when received and returned ready" aria-valuetext="50 percent received and 50 percent returned ready" data-home-proof-range />
+      </div>
+      <output class="sr-only" aria-live="polite" data-home-proof-output>50 percent received and 50 percent returned ready</output>
+    </div>
+
+    <div class="home-proof__copy">
+      <p class="home-proof__eyebrow">A small proof</p>
+      <h2 id="home-proof-title">Whiter is only<br />the beginning.</h2>
+      <p class="home-proof__lead">We remove soil, refine the finish, and return garments that look sharp and perform longer.</p>
+      <ul class="home-proof__benefits" aria-label="Cleaning quality benefits">
+        <li>Heavy soil</li>
+        <li>Presentation</li>
+        <li>Long-term wear</li>
+      </ul>
+    </div>
+  </section>
+
+  </div>
+
+  <div class="home-tailored-transition" aria-hidden="true">
+    <img src="assets/images/generated/home-transition-tailored-hem-brand-v1.png" alt="" width="2048" height="768" loading="eager" decoding="async" />
+  </div>
 
   <!-- Banked positioning copy for later: Every account moves laundry differently. We shape each program around your volume, schedule, standards, packaging, and return needs. -->
 
@@ -126,7 +168,7 @@
           </div>
         </div>
         <a class="btn-primary" data-program-field="href" href="quote.html?program=hotels">Build a hotel program</a>
-        <a class="program-detail__secondary-link" data-program-field="secondaryHref" href="services.html">Learn more about hospitality laundry &rarr;</a>
+        <a class="program-detail__secondary-link" data-program-field="secondaryHref" href="industries.html#hotels">Learn more about hospitality laundry &rarr;</a>
       </article>
     </div>
     <div class="program-model-links" aria-label="Choose an account ownership model">
@@ -260,17 +302,13 @@
       <div class="footer-directory">
         <div class="footer-brand-panel">
           <a class="footer-logo" href="index.html" aria-label="Shelton Linen and Uniform Services home">
-            <span class="footer-brand-mark" aria-hidden="true"><img src="assets/images/shelton-s-mark-white.png" alt="" width="815" height="815" /></span>
-            <span>
-              <span class="footer-brand">Shelton Linen &amp; Uniform Services</span>
-              <span class="footer-descriptor">Commercial Laundry Services · San Diego</span>
-            </span>
+            <img class="footer-brand-logo" src="assets/Shelton%20Brand%20Assets/brand/website/shelton-primary-horizontal-dark.svg" alt="" width="1900" height="480" aria-hidden="true" />
           </a>
         </div>
         <nav class="footer-links" aria-label="Footer pages">
           <h2>Pages</h2>
           <a href="services.html">Services</a>
-          <a href="process.html?v=20260716b">Process</a>
+          <a href="industries.html">Who We Serve</a>
           <a href="pricing.html">Pricing</a>
           <a href="about.html">About</a>
         </nav>
@@ -299,6 +337,7 @@
       </div>
     </div>
   </footer>
+  <script src="assets/js/home-proof.js?v=20260725"></script>
   <script src="assets/js/site.js?v=specialty-accounts-20260708"></script>
 </body>
 </html>

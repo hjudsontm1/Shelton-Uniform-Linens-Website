@@ -3,32 +3,251 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, follow" />
-  <meta http-equiv="refresh" content="0; url=services.html#industries" />
-  <link rel="canonical" href="services.html" />
-  <title>Services &amp; Industries | Shelton Linen &amp; Uniform Services</title>
-  <script>
-    (function () {
-      var anchors = {
-        hotel: "hotels",
-        str: "str-property-managers",
-        restaurant: "restaurants-food-service",
-        spa: "spa-wellness",
-        gym: "gyms-fitness",
-        event: "events-convention-centers",
-        uniform: "uniform-accounts",
-        casino: "casinos-entertainment",
-        wholesale: "wholesale-cleaners"
-      };
-      var sourceHash = window.location.hash.slice(1);
-      var targetHash = anchors[sourceHash] || sourceHash || "industries";
-      window.location.replace("services.html" + window.location.search + "#" + targetHash);
-    }());
-  </script>
+  <link rel="icon" href="assets/Shelton%20Brand%20Assets/brand/website/shelton-favicon.svg" type="image/svg+xml" />
+  <title>Who We Serve | Industry Laundry Programs | Shelton</title>
+  <meta name="description" content="Explore Shelton linen and uniform programs for hotels, property managers, spas, gyms, events, restaurants, uniform accounts, casinos, cleaners, and specialty commercial operations." />
+  <link rel="canonical" href="industries.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.2/src/regular/style.css" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <link rel="stylesheet" href="assets/css/industries.css?v=20260728-polish-pass-3" />
+  <link rel="stylesheet" href="assets/css/header.css?v=20260723-logo-packet" />
 </head>
-<body>
-  <main>
-    <p>Services and industries now live on one page. <a href="services.html#industries">Continue to Shelton services and industries</a>.</p>
+<body class="industries-page" data-page="industries">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html" aria-label="Shelton Linen and Uniform Services home">
+        <img class="nav-brand-logo" src="assets/Shelton%20Brand%20Assets/brand/website/shelton-primary-horizontal-dark.svg" alt="" width="1900" height="480" aria-hidden="true" />
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open navigation"><span></span><span></span></button>
+      <ul class="nav-links" id="primary-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a class="is-active" href="industries.html">Who We Serve</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a class="nav-cta" href="quote.html">Request a Quote</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main-content">
+    <section class="serve-hero" aria-labelledby="serve-title">
+      <div class="serve-hero__copy reveal">
+        <p class="serve-kicker">Who We Serve</p>
+        <h1 id="serve-title">Built around<br />the way you<br />operate.</h1>
+        <p>From guest rooms to production floors, we build linen and uniform programs around your people, pace, and standards.</p>
+        <a class="serve-button serve-button--outline" href="#industry-directory">Find your industry</a>
+      </div>
+      <figure class="serve-hero__media reveal">
+        <img src="assets/images/industry-hotel.jpg" alt="Fresh linens and towels arranged for a hospitality program" width="1672" height="941" fetchpriority="high" />
+      </figure>
+    </section>
+
+    <div class="serve-directory-shell">
+    <nav class="serve-directory" id="industry-directory" aria-label="Industry programs">
+      <a class="is-current" href="#hotels" data-short-label="Hotels" aria-label="01 Hotels and Boutique Stays" aria-current="true"><span>01</span><strong>Hotels &amp;<br />Boutique Stays</strong></a>
+      <a href="#short-term-rentals" data-short-label="Rentals" aria-label="02 Short-Term Rentals and Property Managers"><span>02</span><strong>Short-Term Rentals &amp;<br />Property Managers</strong></a>
+      <a href="#gyms" data-short-label="Fitness" aria-label="03 Gyms and Fitness Centers"><span>03</span><strong>Gyms &amp;<br />Fitness Centers</strong></a>
+      <a href="#spas" data-short-label="Spa" aria-label="04 Spas and Wellness"><span>04</span><strong>Spas &amp;<br />Wellness</strong></a>
+      <a href="#events" data-short-label="Events" aria-label="05 Event Companies and Venues"><span>05</span><strong>Event Companies &amp;<br />Venues</strong></a>
+      <a href="#restaurants" data-short-label="Dining" aria-label="06 Restaurants and Food Service"><span>06</span><strong>Restaurants &amp;<br />Food Service</strong></a>
+      <a href="#uniforms" data-short-label="Uniforms" aria-label="07 Uniform Accounts"><span>07</span><strong>Uniform<br />Accounts</strong></a>
+      <a href="#casinos" data-short-label="Casinos" aria-label="08 Casinos and Entertainment"><span>08</span><strong>Casinos &amp;<br />Entertainment</strong></a>
+      <a href="#wholesale" data-short-label="Wholesale" aria-label="09 Wholesale Dry Cleaners and Laundry Partners"><span>09</span><strong>Wholesale Dry Cleaners &amp;<br />Laundry Partners</strong></a>
+      <a href="#specialty" data-short-label="Specialty" aria-label="10 Specialty Commercial Accounts"><span>10</span><strong>Specialty Commercial<br />Accounts</strong></a>
+    </nav>
+    </div>
+
+    <div class="serve-groups" aria-label="Industries served">
+      <section class="serve-group" aria-labelledby="hospitality-group-title">
+        <figure class="serve-group__media reveal">
+          <img src="assets/images/industry-hotel.jpg" alt="Guest-ready hotel linen and towels" width="1672" height="941" loading="lazy" />
+        </figure>
+        <h2 class="serve-group__word" id="hospitality-group-title">Hospitality</h2>
+        <div class="serve-group__programs">
+          <article class="serve-program reveal" id="hotels">
+            <p class="serve-program__eyebrow">01&nbsp;&nbsp; Hotels &amp; Boutique Stays</p>
+            <h3>Elevated experiences,<br />consistently delivered.</h3>
+            <p>From boutique properties to full-service hotels, reliable care keeps guest rooms and shared spaces ready.</p>
+            <div class="serve-program__facts">
+              <div><h4>Our solutions</h4><ul><li>Bed, bath &amp; table linens</li><li>Housekeeping and terry programs</li><li>Banquet and event support</li></ul></div>
+              <div><h4>Why Shelton</h4><ul><li>Material-aware cleaning</li><li>Stain attention and controlled finishing</li><li>Inspection before organized return</li></ul></div>
+            </div>
+            <button class="serve-program__link" type="button" data-program="hotels">Learn more about this program <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+          </article>
+          <article class="serve-program reveal" id="short-term-rentals">
+            <p class="serve-program__eyebrow">02&nbsp;&nbsp; Short-Term Rentals &amp; Property Managers</p>
+            <h3>Every turnover,<br />ready on time.</h3>
+            <p>Move clean guest linens across active properties without turning your operations team into a laundry team.</p>
+            <div class="serve-program__facts">
+              <div><h4>Our solutions</h4><ul><li>Linens, set tracking &amp; delivery</li><li>Inventory visibility</li><li>Flexible route cadence</li></ul></div>
+              <div><h4>Why Shelton</h4><ul><li>Consistent wash and finish standards</li><li>Account-organized processing</li><li>Property-ready folding and packing</li></ul></div>
+            </div>
+            <button class="serve-program__link" type="button" data-program="short-term-rentals">Learn more about this program <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+          </article>
+        </div>
+      </section>
+
+      <section class="serve-group serve-group--reverse" aria-labelledby="wellness-group-title">
+        <div class="serve-group__programs">
+          <article class="serve-program reveal" id="gyms">
+            <p class="serve-program__eyebrow">03&nbsp;&nbsp; Gyms &amp; Fitness Centers</p>
+            <h3>Fresh towels at the pace your members move.</h3>
+            <p>Dependable towel volume and quick turns keep high-use facilities ready from the first class to the last.</p>
+            <div class="serve-program__facts">
+              <div><h4>Our solutions</h4><ul><li>Towel-volume programs</li><li>Inventory planning</li><li>Pickup and delivery</li></ul></div>
+              <div><h4>Why Shelton</h4><ul><li>Load separation by use and material</li><li>Reliable finish and hand feel</li><li>Inspection before every return</li></ul></div>
+            </div>
+            <button class="serve-program__link" type="button" data-program="gyms">Learn more about this program <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+          </article>
+          <article class="serve-program reveal" id="spas">
+            <p class="serve-program__eyebrow">04&nbsp;&nbsp; Spas &amp; Wellness</p>
+            <h3>Care guests can feel in every detail.</h3>
+            <p>Treatment linens, towels, and robes return with hygienic care and a polished, shelf-ready presentation.</p>
+            <div class="serve-program__facts">
+              <div><h4>Our solutions</h4><ul><li>Towels &amp; treatment linens</li><li>Robes and wraps</li><li>Folded or pressed return</li></ul></div>
+              <div><h4>Why Shelton</h4><ul><li>Fabric-aware wash selection</li><li>Guest-facing finish standards</li><li>Visual inspection before return</li></ul></div>
+            </div>
+            <button class="serve-program__link" type="button" data-program="spas">Learn more about this program <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+          </article>
+        </div>
+        <h2 class="serve-group__word" id="wellness-group-title">Wellness</h2>
+        <div class="serve-group__media serve-group__media--stack reveal">
+          <img src="assets/images/industry-spa.jpg" alt="Folded spa towels and robes" width="1672" height="941" loading="lazy" />
+          <img src="assets/images/industry-gym.jpg" alt="Clean fitness towels ready for members" width="1672" height="941" loading="lazy" />
+        </div>
+      </section>
+
+      <section class="serve-group" aria-labelledby="events-group-title">
+        <figure class="serve-group__media reveal"><img src="assets/images/industry-event.jpg" alt="Presentation-ready table linens for an event" width="1672" height="941" loading="lazy" /></figure>
+        <h2 class="serve-group__word" id="events-group-title">Events</h2>
+        <div class="serve-group__programs">
+          <article class="serve-program reveal" id="events">
+            <p class="serve-program__eyebrow">05&nbsp;&nbsp; Event Companies &amp; Venues</p>
+            <h3>Presentation-ready,<br />right on the deadline.</h3>
+            <p>Event linen care built around color, fabric, specialty pieces, exact return windows, and organized batches.</p>
+            <div class="serve-program__facts"><div><h4>Our solutions</h4><ul><li>Table linen &amp; specialty pieces</li><li>Color-aware care</li><li>Organized batch return</li></ul></div><div><h4>Why Shelton</h4><ul><li>Batch organization by event</li><li>Targeted stain attention</li><li>Finish and count review</li></ul></div></div>
+            <button class="serve-program__link" type="button" data-program="events">Learn more about this program <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+          </article>
+          <article class="serve-program reveal" id="restaurants">
+            <p class="serve-program__eyebrow">06&nbsp;&nbsp; Restaurants &amp; Food Service</p>
+            <h3>A polished table,<br />service after service.</h3>
+            <p>Dining linen and kitchen garments move on a recurring schedule shaped by service windows and weekly volume.</p>
+            <div class="serve-program__facts"><div><h4>Our solutions</h4><ul><li>Table linen &amp; napkins</li><li>Chef coats &amp; aprons</li><li>Bar towels and flatwork</li></ul></div><div><h4>Why Shelton</h4><ul><li>Soil-aware cleaning choices</li><li>Controlled table and garment finishing</li><li>Organized inspection and return</li></ul></div></div>
+            <button class="serve-program__link" type="button" data-program="restaurants">Learn more about this program <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+          </article>
+        </div>
+      </section>
+
+      <section class="serve-group serve-group--reverse" aria-labelledby="workforce-group-title">
+        <div class="serve-group__programs">
+          <article class="serve-program reveal" id="uniforms">
+            <p class="serve-program__eyebrow">07&nbsp;&nbsp; Uniform Accounts</p>
+            <h3>Every shift starts<br />looking ready.</h3>
+            <p>Uniforms, chef wear, and workwear return clean, finished, and organized around the way your team changes out.</p>
+            <div class="serve-program__facts"><div><h4>Our solutions</h4><ul><li>Uniforms by department</li><li>Chef wear &amp; aprons</li><li>Pressing and packaging</li></ul></div><div><h4>Why Shelton</h4><ul><li>Garment-appropriate cleaning</li><li>Workwear-ready finishing</li><li>Department-organized return</li></ul></div></div>
+            <button class="serve-program__link" type="button" data-program="uniforms">Learn more about this program <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+          </article>
+          <article class="serve-program reveal" id="casinos">
+            <p class="serve-program__eyebrow">08&nbsp;&nbsp; Casinos &amp; Entertainment</p>
+            <h3>One partner across<br />every department.</h3>
+            <p>Support mixed teams and 24/7 operations with uniforms, food-and-beverage linen, towels, and house goods.</p>
+            <div class="serve-program__facts"><div><h4>Our solutions</h4><ul><li>Department uniforms</li><li>F&amp;B linen and towels</li><li>Account sorting</li></ul></div><div><h4>Why Shelton</h4><ul><li>Program-specific processing</li><li>Controlled finishing across mixed goods</li><li>Department-organized quality review</li></ul></div></div>
+            <button class="serve-program__link" type="button" data-program="casinos">Learn more about this program <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+          </article>
+        </div>
+        <h2 class="serve-group__word" id="workforce-group-title">Workforce</h2>
+        <figure class="serve-group__media reveal"><img src="assets/images/industry-uniform.jpg" alt="Finished professional uniforms ready for a team" width="1672" height="941" loading="lazy" /></figure>
+      </section>
+
+      <section class="serve-group" aria-labelledby="partners-group-title">
+        <figure class="serve-group__media reveal"><img src="assets/images/industry-wholesale.jpg" alt="Finished garments moving through a wholesale program" width="1672" height="941" loading="lazy" /></figure>
+        <h2 class="serve-group__word" id="partners-group-title">Partners</h2>
+        <div class="serve-group__programs">
+          <article class="serve-program reveal" id="wholesale">
+            <p class="serve-program__eyebrow">09&nbsp;&nbsp; Wholesale Dry Cleaners &amp; Laundry Partners</p>
+            <h3>Capacity that works<br />behind your name.</h3>
+            <p>Behind-the-scenes laundry, pressing, finishing, and overflow capacity with clear care and return standards.</p>
+            <div class="serve-program__facts"><div><h4>Our solutions</h4><ul><li>Pressing &amp; finishing</li><li>Overflow capacity</li><li>Organized partner return</li></ul></div><div><h4>Why Shelton</h4><ul><li>Documented partner specifications</li><li>Batch-organized processing</li><li>Review against agreed return standards</li></ul></div></div>
+            <button class="serve-program__link" type="button" data-program="wholesale">Learn more about this program <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+          </article>
+          <article class="serve-program reveal" id="specialty">
+            <p class="serve-program__eyebrow">10&nbsp;&nbsp; Specialty Commercial Accounts</p>
+            <h3>A program shaped<br />around uncommon needs.</h3>
+            <p>Unique garments and textiles begin with a review of material, construction, condition, timing, and desired finish.</p>
+            <div class="serve-program__facts"><div><h4>Our solutions</h4><ul><li>Fabric-specific review</li><li>Specialty handling</li><li>Custom program design</li></ul></div><div><h4>Why Shelton</h4><ul><li>Item review before approval</li><li>Documented handling expectations</li><li>Scope-specific quality checks</li></ul></div></div>
+            <button class="serve-program__link" type="button" data-program="specialty">Learn more about this program <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <section class="serve-fit" aria-labelledby="serve-fit-title">
+      <h2 id="serve-fit-title">Not sure where your operation fits?</h2>
+      <div class="serve-fit__items">
+        <p><span>Tell us what you process.</span>Share the items and volume you need us to handle.</p>
+        <p><span>How often you need it.</span>Daily, weekly, seasonal—whatever your cadence looks like.</p>
+        <p><span>What ready looks like to you.</span>We will align quality, timing, and presentation to your standards.</p>
+      </div>
+      <p>We’ll match your goods, volume, and cadence to the right care, route, and return format.</p>
+      <a class="serve-fit__link" href="quote.html?industry=other&amp;service=not-sure">Get a program recommendation <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+    </section>
+
   </main>
+
+  <dialog class="program-drawer" id="program-drawer" aria-labelledby="program-drawer-title" data-testid="program-drawer" tabindex="-1">
+    <div class="program-drawer__inner">
+      <button class="program-drawer__close" type="button" aria-label="Close program details" data-drawer-close><i class="ph ph-x" aria-hidden="true"></i></button>
+      <p class="program-drawer__eyebrow" data-drawer-eyebrow></p>
+      <h2 id="program-drawer-title" data-drawer-title></h2>
+      <p class="program-drawer__lead" data-drawer-lead></p>
+      <img class="program-drawer__image" data-drawer-image src="assets/images/industry-hotel.jpg" alt="" width="1672" height="941" />
+      <div class="program-drawer__summary">
+        <section><h3>Typical goods</h3><p data-drawer-goods></p></section>
+        <section><h3>Program models</h3><p data-drawer-models></p></section>
+      </div>
+      <section class="program-route" aria-labelledby="program-route-title">
+        <h3 id="program-route-title">How pickup &amp; return works</h3>
+        <ol>
+          <li><span>01</span><strong>Plan</strong><p data-drawer-plan></p></li>
+          <li><span>02</span><strong>Collect</strong><p data-drawer-collect></p></li>
+          <li><span>03</span><strong>Process</strong><p data-drawer-process></p></li>
+          <li><span>04</span><strong>Return</strong><p data-drawer-return></p></li>
+        </ol>
+        <p class="program-route__note" data-drawer-route-note></p>
+      </section>
+      <section class="program-quality" aria-labelledby="program-quality-title">
+        <h3 id="program-quality-title">Quality built into the program</h3>
+        <ul data-drawer-quality></ul>
+      </section>
+      <div class="program-drawer__actions">
+        <a class="serve-button serve-button--navy" data-drawer-quote href="quote.html"><span>Request a program quote</span></a>
+        <a class="program-drawer__general" href="quote.html">Start a general quote <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </dialog>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="footer-directory">
+        <div class="footer-brand-panel">
+          <a class="footer-logo" href="index.html" aria-label="Shelton Linen and Uniform Services home"><img class="footer-brand-logo" src="assets/Shelton%20Brand%20Assets/brand/website/shelton-primary-horizontal-dark.svg" alt="" width="1900" height="480" aria-hidden="true" /></a>
+          <p class="footer-text">Commercial-only laundry, linen, towel, uniform, event linen, and wholesale finishing support for San Diego businesses.</p>
+        </div>
+        <nav class="footer-links" aria-label="Footer pages"><h2>Pages</h2><a href="services.html">Services</a><a href="industries.html">Who We Serve</a><a href="pricing.html">Pricing</a><a href="about.html">About</a></nav>
+        <nav class="footer-links" aria-label="Industry solutions"><h2>Industry Solutions</h2><a href="#hotels">Hotels</a><a href="#short-term-rentals">Property managers</a><a href="#spas">Spa &amp; wellness</a><a href="#restaurants">Restaurants</a><a href="#wholesale">Wholesale partners</a></nav>
+        <nav class="footer-links" aria-label="Get started"><h2>Get Started</h2><a href="quote.html">Request a quote</a><a href="quote.html?request=plant-tour">Schedule a plant tour</a><a href="https://www.sheltoncleanerssd.com/" target="_blank" rel="noopener">Shelton Cleaners</a></nav>
+      </div>
+      <div class="footer-bottom"><p>2026 Shelton Linen &amp; Uniform Services. All rights reserved.</p><p>Sister company to Shelton Cleaners San Diego.</p></div>
+    </div>
+  </footer>
+
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/industries-programs.js?v=20260728-polish-pass-2"></script>
 </body>
 </html>
