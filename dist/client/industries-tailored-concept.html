@@ -4,18 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="assets/Shelton%20Brand%20Assets/brand/website/shelton-favicon.svg" type="image/svg+xml" />
-  <title>Who We Serve | Industry Laundry Programs | Shelton</title>
+  <title>Who We Serve — Tailored Concept | Shelton</title>
   <meta name="description" content="Explore Shelton linen and uniform programs for hotels, property managers, spas, gyms, events, restaurants, uniform accounts, casinos, cleaners, and specialty commercial operations." />
-  <link rel="canonical" href="industries.html" />
+  <meta name="robots" content="noindex, nofollow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.2/src/regular/style.css" />
   <link rel="stylesheet" href="assets/css/site.css" />
   <link rel="stylesheet" href="assets/css/industries.css?v=20260728-polish-pass-3" />
+  <link rel="stylesheet" href="assets/css/industries-tailored-concept.css?v=20260728-correct-reference-2" />
   <link rel="stylesheet" href="assets/css/header.css?v=20260723-logo-packet" />
 </head>
-<body class="industries-page" data-page="industries">
+<body class="industries-page industries-tailored-concept" data-page="industries">
   <a class="skip-link" href="#main-content">Skip to content</a>
 
   <nav class="site-nav" aria-label="Main navigation">
@@ -165,7 +166,7 @@
         <figure class="serve-group__media reveal"><img src="assets/images/industry-uniform.jpg" alt="Finished professional uniforms ready for a team" width="1672" height="941" loading="lazy" /></figure>
       </section>
 
-      <section class="serve-group" aria-labelledby="partners-group-title">
+      <section class="serve-group serve-group--partners" aria-labelledby="partners-group-title" data-testid="partners-spread">
         <figure class="serve-group__media reveal"><img src="assets/images/industry-wholesale.jpg" alt="Finished garments moving through a wholesale program" width="1672" height="941" loading="lazy" /></figure>
         <h2 class="serve-group__word" id="partners-group-title">Partners</h2>
         <div class="serve-group__programs">
@@ -178,7 +179,7 @@
           </article>
           <article class="serve-program reveal" id="specialty">
             <p class="serve-program__eyebrow">10&nbsp;&nbsp; Specialty Commercial Accounts</p>
-            <h3>A program shaped<br />around uncommon needs.</h3>
+            <h3>A program shaped<br />around<br />uncommon needs.</h3>
             <p>Unique garments and textiles begin with a review of material, construction, condition, timing, and desired finish.</p>
             <div class="serve-program__facts"><div><h4>Our solutions</h4><ul><li>Fabric-specific review</li><li>Specialty handling</li><li>Custom program design</li></ul></div><div><h4>Why Shelton</h4><ul><li>Item review before approval</li><li>Documented handling expectations</li><li>Scope-specific quality checks</li></ul></div></div>
             <button class="serve-program__link" type="button" data-program="specialty">Learn more about this program <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
@@ -187,15 +188,25 @@
       </section>
     </div>
 
-    <section class="serve-fit" aria-labelledby="serve-fit-title">
+    <div class="serve-tailored-fold" aria-hidden="true">
+      <img src="assets/images/generated/who-we-serve-horizontal-fold-v1.png" alt="" width="2048" height="512" />
+    </div>
+
+    <section class="serve-fit" aria-labelledby="serve-fit-title" data-testid="program-estimator-close">
+      <p class="serve-fit__eyebrow">Find your starting point</p>
       <h2 id="serve-fit-title">Not sure where your operation fits?</h2>
       <div class="serve-fit__items">
         <p><span>Tell us what you process.</span>Share the items and volume you need us to handle.</p>
         <p><span>How often you need it.</span>Daily, weekly, seasonal—whatever your cadence looks like.</p>
         <p><span>What ready looks like to you.</span>We will align quality, timing, and presentation to your standards.</p>
       </div>
-      <p>We’ll match your goods, volume, and cadence to the right care, route, and return format.</p>
-      <a class="serve-fit__link" href="quote.html?industry=other&amp;service=not-sure">Get a program recommendation <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+      <div class="serve-fit__close">
+        <div class="serve-fit__actions">
+          <a class="serve-button serve-button--gold" href="estimate.html">Start the estimator</a>
+          <a class="serve-button serve-button--quote" href="quote.html?industry=other&amp;service=not-sure">Request a quote</a>
+        </div>
+        <p>We’ll match your goods, volume, and cadence to the right care, route, and return format.</p>
+      </div>
     </section>
 
   </main>
