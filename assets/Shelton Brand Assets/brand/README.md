@@ -2,6 +2,18 @@
 
 This folder contains the approved commercial brand system built around the standalone circled **S** mark. The Shelton Cleaners wordmark and 24/7 kiosk badge are reference material only and are not part of this commercial identity suite.
 
+## Current Website Lockup
+
+The selected July 2026 logo packet supplies the current website identity in `website/`. These files are unmodified copies of the outlined vector masters in `exports/Shelton Complete Logo Packet/`:
+
+- `website/shelton-primary-horizontal-dark.svg` — website headers and footers on navy or other dark surfaces
+- `website/shelton-primary-horizontal-light.svg` — website headers on cream or other light surfaces
+- `website/shelton-favicon.svg` — browser favicon
+
+For website chrome, these outlined Primary Horizontal lockups supersede the earlier editable-text horizontal lockups listed below. The original circled-S master is unchanged, and the older files remain available for existing applications and historical reference.
+
+Before public deployment or commercial production, confirm that Shelton has the required Sharp Grotesk license described in the complete packet README.
+
 ## Quick Start
 
 | Need | Use |
