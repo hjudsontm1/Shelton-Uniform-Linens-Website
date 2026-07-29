@@ -3,7 +3,7 @@
 
   const root = document.querySelector("[data-pricing-learning]");
   const config = window.SheltonPricingJourneyConfig;
-  const calculator = window.SheltonPricingDevelopmentRules;
+  const calculator = window.SheltonPricingEngine;
   if (!root || !config || !calculator) return;
 
   const storageKey = "shelton-pricing-learning-v2";
