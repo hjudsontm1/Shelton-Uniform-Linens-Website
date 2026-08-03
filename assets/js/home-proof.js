@@ -8,8 +8,8 @@
 
   function updateComparison() {
     var value = Math.min(Number(range.max), Math.max(Number(range.min), Number(range.value)));
-    var returnedReady = 100 - value;
-    var status = value + ' percent received and ' + returnedReady + ' percent returned ready';
+    var professionallyCleaned = 100 - value;
+    var status = value + ' percent received and ' + professionallyCleaned + ' percent professionally cleaned';
 
     proof.style.setProperty('--proof-position', value + '%');
     range.setAttribute('aria-valuetext', status);
