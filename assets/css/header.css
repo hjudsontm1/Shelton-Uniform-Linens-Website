@@ -24,55 +24,32 @@ body:not([data-page="about"]) .site-nav {
 }
 
 .site-nav .nav-brand {
-  width: auto;
-  min-width: max-content;
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
+  width: clamp(14.5rem, 22vw, 17.25rem);
+  max-width: calc(100% - 5rem);
+  min-width: 0;
+  display: block;
+  flex: 0 1 17.25rem;
   color: inherit;
   text-decoration: none;
 }
 
-.site-nav .brand-mark {
-  width: 2.75rem;
-  height: 2.75rem;
-  flex: 0 0 2.75rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.site-nav .brand-mark img {
+.site-nav .nav-brand-logo {
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 0 16px rgba(184, 150, 90, 0.16));
+  height: auto;
 }
 
-.site-nav .brand-copy {
-  min-width: 0;
-  display: grid;
-  gap: 0.05rem;
+.footer-logo {
+  width: min(100%, 19rem);
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
 }
 
-.site-nav .brand-main {
-  color: var(--cream-2);
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 1.1rem;
-  font-weight: 400;
-  letter-spacing: 0.12em;
-  line-height: 1.1;
-  text-transform: uppercase;
-}
-
-.site-nav .brand-sub {
-  color: var(--gold);
-  font-family: Inter, Arial, sans-serif;
-  font-size: 0.58rem;
-  font-weight: 400;
-  letter-spacing: 0.2em;
-  line-height: 1.7;
-  text-transform: uppercase;
+.footer-brand-logo {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .site-nav .nav-links {
@@ -176,18 +153,11 @@ body[data-page="about"] .site-nav {
   -webkit-backdrop-filter: blur(18px) saturate(0.95);
 }
 
-body[data-page="about"] .site-nav .brand-mark img {
-  opacity: 0.9;
-  filter: brightness(0) saturate(0);
-}
-
-body[data-page="about"] .site-nav .brand-main,
 body[data-page="about"] .site-nav .nav-links a:hover,
 body[data-page="about"] .site-nav .nav-links a.is-active {
   color: var(--about-ink);
 }
 
-body[data-page="about"] .site-nav .brand-sub,
 body[data-page="about"] .site-nav .nav-links a,
 body[data-page="about"] .site-nav .nav-cta {
   color: rgba(27, 23, 18, 0.64) !important;
@@ -215,6 +185,8 @@ body[data-page="about"] .site-nav .menu-toggle {
 }
 
 @media (max-width: 1080px) {
+  body.has-open-menu { overflow: hidden; }
+
   .site-nav .menu-toggle {
     display: block;
   }
@@ -270,6 +242,7 @@ body[data-page="about"] .site-nav .menu-toggle {
   body[data-page="about"] .site-nav .nav-links li {
     border-bottom-color: rgba(31, 25, 18, 0.2);
   }
+
 }
 
 @media (max-width: 620px) {
@@ -278,24 +251,8 @@ body[data-page="about"] .site-nav .menu-toggle {
   }
 
   .site-nav .nav-brand {
-    min-width: 0;
-    flex: 1 1 auto;
-  }
-
-  .site-nav .brand-main {
-    max-width: min(16rem, calc(100vw - 7.25rem));
-    font-size: clamp(0.72rem, 3.05vw, 0.95rem);
-    letter-spacing: 0.07em;
-    line-height: 1.02;
-  }
-
-  .site-nav .brand-sub {
-    display: none;
-  }
-
-  .site-nav .brand-mark {
-    width: 2.3rem;
-    height: 2.3rem;
-    flex-basis: 2.3rem;
+    width: min(14rem, calc(100vw - 5.75rem));
+    max-width: none;
+    flex: 0 1 auto;
   }
 }

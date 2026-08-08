@@ -20,17 +20,65 @@
   const toggle = document.querySelector(".menu-toggle");
   const menu = document.querySelector("#primary-menu");
   if (toggle && menu) {
+    const nav = toggle.closest(".site-nav");
+    const mobileNavigation = window.matchMedia("(max-width: 1080px)");
+    const menuIsOpen = () => toggle.getAttribute("aria-expanded") === "true";
+    const closeMenu = ({ restoreFocus = false } = {}) => {
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Open navigation");
+      menu.classList.remove("is-open");
+      document.body.classList.remove("has-open-menu");
+      if (restoreFocus) toggle.focus();
+    };
+    const openMenu = () => {
+      toggle.setAttribute("aria-expanded", "true");
+      toggle.setAttribute("aria-label", "Close navigation");
+      menu.classList.add("is-open");
+      document.body.classList.add("has-open-menu");
+      window.setTimeout(() => {
+        if (menuIsOpen()) menu.querySelector("a[href]")?.focus();
+      }, prefersReducedMotion ? 0 : 260);
+    };
+
     toggle.addEventListener("click", () => {
-      const isOpen = toggle.getAttribute("aria-expanded") === "true";
-      toggle.setAttribute("aria-expanded", String(!isOpen));
-      menu.classList.toggle("is-open", !isOpen);
+      if (menuIsOpen()) closeMenu();
+      else openMenu();
     });
     menu.addEventListener("click", (event) => {
-      if (event.target.closest("a")) {
-        toggle.setAttribute("aria-expanded", "false");
-        menu.classList.remove("is-open");
+      if (event.target.closest("a")) closeMenu();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (!menuIsOpen()) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeMenu({ restoreFocus: true });
+        return;
+      }
+      if (event.key !== "Tab" || !nav) return;
+
+      const focusable = Array.from(nav.querySelectorAll('a[href], button:not([disabled])'))
+        .filter((element) => element.getClientRects().length > 0);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     });
+
+    const resetDesktopMenu = (event) => {
+      if (!event.matches) closeMenu();
+    };
+    if (typeof mobileNavigation.addEventListener === "function") {
+      mobileNavigation.addEventListener("change", resetDesktopMenu);
+    } else {
+      mobileNavigation.addListener(resetDesktopMenu);
+    }
   }
 
   const reveals = document.querySelectorAll(".reveal");
@@ -530,107 +578,107 @@
   const programProfiles = {
     hotels: {
       label: "Hotels & Boutique Stays",
-      summary: "A reliable linen program for hospitality accounts of every size, from boutique stays to larger properties.",
-      items: ["Linens", "Towels", "Bath mats", "Robes", "Blankets"],
-      rhythm: "Pickup and delivery built around your schedule, from once weekly to daily service.",
-      helps: "We help hospitality teams keep linens cleaner, brighter, and more consistent over time, reducing replacement headaches and keeping goods ready for the next stay.",
-      finishing: "Folded, bundled, and delivered back in linen carts.",
+      summary: "A dependable linen program for hotels and boutique properties, built around occupancy, volume, and room turnover.",
+      items: ["Bed linens", "Towels", "Bath mats", "Robes", "Blankets"],
+      rhythm: "Pickup and delivery scheduled around your property's needs, from weekly to daily service.",
+      helps: "Shelton combines consistent commercial cleaning with the flexibility and personal attention of a local, family-run company. We learn how your property operates, then shape pickup schedules, finishing, packaging, and returns around your housekeeping workflow. Your linens are cleaned to our high standards, professionally finished, organized to your specifications, and returned on the schedule your team needs.",
+      finishing: "Folded, bundled, and returned in linen carts based on your property's needs.",
       flow: ["Pickup cadence", "Account sorting", "Finishing standards", "Route-ready return"],
-      cta: "Build a hotel program",
+      cta: "Build a Hotel Program",
       href: "quote.html?program=hotels",
       secondaryCta: "Learn more about hospitality laundry →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#hotels"
     },
     str: {
-      label: "Short-Term Rentals / Property Managers",
-      summary: "A bulk laundry program for STR operators and property managers who need clean guest linens moving between turns without tying up staff time.",
-      items: ["Sheets", "Towels", "Bath mats", "Duvet covers", "Blankets"],
-      rhythm: "Bulk pickup and delivery to a central location, built around turnover volume, property schedules, and seasonal demand.",
-      helps: "We take laundry off the turnover checklist, helping your team avoid on-site washing, laundromat runs, and last-minute linen shortages between guests.",
-      finishing: "Folded, pressed, bundled, labeled, and returned by property, item type, or account preference.",
+      label: "Short-Term Rentals & Property Managers",
+      summary: "A dependable bulk laundry program for operators and property managers handling frequent guest turnover.",
+      items: ["Bed linens", "Towels", "Bath mats", "Duvet covers", "Blankets"],
+      rhythm: "Bulk pickup and delivery to a central location, scheduled around turnover volume, property needs, and seasonal demand.",
+      helps: "Shelton gives short-term rental operators access to the same efficient bulk-cleaning approach used for hotel linen programs. Consolidating linens for commercial processing provides consistent cleaning standards and hotel-style pricing without requiring hotel-level volume. Dependable scheduled service eliminates on-site washing and laundromat runs while helping prevent linen shortages.",
+      finishing: "All sheets are professionally pressed and folded, while towels are neatly folded. Every item is bundled and organized before return, making distribution straightforward.",
       flow: ["Checkout pickup", "Property labeling", "Guest-ready folds", "Cleaner-friendly return"],
-      cta: "Build an STR program",
+      cta: "Build a Short-Term Rental Program",
       href: "quote.html?program=str",
       secondaryCta: "Learn more about STR laundry programs →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#str-property-managers"
     },
     spa: {
       label: "Spas, Massage & Wellness",
-      summary: "A soft-goods laundry program for spas, massage studios, wellness clinics, and treatment-based businesses.",
+      summary: "A dependable laundry program for spas, massage studios, wellness clinics, and other treatment-based businesses.",
       items: ["Towels", "Sheets", "Robes", "Blankets", "Face cradle covers"],
-      rhythm: "Recurring pickup and delivery built around appointment volume, room turnover, and storage needs.",
-      helps: "We help keep your team stocked with clean, spotless, consistent goods — including pressed sheets — so staff is not spending time washing towels, folding sheets, or managing laundry between appointments.",
-      finishing: "Folded, pressed, bundled, sorted by item type, and returned ready to use.",
+      rhythm: "Recurring service scheduled around appointment volume, treatment-room turnover, and available storage.",
+      helps: "Spa linens influence both client comfort and the presentation of every treatment room. Shelton provides consistently cleaned, professionally finished towels, sheets, and robes on a dependable schedule built around your business. Your staff can stay focused on clients instead of washing, drying, pressing, folding, and restocking throughout the day.",
+      finishing: "Sheets are professionally pressed and folded. Towels are returned soft and professionally folded. Robes and other items are folded, bundled, and organized for easy restocking.",
       flow: ["Treatment-room volume", "Softness standards", "Use-based bundles", "Stocked return"],
-      cta: "Build a spa program",
+      cta: "Build a Spa & Wellness Program",
       href: "quote.html?program=spa",
       secondaryCta: "Learn more about spa & wellness laundry →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#spa-wellness"
     },
     fitness: {
       label: "Gyms, Yoga & Fitness Studios",
-      summary: "A towel heavy laundry program for gyms, yoga studios, Pilates studios, fitness clubs, and training facilities.",
-      items: ["Towels", "Hand towels"],
-      rhythm: "Recurring pickup and delivery built around class volume, member usage, storage space, and weekly towel demand.",
-      helps: "We keep clean, odorless towels moving through your studio or facility so staff is not constantly washing, drying, folding, and restocking between classes or peak hours.",
-      finishing: "Folded, bundled, and returned ready to stock.",
+      summary: "A dependable towel program for gyms, yoga and Pilates studios, fitness clubs, and training facilities.",
+      items: ["Towels", "Hand towels", "Specialty items"],
+      rhythm: "Recurring service scheduled around towel demand.",
+      helps: "Shelton helps fitness facilities maintain a consistent supply of clean, fresh, and odor-free towels without requiring staff to manage laundry throughout the day. Commercial bulk cleaning handles high towel volume efficiently, while dependable scheduled service helps keep towel stations stocked through classes and peak hours.",
+      finishing: "Towels are returned soft, professionally folded, bundled, and organized for easy restocking.",
       flow: ["Usage planning", "Frequent pickup", "Towel bundles", "Storage-aware return"],
-      cta: "Build a fitness program",
+      cta: "Build a Fitness Towel Program",
       href: "quote.html?program=fitness",
       secondaryCta: "Learn more about fitness towel service →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#gyms-fitness"
     },
     events: {
       label: "Event Linen Programs",
-      summary: "A specialty cleaning program for event companies, venues, convention centers, and planners handling presentation goods, colored linens, and tight return windows.",
+      summary: "A specialty linen program for event companies, venues, convention centers, and planners working with presentation goods, colored linens, and tight turnaround windows.",
       items: ["Tablecloths", "Napkins", "Runners", "Skirting", "Chair covers", "Specialty event goods"],
-      rhythm: "Pickup and delivery built around event schedules, return windows, seasonal volume, and production needs.",
-      helps: "We provide high quality cleaning that helps event linens stay presentation ready longer. Our cleaning programs remove stains while staying gentle on fabric and color, and our specialty mold removal programs help reduce waste and replacement costs on items of all color.",
-      finishing: "Pressed, hung or folded, sorted by item type, and returned ready for your team.",
+      rhythm: "Service scheduled around event dates, seasonal volume, and production needs.",
+      helps: "Event linens must look their best and return to circulation quickly. Shelton combines high-quality commercial cleaning with careful handling for specialty fabrics and colors. We also offer specialized stain and mold treatment that can help recover damaged linens, reduce unnecessary replacement, and extend the useful life of your inventory.",
+      finishing: "Linens are professionally pressed, hung or folded, sorted by item type, and organized for your team.",
       flow: ["Event deadline", "Specialty cleaning", "Order sorting", "Presentation-ready return"],
-      cta: "Build an event linen program",
+      cta: "Build an Event Linen Program",
       href: "quote.html?program=events",
       secondaryCta: "Learn more about event linen care →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#events-convention-centers"
     },
     restaurants: {
       label: "Restaurants & Food Service",
-      summary: "A commercial laundry program for restaurants, catering teams, and kitchens that need clean, professional goods on a recurring schedule.",
-      items: ["Chef coats", "Aprons", "Napkins", "Bar towels", "Table linens"],
-      rhythm: "Recurring pickup and delivery built around weekly volume, service schedule, kitchen usage, and dining room needs.",
-      helps: "We help keep kitchen and dining goods clean, sharp, and ready for service while handling food stains, grease, heavy soil, and repeated use.",
-      finishing: "Pressed, folded, bundled, and returned in linen carts or bags, ready for your kitchen or dining room use.",
+      summary: "A dependable commercial laundry program for restaurants, catering teams, and kitchens that need professional goods on a recurring schedule.",
+      items: ["Chef coats", "Aprons", "Napkins", "Bar towels", "Tablecloths"],
+      rhythm: "Recurring service scheduled around daily or weekly volume and kitchen use.",
+      helps: "Shelton gives chef coats the high quality commercial cleaning and professional finishing they need to look sharp through repeated use. Each coat is properly cleaned, pressed, and returned on a dependable schedule, helping your kitchen maintain a consistent, professional appearance ensuring they look brand new on the 500th use. We apply that same standard of care to aprons, napkins, bar towels, and tablecloths.",
+      finishing: "Items are professionally pressed, hung or folded, and returned in linen carts or bags based on your operation.",
       flow: ["Recurring service", "Stain-aware wash", "Dining-room finish", "Consistent return"],
-      cta: "Build a restaurant program",
+      cta: "Build a Restaurant Laundry Program",
       href: "quote.html?program=restaurants",
       secondaryCta: "Learn more about restaurant laundry →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#restaurants-food-service"
     },
     uniforms: {
       label: "Uniforms & Casino Programs",
-      summary: "A uniform cleaning program for casinos, hospitality teams, security, valet services, and staff accounts that need workwear returned clean and organized.",
+      summary: "A dependable uniform-cleaning program for casinos, hospitality teams, security, valet services, and other staff accounts.",
       items: ["Uniform shirts", "Chef coats", "Casino uniforms", "Workwear", "Jackets"],
-      rhythm: "Recurring pickup and delivery built around staff count, weekly usage, change-outs, and return needs.",
-      helps: "We help keep uniforms looking professional longer, with cleaning and finishing built around repeated wear, staff presentation, and organized return.",
-      finishing: "High-quality presentation, packaged according to your needs.",
+      rhythm: "Recurring service scheduled around staff count, uniform use, changeouts, and shift requirements.",
+      helps: "Uniforms are an important part of how your team and brand are presented. Shelton applies consistent cleaning and professional finishing across every garment, with a program built around your staff, departments, and organizational needs. Dependable scheduled service helps keep employees properly outfitted and looking professional for every shift.",
+      finishing: "Uniforms are professionally pressed, hung or folded, and packaged according to your needs.",
       flow: ["Staff count", "Garment grouping", "Hung or folded finish", "Route-ready return"],
-      cta: "Build a uniform program",
+      cta: "Build a Uniform Program",
       href: "quote.html?program=uniforms",
       secondaryCta: "Learn more about uniform programs →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#uniform-accounts"
     },
     wholesale: {
       label: "Specialty Commercial Accounts",
-      summary: "A flexible cleaning program for theaters, religious organizations, clubs, and commercial accounts with unique fabric, schedule, or presentation needs.",
-      items: ["Costumes", "Choir robes", "Table linens", "Uniforms", "Specialty garments"],
-      rhythm: "Scheduled or as-needed pickup and delivery built around performances, services, events, banquets, and seasonal needs.",
-      helps: "We help specialty accounts clean, finish, and maintain items that do not fit neatly into a standard laundry program, with careful handling based on how each piece is used.",
-      finishing: "Finished to the highest quality and packaged by your needs.",
+      summary: "A flexible laundry and dry-cleaning program for theaters, religious organizations, clubs, and commercial accounts with unique fabric, scheduling, or presentation needs.",
+      items: ["Costumes", "Choir robes", "Table linens", "Uniforms", "Dry-clean-only garments", "Specialty pieces"],
+      rhythm: "Scheduled or as-needed service built around performances, services, events, banquets, and seasonal demand.",
+      helps: "Some items do not fit neatly into a standard laundry program. Shelton takes the time to understand how each piece is used, how it should be presented, and how it needs to be handled. We use the appropriate commercial laundry or dry-cleaning process based on each item's fabric, construction, and use. Our professional finishing and local flexibility allow us to build a practical program around unique goods, irregular schedules, and specialized requirements.",
+      finishing: "Items are professionally finished, hung or folded, and packaged according to their care requirements and your preferences.",
       flow: ["Unique goods", "Careful handling", "Presentation finish", "Packaged return"],
-      cta: "Discuss specialty account needs",
+      cta: "Discuss Your Specialty Laundry Needs",
       href: "quote.html?program=wholesale",
       secondaryCta: "Learn more about specialty accounts →",
-      secondaryHref: "services.html"
+      secondaryHref: "industries.html#specialty-accounts"
     }
   };
 
@@ -751,8 +799,24 @@
   }
   if (industrySelect && industry) industrySelect.value = industry;
   if (serviceSelect && service) serviceSelect.value = service;
-  if (messageField && request === "plant-tour") {
-    messageField.value = "I would like to schedule a plant tour and discuss a commercial laundry account.";
+  const requestQuoteMap = {
+    "plant-tour": {
+      service: "route",
+      message: "I would like to schedule a plant tour and discuss a commercial laundry account."
+    },
+    "service-change": {
+      service: "route",
+      message: "I would like to request a change to my current commercial route service."
+    },
+    "route-command": {
+      service: "route",
+      message: "I would like to request access to Route Command for my commercial account."
+    }
+  };
+  const requestQuote = requestQuoteMap[request];
+  if (requestQuote) {
+    if (serviceSelect) serviceSelect.value = requestQuote.service;
+    if (messageField) messageField.value = requestQuote.message;
   }
 
   const form = document.querySelector("#quote-form");

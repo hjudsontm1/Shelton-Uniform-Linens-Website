@@ -3,24 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="assets/Shelton%20Brand%20Assets/brand/website/shelton-favicon.svg" type="image/svg+xml" />
   <title>Request a Commercial Laundry Quote | Shelton Linen &amp; Uniform Services</title>
   <meta name="description" content="Request a custom quote for commercial linen, towel, uniform, event linen, wholesale laundry, or pickup and delivery service in San Diego." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/site.css" />
-  <link rel="stylesheet" href="assets/css/quote-experience.css?v=20260713b" />
+  <link rel="stylesheet" href="assets/css/quote-experience.css?v=20260716d" />
+  <link rel="stylesheet" href="assets/css/header.css?v=20260725-menu-refinement-2" />
 </head>
 <body class="" data-page="quote">
   <a class="skip-link" href="#main-content">Skip to content</a>
   <nav class="site-nav" aria-label="Main navigation">
     <div class="nav-inner">
       <a class="nav-brand" href="index.html" aria-label="Shelton Linen and Uniform Services home">
-        <span class="brand-mark" aria-hidden="true"><img src="assets/images/shelton-s-mark-white.png" alt="" width="815" height="815" /></span>
-        <span class="brand-copy">
-          <span class="brand-main">Shelton Linen &amp; Uniform Services</span>
-          <span class="brand-sub">Commercial Laundry Services · San Diego</span>
-        </span>
+        <img class="nav-brand-logo" src="assets/Shelton%20Brand%20Assets/brand/website/shelton-primary-horizontal-dark.svg" alt="" width="1900" height="480" aria-hidden="true" />
       </a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open navigation">
         <span></span><span></span>
@@ -28,7 +26,7 @@
       <ul class="nav-links" id="primary-menu">
           <li><a class="" href="index.html">Home</a></li>
           <li><a class="" href="services.html">Services</a></li>
-          <li><a class="" href="process.html?v=20260716b">Process</a></li>
+          <li><a class="" href="industries.html">Who We Serve</a></li>
           <li><a class="" href="pricing.html">Pricing</a></li>
           <li><a class="" href="about.html">About</a></li>
         <li><a class="nav-cta is-active" href="quote.html">Request a Quote</a></li>
@@ -36,43 +34,53 @@
     </div>
   </nav>
   <main id="main-content">
-  <section class="quote-intake" aria-labelledby="quote-title">
-    <div class="quote-intake__frame">
-      <aside class="quote-intake__welcome">
-        <header>
-          <p class="quote-kicker">Request a commercial quote</p>
-          <h1 id="quote-title">Tell us how your laundry moves.</h1>
-          <p>Share what you know today. Exact weights and a finished service plan are not required to start the conversation.</p>
-        </header>
+    <section class="quote-intake" aria-labelledby="quote-title">
+      <div class="quote-intake__frame">
+        <aside class="quote-intake__welcome">
+          <header>
+            <p class="quote-kicker">Commercial accounts · San Diego</p>
+            <h1 id="quote-title">Request a quote.</h1>
+            <p>Tell us how your laundry moves—your goods, volume, and operating rhythm. Exact weights and a finished service plan are not required.</p>
+          </header>
 
-        <div class="quote-reassurance">
-          <strong>Not sure about a field?</strong>
-          <p>Choose “Not sure yet” or leave an optional detail open. We can work through it together.</p>
-          <a class="quote-estimate-link" href="estimate.html">
-            <span>Prefer a guided starting point?</span>
-            <b>Build a planning estimate <i aria-hidden="true">→</i></b>
+          <a class="quote-estimator" href="pricing.html#factor-program">
+            <span>Need a starting point first?</span>
+            <strong>Build a planning estimate</strong>
+            <p>Use a guided path to think through goods, service model, and weekly volume before requesting a quote.</p>
+            <b>Open the estimator <i aria-hidden="true">→</i></b>
           </a>
-        </div>
 
-        <div class="quote-next">
-          <h2>What happens after you send this</h2>
-          <ol>
-            <li><span>01</span><p>We review your goods, volume, operating rhythm, and return needs.</p></li>
-            <li><span>02</span><p>We map the right cleaning, finishing, packaging, and route approach.</p></li>
-            <li><span>03</span><p>We follow up with the few remaining questions needed for an account-specific quote.</p></li>
-          </ol>
-        </div>
-        <p class="quote-commercial-note">Commercial accounts only · San Diego route service</p>
-      </aside>
+          <div class="quote-next">
+            <h3>What happens next</h3>
+            <ol>
+              <li><span>01</span><p>We review your goods, volume, operating rhythm, and return needs.</p></li>
+              <li><span>02</span><p>We map the right cleaning, finishing, packaging, and route approach.</p></li>
+              <li><span>03</span><p>We follow up with the few remaining questions needed for an account-specific quote.</p></li>
+            </ol>
+          </div>
 
-      <form class="quote-form" id="quote-form" name="commercial-laundry-quote" method="POST" action="https://formspree.io/f/mvzjawvl">
+          <div class="quote-reassurance">
+            <strong>Not sure about a field?</strong>
+            <p>Choose “Not sure yet” or leave an optional detail open. We can work through it together.</p>
+          </div>
+        </aside>
+
+        <form class="quote-form" id="quote-form" name="commercial-laundry-quote" method="POST" action="https://formspree.io/f/mvzjawvl">
         <input class="hidden-field" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
         <header class="quote-form__header">
-          <p>Quote brief</p>
-          <h2>Start with the basics.</h2>
-          <span>Required fields are marked with an asterisk.</span>
+          <div>
+            <p>Quote brief</p>
+            <h2 id="quote-form-title">Start with the essentials.</h2>
+          </div>
+          <span><b aria-hidden="true">*</b> Required</span>
         </header>
+
+        <ol class="quote-form__progress" aria-label="Quote form sections">
+          <li><span>01</span>Account</li>
+          <li><span>02</span>Program</li>
+          <li><span>03</span>Goods</li>
+        </ol>
 
         <section class="quote-form__group" aria-labelledby="account-details-heading">
           <header class="quote-form__group-header">
@@ -80,11 +88,11 @@
             <div><h3 id="account-details-heading">Account details</h3><p>Who should we follow up with?</p></div>
           </header>
           <div class="form-row">
-            <label>Business Name *<input name="company" autocomplete="organization" required placeholder="Hotel, spa, restaurant, studio..." /></label>
-            <label>Your Name *<input name="name" autocomplete="name" required placeholder="Your name" /></label>
+            <label><span>Business Name <b aria-hidden="true">*</b></span><input name="company" autocomplete="organization" required placeholder="Hotel, spa, restaurant, studio..." /></label>
+            <label><span>Your Name <b aria-hidden="true">*</b></span><input name="name" autocomplete="name" required placeholder="Your name" /></label>
           </div>
           <div class="form-row">
-            <label>Email *<input name="email" type="email" autocomplete="email" required placeholder="name@business.com" /></label>
+            <label><span>Email <b aria-hidden="true">*</b></span><input name="email" type="email" autocomplete="email" required placeholder="name@business.com" /></label>
             <label>Phone<input name="phone" type="tel" autocomplete="tel" placeholder="(000) 000-0000" /></label>
           </div>
         </section>
@@ -95,7 +103,7 @@
             <div><h3 id="program-needs-heading">Program needs</h3><p>Help us understand the shape of the account.</p></div>
           </header>
           <div class="form-row">
-            <label>Industry *
+            <label><span>Industry <b aria-hidden="true">*</b></span>
               <select name="industry" id="industry-select" required>
                 <option value="">Select industry</option>
                 <option value="hotel">Boutique Hotels</option><option value="str">Short-Term Rentals / Property Managers</option><option value="restaurant">Restaurants &amp; Food Service</option><option value="spa">Spas, Massage &amp; Wellness</option><option value="gym">Gyms, Yoga &amp; Fitness Studios</option><option value="event">Event Companies</option><option value="uniform">Uniform Accounts</option><option value="casino">Casinos &amp; Entertainment</option><option value="wholesale">Dry Cleaner Wholesale</option>
@@ -156,42 +164,39 @@
         </section>
 
         <div class="quote-form__submit">
-          <button class="btn-primary form-submit" type="submit">Send Quote Request</button>
-          <p>We will use these details only to review your commercial laundry needs and follow up about your account.</p>
+          <button class="btn-primary form-submit" type="submit">Send my quote brief <span aria-hidden="true">→</span></button>
+          <p>We’ll use these details only to review your commercial laundry needs and follow up about your account.</p>
           <p class="form-status" role="status" aria-live="polite"></p>
         </div>
-      </form>
-    </div>
-  </section>
+        </form>
+      </div>
+    </section>
+
+    <section class="quote-about" aria-labelledby="quote-about-title">
+      <div class="quote-about__panel">
+        <div class="quote-about__copy">
+          <p class="quote-about__eyebrow">About Shelton</p>
+          <h2 id="quote-about-title">A family trade, carried forward.</h2>
+          <p>Every generation of the Shelton family has worked in laundry or dry cleaning—building a standard around cleaning well, finishing properly, and returning goods ready to use.</p>
+        </div>
+        <a class="quote-about__link" href="about.html">Our story <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
   </main>
   <footer class="site-footer">
     <div class="site-footer__inner">
-      <section class="footer-closing" aria-label="Shelton closing statement">
-        <div class="footer-closing__copy">
-          <p class="footer-status">Commercial account support available through the quote process.</p>
-          <h2>Clean goods. Reliable routes. Programs built around your business.</h2>
-          <p>Laundry, linen, towel, uniform, event linen, and wholesale finishing support for San Diego businesses.</p>
-        </div>
-        <div class="footer-actions" aria-label="Footer calls to action">
-          <a class="btn-primary footer-action-primary" href="quote.html">Request a Quote</a>
-          <a class="footer-action-secondary" href="services.html">Explore Services</a>
-        </div>
-      </section>
       <div class="footer-directory">
         <div class="footer-brand-panel">
           <a class="footer-logo" href="index.html" aria-label="Shelton Linen and Uniform Services home">
-            <span class="footer-brand-mark" aria-hidden="true"><img src="assets/images/shelton-s-mark-white.png" alt="" width="815" height="815" /></span>
-            <span>
-              <span class="footer-brand">Shelton Linen &amp; Uniform Services</span>
-              <span class="footer-descriptor">Commercial Laundry Services · San Diego</span>
-            </span>
+            <img class="footer-brand-logo" src="assets/Shelton%20Brand%20Assets/brand/website/shelton-primary-horizontal-dark.svg" alt="" width="1900" height="480" aria-hidden="true" />
           </a>
           <p class="footer-text">Commercial-only laundry, linen, towel, uniform, event linen, and wholesale finishing support for San Diego businesses.</p>
         </div>
         <nav class="footer-links" aria-label="Footer pages">
           <h2>Pages</h2>
           <a href="services.html">Services</a>
-          <a href="process.html?v=20260716b">Process</a>
+          <a href="industries.html">Who We Serve</a>
           <a href="pricing.html">Pricing</a>
           <a href="about.html">About</a>
         </nav>
@@ -201,7 +206,7 @@
           <a href="services.html#towels-wellness">Towel service</a>
           <a href="services.html#uniforms-chef-coats">Uniform cleaning</a>
           <a href="services.html#event-linens">Event linen</a>
-          <a href="services.html#wholesale-support">Wholesale support</a>
+          <a href="services.html#specialty-cleaning">Specialty cleaning</a>
         </nav>
         <nav class="footer-links" aria-label="Get started">
           <h2>Get Started</h2>
@@ -216,6 +221,6 @@
       </div>
     </div>
   </footer>
-  <script src="assets/js/site.js"></script>
+  <script src="assets/js/site.js?v=20260725-process-menu-refinement-3"></script>
 </body>
 </html>

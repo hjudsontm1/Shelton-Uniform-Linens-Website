@@ -3,1188 +3,1337 @@
 
   const root = document.querySelector("[data-pricing-learning]");
   const config = window.SheltonPricingJourneyConfig;
-  const calculator = window.SheltonPricingDevelopmentRules;
-  if (!root || !config || !calculator) return;
+  const pricingEngine = window.SheltonPricingEngine;
+  const progressiveRange = window.SheltonProgressiveRange;
+  if (!root || !config || !pricingEngine || !progressiveRange) return;
 
-  const storageKey = "shelton-pricing-learning-v2";
-  const factorLabels = {
-    program: "the operation/goods mix",
-    volume: "weekly poundage",
-    finish: "finish and return",
-    ownership: "inventory ownership",
-    route: "location and route"
+  const q = (selector, scope) => (scope || root).querySelector(selector);
+  const qa = (selector, scope) => Array.from((scope || root).querySelectorAll(selector));
+  const money = (value) => "$" + Math.round(Number(value) || 0).toLocaleString("en-US");
+  const positive = (value) => Number(value) > 0 ? Number(value) : 0;
+  const validLocation = (value) => /^\d{5}(?:-\d{4})?$/.test(String(value || "").trim());
+  const makeId = () => {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
+    return "pricing-" + Date.now() + "-" + Math.random().toString(16).slice(2);
   };
 
   const defaultState = () => ({
     operation: "",
     goods: [],
-    volumeMethod: "known",
-    volumePounds: "",
-    volumePieces: "",
-    scale: {},
-    goodsScale: {},
-    finish: [],
     specialtyNeeds: [],
+    scale: {},
+    finish: [],
     ownership: "",
-    inventory: {
-      suppliedUnits: "",
-      par: "",
-      customization: ""
-    },
+    rentalCategory: "",
+    rentalTier: "",
+    rentalQuantity: "",
+    inventory: { par: "", customization: "" },
     location: "",
-    serviceRhythm: "recommended",
+    requestedPickups: "",
     returnWindow: "",
-    access: ""
+    access: "",
+    leadIdempotencyKey: makeId()
   });
 
-  const readState = () => {
-    try {
-      const saved = JSON.parse(sessionStorage.getItem(storageKey));
-      if (!saved || typeof saved !== "object") return defaultState();
-      return {
+  let state = defaultState();
+  try {
+    const saved = JSON.parse(window.sessionStorage.getItem(config.storageKey) || "null");
+    if (saved && typeof saved === "object") {
+      state = {
         ...defaultState(),
         ...saved,
         goods: Array.isArray(saved.goods) ? saved.goods : [],
+        specialtyNeeds: [],
         scale: saved.scale && typeof saved.scale === "object" ? saved.scale : {},
-        goodsScale: saved.goodsScale && typeof saved.goodsScale === "object" ? saved.goodsScale : {},
-        volumeMethod: saved.volumeMethod === "help" ? "help" : "known",
-        volumePounds: saved.volumePounds || (saved.volumeMethod === "pounds" ? saved.volumeValue : ""),
-        volumePieces: saved.volumePieces || (saved.volumeMethod === "pieces" ? saved.volumeValue : ""),
-        finish: Array.isArray(saved.finish) ? saved.finish : [],
-        specialtyNeeds: Array.isArray(saved.specialtyNeeds) ? saved.specialtyNeeds : [],
-        inventory: saved.inventory && typeof saved.inventory === "object" ? saved.inventory : defaultState().inventory
+        inventory: saved.inventory && typeof saved.inventory === "object" ? saved.inventory : { par: "", customization: "" }
       };
-    } catch (error) {
-      return defaultState();
     }
-  };
+  } catch {
+    state = defaultState();
+  }
 
-  let state = readState();
   let latestResult = null;
-  let estimatorSignature = "";
-  let finishRecommendationState = { ready: false, hasProgram: false, ids: [] };
-  let rhythmPanelOpen = state.serviceRhythm !== "recommended";
-  let operationPanelOpen = false;
-  const pieceBillingCopy = "Those pieces are charged on a per piece basis.";
-  const rhythmOptionLabels = {
-    weekly: "Once weekly",
-    twiceWeekly: "Twice weekly",
-    threeWeekly: "Three times weekly",
-    weekday: "Weekdays",
-    event: "Event-driven"
-  };
-  const rhythmCadenceDays = {
-    weekly: [2],
-    twiceWeekly: [0, 3],
-    threeWeekly: [0, 2, 4],
-    weekday: [0, 1, 2, 3, 4],
-    event: [1, 4]
-  };
+  let latestRawResult = null;
+  let estimateSignature = "";
+  let estimateRequest = 0;
+  let estimateLoading = false;
+  let estimateTimer = 0;
+  let pickerOpen = false;
+  let pendingOperation = "";
+  let scaleStep = 0;
+  let scaleSequenceOperation = state.operation;
+  let pendingInitialHash = window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : "";
 
-  const operationInput = root.querySelector("[data-operation-input]");
-  const operationPicker = root.querySelector("[data-operation-picker]");
-  const operationTrigger = root.querySelector("[data-operation-trigger]");
-  const operationPanel = root.querySelector("[data-operation-panel]");
-  const operationSearch = root.querySelector("[data-operation-search]");
-  const operationOptions = root.querySelector("[data-operation-options]");
-  const operationEmpty = root.querySelector("[data-operation-empty]");
-  const operationValue = root.querySelector("[data-operation-value]");
-  const goodsOptions = root.querySelector("[data-goods-options]");
-  const goodsHelp = root.querySelector("[data-goods-help]");
-  const specialtyFieldset = root.querySelector("[data-specialty-fieldset]");
-  const specialtyOptions = root.querySelector("[data-specialty-options]");
-  const finishRecommendationTitle = root.querySelector("[data-finish-recommendation-title]");
-  const finishRecommendationCopy = root.querySelector("[data-finish-recommendation-copy]");
-  const finishRecommendationBasis = root.querySelector("[data-finish-recommendation-basis]");
-  const finishOperation = root.querySelector("[data-finish-operation]");
-  const finishGoods = root.querySelector("[data-finish-goods]");
-  const finishVolume = root.querySelector("[data-finish-volume]");
-  const ownershipOptions = root.querySelector("[data-ownership-options]");
-  const inventoryDetails = root.querySelector("[data-inventory-details]");
-  const inventoryUnits = root.querySelector("[data-inventory-units]");
-  const inventoryParInputs = Array.from(root.querySelectorAll("[data-inventory-par]"));
-  const inventoryCustomizationInputs = Array.from(root.querySelectorAll("[data-inventory-customization]"));
-  const poundVolumeField = root.querySelector("[data-pound-volume-field]");
-  const pieceVolumeField = root.querySelector("[data-piece-volume-field]");
-  const poundVolumeInput = root.querySelector("[data-pound-volume-input]");
-  const pieceVolumeInput = root.querySelector("[data-piece-volume-input]");
-  const volumeBillingNote = root.querySelector("[data-volume-billing-note]");
-  const volumeDirect = root.querySelector("[data-volume-direct]");
-  const volumeEstimator = root.querySelector("[data-volume-estimator]");
-  const volumeEstimatorContext = root.querySelector("[data-volume-estimator-context]");
-  const volumeEstimatorFields = root.querySelector("[data-volume-estimator-fields]");
-  const volumeEstimatorStatus = root.querySelector("[data-volume-estimator-status]");
-  const volumeHelpConversion = root.querySelector("[data-volume-help-conversion]");
-  const locationInput = root.querySelector("[data-location-input]");
-  const rhythmInputs = Array.from(root.querySelectorAll("[data-rhythm-input]"));
-  const rhythmUseRecommendation = rhythmInputs.find((input) => input.value === "recommended");
-  const rhythmToggle = root.querySelector("[data-rhythm-toggle]");
-  const rhythmOverrides = root.querySelector("[data-rhythm-overrides]");
-  const rhythmOverrideNote = root.querySelector("[data-rhythm-override-note]");
-  const rhythmRecommendationKicker = root.querySelector("[data-rhythm-recommendation-kicker]");
-  const rhythmCadence = root.querySelector("[data-rhythm-cadence]");
-  const rhythmDays = Array.from(root.querySelectorAll("[data-rhythm-day]"));
-  const returnWindowInputs = Array.from(root.querySelectorAll("[data-return-window]"));
-  const accessInputs = Array.from(root.querySelectorAll("[data-access-input]"));
-  const rhythmRecommendationLabel = root.querySelector("[data-rhythm-recommendation-label]");
-  const rhythmRecommendationReason = root.querySelector("[data-rhythm-recommendation-reason]");
-  const completedCount = root.querySelector("[data-completed-count]");
-  const progressDots = Array.from(root.querySelectorAll("[data-progress-dots] li"));
-  const rangeLocked = root.querySelector("[data-range-locked]");
-  const rangeRevealed = root.querySelector("[data-range-revealed]");
-  const unlockCopy = root.querySelector("[data-unlock-copy]");
-  const weeklyRange = root.querySelector("[data-weekly-range]");
-  const monthlyRange = root.querySelector("[data-monthly-range]");
-  const rangeStage = root.querySelector("[data-range-stage]");
-  const guidanceTitle = root.querySelector("[data-range-guidance-title]");
-  const guidanceCopy = root.querySelector("[data-range-guidance-copy]");
-  const confidenceLabel = root.querySelector("[data-confidence-label]");
-  const rhythmLabel = root.querySelector("[data-rhythm-label]");
-  const modelLabel = root.querySelector("[data-model-label]");
-  const rangeBreakdown = root.querySelector("[data-range-breakdown]");
-  const processingRange = root.querySelector("[data-processing-range]");
-  const inventoryRangeRow = root.querySelector("[data-inventory-range-row]");
-  const inventoryRange = root.querySelector("[data-inventory-range]");
-  const rangeReview = root.querySelector("[data-range-review]");
-  const rangeReviewCopy = root.querySelector("[data-range-review-copy]");
-  const rangeAssumptions = root.querySelector("[data-range-assumptions]");
-  const estimateDock = root.querySelector("[data-estimate-dock]");
-  const dockProgress = root.querySelector("[data-dock-progress]");
-  const dockRange = root.querySelector("[data-dock-range]");
-  const dockAction = root.querySelector("[data-dock-action]");
-  const quoteForm = root.querySelector("[data-quote-form]");
-  const quoteError = root.querySelector("[data-quote-error]");
-  const quoteStatus = root.querySelector("[data-quote-status]");
-  const clearAnswers = root.querySelector("[data-clear-answers]");
+  const operationPicker = q("[data-operation-picker]");
+  const operationTrigger = q("[data-operation-trigger]");
+  const operationPanel = q("[data-operation-panel]");
+  const operationValue = q("[data-operation-value]");
+  const operationOptions = q("[data-operation-options]");
+  const operationConfirmation = q("[data-operation-confirmation]");
+  const operationConfirmationTitle = q("[data-operation-confirmation-title]");
+  const operationConfirm = q("[data-operation-confirm]");
+  const operationCancel = q("[data-operation-cancel]");
+  const operationInput = q("[data-operation-input]");
+  const goodsOptions = q("[data-goods-options]");
+  const goodsLegend = q("[data-goods-legend]");
+  const goodsHelp = q("[data-goods-help]");
+  const programHeading = q("[data-program-heading]");
+  const operationGuideLink = q("[data-operation-guide-link]");
+  const scaleFields = q("[data-volume-estimator-fields]");
+  const scaleStatus = q("[data-volume-estimator-status]");
+  const scaleConversion = q("[data-volume-help-conversion]");
+  const ownershipOptions = q("[data-ownership-options]");
+  const inventoryDetails = q("[data-inventory-details]");
+  const inventoryCategory = q("[data-inventory-category]");
+  const inventoryTier = q("[data-inventory-tier]");
+  const inventoryUnits = q("[data-inventory-units]");
+  const locationInput = q("[data-location-input]");
+  const rangeLocked = q("[data-range-locked]");
+  const rangeRevealed = q("[data-range-revealed]");
+  const unlockCopy = q("[data-unlock-copy]");
+  const weeklyRange = q("[data-weekly-range]");
+  const poundRange = q("[data-pound-range]");
+  const rangeStage = q("[data-range-stage]");
+  const guidanceTitle = q("[data-range-guidance-title]");
+  const guidanceCopy = q("[data-range-guidance-copy]");
+  const estimateDock = q("[data-estimate-dock]");
+  const dockProgress = q("[data-dock-progress]");
+  const dockRange = q("[data-dock-range]");
+  const dockAction = q("[data-dock-action]");
+  const clearAnswers = q("[data-clear-answers]");
+  const quoteForm = q("[data-quote-form]");
+  const quoteError = q("[data-quote-error]");
+  const quoteStatus = q("[data-quote-status]");
+  const quoteSubmit = q("[data-quote-submit]");
 
-  const createChoice = (type, name, value, label, checked, description) => {
-    const wrapper = document.createElement("label");
-    const input = document.createElement("input");
-    const visual = document.createElement("span");
-    input.type = type;
-    input.name = name;
-    input.value = value;
-    input.checked = checked;
-    visual.textContent = label;
-    if (description) {
-      const small = document.createElement("small");
-      small.textContent = description;
-      visual.appendChild(small);
+  const operationForState = () => config.operations.find((item) => item.id === state.operation) || null;
+  const selectedGoods = () => state.goods.map((id) => config.goods[id]).filter(Boolean);
+  const scaleSchema = () => config.scaleSchemas[state.operation] || [];
+  const directFollowupIds = new Set([
+    "weeklyRobes", "weeklyBlankets", "weeklyChefCoats", "weeklyAprons",
+    "weeklyUniformTops", "weeklyPants", "weeklyJackets", "storage",
+    "seasonality", "variability", "peakPattern"
+  ]);
+  const scaleEntryMeta = () => {
+    const meta = config.scaleEntryModes?.[state.operation];
+    if (!meta) return null;
+    if (Array.isArray(meta.directGoods) && !meta.directGoods.some((id) => state.goods.includes(id))) return null;
+    return meta;
+  };
+  const entryModeField = (meta) => ({
+    id: "entryMode",
+    label: "Which number do you know?",
+    hint: "The estimator needs either normal operating activity or a measured weekly total to establish its first range.",
+    type: "select",
+    required: true,
+    routing: true,
+    options: [
+      { value: "drivers", label: meta.driverLabel },
+      { value: "direct", label: meta.directLabel }
+    ]
+  });
+  const conditionalScaleFieldVisible = (field) => {
+    if (field.id === "duvetPercent") return state.scale.bedSystem === "mixed";
+    if (field.id === "memoryCarePercent") return state.scale.careType === "mixed";
+    if (field.id === "averageBedrooms") return state.scale.bedroomBasis === "average";
+    if (field.id === "totalBedrooms") return state.scale.bedroomBasis === "total";
+    return true;
+  };
+  const fieldVisible = (field) => (
+    (!Array.isArray(field.goods) || field.goods.some((id) => state.goods.includes(id)))
+    && conditionalScaleFieldVisible(field)
+  );
+  const visibleScaleFields = () => {
+    const fields = scaleSchema().filter(fieldVisible);
+    const meta = scaleEntryMeta();
+    if (!meta) return fields;
+    const entry = entryModeField(meta);
+    if (!state.scale.entryMode) return [entry];
+    if (state.scale.entryMode === "direct") {
+      const direct = fields.find((field) => field.id === meta.directField);
+      const followups = fields.filter((field) => field.id !== meta.directField && directFollowupIds.has(field.id));
+      const directRequired = direct ? {
+        ...direct,
+        required: true,
+        routing: true,
+        emptyAction: meta.directField === "totalWeeklyPieces" ? "Enter weekly pieces" : "Enter weekly pounds"
+      } : null;
+      return [entry, ...(directRequired ? [directRequired] : []), ...followups];
     }
-    wrapper.append(input, visual);
-    return wrapper;
+    return [entry, ...fields.filter((field) => field.id !== meta.directField)];
   };
 
-  const selectedRadioValue = (inputs) => inputs.find((input) => input.checked)?.value || "";
+  const persist = () => {
+    try {
+      window.sessionStorage.setItem(config.storageKey, JSON.stringify(state));
+    } catch {
+      // The estimator remains usable when browser storage is unavailable.
+    }
+  };
 
-  const syncRadioInputs = (inputs, value) => {
-    inputs.forEach((input) => {
-      input.checked = input.value === (value || "");
+  const invalidateEstimate = () => {
+    estimateSignature = "";
+    latestResult = null;
+    latestRawResult = null;
+  };
+
+  const restoreInitialHash = () => {
+    if (!pendingInitialHash) return;
+    const target = document.getElementById(pendingInitialHash);
+    if (!target) {
+      pendingInitialHash = "";
+      return;
+    }
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: "instant", block: "start" });
+        pendingInitialHash = "";
+      });
     });
   };
 
-  const filterOperationOptions = (query = "") => {
-    const normalized = query.trim().toLowerCase();
-    let visibleCount = 0;
-    operationOptions.querySelectorAll("[data-operation-option]").forEach((button) => {
-      const matches = !normalized || button.dataset.search.includes(normalized);
-      button.hidden = !matches;
-      if (matches) visibleCount += 1;
-    });
-    operationEmpty.hidden = visibleCount > 0;
-  };
+  const modalPicker = () => false;
 
-  const syncOperationPicker = () => {
-    const operation = config.operations.find((item) => item.id === operationInput.value);
-    operationValue.textContent = operation?.label || "Choose the closest match";
-    operationTrigger.classList.toggle("has-value", Boolean(operation));
-    operationOptions.querySelectorAll("[data-operation-option]").forEach((button) => {
-      button.setAttribute("aria-selected", String(button.dataset.value === operationInput.value));
-    });
-  };
-
-  const setOperationPanelOpen = (open) => {
-    operationPanelOpen = Boolean(open);
-    operationPanel.hidden = !operationPanelOpen;
-    operationTrigger.setAttribute("aria-expanded", String(operationPanelOpen));
-    operationPicker.classList.toggle("is-open", operationPanelOpen);
-    if (operationPanelOpen) {
-      requestAnimationFrame(() => operationSearch.focus());
+  const syncPickerSemantics = () => {
+    const modal = modalPicker();
+    if (!window.matchMedia("(max-width: 760px)").matches) estimateDock.classList.remove("is-suppressed");
+    operationPanel.setAttribute("role", modal ? "dialog" : "region");
+    if (modal) {
+      operationPanel.setAttribute("aria-modal", "true");
+      operationTrigger.setAttribute("aria-haspopup", "dialog");
     } else {
-      operationSearch.value = "";
-      filterOperationOptions();
+      operationPanel.removeAttribute("aria-modal");
+      operationTrigger.removeAttribute("aria-haspopup");
+    }
+    document.body.classList.toggle("operation-picker-open", pickerOpen);
+  };
+
+  const clearOperationConfirmation = () => {
+    pendingOperation = "";
+    operationConfirmation.hidden = true;
+  };
+
+  const setPickerOpen = (open, options = {}) => {
+    pickerOpen = Boolean(open);
+    operationPanel.hidden = !pickerOpen;
+    operationTrigger.setAttribute("aria-expanded", String(pickerOpen));
+    operationPicker.classList.toggle("is-open", pickerOpen);
+    if (pickerOpen) {
+      syncPickerSemantics();
+      clearOperationConfirmation();
+      const selected = q('[data-operation-option="' + state.operation + '"]', operationOptions);
+      const first = q("[data-operation-option]", operationOptions);
+      window.setTimeout(() => (selected || first)?.focus(), 0);
+    } else {
+      clearOperationConfirmation();
+      document.body.classList.remove("operation-picker-open");
+      if (options.returnFocus) window.setTimeout(() => operationTrigger.focus({ preventScroll: true }), 0);
     }
   };
 
-  const renderOperations = () => {
+  const renderOperationOptions = () => {
+    operationInput.replaceChildren(new Option("Choose the closest match", ""));
     operationOptions.replaceChildren();
     config.operations.forEach((operation) => {
-      const option = document.createElement("option");
-      option.value = operation.id;
-      option.textContent = operation.label;
-      operationInput.appendChild(option);
-
+      operationInput.appendChild(new Option(operation.label, operation.id));
       const button = document.createElement("button");
-      const index = document.createElement("span");
-      const label = document.createElement("strong");
       button.type = "button";
-      button.setAttribute("role", "option");
-      button.dataset.operationOption = "";
-      button.dataset.value = operation.id;
-      button.dataset.search = operation.label.toLowerCase();
-      index.textContent = String(operationOptions.children.length + 1).padStart(2, "0");
-      label.textContent = operation.label;
-      button.append(index, label);
+      button.dataset.operationOption = operation.id;
+      button.setAttribute("aria-pressed", String(state.operation === operation.id));
+      const number = document.createElement("span");
+      number.className = "operation-picker__number";
+      number.textContent = operation.number;
+      const copy = document.createElement("span");
+      copy.className = "operation-picker__option-copy";
+      const strong = document.createElement("strong");
+      strong.textContent = operation.label;
+      copy.appendChild(strong);
+      button.append(number, copy);
       operationOptions.appendChild(button);
     });
+  };
+
+  const syncOperation = () => {
+    const operation = operationForState();
     operationInput.value = state.operation;
-    syncOperationPicker();
+    operationValue.textContent = operation ? operation.label : "Choose the closest match";
+    operationTrigger.classList.toggle("has-value", Boolean(operation));
+    qa("[data-operation-option]", operationOptions).forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.operationOption === state.operation));
+    });
+  };
+
+  const hasOperationDependentAnswers = () => Boolean(
+    state.goods.length
+    || state.specialtyNeeds.length
+    || Object.keys(state.scale).length
+    || state.finish.length
+    || state.rentalCategory
+    || state.rentalTier
+    || state.rentalQuantity
+  );
+
+  const applyOperation = (operationId) => {
+    if (operationId === state.operation) {
+      setPickerOpen(false, { returnFocus: true });
+      return;
+    }
+    state.operation = operationId;
+    state.goods = [];
+    state.specialtyNeeds = [];
+    state.scale = {};
+    state.finish = [];
+    state.rentalCategory = "";
+    state.rentalTier = "";
+    state.rentalQuantity = "";
+    scaleStep = 0;
+    scaleSequenceOperation = operationId;
+    invalidateEstimate();
+    setPickerOpen(false, { returnFocus: true });
+    renderAll();
+  };
+
+  const selectOperation = (operationId) => {
+    if (operationId === state.operation || !state.operation || !hasOperationDependentAnswers()) {
+      applyOperation(operationId);
+      return;
+    }
+    const nextOperation = config.operations.find((item) => item.id === operationId);
+    if (!nextOperation) return;
+    pendingOperation = operationId;
+    operationConfirmationTitle.textContent = "Change to " + nextOperation.label + "?";
+    operationConfirmation.hidden = false;
+    window.setTimeout(() => operationConfirm.focus(), 0);
+  };
+
+  const renderProgramContext = () => {
+    const operation = operationForState();
+    const industryAnchors = {
+      hotel: "hotels",
+      str: "short-term-rentals",
+      spa: "spas",
+      gym: "gyms",
+      events: "events",
+      restaurant: "restaurants",
+      casino: "casinos",
+      uniforms: "uniforms",
+      wholesale: "wholesale"
+    };
+    const industryAnchor = operation ? industryAnchors[operation.id] : "industry-directory";
+    operationGuideLink.setAttribute("href", "industries.html#" + (industryAnchor || "industry-directory"));
+    operationGuideLink.setAttribute(
+      "aria-label",
+      operation
+        ? "Explore " + operation.label + " in Who We Serve"
+        : "Explore the programs in Who We Serve"
+    );
+    programHeading.textContent = operation
+      ? "What should Shelton clean and return?"
+      : "Start with the operation closest to yours.";
+    goodsLegend.textContent = operation ? "Goods in this program" : "What should Shelton clean and return?";
   };
 
   const renderGoods = () => {
+    const operation = operationForState();
     goodsOptions.replaceChildren();
-    const operation = config.operations.find((item) => item.id === state.operation);
     if (!operation) {
-      goodsHelp.textContent = "Select an operation to see the goods most often included in that kind of program.";
+      goodsHelp.textContent = "Choose an operation first, then select every item that belongs in the program.";
       return;
     }
-
-    goodsHelp.textContent = "Choose every type that regularly moves through the program.";
-    state.goods = state.goods.filter((id) => operation.goods.includes(id));
+    goodsHelp.textContent = operation.id === "other"
+      ? "Choose the closest goods. Shelton can refine the program with you during review."
+      : "Select everything Shelton would pick up, process, and return in a normal service week.";
     operation.goods.forEach((id) => {
-      const item = config.goods[id];
-      if (!item) return;
-      const choice = createChoice("checkbox", "goods", id, item.label, state.goods.includes(id));
-      goodsOptions.appendChild(choice);
+      const good = config.goods[id];
+      if (!good) return;
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.name = "goods";
+      input.value = id;
+      input.checked = state.goods.includes(id);
+      const copy = document.createElement("span");
+      const strong = document.createElement("strong");
+      strong.textContent = good.label;
+      copy.appendChild(strong);
+      if (good.short) {
+        const small = document.createElement("small");
+        small.textContent = good.short;
+        copy.appendChild(small);
+      } else {
+        copy.classList.add("is-label-only");
+      }
+      label.append(input, copy);
+      goodsOptions.appendChild(label);
     });
   };
 
-  const compatibleSpecialtyOptions = () => config.specialtyOptions.filter((item) => {
-    const operationMatches = !item.operations?.length || item.operations.includes(state.operation);
-    const goodsMatch = !item.goods?.length || state.goods.some((goodId) => item.goods.includes(goodId));
-    return operationMatches && goodsMatch;
-  });
+  const renderScale = () => {
+    const operation = operationForState();
+    const fields = visibleScaleFields();
+    scaleFields.replaceChildren();
+    scaleConversion.hidden = true;
+    if (!operation) {
+      scaleStep = 0;
+      scaleSequenceOperation = "";
+      const empty = document.createElement("div");
+      empty.className = "volume-question volume-question--empty";
+      const eyebrow = document.createElement("span");
+      eyebrow.className = "volume-question__eyebrow";
+      eyebrow.textContent = "Section 01 first";
+      const prompt = document.createElement("p");
+      prompt.textContent = "Choose the closest operation to open the first sizing question.";
+      empty.append(eyebrow, prompt);
+      scaleFields.appendChild(empty);
+      scaleStatus.textContent = "No generic price is calculated before the operation is known.";
+      return;
+    }
+    if (scaleSequenceOperation !== state.operation) {
+      scaleStep = 0;
+      scaleSequenceOperation = state.operation;
+    }
+    scaleStep = Math.max(0, Math.min(scaleStep, Math.max(0, fields.length - 1)));
+    const field = fields[scaleStep];
+    if (!field) {
+      scaleStatus.textContent = "Select the goods in Section 01 to open the sizing questions that apply.";
+      return;
+    }
 
-  const renderSpecialty = () => {
-    const available = compatibleSpecialtyOptions();
-    const availableIds = new Set(available.map((item) => item.id));
-    state.specialtyNeeds = state.specialtyNeeds.filter((id) => availableIds.has(id));
-    specialtyOptions.replaceChildren();
-    available.forEach((item) => {
-      specialtyOptions.appendChild(createChoice(
-        "checkbox",
-        "specialty",
-        item.id,
-        item.label,
-        state.specialtyNeeds.includes(item.id),
-        item.description
-      ));
+    const question = document.createElement("div");
+    question.className = "volume-question";
+    question.dataset.scaleQuestion = field.id;
+
+    const questionHead = document.createElement("div");
+    questionHead.className = "volume-question__head";
+    const progress = document.createElement("span");
+    progress.className = "volume-question__eyebrow";
+    progress.textContent = "Question " + String(scaleStep + 1).padStart(2, "0") + " of " + String(fields.length).padStart(2, "0");
+    const answered = document.createElement("span");
+    answered.className = "volume-question__answered";
+    const answeredCount = fields.filter(basicFieldValid).length;
+    answered.textContent = answeredCount + (answeredCount === 1 ? " answer saved" : " answers saved");
+    questionHead.append(progress, answered);
+
+    const titleText = field.label + (field.required ? "" : " · optional");
+    let fieldElement;
+    if (field.type === "select") {
+      const fieldset = document.createElement("fieldset");
+      fieldset.className = "volume-choice-field";
+      const legend = document.createElement("legend");
+      legend.textContent = titleText;
+      const choices = document.createElement("div");
+      choices.className = "volume-choice-grid";
+      if (field.options.length === 2) choices.classList.add("volume-choice-grid--two");
+      field.options.forEach((item) => {
+        const optionLabel = document.createElement("label");
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = "scale-" + field.id;
+        input.value = item.value;
+        input.dataset.scaleField = field.id;
+        input.checked = state.scale[field.id] === item.value;
+        const card = document.createElement("span");
+        const strong = document.createElement("strong");
+        strong.textContent = item.label;
+        card.appendChild(strong);
+        if (item.description) {
+          const description = document.createElement("small");
+          description.textContent = item.description;
+          card.appendChild(description);
+        }
+        optionLabel.append(input, card);
+        choices.appendChild(optionLabel);
+      });
+      fieldset.append(legend, choices);
+      if (field.id !== "entryMode") {
+        const hint = document.createElement("small");
+        hint.className = "volume-choice-field__hint volume-question__why";
+        const hintLabel = document.createElement("strong");
+        hintLabel.textContent = "Why it matters";
+        const hintCopy = document.createElement("span");
+        hintCopy.textContent = field.hint;
+        hint.append(hintLabel, hintCopy);
+        fieldset.appendChild(hint);
+      }
+      fieldElement = fieldset;
+    } else {
+      const label = document.createElement("label");
+      label.className = "calm-field volume-estimator__field";
+      const title = document.createElement("span");
+      title.textContent = titleText;
+      const wrap = document.createElement("span");
+      wrap.className = "number-field";
+      const control = document.createElement("input");
+      control.type = "number";
+      control.inputMode = "decimal";
+      control.min = String(field.min);
+      control.max = String(field.max);
+      control.step = String(field.step || 1);
+      control.dataset.scaleField = field.id;
+      control.value = state.scale[field.id] === undefined ? "" : state.scale[field.id];
+      const unit = document.createElement("em");
+      unit.textContent = field.unit;
+      wrap.append(control, unit);
+      label.append(title, wrap);
+      const hint = document.createElement("small");
+      hint.className = "volume-question__why";
+      const hintLabel = document.createElement("strong");
+      hintLabel.textContent = "Why it matters";
+      const hintCopy = document.createElement("span");
+      hintCopy.textContent = field.hint;
+      hint.append(hintLabel, hintCopy);
+      label.appendChild(hint);
+      fieldElement = label;
+    }
+
+    const navigation = document.createElement("div");
+    navigation.className = "volume-question__navigation";
+    const back = document.createElement("button");
+    back.type = "button";
+    back.dataset.scaleBack = "";
+    back.textContent = "Back";
+    back.hidden = scaleStep === 0;
+    const next = document.createElement("button");
+    next.type = "button";
+    next.dataset.scaleNext = "";
+    const lastQuestion = scaleStep === fields.length - 1;
+    const routeRequired = Boolean(field.routing);
+    next.disabled = routeRequired && !basicFieldValid(field);
+    next.textContent = routeRequired && !basicFieldValid(field)
+      ? (field.emptyAction || "Choose a starting point")
+      : lastQuestion
+        ? "Finish section"
+        : (basicFieldValid(field) ? "Next question" : "Skip for now");
+    navigation.append(back, next);
+    question.append(questionHead, fieldElement);
+    if (operation.centralLocationRequired) {
+      const requirement = document.createElement("p");
+      requirement.className = "central-location-requirement";
+      requirement.textContent = "Central location required";
+      question.appendChild(requirement);
+    }
+    question.appendChild(navigation);
+    scaleFields.appendChild(question);
+    updateScaleStatus();
+  };
+
+  const basicFieldValid = (field) => {
+    const value = state.scale[field.id];
+    if (field.type === "select") return String(value || "").trim() !== "";
+    const numeric = Number(value);
+    return String(value ?? "").trim() !== "" && Number.isFinite(numeric) && numeric >= Number(field.min) && numeric <= Number(field.max);
+  };
+
+  const selectedCountRequirements = {
+    weeklyRobes: ["robes"],
+    weeklyBlankets: ["blankets"],
+    weeklyTablecloths: ["tablecloths"],
+    weeklyNapkins: ["napkins"],
+    weeklyChefCoats: ["chefCoats"],
+    weeklyAprons: ["aprons"],
+    weeklyUniformTops: ["uniformShirts", "casinoUniforms"],
+    weeklyPants: ["workwear"],
+    weeklyJackets: ["jackets"]
+  };
+
+  const validateScale = () => {
+    const operation = operationForState();
+    if (!operation) return { ready: false, message: "Choose an operation in Section 01 first.", missing: [] };
+    const fields = visibleScaleFields();
+    const missing = [];
+    fields.forEach((field) => {
+      if (field.required && !basicFieldValid(field)) missing.push(field.label);
+      const goodsIds = selectedCountRequirements[field.id] || [];
+      if (goodsIds.some((id) => state.goods.includes(id)) && !positive(state.scale[field.id])) missing.push(field.label);
     });
-    specialtyFieldset.hidden = !state.operation || !state.goods.length || !available.length;
+
+    const anyPositive = (ids) => ids.some((id) => positive(state.scale[id]) > 0);
+    if (state.operation === "events" && !anyPositive(["weeklyTablecloths", "weeklyNapkins", "totalWeeklyPieces"])) {
+      missing.push("At least one weekly event-linen count");
+    }
+    if (state.operation === "uniforms" && !anyPositive(["weeklyUniformTops", "weeklyChefCoats", "weeklyPants", "weeklyJackets"])) {
+      missing.push("At least one weekly garment count");
+    }
+    if (state.operation === "casino" && !anyPositive(["hotelRooms", "weeklyCovers", "weeklyTablecloths", "weeklyNapkins", "weeklyChefCoats", "weeklyUniformTops"])) {
+      missing.push("At least one active casino program");
+    }
+    if (state.operation === "restaurant") {
+      const dining = state.goods.some((id) => ["napkins", "tableLinens"].includes(id));
+      const utilityOnly = state.goods.includes("barTowels") && !dining;
+      if (dining && !anyPositive(["weeklyCovers", "knownVolume"])) missing.push("Weekly covers or measured linen pounds");
+      if (utilityOnly && !positive(state.scale.knownVolume)) missing.push("Measured weekly utility-towel pounds");
+      if (!dining && !state.goods.includes("barTowels") && !anyPositive(["weeklyChefCoats", "weeklyAprons"])) {
+        missing.push("At least one weekly garment count");
+      }
+    }
+    if (state.operation === "other") {
+      if (!positive(state.scale.weeklyVolume)) missing.push("Approximate weekly volume");
+      if (!state.scale.volumeUnit) missing.push("Volume unit");
+    }
+
+    const unique = Array.from(new Set(missing));
+    return {
+      ready: unique.length === 0 && state.goods.length > 0,
+      missing: unique,
+      message: unique.length ? "To refine: " + unique.slice(0, 3).join(", ") + (unique.length > 3 ? "…" : ".") : "Select at least one good in Section 01."
+    };
+  };
+
+  function updateScaleStatus() {
+    const validation = validateScale();
+    const minimum = progressiveRange.minimumDriver(state);
+    if (!minimum.ready) {
+      scaleStatus.textContent = minimum.message;
+    } else if (!validation.ready) {
+      scaleStatus.textContent = "Early range available. " + validation.message;
+    } else {
+      scaleStatus.textContent = "The key sizing inputs are included. Optional details can continue to narrow the range.";
+    }
+  }
+
+  const finishByGood = {
+    sheets: "Pressed and folded",
+    duvetCovers: "Pressed and folded",
+    towels: "Folded",
+    handTowels: "Folded",
+    bathMats: "Folded",
+    robes: "Cleaned and folded",
+    blankets: "Cleaned and folded",
+    faceCradleCovers: "Cleaned and folded",
+    tablecloths: "Pressed and folded",
+    napkins: "Pressed and folded",
+    runners: "Pressed and folded",
+    skirting: "Pressed and folded",
+    chairCovers: "Pressed and folded",
+    specialtyEventGoods: "Finished to item specification",
+    chefCoats: "Pressed and returned on hangers",
+    aprons: "Cleaned and folded",
+    barTowels: "Folded",
+    tableLinens: "Pressed and folded",
+    casinoUniforms: "Pressed and returned on hangers",
+    banquetLinens: "Pressed and folded",
+    uniformShirts: "Pressed and returned on hangers",
+    workwear: "Cleaned and folded",
+    jackets: "Pressed and returned on hangers",
+    shirts: "Pressed and returned on hangers",
+    suits: "Pressed and returned on hangers",
+    dresses: "Pressed and returned on hangers",
+    specialtyGarments: "Finished to item specification",
+    choirRobes: "Pressed and returned on hangers"
+  };
+
+  const finishForGoods = () => state.goods.map((id) => finishByGood[id] || "Cleaned and finished");
+
+  const currentWeeklyPounds = () => {
+    const measured = positive(state.scale.knownVolume);
+    if (measured) return measured;
+    if (state.scale.volumeUnit === "pounds" && positive(state.scale.weeklyVolume)) return positive(state.scale.weeklyVolume);
+    return positive(latestResult?.weeklyPounds);
+  };
+
+  const renderFinish = () => {
+    const operation = operationForState();
+    const title = q("[data-finish-recommendation-title]");
+    const list = q("[data-finish-goods-list]");
+    const returnFormat = q("[data-return-format]");
+    const returnTitle = q("[data-return-format-title]");
+    const returnStatus = q("[data-return-format-status]");
+    const returnOptions = qa("[data-return-format-option]", returnFormat);
+    state.finish = finishForGoods();
+    list.replaceChildren();
+    if (!operation || !state.goods.length) {
+      title.textContent = "Choose goods in Section 01 to see their finish and return format.";
+      returnFormat.hidden = true;
+      return;
+    }
+    title.textContent = "Finish by selected item";
+    state.goods.forEach((id) => {
+      const good = config.goods[id];
+      if (!good) return;
+      const item = document.createElement("li");
+      const name = document.createElement("span");
+      const finish = document.createElement("strong");
+      name.textContent = good.label;
+      finish.textContent = finishByGood[id] || "Cleaned and finished";
+      item.append(name, finish);
+      list.appendChild(item);
+    });
+
+    returnFormat.hidden = false;
+    const weeklyPounds = currentWeeklyPounds();
+    const format = weeklyPounds ? (weeklyPounds >= 500 ? "cart" : "bag") : "";
+    returnOptions.forEach((option) => option.classList.toggle("is-selected", option.dataset.returnFormatOption === format));
+    if (format === "cart") {
+      returnTitle.textContent = "Linen cart return";
+      returnStatus.textContent = "Selected automatically from the program volume.";
+    } else if (format === "bag") {
+      returnTitle.textContent = "Bag return";
+      returnStatus.textContent = "Selected automatically from the program volume.";
+    } else {
+      returnTitle.textContent = "Set by program volume";
+      returnStatus.textContent = "Enter a sizing detail in Section 02 and the return format will update automatically.";
+    }
   };
 
   const renderOwnership = () => {
     ownershipOptions.replaceChildren();
     config.ownershipChoices.forEach((item) => {
-      const choice = createChoice("radio", "ownership", item.id, item.label, state.ownership === item.id, item.description);
-      ownershipOptions.appendChild(choice);
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.name = "ownership";
+      input.value = item.id;
+      input.checked = state.ownership === item.id;
+      const copy = document.createElement("span");
+      const strong = document.createElement("strong");
+      strong.textContent = item.label;
+      const small = document.createElement("small");
+      small.textContent = item.description;
+      copy.append(strong, small);
+      label.append(input, copy);
+      ownershipOptions.appendChild(label);
     });
-    const needsInventory = state.ownership === "some" || state.ownership === "supply";
-    inventoryDetails.hidden = !needsInventory;
-    inventoryUnits.value = state.inventory.suppliedUnits || "";
-    syncRadioInputs(inventoryParInputs, state.inventory.par);
-    syncRadioInputs(inventoryCustomizationInputs, state.inventory.customization);
+    const supplied = ["some", "supply"].includes(state.ownership);
+    inventoryDetails.hidden = !supplied;
+    renderRentalCategories();
+    inventoryTier.value = state.rentalTier || "";
+    inventoryUnits.value = state.rentalQuantity || "";
+    qa("[data-inventory-par]").forEach((input) => {
+      input.checked = input.value === state.inventory.par;
+    });
+    qa("[data-inventory-customization]").forEach((input) => {
+      input.checked = input.value === state.inventory.customization;
+    });
   };
 
-  const positiveNumber = (value) => {
-    const number = Number(value);
-    return Number.isFinite(number) && number > 0 ? number : 0;
+  const rentalCategoryLabel = {
+    sheets: "Sheets / bed linen",
+    towels: "Towels / bath linen",
+    robes: "Robes",
+    blankets: "Blankets",
+    "table linens": "Table / event linen",
+    uniforms: "Uniforms / workwear"
   };
 
-  const helpProfile = () => config.helpEstimateProfiles?.[state.operation] || null;
+  const rentalCategoryForGood = (id) => ({
+    sheets: "sheets",
+    duvetCovers: "sheets",
+    towels: "towels",
+    handTowels: "towels",
+    bathMats: "towels",
+    barTowels: "towels",
+    robes: "robes",
+    blankets: "blankets",
+    tablecloths: "table linens",
+    napkins: "table linens",
+    tableLinens: "table linens",
+    banquetLinens: "table linens",
+    chefCoats: "uniforms",
+    aprons: "uniforms",
+    casinoUniforms: "uniforms",
+    uniformShirts: "uniforms",
+    workwear: "uniforms",
+    jackets: "uniforms"
+  }[id] || "");
 
-  const billingUnitForGood = (goodId) => {
-    const billing = config.billingUnits || {};
-    const operationBilling = billing.byOperation?.[state.operation] || {};
-    return operationBilling.goods?.[goodId]
-      || operationBilling.default
-      || billing.byGood?.[goodId]
-      || billing.default
-      || "pounds";
+  const renderRentalCategories = () => {
+    const values = Array.from(new Set(state.goods.map(rentalCategoryForGood).filter(Boolean)));
+    inventoryCategory.replaceChildren(new Option("Choose the supplied item", ""));
+    values.forEach((value) => inventoryCategory.appendChild(new Option(rentalCategoryLabel[value] || value, value)));
+    if (!values.includes(state.rentalCategory)) state.rentalCategory = "";
+    inventoryCategory.value = state.rentalCategory;
   };
 
-  const hasPieceBilledGoods = () => state.goods.some((goodId) => billingUnitForGood(goodId) === "pieces");
-  const hasPoundBilledGoods = () => state.goods.some((goodId) => billingUnitForGood(goodId) === "pounds");
-  const pieceBilledGoods = () => state.goods.filter((goodId) => billingUnitForGood(goodId) === "pieces");
-  const poundBilledGoods = () => state.goods.filter((goodId) => billingUnitForGood(goodId) === "pounds");
-  const billingCopyForSelection = () => hasPoundBilledGoods()
-    ? `${pieceBillingCopy} Other selected goods are charged by weight, so both measures stay separate.`
-    : pieceBillingCopy;
-
-  const estimateBasis = (basis) => {
-    switch (basis) {
-      case "weeklyTurns":
-        return positiveNumber(state.scale.weeklyTurns);
-      case "appointments":
-        return positiveNumber(state.scale.appointments);
-      case "eventsPerMonth":
-        return positiveNumber(state.scale.eventsPerMonth) / calculator.pricingRules.monthlyWeeks;
-      case "employees":
-        return positiveNumber(state.scale.employees);
-      case "weeklyCovers":
-        return positiveNumber(state.scale.weeklyCovers);
-      case "banquetEvents":
-        return positiveNumber(state.scale.banquetEvents) / calculator.pricingRules.monthlyWeeks;
-      case "choirMembers":
-        return positiveNumber(state.scale.choirMembers);
-      case "servicesAndEvents":
-        return positiveNumber(state.scale.weeklyServices)
-          + positiveNumber(state.scale.specialEventsPerMonth) / calculator.pricingRules.monthlyWeeks;
-      case "weekly":
-        return 1;
-      default:
-        return 0;
-    }
-  };
-
-  const helpEstimatedVolume = () => {
-    const profile = helpProfile();
-    const empty = { pounds: 0, pieces: 0, pieceCounts: {}, complete: false };
-    if (!profile || !state.goods.length) return empty;
-
-    let pounds = 0;
-    let pieces = 0;
-    const pieceCounts = {};
-    for (const goodId of state.goods) {
-      const driverId = profile.goods[goodId];
-      const driver = config.helpEstimateDrivers?.[driverId];
-      const quantity = positiveNumber(state.goodsScale[goodId]);
-      const basis = driver ? estimateBasis(driver.basis) : 0;
-      if (!driver || quantity <= 0 || basis <= 0) return empty;
-      const weeklyCount = quantity * basis;
-      if (billingUnitForGood(goodId) === "pieces") {
-        pieces += weeklyCount;
-        pieceCounts[goodId] = weeklyCount;
-      } else {
-        pounds += weeklyCount * (calculator.pricingRules.goodsWeights[goodId] || 1);
-      }
-    }
-
-    return { pounds, pieces, pieceCounts, complete: pounds > 0 || pieces > 0 };
-  };
-
-  const planningPounds = () => state.volumeMethod === "help"
-    ? helpEstimatedVolume().pounds
-    : positiveNumber(state.volumePounds);
-  const planningPieces = () => state.volumeMethod === "help"
-    ? helpEstimatedVolume().pieces
-    : positiveNumber(state.volumePieces);
-  const planningPieceCounts = () => {
-    if (state.volumeMethod === "help") return helpEstimatedVolume().pieceCounts;
-    const goods = pieceBilledGoods();
-    const count = planningPieces();
-    if (!goods.length || !count) return {};
-    const each = count / goods.length;
-    return Object.fromEntries(goods.map((goodId) => [goodId, each]));
-  };
-  const planningLoad = () => planningPounds() + Object.entries(planningPieceCounts()).reduce(
-    (sum, [goodId, value]) => sum + Number(value || 0) * (calculator.pricingRules.goodsWeights[goodId] || 1),
-    0
-  );
-
-  const finishOption = (id) => config.finishOptions.find((item) => item.id === id);
-
-  const finishOptionMatchesGoods = (id) => {
-    const option = finishOption(id);
-    return Boolean(option && (!option.goods?.length || state.goods.some((goodId) => option.goods.includes(goodId))));
-  };
-
-  const recommendFinishIds = (pounds) => {
-    const ids = [];
-    const add = (id) => {
-      if (!ids.includes(id) && finishOptionMatchesGoods(id)) ids.push(id);
-    };
-    const matches = (id) => finishOptionMatchesGoods(id);
-    const presentationGoods = new Set(["tablecloths", "napkins", "runners", "skirting", "chairCovers", "specialtyEventGoods", "tableLinens", "banquetLinens"]);
-    const towelGoods = new Set(["towels", "handTowels", "bathMats", "barTowels", "faceCradleCovers"]);
-    const hasFoldedGoods = matches("folded");
-    const hasGarmentGoods = matches("hanging");
-    const hasPresentationGoods = state.goods.some((goodId) => presentationGoods.has(goodId));
-    const towelOnly = state.goods.length > 0 && state.goods.every((goodId) => towelGoods.has(goodId));
-
-    if (hasFoldedGoods) add("folded");
-    if (hasGarmentGoods || hasPresentationGoods) add("pressed");
-    if (hasGarmentGoods) add("hanging");
-
-    if (state.operation === "wholesale" && hasGarmentGoods) {
-      add("poly");
-    } else if ((["hotel", "casino"].includes(state.operation) || pounds >= 1000) && matches("linenCart")) {
-      add("linenCart");
-    } else if (towelOnly && pounds > 0 && pounds < 350) {
-      add("bagged");
-    } else if (["str", "events", "casino", "uniforms", "worship"].includes(state.operation)) {
-      add("labeled");
-    } else if (hasFoldedGoods) {
-      add("bundled");
-    }
-
-    if (!ids.length) {
-      const fallback = config.finishOptions.find((item) => finishOptionMatchesGoods(item.id));
-      if (fallback) ids.push(fallback.id);
-    }
-
-    return ids.slice(0, 4);
-  };
-
-  const selectedGoodsSummary = () => {
-    const labels = state.goods.map((id) => config.goods[id]?.label).filter(Boolean);
-    if (labels.length <= 2) return labels.join(" and ");
-    return `${labels[0]}, ${labels[1]}, and ${labels.length - 2} more`;
-  };
-
-  const finishVolumeBasis = () => {
-    const pounds = planningPounds();
-    const pieces = planningPieces();
-    const qualifier = state.volumeMethod === "help" ? "Approximately " : "";
-    const parts = [];
-    if (pounds > 0) parts.push(`${Math.round(pounds).toLocaleString("en-US")} lb / week`);
-    if (pieces > 0) parts.push(`${Math.round(pieces).toLocaleString("en-US")} pieces / week`);
-    return `${qualifier}${parts.join(" + ")}`;
-  };
-
-  const finishRecommendation = () => {
-    const operation = config.operations.find((item) => item.id === state.operation);
-    const hasProgram = Boolean(operation && state.goods.length);
-    if (!hasProgram) {
-      return {
-        ready: false,
-        hasProgram: false,
-        ids: [],
-        title: "We’ll recommend how finished goods should come back.",
-        copy: operation
-          ? "Choose the goods that regularly move through the program, then add weekly pounds or pieces in Section 02."
-          : "Choose an operation and goods in Section 01, then add weekly pounds or pieces in Section 02."
-      };
-    }
-
-    const load = planningLoad();
-    const ids = recommendFinishIds(load);
-    const labels = ids.map((id) => finishOption(id)?.label).filter(Boolean);
-    const recommendation = labels.join(" + ");
-    const ready = planningPounds() > 0 || planningPieces() > 0;
-    const volume = ready ? finishVolumeBasis() : "Add pounds or pieces in Section 02";
+  const completion = () => {
+    const scale = validateScale().ready;
     return {
-      ready,
-      hasProgram: true,
-      ids,
-      operation: operation.label,
-      goods: selectedGoodsSummary(),
-      volume,
-      title: ready
-        ? `We recommend ${recommendation}.`
-        : `Likely starting point: ${recommendation}.`,
-      copy: ready
-        ? `Based on this account’s type of work, selected goods, and ${volume.toLowerCase()}, this combination balances presentation, staff handling, and practical return.`
-        : "This early direction comes from the type of work and goods selected above. Add weekly pounds or pieces in Section 02 to confirm the packaging and return method."
+      program: Boolean(state.operation && state.goods.length),
+      volume: scale,
+      finish: Boolean(state.goods.length && state.finish.length),
+      ownership: Boolean(state.ownership),
+      route: validLocation(state.location)
     };
   };
 
-  const renderFinishRecommendation = () => {
-    const recommendation = finishRecommendation();
-    finishRecommendationState = recommendation;
-    state.finish = recommendation.ids.slice();
-    finishRecommendationTitle.textContent = recommendation.title;
-    finishRecommendationCopy.textContent = recommendation.copy;
-    finishRecommendationBasis.hidden = !recommendation.hasProgram;
-    if (recommendation.hasProgram) {
-      finishOperation.textContent = recommendation.operation;
-      finishGoods.textContent = recommendation.goods;
-      finishVolume.textContent = recommendation.volume;
-    } else {
-      finishOperation.textContent = "";
-      finishGoods.textContent = "";
-      finishVolume.textContent = "";
-    }
-  };
-
-  const scaleField = (id) => (config.scaleSchemas?.[state.operation] || []).find((field) => field.id === id);
-
-  const requiredBaseFields = () => {
-    const profile = helpProfile();
-    const required = new Set();
-    if (!profile) return required;
-    const requiredByBasis = {
-      weeklyTurns: ["weeklyTurns"],
-      appointments: ["appointments"],
-      eventsPerMonth: ["eventsPerMonth"],
-      employees: ["employees"],
-      weeklyCovers: ["weeklyCovers"],
-      banquetEvents: ["banquetEvents"],
-      choirMembers: ["choirMembers"],
-      servicesAndEvents: ["weeklyServices"],
-      weekly: []
-    };
-    state.goods.forEach((goodId) => {
-      const driver = config.helpEstimateDrivers?.[profile.goods[goodId]];
-      (requiredByBasis[driver?.basis] || []).forEach((id) => required.add(id));
-    });
-    return required;
-  };
-
-  const visibleBaseFields = () => {
-    const profile = helpProfile();
-    if (!profile) return [];
-    return profile.baseFields.filter((id) => {
-      if (state.operation === "casino") {
-        if (id === "banquetEvents") return state.goods.includes("banquetLinens");
-        if (id === "restaurantOutlets") return state.goods.some((goodId) => ["chefCoats", "napkins", "tableLinens"].includes(goodId));
-      }
-      if (state.operation === "worship") {
-        if (id === "weeklyServices" || id === "specialEventsPerMonth") return state.goods.includes("tableLinens");
-        if (id === "choirMembers") return state.goods.includes("choirRobes");
-      }
-      return true;
-    });
-  };
-
-  const createEstimatorBaseField = (field, required) => {
-    const controlId = `volume-estimate-${state.operation}-${field.id}`;
-    if (field.type === "select") {
-      const group = document.createElement("fieldset");
-      const legend = document.createElement("legend");
-      const options = document.createElement("div");
-      const hint = document.createElement("small");
-      group.className = "calm-field volume-estimator__field volume-estimator__field--choices";
-      legend.textContent = field.label;
-      options.className = "editorial-choice-list editorial-choice-list--estimator";
-      field.options.forEach((item, index) => {
-        const label = document.createElement("label");
-        const input = document.createElement("input");
-        const visual = document.createElement("span");
-        const text = document.createElement("strong");
-        input.type = "radio";
-        input.name = controlId;
-        input.value = item.value;
-        input.required = required;
-        input.dataset.volumeEstimateBase = field.id;
-        input.checked = state.scale[field.id] === item.value;
-        input.id = `${controlId}-${index}`;
-        text.textContent = item.label;
-        visual.appendChild(text);
-        label.append(input, visual);
-        options.appendChild(label);
-      });
-      hint.textContent = field.hint;
-      group.append(legend, options, hint);
-      return group;
-    }
-
-    const label = document.createElement("label");
-    const title = document.createElement("span");
-    const control = document.createElement("input");
-    const unit = document.createElement("em");
-    label.className = "calm-field volume-estimator__field";
-    label.htmlFor = controlId;
-    title.textContent = field.label;
-    if (field.unit) {
-      unit.textContent = field.unit;
-      title.append(" ", unit);
-    }
-    control.type = "number";
-    control.min = field.min;
-    control.max = field.max;
-    control.step = field.step || 1;
-    control.inputMode = "numeric";
-    control.id = controlId;
-    control.dataset.volumeEstimateBase = field.id;
-    control.required = required;
-    control.value = state.scale[field.id] || "";
-
-    const hint = document.createElement("small");
-    hint.textContent = field.hint;
-    label.append(title, control, hint);
-    return label;
-  };
-
-  const createEstimatorGoodsField = (goodId, driver) => {
-    const good = config.goods[goodId];
-    const label = document.createElement("label");
-    const title = document.createElement("span");
-    const control = document.createElement("input");
-    const unit = document.createElement("em");
-    const controlId = `volume-estimate-good-${goodId}`;
-    label.className = "calm-field volume-estimator__field volume-estimator__field--good";
-    label.htmlFor = controlId;
-    title.textContent = `${good.label} ${driver.label}`;
-    unit.textContent = driver.unit;
-    title.append(" ", unit);
-    control.id = controlId;
-    control.type = "number";
-    control.min = "0.1";
-    control.max = "1000000";
-    control.step = "0.1";
-    control.inputMode = "decimal";
-    control.required = true;
-    control.dataset.volumeEstimateGood = goodId;
-    control.value = state.goodsScale[goodId] || "";
-    label.append(title, control);
-    return label;
-  };
-
-  const buildEstimatorFields = () => {
-    volumeEstimatorFields.replaceChildren();
-    const profile = helpProfile();
-    if (!profile || !state.goods.length) return;
-
-    const required = requiredBaseFields();
-    const baseFields = visibleBaseFields().map(scaleField).filter(Boolean);
-    if (baseFields.length) {
-      const group = document.createElement("fieldset");
-      const legend = document.createElement("legend");
-      const fields = document.createElement("div");
-      group.className = "volume-estimator__group";
-      legend.textContent = "Your operation";
-      fields.className = "volume-estimator__grid";
-      baseFields.forEach((field) => fields.appendChild(createEstimatorBaseField(field, required.has(field.id))));
-      group.append(legend, fields);
-      volumeEstimatorFields.appendChild(group);
-    }
-
-    const goodsGroup = document.createElement("fieldset");
-    const goodsLegend = document.createElement("legend");
-    const goodsFields = document.createElement("div");
-    goodsGroup.className = "volume-estimator__group";
-    goodsLegend.textContent = "Selected goods";
-    goodsFields.className = "volume-estimator__grid";
-    state.goods.forEach((goodId) => {
-      const driver = config.helpEstimateDrivers?.[profile.goods[goodId]];
-      if (driver && config.goods[goodId]) goodsFields.appendChild(createEstimatorGoodsField(goodId, driver));
-    });
-    goodsGroup.append(goodsLegend, goodsFields);
-    volumeEstimatorFields.appendChild(goodsGroup);
-  };
-
-  const renderHelpEstimator = () => {
-    const operation = config.operations.find((item) => item.id === state.operation);
-    const signature = `${state.operation}|${state.goods.join(",")}`;
-    if (signature !== estimatorSignature) {
-      estimatorSignature = signature;
-      buildEstimatorFields();
-    }
-
-    if (!operation) {
-      volumeEstimatorContext.textContent = "Choose the operation in section 01 to see tailored prompts.";
-    } else if (!state.goods.length) {
-      volumeEstimatorContext.textContent = "Choose the goods in section 01 to build this estimate.";
-    } else {
-      volumeEstimatorContext.textContent = `${operation.label} · ${state.goods.length} selected ${state.goods.length === 1 ? "good" : "goods"}`;
-    }
-
-    const estimate = helpEstimatedVolume();
-    const canEstimate = Boolean(operation && state.goods.length && estimate.complete);
-    const usesPieceBilling = hasPieceBilledGoods();
-    volumeEstimatorStatus.hidden = canEstimate;
-    volumeEstimatorStatus.textContent = operation && state.goods.length
-      ? usesPieceBilling
-        ? "Complete the prompts that apply to finish this estimate."
-        : "Complete the prompts that apply to reveal an estimated weekly weight."
-      : "Your estimate will adapt to the operation and goods selected above.";
-    const estimateParts = [];
-    if (estimate.pounds > 0) estimateParts.push(`${Math.round(estimate.pounds).toLocaleString("en-US")} lb/week`);
-    if (estimate.pieces > 0) estimateParts.push(`${Math.round(estimate.pieces).toLocaleString("en-US")} pieces/week`);
-    volumeHelpConversion.hidden = !usesPieceBilling && !canEstimate;
-    volumeHelpConversion.textContent = canEstimate
-      ? `Estimated weekly program: ${estimateParts.join(" + ")}. ${usesPieceBilling ? billingCopyForSelection() : ""}`.trim()
-      : usesPieceBilling
-        ? billingCopyForSelection()
-        : "";
-  };
-
-  const renderVolume = () => {
-    const methodInput = root.querySelector(`[name="volumeMethod"][value="${state.volumeMethod}"]`);
-    if (methodInput) methodInput.checked = true;
-    const usesEstimator = state.volumeMethod === "help";
-    volumeDirect.hidden = usesEstimator;
-    volumeEstimator.hidden = !usesEstimator;
-    poundVolumeInput.value = state.volumePounds || "";
-    pieceVolumeInput.value = state.volumePieces || "";
-    const showPounds = !state.goods.length || hasPoundBilledGoods();
-    const showPieces = !state.goods.length || hasPieceBilledGoods();
-    poundVolumeField.hidden = !showPounds;
-    pieceVolumeField.hidden = !showPieces;
-    volumeBillingNote.textContent = !state.goods.length
-      ? "Choose the goods above and this section will show the measure that applies."
-      : showPounds && showPieces
-        ? "This is a mixed program. Enter pounds and pieces separately; the estimate will not convert piece-billed goods into pounds."
-        : showPieces
-          ? pieceBillingCopy
-          : "The selected goods are planned by weekly weight.";
-
-    if (usesEstimator) renderHelpEstimator();
-  };
-
-  const validLocation = () => {
-    const value = state.location.trim();
-    return /^\d{5}$/.test(value) || /[a-zA-Z]{2,}/.test(value);
-  };
-
-  const completion = () => ({
-    program: Boolean(state.operation && state.goods.length),
-    volume: planningPounds() > 0 || planningPieces() > 0,
-    finish: finishRecommendationState.ready,
-    ownership: Boolean(state.ownership),
-    route: validLocation()
+  const minimumEstimate = () => progressiveRange.minimumDriver(state);
+  const estimateReady = () => Boolean(minimumEstimate().ready);
+  const currentPrecision = () => progressiveRange.precision(state, visibleScaleFields(), {
+    locationValid: validLocation(state.location)
   });
 
-  const roundFive = (value) => Math.max(5, Math.round(value / 5) * 5);
-  const money = (value) => `$${Math.round(value).toLocaleString("en-US")}`;
-
-  const calculationState = () => ({
-    operation: state.operation || "other",
+  const stateForEngine = () => ({
+    operation: state.operation,
     goods: state.goods.slice(),
-    scale: {
-      ...state.scale,
-      knownPounds: state.volumeMethod === "help" ? 0 : planningPounds(),
-      knownPieces: state.volumeMethod === "help" ? 0 : planningPieces(),
-      estimatedPounds: state.volumeMethod === "help" ? planningPounds() : 0,
-      estimatedPieces: state.volumeMethod === "help" ? planningPieces() : 0,
-      weeklyPieceCounts: planningPieceCounts(),
-      pieceGoods: pieceBilledGoods(),
-      storage: state.scale.storage || "limited"
-    },
-    finish: state.finish.slice(),
     specialtyNeeds: state.specialtyNeeds.slice(),
+    scale: { ...state.scale },
+    finish: state.finish.slice(),
     ownership: state.ownership || "unsure",
-    inventory: { ...state.inventory },
-    serviceRhythm: state.serviceRhythm || "recommended",
-    location: {
-      value: state.location.trim(),
-      kind: /^\d{5}$/.test(state.location.trim()) ? "zip" : "city"
-    },
-    route: {
-      returnWindow: state.returnWindow,
-      access: state.access
-    }
+    rentalCategory: state.rentalCategory,
+    rentalTier: state.rentalTier,
+    rentalQuantity: state.rentalQuantity,
+    location: { type: /^\d{5}$/.test(state.location.trim()) ? "zip" : "city", value: state.location.trim() },
+    requestedPickups: state.requestedPickups || ""
   });
 
-  const adjustedRange = (result, count) => {
-    if (count === 5) return result.range;
-    const midpoint = (result.range.weeklyLow + result.range.weeklyHigh) / 2;
-    const spread = count === 3 ? 0.38 : 0.24;
-    const weeklyLow = roundFive(midpoint * (1 - spread));
-    const weeklyHigh = roundFive(midpoint * (1 + spread));
-    return {
-      weeklyLow,
-      weeklyHigh,
-      monthlyLow: roundFive(weeklyLow * calculator.pricingRules.monthlyWeeks),
-      monthlyHigh: roundFive(weeklyHigh * calculator.pricingRules.monthlyWeeks)
-    };
-  };
+  const estimateKey = () => JSON.stringify(stateForEngine());
 
-  const serialOxford = (items) => {
-    if (items.length === 1) return items[0];
-    if (items.length === 2) return `${items[0]} and ${items[1]}`;
-    return `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
-  };
-
-  const moneyRange = (range) => `${money(range.weeklyLow)}–${money(range.weeklyHigh)} / week`;
-
-  const setRhythmPanelOpen = (open) => {
-    rhythmPanelOpen = open;
-    rhythmOverrides.hidden = !open;
-    rhythmToggle.setAttribute("aria-expanded", String(open));
-    rhythmToggle.textContent = open ? "Hide alternate rhythms" : "Choose a different rhythm";
-  };
-
-  const syncRhythmInputs = () => {
-    const selected = state.serviceRhythm || "recommended";
-    rhythmInputs.forEach((input) => {
-      input.checked = input.value === selected;
-    });
-  };
-
-  const renderRhythmCadence = (rhythmId) => {
-    const activeDays = rhythmCadenceDays[rhythmId] || [];
-    rhythmCadence.dataset.rhythm = rhythmId || "pending";
-    rhythmDays.forEach((day, index) => {
-      day.classList.toggle("is-active", activeDays.includes(index));
-    });
-  };
-
-  const renderRhythmRecommendation = () => {
-    if (!state.operation || (!planningPounds() && !planningPieces())) {
-      rhythmRecommendationKicker.textContent = "Recommendation pending";
-      rhythmRecommendationLabel.textContent = "Add the operation and weekly volume to see a recommendation.";
-      rhythmRecommendationReason.textContent = "Shelton balances estimated movement, storage, and the type of account before suggesting a route rhythm.";
-      rhythmUseRecommendation.disabled = true;
-      renderRhythmCadence("");
-      if (state.serviceRhythm !== "recommended") {
-        rhythmOverrideNote.hidden = false;
-        rhythmOverrideNote.textContent = `Your ${rhythmOptionLabels[state.serviceRhythm] || "preferred"} rhythm is saved. Add the operation and weekly volume to compare it with Shelton's recommendation.`;
-      } else {
-        rhythmOverrideNote.hidden = true;
-      }
-      return;
-    }
-    const recommendationState = calculationState();
-    recommendationState.serviceRhythm = "recommended";
-    const rhythm = calculator.recommendRhythm(recommendationState, planningLoad(), calculator.pricingRules);
-    rhythmRecommendationKicker.textContent = "Shelton's recommendation";
-    rhythmRecommendationLabel.textContent = rhythm.recommendedLabel;
-    rhythmRecommendationReason.textContent = rhythm.reason;
-    rhythmUseRecommendation.disabled = false;
-    renderRhythmCadence(rhythm.recommendedId);
-    if (state.serviceRhythm !== "recommended") {
-      const selectedLabel = rhythmOptionLabels[state.serviceRhythm] || "alternate rhythm";
-      rhythmOverrideNote.hidden = false;
-      rhythmOverrideNote.textContent = state.serviceRhythm === rhythm.recommendedId
-        ? `${selectedLabel} matches Shelton's current recommendation.`
-        : `You selected ${selectedLabel}. Because it differs from Shelton's recommendation, the planning range may widen or require route review.`;
-    } else {
-      rhythmOverrideNote.hidden = true;
-    }
-  };
-
-  const renderResultSupport = (result, count) => {
-    const showBreakdown = count === 5 && (result.inventoryRange || result.inventoryExcluded);
-    rangeBreakdown.hidden = !showBreakdown;
-    if (showBreakdown) {
-      processingRange.textContent = moneyRange(result.processingRange);
-      inventoryRangeRow.hidden = false;
-      inventoryRange.textContent = result.inventoryRange ? moneyRange(result.inventoryRange) : "Not included yet";
-    }
-
-    const reviews = result.manualReviewReasons || [];
-    rangeReview.hidden = !reviews.length;
-    rangeReviewCopy.textContent = reviews.join(" ");
-    rangeAssumptions.replaceChildren();
-    (result.assumptions || []).forEach((assumption) => {
-      const item = document.createElement("li");
-      item.textContent = assumption;
-      rangeAssumptions.appendChild(item);
-    });
-  };
-
-  const updateResult = () => {
+  const renderProgress = () => {
     const completed = completion();
-    const completedKeys = Object.keys(completed).filter((key) => completed[key]);
-    const missingKeys = Object.keys(completed).filter((key) => !completed[key]);
-    const count = completedKeys.length;
-
-    completedCount.textContent = `${count} of 5 ${count === 1 ? "factor" : "factors"}`;
-    progressDots.forEach((dot, index) => dot.classList.toggle("is-complete", index < count));
     Object.entries(completed).forEach(([key, value]) => {
-      const label = root.querySelector(`[data-factor-state="${key}"]`);
+      const label = q('[data-factor-state="' + key + '"]');
       if (!label) return;
-      label.textContent = key === "finish"
-        ? value
-          ? "Recommendation ready"
-          : finishRecommendationState.hasProgram
-            ? "Add weekly volume"
-            : "Waiting for estimator"
-        : value
-          ? "Included in your range"
-          : "Optional";
+      if (key === "program") {
+        if (value) label.textContent = "Ready for sizing";
+        else if (state.operation) label.textContent = "Choose at least one item";
+        else label.textContent = "Required · start here";
+      } else if (key === "volume") {
+        if (!state.operation) label.textContent = "Choose an operation first";
+        else if (value) label.textContent = "Included in your review";
+        else if (estimateReady()) label.textContent = "Range open · keep refining";
+        else label.textContent = "Add the first sizing answer";
+      }
+      else if (key === "finish") label.textContent = value ? "Finish ready" : "Choose goods in Section 01";
+      else label.textContent = value ? "Included in your review" : "Optional";
       label.classList.toggle("is-complete", value);
     });
 
-    if (count < 3) {
-      latestResult = null;
-      rangeLocked.hidden = false;
-      rangeRevealed.hidden = true;
-      rangeBreakdown.hidden = true;
-      rangeReview.hidden = true;
-      rangeAssumptions.replaceChildren();
-      const remaining = 3 - count;
-      unlockCopy.textContent = count === 0
-        ? "Answer any three factors to reveal an early planning range."
-        : `Answer ${remaining} more ${remaining === 1 ? "factor" : "factors"} to reveal an early planning range.`;
-    } else {
-      const result = calculator.calculatePlanningRange(calculationState(), calculator.pricingRules);
-      const range = adjustedRange(result, count);
-      latestResult = { ...result, range, completed, count };
-      rangeLocked.hidden = true;
-      rangeRevealed.hidden = false;
-      weeklyRange.textContent = `${money(range.weeklyLow)}–${money(range.weeklyHigh)}`;
-      monthlyRange.textContent = `${money(range.monthlyLow)}–${money(range.monthlyHigh)} in a typical month`;
-      rhythmLabel.textContent = result.rhythm.label;
-      modelLabel.textContent = result.model.label;
-      renderResultSupport(result, count);
-
-      if (count === 3) {
-        rangeStage.textContent = "Early planning range · 3 of 5 factors";
-        confidenceLabel.textContent = "Early direction";
-        guidanceTitle.textContent = "Broad by design";
-        guidanceCopy.textContent = `Add ${serialOxford(missingKeys.map((key) => factorLabels[key]))} to narrow this range. The wider band protects against false precision while those details are still unknown.`;
-      } else if (count === 4) {
-        rangeStage.textContent = "Refining range · 4 of 5 factors";
-        confidenceLabel.textContent = "Useful planning confidence";
-        guidanceTitle.textContent = "One detail will tighten it further";
-        guidanceCopy.textContent = `Add ${factorLabels[missingKeys[0]]} for the most informed version of this planning range.`;
-      } else {
-        rangeStage.textContent = "Most informed planning range · 5 of 5 factors";
-        confidenceLabel.textContent = result.confidence.level;
-        guidanceTitle.textContent = result.manualReviewReasons.length ? "Needs Shelton review" : "Ready for Shelton review";
-        guidanceCopy.textContent = result.confidence.explanation;
-      }
-    }
-
-    if (count > 0) {
+    if (state.operation || state.goods.length) {
       estimateDock.hidden = false;
-      dockProgress.textContent = `${count} of 5 ${count === 1 ? "factor" : "factors"}`;
-      if (count < 3) {
-        const remaining = 3 - count;
-        dockRange.textContent = `Answer ${remaining} more to reveal your range`;
+      dockProgress.textContent = "Your planning range";
+      if (!completed.program) {
+        dockRange.textContent = "Choose at least one item to complete Section 01.";
+        dockAction.textContent = "Finish section 01";
+        dockAction.href = "#factor-program";
+      } else if (!estimateReady()) {
+        dockRange.textContent = minimumEstimate().message;
+        dockAction.textContent = "Add first sizing answer";
+        dockAction.href = "#factor-volume";
+      } else if (estimateLoading) {
+        dockRange.textContent = "Calculating your planning range…";
         dockAction.textContent = "View progress";
+        dockAction.href = "#planning-range";
+      } else if (latestResult && latestResult.range) {
+        dockRange.textContent = Number(latestResult.range.weeklyLow) === Number(latestResult.range.weeklyHigh)
+          ? money(latestResult.range.weeklyBase) + " / week"
+          : money(latestResult.range.weeklyLow) + "–" + money(latestResult.range.weeklyHigh) + " / week";
+        dockAction.textContent = "View planning range";
+        dockAction.href = "#planning-range";
       } else {
-        dockRange.textContent = weeklyRange.textContent + " / week";
-        dockAction.textContent = count < 5 ? "See how to narrow it" : "View full range";
+        dockRange.textContent = "Shelton review path ready";
+        dockAction.textContent = "View review";
+        dockAction.href = "#planning-range";
       }
     } else {
       estimateDock.hidden = true;
     }
   };
 
-  const saveAndUpdate = () => {
-    renderSpecialty();
-    renderVolume();
-    renderFinishRecommendation();
-    renderOwnership();
-    renderRhythmRecommendation();
-    sessionStorage.setItem(storageKey, JSON.stringify(state));
-    updateResult();
+  const rhythmDaysFor = (label) => {
+    const text = String(label || "").toLowerCase();
+    if (text.includes("weekday")) return [0, 1, 2, 3, 4];
+    if (text.includes("three")) return [0, 2, 4];
+    if (text.includes("twice")) return [1, 4];
+    if (text.includes("once")) return [2];
+    return [];
   };
 
-  operationInput.addEventListener("change", () => {
-    state.operation = operationInput.value;
-    const operation = config.operations.find((item) => item.id === state.operation);
-    state.goods = operation ? state.goods.filter((id) => operation.goods.includes(id)) : [];
-    state.volumePounds = "";
-    state.volumePieces = "";
-    state.scale = {};
-    state.goodsScale = {};
-    estimatorSignature = "";
-    renderGoods();
-    syncOperationPicker();
-    setOperationPanelOpen(false);
-    saveAndUpdate();
-  });
-
-  operationTrigger.addEventListener("click", () => {
-    setOperationPanelOpen(!operationPanelOpen);
-  });
-
-  operationSearch.addEventListener("input", () => {
-    filterOperationOptions(operationSearch.value);
-  });
-
-  operationSearch.addEventListener("keydown", (event) => {
-    if (event.key !== "ArrowDown") return;
-    const firstVisible = Array.from(operationOptions.querySelectorAll("[data-operation-option]")).find((button) => !button.hidden);
-    if (!firstVisible) return;
-    event.preventDefault();
-    firstVisible.focus();
-  });
-
-  operationOptions.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-operation-option]");
-    if (!button) return;
-    operationInput.value = button.dataset.value;
-    operationInput.dispatchEvent(new Event("change", { bubbles: true }));
-    operationTrigger.focus();
-  });
-
-  operationPicker.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape" || !operationPanelOpen) return;
-    setOperationPanelOpen(false);
-    operationTrigger.focus();
-  });
-
-  document.addEventListener("click", (event) => {
-    if (!operationPanelOpen || operationPicker.contains(event.target)) return;
-    setOperationPanelOpen(false);
-  });
-
-  goodsOptions.addEventListener("change", (event) => {
-    if (!event.target.matches("input[name='goods']")) return;
-    state.goods = Array.from(goodsOptions.querySelectorAll("input:checked")).map((input) => input.value);
-    if (!hasPoundBilledGoods()) state.volumePounds = "";
-    if (!hasPieceBilledGoods()) state.volumePieces = "";
-    state.goodsScale = Object.fromEntries(Object.entries(state.goodsScale).filter(([id]) => state.goods.includes(id)));
-    estimatorSignature = "";
-    saveAndUpdate();
-  });
-
-  specialtyOptions.addEventListener("change", (event) => {
-    if (!event.target.matches("input[name='specialty']")) return;
-    state.specialtyNeeds = Array.from(specialtyOptions.querySelectorAll("input:checked")).map((input) => input.value);
-    saveAndUpdate();
-  });
-
-  root.querySelector("[data-volume-methods]").addEventListener("change", (event) => {
-    if (!event.target.matches("input[name='volumeMethod']")) return;
-    state.volumeMethod = event.target.value;
-    saveAndUpdate();
-  });
-
-  poundVolumeInput.addEventListener("input", () => {
-    state.volumePounds = poundVolumeInput.value;
-    saveAndUpdate();
-  });
-
-  pieceVolumeInput.addEventListener("input", () => {
-    state.volumePieces = pieceVolumeInput.value;
-    saveAndUpdate();
-  });
-
-  const updateEstimatorValue = (event) => {
-    const baseId = event.target.dataset.volumeEstimateBase;
-    const goodId = event.target.dataset.volumeEstimateGood;
-    if (baseId) state.scale[baseId] = event.target.value;
-    if (goodId) state.goodsScale[goodId] = event.target.value;
-    if (baseId || goodId) saveAndUpdate();
+  const renderRouteRecommendation = () => {
+    const kicker = q("[data-rhythm-recommendation-kicker]");
+    const label = q("[data-rhythm-recommendation-label]");
+    const cadence = q("[data-rhythm-cadence]");
+    const days = qa("[data-rhythm-day]");
+    const toggle = q("[data-rhythm-toggle]");
+    const overrides = q("[data-rhythm-overrides]");
+    qa("[data-rhythm-input]").forEach((input) => {
+      input.checked = state.requestedPickups ? input.value === state.requestedPickups : input.value === "recommended";
+    });
+    toggle.hidden = !latestResult || latestResult.rangeUnavailable;
+    if (!latestResult || latestResult.rangeUnavailable) overrides.hidden = true;
+    if (!latestResult) {
+      kicker.textContent = estimateLoading ? "Calculating service rhythm" : "Recommendation pending";
+      label.textContent = estimateReady() ? "Calculating the likely service rhythm." : minimumEstimate().message;
+      cadence.dataset.rhythm = "pending";
+      days.forEach((day) => day.classList.remove("is-active"));
+      return;
+    }
+    kicker.textContent = latestResult.rangeUnavailable ? "Shelton route review" : "Planning recommendation";
+    label.textContent = latestResult.rhythm.label;
+    const active = rhythmDaysFor(latestResult.rhythm.label);
+    days.forEach((day, index) => day.classList.toggle("is-active", active.includes(index)));
   };
 
-  volumeEstimatorFields.addEventListener("input", updateEstimatorValue);
-  volumeEstimatorFields.addEventListener("change", (event) => {
-    if (event.target.matches("[data-volume-estimate-base], [data-volume-estimate-good]")) updateEstimatorValue(event);
-  });
+  const renderResult = () => {
+    renderProgress();
+    renderRouteRecommendation();
 
-  ownershipOptions.addEventListener("change", (event) => {
-    if (!event.target.matches("input[name='ownership']")) return;
-    state.ownership = event.target.value;
-    saveAndUpdate();
-  });
-
-  const updateInventory = () => {
-    state.inventory = {
-      suppliedUnits: inventoryUnits.value,
-      par: selectedRadioValue(inventoryParInputs),
-      customization: selectedRadioValue(inventoryCustomizationInputs)
-    };
-    saveAndUpdate();
-  };
-
-  inventoryUnits.addEventListener("input", updateInventory);
-  inventoryParInputs.forEach((input) => input.addEventListener("change", updateInventory));
-  inventoryCustomizationInputs.forEach((input) => input.addEventListener("change", updateInventory));
-
-  locationInput.addEventListener("input", () => {
-    state.location = locationInput.value;
-    saveAndUpdate();
-  });
-
-  rhythmInputs.forEach((input) => {
-    input.addEventListener("change", () => {
-      if (!input.checked) return;
-      state.serviceRhythm = input.value;
-      if (input.value === "recommended") setRhythmPanelOpen(false);
-      else setRhythmPanelOpen(true);
-      saveAndUpdate();
-    });
-  });
-
-  rhythmToggle.addEventListener("click", () => {
-    setRhythmPanelOpen(!rhythmPanelOpen);
-  });
-
-  returnWindowInputs.forEach((input) => {
-    input.addEventListener("change", () => {
-      if (!input.checked) return;
-      state.returnWindow = input.value;
-      saveAndUpdate();
-    });
-  });
-
-  accessInputs.forEach((input) => {
-    input.addEventListener("change", () => {
-      if (!input.checked) return;
-      state.access = input.value;
-      saveAndUpdate();
-    });
-  });
-
-  clearAnswers.addEventListener("click", () => {
-    state = defaultState();
-    estimatorSignature = "";
-    sessionStorage.removeItem(storageKey);
-    operationInput.value = "";
-    syncOperationPicker();
-    setOperationPanelOpen(false);
-    renderGoods();
-    renderSpecialty();
-    renderOwnership();
-    renderVolume();
-    renderFinishRecommendation();
-    locationInput.value = "";
-    syncRhythmInputs();
-    setRhythmPanelOpen(false);
-    syncRadioInputs(returnWindowInputs, "");
-    syncRadioInputs(accessInputs, "");
-    quoteError.hidden = true;
-    quoteStatus.hidden = true;
-    renderRhythmRecommendation();
-    updateResult();
-  });
-
-  quoteForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const formData = new FormData(quoteForm);
-    const email = String(formData.get("email") || "").trim();
-    const required = ["name", "business"].every((key) => String(formData.get(key) || "").trim());
-    const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    if (!required || !validEmail) {
-      quoteError.hidden = false;
+    if (!estimateReady()) {
+      rangeLocked.hidden = false;
+      rangeRevealed.hidden = true;
+      unlockCopy.textContent = minimumEstimate().message;
+      return;
+    }
+    if (estimateLoading || !latestResult) {
+      rangeLocked.hidden = false;
+      rangeRevealed.hidden = true;
+      unlockCopy.textContent = "Calculating your planning range…";
       return;
     }
 
+    rangeLocked.hidden = true;
+    rangeRevealed.hidden = false;
+    rangeRevealed.classList.toggle("is-range-unavailable", latestResult.rangeUnavailable);
+
+    if (latestResult.rangeUnavailable || !latestResult.range) {
+      weeklyRange.textContent = "Shelton review";
+      poundRange.textContent = "Pricing is confirmed after a quick program review.";
+      rangeStage.textContent = "Personalized pricing review";
+      guidanceTitle.textContent = "Your answers are ready to send";
+      guidanceCopy.textContent = "Request a quote with the information you have. Shelton will confirm the remaining service details with you.";
+    } else {
+      const collapsed = Number(latestResult.range.weeklyLow) === Number(latestResult.range.weeklyHigh);
+      weeklyRange.textContent = collapsed
+        ? money(latestResult.range.weeklyBase)
+        : money(latestResult.range.weeklyLow) + "–" + money(latestResult.range.weeklyHigh);
+      poundRange.textContent = latestResult.unitPricing
+        ? "$" + latestResult.unitPricing.poundLow.toFixed(2) + " / lb fixed recommended rate"
+        : "Per-pound pricing is confirmed during review.";
+      rangeStage.textContent = collapsed ? "Likely typical weekly amount" : "Typical weekly amount and quantity range";
+      guidanceTitle.textContent = latestResult.manualReview || latestResult.warning.includes("REVIEW")
+        ? "Let’s confirm this program"
+        : latestResult.confidence?.explanation
+          ? "What still matters"
+          : "Ready for a conversation";
+      guidanceCopy.textContent = latestResult.confidence?.explanation || "Shelton will confirm your goods and route before final pricing.";
+    }
+  };
+
+  const refreshProgressiveResult = () => {
+    if (!latestRawResult) {
+      renderResult();
+      return;
+    }
+    latestResult = progressiveRange.refine(latestRawResult, currentPrecision());
+    renderResult();
+  };
+
+  const requestEstimate = async () => {
+    window.clearTimeout(estimateTimer);
+    if (!estimateReady()) {
+      estimateRequest += 1;
+      estimateLoading = false;
+      latestResult = null;
+      latestRawResult = null;
+      renderResult();
+      return;
+    }
+    const signature = estimateKey();
+    if (signature === estimateSignature && (latestResult || estimateLoading)) {
+      renderResult();
+      return;
+    }
+    estimateSignature = signature;
+    const requestId = ++estimateRequest;
+    estimateLoading = true;
+    latestResult = null;
+    latestRawResult = null;
+    renderResult();
+    const result = await pricingEngine.calculatePlanningRange(stateForEngine());
+    if (requestId !== estimateRequest) return;
+    latestRawResult = result;
+    latestResult = progressiveRange.refine(result, currentPrecision());
+    estimateLoading = false;
+    renderFinish();
+    renderResult();
+    restoreInitialHash();
+  };
+
+  const scheduleEstimate = (delay = 250) => {
+    window.clearTimeout(estimateTimer);
+    estimateTimer = window.setTimeout(requestEstimate, delay);
+  };
+
+  const renderAll = () => {
+    syncOperation();
+    renderGoods();
+    renderProgramContext();
+    renderScale();
+    renderFinish();
+    renderOwnership();
+    locationInput.value = state.location;
+    qa("[data-return-window]").forEach((input) => { input.checked = input.value === state.returnWindow; });
+    qa("[data-access-input]").forEach((input) => { input.checked = input.value === state.access; });
+    persist();
+    requestEstimate();
+  };
+
+  const onStateChange = () => {
+    invalidateEstimate();
+    renderAll();
+  };
+
+  operationTrigger.addEventListener("click", () => setPickerOpen(!pickerOpen));
+  operationOptions.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-operation-option]");
+    if (button) selectOperation(button.dataset.operationOption);
+  });
+  operationOptions.addEventListener("keydown", (event) => {
+    if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+    const visible = qa("[data-operation-option]", operationOptions).filter((button) => !button.hidden);
+    if (!visible.length) return;
+    const index = Math.max(0, visible.indexOf(document.activeElement));
+    let next = index;
+    if (event.key === "ArrowDown") next = (index + 1) % visible.length;
+    if (event.key === "ArrowUp") next = (index - 1 + visible.length) % visible.length;
+    if (event.key === "Home") next = 0;
+    if (event.key === "End") next = visible.length - 1;
+    event.preventDefault();
+    visible[next].focus();
+  });
+  operationConfirm.addEventListener("click", () => {
+    if (pendingOperation) applyOperation(pendingOperation);
+  });
+  operationCancel.addEventListener("click", () => {
+    clearOperationConfirmation();
+    const current = q('[data-operation-option="' + state.operation + '"]', operationOptions);
+    if (current && !current.hidden) current.focus();
+    else q("[data-operation-option]", operationOptions)?.focus();
+  });
+  operationInput.addEventListener("change", () => selectOperation(operationInput.value));
+  document.addEventListener("click", (event) => {
+    if (pickerOpen && !event.target.closest("[data-operation-picker]")) setPickerOpen(false);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && pickerOpen) {
+      if (!operationConfirmation.hidden) {
+        clearOperationConfirmation();
+        const current = q('[data-operation-option="' + state.operation + '"]', operationOptions);
+        (current || q("[data-operation-option]", operationOptions))?.focus();
+      } else {
+        setPickerOpen(false, { returnFocus: true });
+      }
+      return;
+    }
+    if (event.key === "Tab" && pickerOpen && modalPicker()) {
+      const focusable = qa("button, input", operationPanel).filter((element) => (
+        !element.disabled && !element.hidden && !element.closest("[hidden]")
+      ));
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  });
+  window.addEventListener("resize", syncPickerSemantics);
+
+  goodsOptions.addEventListener("change", (event) => {
+    if (!event.target.matches('input[name="goods"]')) return;
+    const id = event.target.value;
+    state.goods = event.target.checked
+      ? Array.from(new Set(state.goods.concat(id)))
+      : state.goods.filter((item) => item !== id);
+    const validGoods = operationForState() ? operationForState().goods : [];
+    state.goods = state.goods.filter((item) => validGoods.includes(item));
+    onStateChange();
+  });
+
+  scaleFields.addEventListener("input", (event) => {
+    const id = event.target.dataset.scaleField;
+    if (!id) return;
+    state.scale[id] = event.target.value;
+    invalidateEstimate();
+    persist();
+    updateScaleStatus();
+    renderFinish();
+    scheduleEstimate();
+    const next = q("[data-scale-next]", scaleFields);
+    const field = visibleScaleFields().find((item) => item.id === id);
+    if (next && field) {
+      const lastQuestion = scaleStep === visibleScaleFields().length - 1;
+      const routeRequired = Boolean(field.routing);
+      next.disabled = routeRequired && !basicFieldValid(field);
+      next.textContent = routeRequired && !basicFieldValid(field)
+        ? (field.emptyAction || "Choose a starting point")
+        : lastQuestion
+          ? "Finish section"
+          : (basicFieldValid(field) ? "Next question" : "Skip for now");
+    }
+    const saved = q(".volume-question__answered", scaleFields);
+    if (saved) {
+      const answeredCount = visibleScaleFields().filter(basicFieldValid).length;
+      saved.textContent = answeredCount + (answeredCount === 1 ? " answer saved" : " answers saved");
+    }
+  });
+  scaleFields.addEventListener("change", (event) => {
+    const id = event.target.dataset.scaleField;
+    if (!id) return;
+    state.scale[id] = event.target.value;
+    if (id === "entryMode") {
+      const meta = scaleEntryMeta();
+      if (meta) {
+        const keep = new Set(["entryMode"]);
+        if (state.scale.entryMode === "direct") {
+          keep.add(meta.directField);
+          scaleSchema().forEach((field) => {
+            if (directFollowupIds.has(field.id)) keep.add(field.id);
+          });
+        } else {
+          scaleSchema().forEach((field) => {
+            if (field.id !== meta.directField) keep.add(field.id);
+          });
+        }
+        Object.keys(state.scale).forEach((key) => {
+          if (!keep.has(key)) delete state.scale[key];
+        });
+      }
+    }
+    if (id === "bedroomBasis") {
+      if (state.scale.bedroomBasis === "average") delete state.scale.totalBedrooms;
+      if (state.scale.bedroomBasis === "total") delete state.scale.averageBedrooms;
+    }
+    if (id === "bedSystem" && state.scale[id] !== "mixed") delete state.scale.duvetPercent;
+    if (id === "careType" && state.scale[id] !== "mixed") delete state.scale.memoryCarePercent;
+    invalidateEstimate();
+    persist();
+    updateScaleStatus();
+    renderFinish();
+    requestEstimate();
+  });
+  scaleFields.addEventListener("click", (event) => {
+    const back = event.target.closest("[data-scale-back]");
+    const next = event.target.closest("[data-scale-next]");
+    if (!back && !next) return;
+    const fields = visibleScaleFields();
+    if (next?.disabled) return;
+    if (back) scaleStep = Math.max(0, scaleStep - 1);
+    if (next && scaleStep >= fields.length - 1) {
+      q("#factor-finish").scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (next) scaleStep += 1;
+    renderScale();
+    const control = q("[data-scale-field]", scaleFields);
+    if (control) window.setTimeout(() => control.focus(), 0);
+  });
+
+  ownershipOptions.addEventListener("change", (event) => {
+    if (!event.target.matches('input[name="ownership"]')) return;
+    state.ownership = event.target.value;
+    if (!["some", "supply"].includes(state.ownership)) {
+      state.rentalCategory = "";
+      state.rentalTier = "";
+      state.rentalQuantity = "";
+    }
+    onStateChange();
+  });
+
+  inventoryCategory.addEventListener("change", () => {
+    state.rentalCategory = inventoryCategory.value;
+    onStateChange();
+  });
+  inventoryTier.addEventListener("change", () => {
+    state.rentalTier = inventoryTier.value;
+    onStateChange();
+  });
+  inventoryUnits.addEventListener("input", () => {
+    state.rentalQuantity = inventoryUnits.value;
+    invalidateEstimate();
+    persist();
+    requestEstimate();
+  });
+  qa("[data-inventory-par]").forEach((input) => input.addEventListener("change", () => {
+    state.inventory.par = input.value;
+    persist();
+    renderProgress();
+  }));
+  qa("[data-inventory-customization]").forEach((input) => input.addEventListener("change", () => {
+    state.inventory.customization = input.value;
+    persist();
+    renderProgress();
+  }));
+
+  locationInput.addEventListener("input", () => {
+    state.location = locationInput.value;
+    persist();
+    invalidateEstimate();
+    requestEstimate();
+  });
+  qa("[data-return-window]").forEach((input) => input.addEventListener("change", () => {
+    state.returnWindow = input.value;
+    persist();
+    refreshProgressiveResult();
+  }));
+  qa("[data-access-input]").forEach((input) => input.addEventListener("change", () => {
+    state.access = input.value;
+    persist();
+    invalidateEstimate();
+    requestEstimate();
+  }));
+  q("[data-rhythm-toggle]")?.addEventListener("click", () => {
+    const overrides = q("[data-rhythm-overrides]");
+    const open = overrides.hidden;
+    overrides.hidden = !open;
+    q("[data-rhythm-toggle]").setAttribute("aria-expanded", String(open));
+  });
+  qa("[data-rhythm-input]").forEach((input) => input.addEventListener("change", () => {
+    state.requestedPickups = input.value === "recommended" ? "" : input.value;
+    persist();
+    invalidateEstimate();
+    requestEstimate();
+  }));
+
+  clearAnswers.addEventListener("click", () => {
+    state = defaultState();
+    scaleStep = 0;
+    scaleSequenceOperation = "";
+    estimateRequest += 1;
+    window.clearTimeout(estimateTimer);
+    estimateSignature = "";
+    estimateLoading = false;
+    latestResult = null;
+    latestRawResult = null;
+    pickerOpen = false;
+    operationPanel.hidden = true;
+    quoteForm.reset();
     quoteError.hidden = true;
-    const payload = {
-      createdAt: new Date().toISOString(),
-      contact: Object.fromEntries(formData.entries()),
-      pricingInputs: state,
-      planningResult: latestResult ? {
-        weeklyRange: latestResult.range,
-        processingRange: latestResult.processingRange,
-        inventoryRange: latestResult.inventoryRange,
-        completedFactors: latestResult.count,
-        weeklyPounds: latestResult.weeklyPounds,
-        weeklyPieces: latestResult.weeklyPieces,
+    quoteStatus.hidden = true;
+    window.sessionStorage.removeItem(config.storageKey);
+    renderAll();
+  });
+
+  const quoteContactValid = () => {
+    const form = new FormData(quoteForm);
+    const name = String(form.get("name") || "").trim();
+    const business = String(form.get("business") || "").trim();
+    const email = String(form.get("email") || "").trim();
+    const phone = String(form.get("phone") || "").trim();
+    const preferred = String(form.get("preferredContact") || "");
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const phoneRequired = ["phone", "either"].includes(preferred);
+    const valid = Boolean(name && business && emailValid && preferred && (!phoneRequired || phone));
+    quoteError.textContent = phoneRequired && !phone && name && business && emailValid
+      ? "Add a phone number for your selected contact preference."
+      : "Complete the required contact details and select how you prefer to be reached.";
+    quoteError.hidden = valid;
+    return valid;
+  };
+
+  quoteForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!quoteContactValid()) {
+      quoteError.focus && quoteError.focus();
+      return;
+    }
+    const form = new FormData(quoteForm);
+    const contact = {
+      businessName: String(form.get("business") || "").trim(),
+      contactName: String(form.get("name") || "").trim(),
+      email: String(form.get("email") || "").trim(),
+      phone: String(form.get("phone") || "").trim() || null,
+      preferredContact: String(form.get("preferredContact") || "email"),
+      location: state.location.trim() || null,
+      notes: String(form.get("notes") || "").trim() || null
+    };
+    const snapshot = {
+      schemaVersion: "website-pricing-spine.v3",
+      estimatorVersion: pricingEngine.pricingRules.version,
+      source: {
+        host: window.location.host,
+        page: window.location.pathname,
+        campaign: new URLSearchParams(window.location.search).get("utm_campaign") || null
+      },
+      operation: state.operation,
+      operationLabel: operationForState() ? operationForState().label : "",
+      goods: state.goods.slice(),
+      specialtyNeeds: state.specialtyNeeds.slice(),
+      scale: { ...state.scale },
+      finish: state.finish.slice(),
+      ownership: state.ownership || "unsure",
+      rental: {
+        category: state.rentalCategory || null,
+        tier: state.rentalTier || null,
+        quantity: positive(state.rentalQuantity) || null,
+        par: state.inventory.par || null,
+        customization: state.inventory.customization || null
+      },
+      route: {
+        location: state.location.trim() || null,
+        requestedPickups: state.requestedPickups || null,
+        access: state.access || null
+      },
+      publicRecommendation: latestResult ? {
+        modelVersion: latestResult.rulesVersion,
+        warning: latestResult.warning,
+        range: latestResult.range,
         rhythm: latestResult.rhythm,
         model: latestResult.model,
-        confidence: latestResult.confidence,
-        manualReviewReasons: latestResult.manualReviewReasons,
-        assumptions: latestResult.assumptions,
-        rulesVersion: latestResult.rulesVersion
-      } : null,
-      status: "development payload — connect to Shelton quote endpoint"
+        confidence: latestResult.confidence
+      } : null
     };
-    sessionStorage.setItem("shelton-pricing-quote-payload", JSON.stringify(payload));
+
+    quoteSubmit.disabled = true;
+    quoteSubmit.textContent = "Sending…";
     quoteStatus.hidden = false;
-    quoteStatus.textContent = "Your pricing answers and contact details are prepared together. In this development build, the request is saved locally and has not been sent.";
-    quoteStatus.focus();
+    quoteStatus.textContent = "Sending your program to Shelton for review.";
+    try {
+      const notification = new FormData(quoteForm);
+      notification.set("company", contact.businessName);
+      notification.set("operation", snapshot.operationLabel);
+      notification.set("goods", selectedGoods().map((item) => item.label).join(", "));
+      notification.set("pricing_journey", JSON.stringify(snapshot));
+      const durableRequest = window.fetch(pricingEngine.apiUrl(pricingEngine.pricingRules.leadPath), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key": state.leadIdempotencyKey
+        },
+        body: JSON.stringify({
+          estimateToken: latestResult ? latestResult.estimateToken : null,
+          idempotencyKey: state.leadIdempotencyKey,
+          contact,
+          journeySnapshot: snapshot
+        })
+      });
+      const notificationRequest = window.fetch(quoteForm.action, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: notification
+      });
+      const [durableResult, notificationResult] = await Promise.allSettled([durableRequest, notificationRequest]);
+      const durableAccepted = durableResult.status === "fulfilled" && durableResult.value.ok;
+      const fallbackAccepted = notificationResult.status === "fulfilled" && notificationResult.value.ok;
+      if (!durableAccepted && !fallbackAccepted) throw new Error("Review intake failed.");
+
+      window.sessionStorage.removeItem(config.storageKey);
+      window.location.assign(quoteForm.dataset.quoteSuccess || "thank-you.html");
+    } catch {
+      quoteStatus.hidden = false;
+      quoteStatus.textContent = "We could not send the request. Your answers are still here; please try again.";
+      quoteStatus.focus();
+      quoteSubmit.disabled = false;
+      quoteSubmit.textContent = "Send to Shelton for review";
+    }
   });
 
   if ("IntersectionObserver" in window) {
+    const dockBlockers = new Set();
     const observer = new IntersectionObserver((entries) => {
-      const inResult = entries.some((entry) => entry.isIntersecting);
-      estimateDock.classList.toggle("is-suppressed", inResult);
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) dockBlockers.add(entry.target);
+        else dockBlockers.delete(entry.target);
+      });
+      estimateDock.classList.toggle("is-suppressed", dockBlockers.size > 0);
     }, { threshold: 0.1 });
-    observer.observe(root.querySelector("[data-range-shell]"));
-    observer.observe(root.querySelector("[data-quote-form]"));
+    observer.observe(q("[data-range-shell]"));
+    observer.observe(quoteForm);
   }
 
-  renderOperations();
-  renderGoods();
-  renderSpecialty();
-  renderOwnership();
-  renderVolume();
-  renderFinishRecommendation();
-  locationInput.value = state.location;
-  syncRhythmInputs();
-  setRhythmPanelOpen(rhythmPanelOpen);
-  syncRadioInputs(returnWindowInputs, state.returnWindow);
-  syncRadioInputs(accessInputs, state.access);
-  renderRhythmRecommendation();
-  updateResult();
+  renderOperationOptions();
+  renderAll();
+  if (!estimateLoading) restoreInitialHash();
 }());

@@ -2007,7 +2007,7 @@ body.has-about-dialog { overflow: hidden; }
 }
 .program-detail {
   min-height: var(--program-panel-height);
-  height: var(--program-panel-height);
+  height: auto;
   padding: clamp(0.92rem, 1.52vw, 1.1rem);
   display: flex;
   flex-direction: column;
@@ -2033,18 +2033,17 @@ body.has-about-dialog { overflow: hidden; }
   line-height: 1.36;
 }
 .program-detail__grid {
-  flex: 1 1 auto;
-  min-height: 0;
+  flex: 0 0 auto;
   margin: 0.68rem 0 0.72rem;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, auto);
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
 }
 .program-detail__grid > div {
-  min-height: 0;
+  min-height: clamp(9rem, 11.5vw, 10.35rem);
   padding: 0.76rem 0.84rem;
   background: rgba(8,19,33,0.7);
 }
@@ -3178,6 +3177,7 @@ fieldset {
   }
   .program-builder .section-head { margin-bottom: 1.25rem; }
   .program-builder .section-head .section-eyebrow { margin-bottom: 0.55rem; }
+  .program-builder .section-head h2 { max-width: 20rem; font-size: clamp(2.55rem, 10.8vw, 3rem); }
   .program-builder .section-head > p { margin-top: 0.8rem; }
   .program-builder__layout { margin-top: 0.55rem; }
   .program-selector { grid-template-rows: none; grid-auto-rows: 6.85rem; }
@@ -4969,10 +4969,10 @@ body[data-page="about"] .about-claim-timeline__intro p {
   line-height: 1.72;
 }
 body[data-page="about"] .about-linen-stack {
-  --towel-white: #faf4e8;
-  --towel-highlight: #fffaf1;
-  --towel-edge: rgba(86,67,43,0.23);
-  --towel-contact: rgba(45,34,22,0.27);
+  --towel-white: #fbfbf8;
+  --towel-highlight: #ffffff;
+  --towel-edge: rgba(74,66,55,0.14);
+  --towel-contact: rgba(44,37,29,0.22);
   --towel-texture: url("../images/generated/about-terry-pile-white-v2.webp");
   width: min(calc(100% - 6.5rem), 57.1875rem);
   margin: 0 auto;
@@ -4982,41 +4982,52 @@ body[data-page="about"] .about-linen-stack {
   isolation: isolate;
 }
 body[data-page="about"] .about-linen-stack__item {
-  --fold-height: 5.75rem;
+  --fold-height: 5.25rem;
   position: relative;
   z-index: 1;
   margin: -1px 0 0;
 }
-body[data-page="about"] .about-linen-stack__item:nth-child(1) { z-index: 8; }
-body[data-page="about"] .about-linen-stack__item:nth-child(2) { z-index: 7; }
-body[data-page="about"] .about-linen-stack__item:nth-child(3) { z-index: 6; }
-body[data-page="about"] .about-linen-stack__item:nth-child(4) { z-index: 5; }
-body[data-page="about"] .about-linen-stack__item:nth-child(5) { z-index: 4; }
-body[data-page="about"] .about-linen-stack__item:nth-child(6) { z-index: 3; }
-body[data-page="about"] .about-linen-stack__item:nth-child(7) { z-index: 2; }
-body[data-page="about"] .about-linen-stack__item:nth-child(8) { z-index: 1; }
+body[data-page="about"] .about-linen-stack__item:nth-child(1) { --fold-height: 8rem; z-index: 8; }
+body[data-page="about"] .about-linen-stack__item:nth-child(2) { --fold-height: 8.5rem; z-index: 7; }
+body[data-page="about"] .about-linen-stack__item:nth-child(3) { --fold-height: 7.9375rem; z-index: 6; }
+body[data-page="about"] .about-linen-stack__item:nth-child(4) { --fold-height: 5.75rem; z-index: 5; }
+body[data-page="about"] .about-linen-stack__item:nth-child(5) { --fold-height: 5.3125rem; z-index: 4; }
+body[data-page="about"] .about-linen-stack__item:nth-child(6) { --fold-height: 4.8125rem; z-index: 3; }
+body[data-page="about"] .about-linen-stack__item:nth-child(7) { --fold-height: 4.75rem; z-index: 2; }
+body[data-page="about"] .about-linen-stack__item:nth-child(8) { --fold-height: 4.375rem; z-index: 1; }
+body[data-page="about"] .about-linen-stack__item:nth-child(2n) .about-linen-fold {
+  margin-right: 0.08rem;
+  margin-left: 0.28rem;
+}
+body[data-page="about"] .about-linen-stack__item:nth-child(3n) .about-linen-fold {
+  margin-right: 0.34rem;
+  margin-left: 0.06rem;
+}
+body[data-page="about"] .about-linen-stack__item:nth-child(5n) .about-linen-fold {
+  margin-right: 0.2rem;
+  margin-left: 0.18rem;
+}
 body[data-page="about"] .about-linen-fold {
   position: relative;
   color: var(--about-ink);
   border: 1px solid var(--towel-edge);
-  border-radius: 1.15rem 1.35rem 1.05rem 1.25rem;
+  border-radius: 1.35rem 1.65rem 1.2rem 1.5rem;
   background-color: var(--towel-white);
   background-image: var(--towel-texture);
-  background-size: 52rem 52rem;
-  background-blend-mode: multiply;
+  background-size: 42rem 42rem;
   box-shadow:
-    0 0.12rem 0.2rem rgba(45,34,22,0.22),
-    0 0.55rem 0.9rem -0.32rem var(--towel-contact),
-    inset 0 1px rgba(255,255,255,0.82),
-    inset 0 -0.65rem 0.85rem -0.7rem rgba(72,61,45,0.24);
+    0 0.16rem 0.28rem rgba(44,37,29,0.16),
+    0 0.9rem 1.65rem -0.72rem var(--towel-contact),
+    inset 0 1px rgba(255,255,255,0.98),
+    inset 0 -0.58rem 0.82rem -0.66rem rgba(72,65,55,0.2);
 }
 body[data-page="about"] .about-linen-fold[open] {
   z-index: 10;
-  border-radius: 1.15rem 1.35rem 0.55rem 0.7rem;
+  border-radius: 1.35rem 1.65rem 0.65rem 0.8rem;
   box-shadow:
-    0 0.15rem 0.24rem rgba(45,34,22,0.24),
-    0 0.78rem 1.35rem -0.48rem rgba(45,34,22,0.32),
-    inset 0 1px rgba(255,255,255,0.84);
+    0 0.2rem 0.34rem rgba(44,37,29,0.17),
+    0 1rem 1.9rem -0.72rem rgba(44,37,29,0.25),
+    inset 0 1px rgba(255,255,255,0.98);
 }
 body[data-page="about"] .about-linen-fold > summary {
   min-width: 0;
@@ -5027,10 +5038,9 @@ body[data-page="about"] .about-linen-fold > summary {
   list-style: none;
   cursor: pointer;
   border-radius: inherit;
-  background-color: var(--towel-white);
+  background-color: rgba(255,255,253,0.82);
   background-image: var(--towel-texture);
-  background-size: 52rem 52rem;
-  background-blend-mode: multiply;
+  background-size: 42rem 42rem;
   transition: box-shadow 180ms ease, filter 180ms ease;
 }
 body[data-page="about"] .about-linen-fold > summary::-webkit-details-marker {
@@ -5043,18 +5053,16 @@ body[data-page="about"] .about-linen-fold > summary::before {
   z-index: 2;
   inset: 0 auto 0 0;
   pointer-events: none;
-  border-right: 1px solid rgba(92,73,48,0.18);
-  background-color: #ece2cf;
+  border-right: 1px solid rgba(76,68,57,0.14);
+  background-color: rgba(247,247,244,0.74);
   background-image: url("../images/generated/about-linen-weave-v1.png");
   background-position: center;
   background-size: 8rem 8rem;
-  background-blend-mode: multiply;
   box-shadow:
-    inset -0.22rem 0 0.34rem rgba(92,73,48,0.15),
-    inset 0.24rem 0 0.38rem rgba(255,252,244,0.78),
-    0.18rem 0 0.28rem rgba(63,46,28,0.12);
-  filter: saturate(0.8);
-  opacity: 0.86;
+    inset -0.18rem 0 0.3rem rgba(76,68,57,0.08),
+    inset 0.18rem 0 0.3rem rgba(255,255,255,0.74);
+  filter: grayscale(1) brightness(1.12);
+  opacity: 0.72;
 }
 body[data-page="about"] .about-linen-fold > summary::after {
   content: "";
@@ -5063,20 +5071,18 @@ body[data-page="about"] .about-linen-fold > summary::after {
   z-index: 2;
   inset: auto 0.38rem 0.08rem 0.32rem;
   pointer-events: none;
-  border-top: 1px solid rgba(92,73,48,0.18);
-  border-bottom: 1px solid rgba(255,250,240,0.86);
+  border-top: 1px solid rgba(79,70,58,0.13);
+  border-bottom: 1px solid rgba(255,255,255,0.9);
   border-radius: 0 0 1.1rem 1.25rem;
-  background-color: #ece2cf;
+  background-color: rgba(244,245,242,0.82);
   background-image: url("../images/generated/about-linen-weave-v1.png");
   background-position: center;
   background-size: 8rem 8rem;
-  background-blend-mode: multiply;
   box-shadow:
-    inset 0 1px rgba(255,252,244,0.84),
-    inset 0 -0.2rem 0.32rem rgba(105,77,45,0.14),
-    0 0.22rem 0.42rem rgba(54,38,22,0.22);
-  filter: saturate(0.8);
-  opacity: 0.9;
+    inset 0 1px rgba(255,255,255,0.94),
+    0 -0.16rem 0.38rem rgba(79,70,58,0.08);
+  filter: grayscale(1) brightness(1.12);
+  opacity: 0.78;
 }
 body[data-page="about"] .about-linen-fold > summary:hover {
   filter: brightness(1.025);
@@ -5100,7 +5106,7 @@ body[data-page="about"] .about-linen-fold__heading {
   transition: min-height 520ms cubic-bezier(.2,.72,.2,1);
 }
 body[data-page="about"] .about-linen-fold[open] .about-linen-fold__heading {
-  min-height: var(--fold-height);
+  min-height: 7.9375rem;
 }
 body[data-page="about"] .about-linen-fold__heading time,
 body[data-page="about"] .about-linen-fold__number,
@@ -5172,8 +5178,7 @@ body[data-page="about"] .about-linen-fold[open] > .about-linen-fold__panel {
   border-top: 1px solid rgba(74,66,55,0.16);
   background-color: var(--towel-white);
   background-image: var(--towel-texture);
-  background-size: 52rem 52rem;
-  background-blend-mode: multiply;
+  background-size: 42rem 42rem;
 }
 .js-enabled body[data-page="about"] .about-linen-fold[open] > .about-linen-fold__panel {
   grid-template-rows: 0fr;
@@ -5199,7 +5204,7 @@ body[data-page="about"] .about-linen-fold__content {
   align-items: center;
   padding: 0.95rem 5.375rem 0.8125rem 2.25rem;
   border-bottom: 1px solid rgba(74,66,55,0.16);
-  box-shadow: inset 0 -0.78rem 1rem -0.84rem rgba(105,77,45,0.24);
+  box-shadow: inset 0 -0.78rem 1rem -0.84rem rgba(68,59,48,0.2);
 }
 body[data-page="about"] .about-linen-fold__photo {
   width: 100%;
@@ -5208,10 +5213,9 @@ body[data-page="about"] .about-linen-fold__photo {
   box-sizing: border-box;
   padding: 1.2rem 1.1rem 1.05rem;
   position: relative;
-  background-color: var(--towel-highlight);
+  background-color: #fafaf7;
   background-image: var(--towel-texture);
-  background-size: 40rem 40rem;
-  background-blend-mode: multiply;
+  background-size: 32rem 32rem;
   border: 1px solid rgba(74,66,55,0.18);
   border-radius: 0.18rem 0.42rem 0.22rem 0.5rem;
   box-shadow:
@@ -5320,6 +5324,10 @@ body[data-page="about"] .about-linen-fold__rule span {
   body[data-page="about"] .about-linen-stack__item:nth-child(n) {
     --fold-height: 4.75rem;
   }
+  body[data-page="about"] .about-linen-stack__item:nth-child(1),
+  body[data-page="about"] .about-linen-stack__item:nth-child(2) {
+    --fold-height: 5.1rem;
+  }
   body[data-page="about"] .about-linen-stack__item:nth-child(n) .about-linen-fold {
     margin-right: 0;
     margin-left: 0;
@@ -5335,7 +5343,7 @@ body[data-page="about"] .about-linen-fold__rule span {
     grid-template-columns: 5rem 2.65rem minmax(0,1fr) 2.3rem;
   }
   body[data-page="about"] .about-linen-fold[open] .about-linen-fold__heading {
-    min-height: var(--fold-height);
+    min-height: 5.5rem;
   }
   body[data-page="about"] .about-linen-fold__heading time {
     padding: 0.4rem 0.3rem 0.4rem 0.72rem;
