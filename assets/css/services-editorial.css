@@ -145,7 +145,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 620px) {
   .service-library-hero {
     height: 47rem;
     min-height: 47rem;
@@ -325,7 +325,7 @@
   outline-offset: 0.5rem;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 620px) {
   .service-library-hero__actions {
     display: block;
   }
@@ -352,7 +352,7 @@
 
 /* Mobile compact threshold ------------------------------------------------ */
 
-@media (max-width: 640px) {
+@media (max-width: 620px) {
   .service-library-hero {
     height: 47rem;
     min-height: 47rem;
@@ -1989,7 +1989,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 620px) {
   .service-library-hero {
     padding: 5rem 0 0;
     background-position: 12% center;
@@ -2347,7 +2347,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 620px) {
   .service-library-hero {
     height: 47rem;
     min-height: 47rem;

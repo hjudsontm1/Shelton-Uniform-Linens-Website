@@ -443,7 +443,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 620px) {
   .service-chapter {
     scroll-margin-top: 7.45rem;
   }
@@ -503,6 +503,13 @@
 
   .service-chapter__cta {
     margin-top: 2rem;
+  }
+}
+
+@media (max-width: 389px) {
+  .service-chapter--uniforms .service-chapter__header h2,
+  .service-chapter--specialty .service-chapter__header h2 {
+    font-size: clamp(3.25rem, 15vw, 3.65rem);
   }
 }
 

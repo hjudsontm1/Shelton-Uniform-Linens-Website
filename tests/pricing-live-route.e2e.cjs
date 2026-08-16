@@ -12,19 +12,20 @@ const assertNoOverflow = async (page, label) => {
 };
 
 const publicEstimate = (lane, rental = []) => ({
+  schemaVersion: "commercial-estimator.v3",
   estimateToken: `signed-${lane}-estimate`,
   estimate: {
-    modelVersion: "commercial-estimator.v2.3",
+    modelVersion: "commercial-estimator.v2.4",
     lane,
     ready: true,
     requiresReview: false,
     reviewMessages: [],
     confidence: { score: 76, label: "Directional", evidence: "estimated" },
-    sizing: { driver: "Approved V2.3 volume model", weeklyPounds: 6142.5 },
+    sizing: { driver: "Approved V2.4 volume model", weeklyPounds: 6142.5 },
     pricing: {
       weeklyRange: { low: 5100, base: 5500, high: 5900 },
       monthlyRange: { low: 22100, base: 23850, high: 25550 },
-      lines: [{ key: "major", label: "Customer-owned linen", billingUnit: "pound", weeklyUnits: 6142.5, low: 0.82, target: 0.88, high: 0.96 }]
+      unitPrices: [{ label: "Customer-owned linen", billingUnit: "pound", weeklyUnits: 6142.5, recommendedRate: 0.88 }]
     },
     route: { label: "Weekday commercial pickup and return", recommendedPickupsPerWeek: 5, remoteReview: false },
     rental
@@ -109,7 +110,9 @@ const main = async () => {
   await page.goto(baseUrl, { waitUntil: "networkidle" });
 
   assert.equal(await page.locator('meta[name="robots"]').count(), 0, "Pricing remains indexable");
-  assert.equal(await page.locator("html").getAttribute("class"), "pricing-spine-concept pricing-spine-workbench");
+  const rootClasses = String(await page.locator("html").getAttribute("class") || "").split(/\s+/);
+  assert.ok(rootClasses.includes("pricing-spine-concept"));
+  assert.ok(rootClasses.includes("pricing-spine-workbench"));
   assert.equal(await page.locator("[data-operation-option]").count(), 13);
   assert.equal(await page.locator("[data-operation-guide], [data-operation-guide-empty]").count(), 0, "the former operation note is removed");
   assert.equal(await page.locator("[data-program-details], .chapter-detail-list").count(), 0, "the compact detail-row introductions are removed");
@@ -190,7 +193,7 @@ const main = async () => {
   await Promise.all([page.waitForURL("**/thank-you.html"), page.locator("[data-quote-submit]").click()]);
   assert.equal(captures.lead.estimateToken, "signed-hotel-estimate");
   assert.equal(captures.lead.contact.businessName, "Shelton Test Hotel");
-  assert.equal(captures.lead.journeySnapshot.estimatorVersion, "commercial-estimator.v2.3");
+  assert.equal(captures.lead.journeySnapshot.estimatorVersion, "commercial-estimator.v2.4");
   assert.equal(captures.leadAttempts[0].body.idempotencyKey, captures.leadAttempts[0].idempotencyKey);
   assert.match(captures.formspree, /name="pricing_journey"/);
   assert.deepEqual(errors, []);
@@ -209,10 +212,11 @@ const main = async () => {
       const shell = rect(document.querySelector(".learning-chapters"));
       const programLesson = rect(document.querySelector("#factor-program .learning-chapter__lesson"));
       const programEditorial = rect(document.querySelector("#factor-program .chapter-editorial-title"));
+      const heroTransition = getComputedStyle(document.querySelector(".calm-hero"), "::after");
       return {
         shell: { ...shell, rightGap: innerWidth - shell.right },
-        background: getComputedStyle(document.body).backgroundImage,
-        backgroundSize: getComputedStyle(document.body).backgroundSize,
+        background: heroTransition.backgroundImage,
+        backgroundSize: heroTransition.backgroundSize,
         programLessonAlign: getComputedStyle(document.querySelector("#factor-program .learning-chapter__lesson")).textAlign,
         programAnswerHeadingAlign: getComputedStyle(document.querySelector("#factor-program .answer-heading")).textAlign,
         programEditorialAlign: getComputedStyle(document.querySelector("#factor-program .chapter-editorial-title")).textAlign,
@@ -233,8 +237,8 @@ const main = async () => {
     });
     assert.ok(compactLayout.shell.width <= width - 28, `${width}: compact shell exposes the patterned rails`);
     assert.ok(Math.abs(compactLayout.shell.left - compactLayout.shell.rightGap) <= 2, `${width}: compact shell is centered`);
-    assert.match(compactLayout.background, /pricing-halftone-transition-tall-v5/, `${width}: compact shell keeps the spine motif`);
-    assert.equal(compactLayout.backgroundSize, "100%", `${width}: the halftone reaches the visible compact rails`);
+    assert.match(compactLayout.background, /pricing-halftone-transition-tall-v5/, `${width}: compact shell keeps the full desktop spine motif`);
+    assert.equal(compactLayout.backgroundSize, "744px", `${width}: compact keeps the desktop halftone density`);
     assert.equal(compactLayout.programLessonAlign, "center", `${width}: the stacked Section 01 lesson is centered`);
     assert.equal(compactLayout.programAnswerHeadingAlign, "center", `${width}: the stacked Section 01 answer heading is centered`);
     assert.equal(compactLayout.programEditorialAlign, "center", `${width}: the Section 01 editorial stays centered`);

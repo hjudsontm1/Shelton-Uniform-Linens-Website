@@ -30,7 +30,8 @@ async function main() {
   const originalEnvironment = {
     SHELTON_OFFICE_BASE_URL: process.env.SHELTON_OFFICE_BASE_URL,
     SHELTON_OFFICE_BYPASS_TOKEN: process.env.SHELTON_OFFICE_BYPASS_TOKEN,
-    SHELTON_PUBLIC_PROXY_SECRET: process.env.SHELTON_PUBLIC_PROXY_SECRET
+    SHELTON_PUBLIC_PROXY_SECRET: process.env.SHELTON_PUBLIC_PROXY_SECRET,
+    SHELTON_OFFICE_TIMEOUT_MS: process.env.SHELTON_OFFICE_TIMEOUT_MS
   };
   const calls = [];
   Object.assign(process.env, {
@@ -48,7 +49,14 @@ async function main() {
       estimateToken: "signed-token",
       estimate: {
         modelVersion: "commercial-estimator.v2.4",
-        pricing: { weeklyRange: { low: 1000, base: 1100, high: 1200 } }
+        debugTrace: "must-not-reach-the-browser",
+        confidence: { label: "Directional" },
+        sizing: { weeklyPounds: 1250 },
+        route: { label: "Two weekly commercial stops", remoteReview: false },
+        pricing: {
+          weeklyRange: { low: 1000, base: 1100, high: 1200 },
+          unitPrices: [{ label: "Customer-owned linen", billingUnit: "pound", recommendedRate: 0.88, weeklyUnits: 1250 }]
+        }
       }
     }), { status: 200 });
   };
@@ -58,6 +66,7 @@ async function main() {
     const estimate = await invoke(estimateHandler, "POST", { estimate: { schemaVersion: "commercial-estimator.v3", operation: "hotel" } }, requestHeaders);
     assert.equal(estimate.status, 200);
     assert.equal(estimate.body.estimate.modelVersion, "commercial-estimator.v2.4");
+    assert.equal(estimate.body.estimate.debugTrace, undefined);
     assert.equal(estimate.headers.get("cache-control"), "no-store");
     const estimateCall = calls.at(-1);
     assert.equal(estimateCall.url, "https://office.example/api/public/commercial-estimate");
@@ -92,6 +101,23 @@ async function main() {
     assert.equal(unsafe.status, 502);
     assert.equal(unsafe.body.code, "unsafe_estimator_response");
     assert.doesNotMatch(unsafe.text, /economics|marginPercent|private-bypass|private-proxy/i);
+
+    global.fetch = async () => new Response(JSON.stringify({
+      schemaVersion: "commercial-estimator.v3",
+      estimate: { modelVersion: "commercial-estimator.v2.4", totalCost: 900 }
+    }), { status: 200 });
+    const compoundUnsafe = await invoke(estimateHandler, "POST", { estimate: { operation: "hotel" } }, requestHeaders);
+    assert.equal(compoundUnsafe.status, 502);
+    assert.equal(compoundUnsafe.body.code, "unsafe_estimator_response");
+    assert.doesNotMatch(compoundUnsafe.text, /totalCost|900/);
+
+    process.env.SHELTON_OFFICE_TIMEOUT_MS = "20";
+    global.fetch = async (_url, options) => new Promise((_resolve, reject) => {
+      options.signal.addEventListener("abort", () => reject(Object.assign(new Error("aborted"), { name: "AbortError" })), { once: true });
+    });
+    const timeout = await invoke(estimateHandler, "POST", { estimate: { operation: "hotel" } }, requestHeaders);
+    assert.equal(timeout.status, 504);
+    assert.equal(timeout.body.code, "estimator_timeout");
 
     const wrongMethod = await invoke(estimateHandler, "GET");
     assert.equal(wrongMethod.status, 405);

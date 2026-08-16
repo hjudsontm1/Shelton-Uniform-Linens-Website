@@ -1209,7 +1209,7 @@
   }
 
   .pricing-spine-workbench .factor-map {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     margin-top: 3.5rem;
   }
 
@@ -2048,6 +2048,27 @@
   margin-top: 1.8rem;
 }
 
+.pricing-spine-workbench .quote-privacy-note {
+  max-width: 58rem;
+  margin: 1.2rem 0 0;
+  color: rgba(250, 246, 238, 0.66);
+  font-family: "Inter", sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.65;
+}
+
+.pricing-spine-workbench .quote-privacy-note a {
+  color: var(--calm-gold);
+  text-decoration-color: rgba(184, 150, 90, 0.5);
+  text-underline-offset: 0.22em;
+}
+
+.pricing-spine-workbench .quote-privacy-note a:hover,
+.pricing-spine-workbench .quote-privacy-note a:focus-visible {
+  color: var(--calm-cream);
+  text-decoration-color: currentColor;
+}
+
 @media (min-width: 1200px) {
   .pricing-spine-workbench .quote-handoff {
     grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
@@ -2107,6 +2128,40 @@
 
   .pricing-spine-workbench .quote-handoff button {
     margin-top: 1.5rem;
+  }
+}
+
+/* The site keeps its compact-desktop composition down to 621px. Preserve
+   that layout while keeping the final conversion controls comfortably
+   readable; phone styling begins below this range and remains unchanged. */
+@media (min-width: 621px) and (max-width: 1080px) {
+  .pricing-spine-workbench .quote-fields label span,
+  .pricing-spine-workbench .quote-contact-choice legend {
+    color: rgba(250, 246, 238, 0.78);
+    font-size: 0.72rem;
+    line-height: 1.4;
+  }
+
+  .pricing-spine-workbench .quote-fields input,
+  .pricing-spine-workbench .quote-fields textarea {
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .pricing-spine-workbench .quote-contact-choice label span {
+    font-size: 0.72rem;
+  }
+
+  .pricing-spine-workbench .quote-error,
+  .pricing-spine-workbench .quote-status,
+  .pricing-spine-workbench .quote-privacy-note {
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+
+  .pricing-spine-workbench .quote-handoff button {
+    font-size: 0.72rem;
   }
 }
 
@@ -2172,5 +2227,406 @@
     height: clamp(10rem, 28vw, 14rem);
     background: linear-gradient(180deg, rgba(8, 19, 33, 0), var(--calm-navy));
     pointer-events: none;
+  }
+}
+
+/*
+ * Pricing opening responsive contract
+ *
+ * Keep the approved full-width desktop composition intact through compact
+ * layouts. Mobile remains a separate treatment at 760px and below.
+ */
+@media (min-width: 761px) {
+  .pricing-spine-workbench {
+    --pricing-hero-height: clamp(700px, calc(100svh - 88px), 950px);
+    --pricing-hero-inline: clamp(2.5rem, 6vw, 6rem);
+    --pricing-hero-top: clamp(6rem, 11vh, 8rem);
+    --pricing-hero-bottom: clamp(9rem, 16vh, 11.5rem);
+    --pricing-arch-overlap: clamp(13.5rem, 16.25vw, 16.25rem);
+    --pricing-arch-radius: clamp(5.5rem, 9vw, 9rem);
+  }
+
+  .pricing-spine-workbench,
+  .pricing-spine-workbench body,
+  .pricing-spine-workbench body.pricing-calm-page {
+    background-color: #e7e3dc;
+    background-image: none;
+  }
+
+  .pricing-spine-workbench .pricing-calm {
+    overflow: visible;
+    background-color: var(--calm-ivory);
+    background-image: url("../images/generated/pricing-sparse-bridge-v1.png");
+    background-position: center top;
+    background-repeat: repeat;
+    background-size: 744px 18.890625px;
+  }
+
+  .pricing-spine-workbench .pricing-opening {
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+    overflow: visible;
+    background: #e7e3dc;
+  }
+
+  .pricing-spine-workbench .calm-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(2rem, 1fr) auto;
+    min-height: var(--pricing-hero-height);
+    padding: var(--pricing-hero-top) var(--pricing-hero-inline) var(--pricing-hero-bottom);
+    place-items: start center;
+    border-radius: 0;
+    overflow: visible;
+    background: var(--calm-navy);
+  }
+
+  .pricing-spine-workbench .calm-hero__copy {
+    display: contents;
+  }
+
+  .pricing-spine-workbench .calm-hero h1 {
+    grid-row: 1;
+    z-index: 5;
+    width: min(100%, 760px);
+    max-width: min(8.4em, 760px, calc(100vw - (2 * var(--pricing-hero-inline))));
+    color: var(--calm-ivory);
+    font-size: clamp(4.4rem, 6.3vw, 6.4rem);
+    line-height: 0.9;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .pricing-spine-workbench .calm-hero__support {
+    grid-row: 2;
+    z-index: 5;
+    width: min(100%, 38rem);
+    max-width: 38rem;
+    margin-top: clamp(1.65rem, 3vh, 2rem);
+    color: rgba(250, 246, 238, 0.76);
+    font-size: clamp(0.9rem, 0.95vw, 0.98rem);
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .pricing-spine-workbench .calm-hero__actions {
+    position: relative;
+    grid-row: 4;
+    z-index: 6;
+    align-self: end;
+    gap: clamp(1.25rem, 2vw, 2rem);
+    margin: 0;
+    transform: none;
+    flex-wrap: nowrap;
+  }
+
+  .pricing-spine-workbench .calm-text-action,
+  .pricing-spine-workbench .calm-quiet-action {
+    min-height: 44px;
+    font-size: clamp(0.61rem, 0.65vw, 0.69rem);
+    letter-spacing: 0.16em;
+    white-space: nowrap;
+  }
+
+  .pricing-spine-workbench .calm-hero__actions .calm-text-action {
+    color: var(--calm-ink);
+    border-bottom-color: var(--calm-gold-dark);
+  }
+
+  .pricing-spine-workbench .calm-hero__actions .calm-quiet-action {
+    color: rgba(23, 32, 42, 0.72);
+  }
+
+  .pricing-spine-workbench .calm-hero__image {
+    z-index: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+    border-radius: 0;
+    background: var(--calm-navy);
+  }
+
+  .pricing-spine-workbench .calm-hero__image::after {
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(8, 19, 33, 0.58) 0%,
+      rgba(8, 19, 33, 0.58) 66%,
+      rgba(4, 18, 36, 0.82) 86%,
+      #021225 100%
+    );
+  }
+
+  .pricing-spine-workbench .calm-hero__image img {
+    opacity: 0.58;
+    object-position: center 54%;
+    filter: saturate(0.68) contrast(0.96);
+  }
+
+  .pricing-spine-workbench .pricing-intro {
+    z-index: 4;
+    width: min(1180px, 82vw);
+    min-height: 0;
+    margin: calc(-1 * var(--pricing-arch-overlap)) auto 0;
+    padding: clamp(5.75rem, 8vw, 7rem) clamp(2.5rem, 6vw, 4.5rem) 3.5rem;
+    border-radius: 50% 50% 0 0 / var(--pricing-arch-radius) var(--pricing-arch-radius) 0 0;
+    color: var(--calm-ink);
+    background: var(--calm-ivory);
+  }
+
+  /* Keep the full desktop halftone field behind the compact shell. The
+     pattern stays at the approved desktop scale so narrowing the viewport
+     changes only the crop, never the artwork or its density. */
+  .pricing-spine-workbench .calm-hero::after {
+    content: "";
+    position: absolute;
+    top: calc(100% - 1px);
+    right: 0;
+    left: 0;
+    z-index: 1;
+    height: 2740px;
+    background-color: var(--calm-ivory);
+    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.png");
+    background-position: center top;
+    background-repeat: repeat-x;
+    background-size: 744px auto;
+    pointer-events: none;
+  }
+}
+
+/* Pricing guide: one editorial rail from compact through full desktop. */
+@media (min-width: 761px) {
+  .pricing-spine-workbench .pricing-intro__hero > p:not(.calm-eyebrow) {
+    max-width: 48rem;
+    margin-top: clamp(1.45rem, 2.2vw, 1.75rem);
+    color: rgba(23, 32, 42, 0.74);
+    font-size: clamp(0.84rem, 0.95vw, 0.92rem);
+    line-height: 1.7;
+  }
+
+  .pricing-spine-workbench .factor-map {
+    width: 100%;
+    max-width: 65rem;
+    margin-top: clamp(3rem, 3.75vw, 3.5rem);
+    border: 0;
+    border-top: 1px solid var(--calm-ink-line);
+  }
+
+  .pricing-spine-workbench .factor-map li,
+  .pricing-spine-workbench .factor-map li:first-child,
+  .pricing-spine-workbench .factor-map li:nth-child(2n),
+  .pricing-spine-workbench .factor-map li:nth-child(5),
+  .pricing-spine-workbench .factor-map li:last-child {
+    grid-column: auto;
+    border: 0;
+    border-right: 1px solid var(--calm-ink-line);
+    border-bottom: 0;
+  }
+
+  .pricing-spine-workbench .factor-map li:first-child {
+    border-left: 1px solid var(--calm-ink-line);
+  }
+
+  .pricing-spine-workbench .factor-map li:last-child {
+    border-right: 1px solid var(--calm-ink-line);
+  }
+
+  .pricing-spine-workbench .factor-map a {
+    min-height: clamp(7rem, 8.75vw, 7.875rem);
+    padding: clamp(1rem, 1.5vw, 1.5rem) clamp(0.45rem, 1.2vw, 1.25rem);
+    align-items: center;
+    color: var(--calm-ink);
+    font-size: clamp(1rem, 1.45vw, 1.25rem);
+    line-height: 1.08;
+    text-align: center;
+    transition: color 160ms ease, background-color 160ms ease;
+  }
+
+  .pricing-spine-workbench .factor-map a:hover {
+    background: rgba(184, 150, 90, 0.08);
+  }
+
+  .pricing-spine-workbench .factor-map a:focus-visible {
+    outline: 2px solid var(--calm-gold-dark);
+    outline-offset: -2px;
+    background: rgba(184, 150, 90, 0.1);
+  }
+
+  .pricing-spine-workbench .factor-map span {
+    color: var(--calm-gold-dark);
+    font-size: clamp(0.6rem, 0.68vw, 0.64rem);
+    letter-spacing: 0.18em;
+  }
+}
+
+/* Keep the editorial spine and its patterned rails continuous at every
+   desktop and compact-desktop width. The guide arch already uses this
+   measure; the chapters, result, and handoff now stay on the same axis. */
+@media (min-width: 761px) {
+  .pricing-spine-workbench .learning-chapters,
+  .pricing-spine-workbench .planning-result,
+  .pricing-spine-workbench .quote-handoff {
+    width: min(1180px, 82vw);
+  }
+
+  /* Treat the preferred contact choices as one balanced control. */
+  .pricing-spine-workbench .quote-contact-choice {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    align-items: stretch;
+  }
+
+  .pricing-spine-workbench .quote-contact-choice legend {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin: 0 0 0.65rem;
+  }
+
+  .pricing-spine-workbench .quote-contact-choice label,
+  .pricing-spine-workbench .quote-contact-choice label span {
+    width: 100%;
+  }
+
+  .pricing-spine-workbench .quote-contact-choice label span {
+    min-height: 48px;
+    padding: 0.7rem 1rem;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .pricing-spine-workbench .quote-contact-choice label + label span {
+    border-left: 0;
+  }
+}
+
+/* Give the estimator a quiet closing beat before the footer. The same lower
+   fade now carries from compact desktop through the widest layout. */
+@media (min-width: 761px) {
+  .pricing-spine-workbench .pricing-calm {
+    padding-bottom: clamp(3.5rem, 4.5vw, 4.5rem);
+  }
+
+  .pricing-spine-workbench .pricing-calm::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    height: clamp(15rem, 24vw, 22rem);
+    background-color: transparent;
+    background-image: linear-gradient(
+      180deg,
+      rgba(250, 246, 238, 0) 0%,
+      rgba(8, 19, 33, 0.18) 24%,
+      rgba(8, 19, 33, 0.68) 66%,
+      var(--calm-navy) 100%
+    );
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    transform: none;
+    pointer-events: none;
+  }
+
+  .pricing-spine-workbench .site-footer {
+    border-top: 0;
+    background-color: #050b14;
+    background-image:
+      radial-gradient(circle at 12% 10%, rgba(210, 176, 113, 0.1), transparent 22rem),
+      radial-gradient(circle at 84% 26%, rgba(42, 63, 84, 0.2), transparent 28rem),
+      linear-gradient(180deg, var(--calm-navy) 0%, #07101c 30%, #050b14 72%);
+  }
+}
+
+/* Match the shared footer's responsive directory at every non-mobile width.
+   These selectors sit after the estimator's older page-specific overrides. */
+@media (min-width: 761px) {
+  .pricing-spine-workbench .site-footer__inner {
+    width: var(--container-width);
+  }
+
+  .pricing-spine-workbench .footer-bottom {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1080px) {
+  .pricing-spine-workbench .footer-directory {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: clamp(1.25rem, 3.5vw, 2.5rem);
+    row-gap: clamp(2rem, 4vw, 2.75rem);
+  }
+
+  .pricing-spine-workbench .footer-brand-panel {
+    grid-column: 1 / -1;
+    max-width: 36rem;
+  }
+}
+
+@media (min-width: 1081px) and (max-width: 1199px) {
+  .pricing-spine-workbench .footer-directory {
+    grid-template-columns: minmax(18rem, 1.22fr) repeat(3, minmax(9rem, 0.52fr));
+  }
+
+  .pricing-spine-workbench .footer-brand-panel {
+    grid-column: auto;
+  }
+}
+
+/* Phone-only accessibility and spacing corrections. Keep the approved
+   compact/desktop composition unchanged from 621px upward. */
+@media (max-width: 620px) {
+  .pricing-spine-workbench .answer-heading > span,
+  .pricing-spine-workbench .calm-field small,
+  .pricing-spine-workbench .choice-cloud--described label span small,
+  .pricing-spine-workbench .finish-recommendation__note,
+  .pricing-spine-workbench .volume-estimator__field--choices > small,
+  .pricing-spine-workbench .volume-estimator__status,
+  .pricing-spine-workbench .volume-question__answered,
+  .pricing-spine-workbench .volume-choice-grid label > span small,
+  .pricing-spine-workbench .volume-choice-field__hint,
+  .pricing-spine-workbench .volume-question .volume-question__why,
+  .pricing-spine-workbench .volume-question .number-field em,
+  .pricing-spine-workbench .ownership-list label span small,
+  .pricing-spine-workbench .conditional-panel__heading p,
+  .pricing-spine-workbench .conditional-panel__note,
+  .pricing-spine-workbench .operation-picker__trigger:not(.has-value) strong,
+  .pricing-spine-workbench .operation-picker__panel > p,
+  .pricing-spine-workbench .rhythm-cadence li:not(.is-active),
+  .pricing-spine-workbench .rhythm-cadence small,
+  .pricing-spine-workbench .rhythm-options span small,
+  .pricing-spine-workbench .range-progress button,
+  .pricing-spine-workbench .range-number span,
+  .pricing-spine-workbench .return-format > p {
+    color: rgba(23, 32, 42, 0.68);
+  }
+
+  .pricing-spine-workbench .calm-field input::placeholder {
+    color: rgba(23, 32, 42, 0.62);
+  }
+
+  .pricing-spine-workbench .quote-fields > label > span,
+  .pricing-spine-workbench .quote-contact-choice legend {
+    color: rgba(250, 246, 238, 0.78);
+  }
+
+  .pricing-spine-workbench .return-format {
+    padding: 0.2rem 0 0;
+  }
+
+  .pricing-spine-workbench .range-progress button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.65rem 0.25rem;
+  }
+
+  .pricing-spine-workbench .range-progress button[data-state="confirming"] {
+    color: var(--calm-ink);
+    border-bottom-color: var(--calm-gold-dark);
   }
 }

@@ -1,0 +1,64 @@
+/*
+ * Mockup-only transition study.
+ * The shared proof scene washes gently into parchment, then the program
+ * builder settles into Shelton Deep Navy. No content, geometry, or behavior
+ * changes.
+ */
+
+.home-transition-gradual .home-opening::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  height: clamp(9rem, 15vw, 14rem);
+  background: linear-gradient(
+    180deg,
+    rgba(230, 221, 207, 0) 0%,
+    rgba(230, 221, 207, 0.2) 34%,
+    rgba(230, 221, 207, 0.62) 70%,
+    #e6ddcf 100%
+  );
+  pointer-events: none;
+}
+
+.home-transition-gradual .home-proof {
+  border-bottom-color: transparent;
+}
+
+.home-transition-gradual .program-builder {
+  background: linear-gradient(
+    180deg,
+    #e6ddcf 0%,
+    #b9ad9c 3.25rem,
+    #59606a 6.75rem,
+    #202c3a 9.5rem,
+    #081321 13rem,
+    #081321 100%
+  );
+}
+
+.home-transition-gradual .program-builder::before {
+  background:
+    radial-gradient(circle at 22% 18%, rgba(42, 63, 84, 0.16), transparent 28rem),
+    linear-gradient(180deg, rgba(13, 27, 46, 0.06), rgba(8, 19, 33, 0.015) 55%, rgba(13, 27, 46, 0.06));
+}
+
+@media (max-width: 860px) {
+  .home-transition-gradual .home-opening::after {
+    height: clamp(7rem, 24vw, 11rem);
+  }
+
+  .home-transition-gradual .program-builder {
+    background: linear-gradient(
+      180deg,
+      #e6ddcf 0%,
+      #9b9184 2.5rem,
+      #49515c 5rem,
+      #182432 7.5rem,
+      #081321 10rem,
+      #081321 100%
+    );
+  }
+}

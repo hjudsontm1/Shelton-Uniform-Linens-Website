@@ -4,6 +4,8 @@ const path = require("node:path");
 const calls = [];
 global.document = { querySelector: () => null };
 global.window = {
+  setTimeout,
+  clearTimeout,
   fetch: async (url, options) => {
     calls.push({ url, body: JSON.parse(options.body) });
     return {

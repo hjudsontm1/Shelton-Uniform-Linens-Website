@@ -1,0 +1,483 @@
+/*
+ * About timeline v2
+ * Nonmobile recreation of the approved towel-stack mockups.
+ * The existing timeline remains the mobile experience at 620px and below.
+ */
+
+body[data-page="about"] .about-towel-history {
+  display: none;
+}
+
+@media (min-width: 621px) {
+  body[data-page="about"] .about-claim-timeline[data-mobile-history] {
+    display: none;
+  }
+
+  body[data-page="about"] .about-towel-history {
+    --timeline-cream: #f1e5ce;
+    --timeline-paper: #fbfaf6;
+    --timeline-navy: #081321;
+    --timeline-gold: #b8965a;
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: clamp(2.75rem, 3.7vw, 3.7rem) 0 clamp(3.5rem, 4.8vw, 5rem);
+    overflow: clip;
+    color: var(--timeline-navy);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  body[data-page="about"] .about-towel-history__title {
+    width: min(83.2vw, 77.5rem);
+    margin: 0 auto clamp(2rem, 2.8vw, 2.65rem);
+    color: var(--timeline-navy);
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(2.35rem, 4.35vw, 4rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.038em;
+    text-align: center;
+  }
+
+  body[data-page="about"] .about-towel-history__stage {
+    width: min(83.2vw, 77.5rem);
+    margin: 0 auto;
+    position: relative;
+  }
+
+  body[data-page="about"] .about-towel-history__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  body[data-page="about"] .about-towel-history__item,
+  body[data-page="about"] .about-towel-history__item:nth-child(n) {
+    margin: 0;
+    padding: 0;
+  }
+
+  body[data-page="about"] .about-towel-history__trigger {
+    appearance: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    display: grid;
+    align-items: center;
+    overflow: visible;
+    color: var(--timeline-navy);
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: url("../images/generated/about-timeline-row-tight-v2.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    box-shadow: none;
+    cursor: pointer;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    text-align: left;
+    transition: filter 180ms ease, transform 280ms cubic-bezier(0.2, 0.72, 0.2, 1);
+  }
+
+  body[data-page="about"] .about-towel-history__trigger:hover {
+    filter: brightness(1.018);
+  }
+
+  body[data-page="about"] .about-towel-history__trigger:focus-visible {
+    z-index: 20;
+    outline: 2px solid rgba(168, 124, 54, 0.92);
+    outline-offset: 1px;
+  }
+
+  body[data-page="about"] .about-towel-history__item.is-active .about-towel-history__trigger {
+    z-index: 12;
+  }
+
+  body[data-page="about"] .about-towel-history__trigger::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    display: none;
+    pointer-events: none;
+    background-image: url("../images/generated/about-timeline-active-tab-v2.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+  }
+
+  body[data-page="about"] .about-towel-history__item.is-active .about-towel-history__trigger::before {
+    display: block;
+  }
+
+  body[data-page="about"] .about-towel-history__year,
+  body[data-page="about"] .about-towel-history__label {
+    min-width: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  body[data-page="about"] .about-towel-history__year {
+    color: #a77c36;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  body[data-page="about"] .about-towel-history__label {
+    color: var(--timeline-navy);
+    line-height: 1.03;
+  }
+
+  body[data-page="about"] .about-towel-history__arrow {
+    display: none;
+    color: var(--timeline-gold);
+  }
+
+  body[data-page="about"] .about-towel-history__detail {
+    box-sizing: border-box;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-clip,
+  body[data-page="about"] .about-towel-history__detail-surface {
+    min-height: 0;
+    box-sizing: border-box;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-surface {
+    position: relative;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-content {
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-header {
+    margin: 0;
+    color: var(--timeline-navy);
+  }
+
+  body[data-page="about"] .about-towel-history__detail-header time {
+    color: #a77c36;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-rule {
+    display: block;
+    height: 1px;
+    background: rgba(184, 150, 90, 0.82);
+  }
+
+  body[data-page="about"] .about-towel-history__detail-header h3 {
+    margin: 0;
+    color: var(--timeline-navy);
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.038em;
+  }
+
+  body[data-page="about"] .about-towel-history__photo {
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    padding: clamp(0.48rem, 0.72vw, 0.72rem);
+    background: var(--timeline-paper);
+    border: 1px solid rgba(73, 63, 48, 0.16);
+    box-shadow: 0 0.45rem 0.78rem rgba(45, 34, 22, 0.2);
+  }
+
+  body[data-page="about"] .about-towel-history__photo img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    border: 1px solid rgba(42, 34, 25, 0.18);
+    filter: grayscale(1) sepia(0.08) contrast(1.12) brightness(0.94);
+  }
+
+  body[data-page="about"] .about-towel-history__copy {
+    margin: 0;
+    color: rgba(27, 23, 18, 0.72);
+    font-family: Inter, Arial, sans-serif;
+    line-height: 1.48;
+  }
+
+  body[data-page="about"] .about-towel-history__photo img[src*="shelton-cleaners-poly-garments"] {
+    object-position: 58% 50%;
+  }
+}
+
+@media (min-width: 861px) {
+  body[data-page="about"] .about-towel-history {
+    padding-top: 1.875rem;
+  }
+
+  body[data-page="about"] .about-towel-history__title {
+    margin-bottom: 3rem;
+  }
+
+  body[data-page="about"] .about-towel-history__stage {
+    aspect-ratio: 1.462 / 1;
+  }
+
+  body[data-page="about"] .about-towel-history__list {
+    width: 39.25%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: repeat(9, minmax(0, 1fr));
+  }
+
+  body[data-page="about"] .about-towel-history__item,
+  body[data-page="about"] .about-towel-history__item:nth-child(n) {
+    width: 100%;
+    height: 100%;
+    position: static;
+  }
+
+  body[data-page="about"] .about-towel-history__trigger {
+    height: calc(100% + 0.2rem);
+    grid-template-columns: 32.7% minmax(0, 1fr);
+    transform: translateY(-0.1rem);
+  }
+
+  body[data-page="about"] .about-towel-history__item.is-active .about-towel-history__trigger {
+    transform: translateY(-0.1rem);
+  }
+
+  body[data-page="about"] .about-towel-history__trigger::before {
+    width: clamp(1.75rem, 2.5vw, 2.35rem);
+    height: 94%;
+    inset: 3% auto auto clamp(-0.93rem, -0.98vw, -0.72rem);
+  }
+
+  body[data-page="about"] .about-towel-history__year {
+    padding-left: 5%;
+    font-size: clamp(0.72rem, 1.35vw, 1.24rem);
+    text-align: center;
+  }
+
+  body[data-page="about"] .about-towel-history__label {
+    padding: 0.1rem clamp(0.6rem, 1vw, 1rem) 0.1rem 0;
+    font-size: clamp(0.76rem, 1.45vw, 1.34rem);
+  }
+
+  body[data-page="about"] .about-towel-history__detail {
+    width: 55.35%;
+    height: 100%;
+    position: absolute;
+    inset: 0 0 auto auto;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 280ms ease;
+  }
+
+  body[data-page="about"] .about-towel-history__item.is-active .about-towel-history__detail {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-clip,
+  body[data-page="about"] .about-towel-history__detail-surface {
+    width: 100%;
+    height: 100%;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-surface {
+  background-image: url("../images/generated/about-timeline-story-towel-transparent-surface-v4.png");
+  }
+
+  body[data-page="about"] .about-towel-history__detail-content {
+    height: 100%;
+    padding: 9.3% 10.25% 11.25%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto auto;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-header time {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    font-size: clamp(0.72rem, 1.28vw, 1.18rem);
+  }
+
+  body[data-page="about"] .about-towel-history__detail-rule {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-top: 3.5%;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-header h3 {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    margin-top: 6.8%;
+    font-size: clamp(1.58rem, 3vw, 2.78rem);
+  }
+
+  body[data-page="about"] .about-towel-history__photo {
+    height: 48.5%;
+    aspect-ratio: auto;
+    margin-top: 7.2%;
+    flex: 0 0 auto;
+    overflow: hidden;
+  }
+
+  body[data-page="about"] .about-towel-history__copy {
+    min-height: 5.2em;
+    margin-top: 7%;
+    padding-right: 2%;
+    font-size: clamp(0.72rem, 1.2vw, 1.1rem);
+  }
+
+  body[data-page="about"] #about-towel-trigger-2023 .about-towel-history__label {
+    font-size: clamp(0.7rem, 1.12vw, 1.04rem);
+    letter-spacing: -0.018em;
+  }
+}
+
+@media (min-width: 621px) and (max-width: 860px) {
+  body[data-page="about"] .about-towel-history {
+    padding-top: clamp(2.65rem, 5.7vw, 3.35rem);
+    padding-bottom: clamp(3.2rem, 6.7vw, 4.4rem);
+  }
+
+  body[data-page="about"] .about-towel-history__title {
+    width: min(78vw, 43.75rem);
+    margin-bottom: clamp(2rem, 4.8vw, 2.7rem);
+    font-size: clamp(2.45rem, 6.15vw, 3.35rem);
+  }
+
+  body[data-page="about"] .about-towel-history__stage {
+    width: min(70vw, 43.75rem);
+  }
+
+  body[data-page="about"] .about-towel-history__item {
+    width: 100%;
+  }
+
+  body[data-page="about"] .about-towel-history__trigger {
+    height: clamp(3.75rem, 9.15vw, 5.75rem);
+    grid-template-columns: 25.8% minmax(0, 1fr) 3.25rem;
+  }
+
+  body[data-page="about"] .about-towel-history__year {
+    padding-left: 8%;
+    font-size: clamp(1rem, 2.52vw, 1.34rem);
+    text-align: center;
+  }
+
+  body[data-page="about"] .about-towel-history__label {
+    padding: 0.2rem 0.45rem 0.2rem 0.15rem;
+    font-size: clamp(1.02rem, 2.75vw, 1.46rem);
+  }
+
+  body[data-page="about"] .about-towel-history__arrow {
+    display: grid;
+    place-items: center;
+    padding-right: 12%;
+    font-size: clamp(1.55rem, 3.4vw, 2rem);
+    opacity: 0;
+    transition: opacity 180ms ease, transform 280ms ease;
+  }
+
+  body[data-page="about"] .about-towel-history__item.is-active .about-towel-history__arrow {
+    opacity: 1;
+    transform: rotate(180deg);
+  }
+
+  body[data-page="about"] .about-towel-history__trigger::before {
+    width: clamp(1.45rem, 3.8vw, 2rem);
+    height: 94%;
+    inset: 3% auto auto clamp(-0.82rem, -1.8vw, -0.66rem);
+  }
+
+  body[data-page="about"] .about-towel-history__detail {
+    width: 100%;
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+      grid-template-rows 280ms cubic-bezier(0.2, 0.72, 0.2, 1),
+      opacity 220ms ease;
+  }
+
+  body[data-page="about"] .about-towel-history__item.is-active .about-towel-history__detail {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-clip {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-surface {
+    width: 100%;
+    aspect-ratio: 1 / 1.01;
+    background-image: url("../images/generated/about-timeline-compact-open-surface-v2.png");
+  }
+
+  body[data-page="about"] .about-towel-history__detail-content {
+    height: 100%;
+    padding: 4.2% 9.1% 11%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-header time,
+  body[data-page="about"] .about-towel-history__detail-rule {
+    display: none;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-header h3 {
+    font-size: clamp(2rem, 5.2vw, 2.72rem);
+  }
+
+  body[data-page="about"] .about-towel-history__photo {
+    height: calc(min(70vw, 43.75rem) * 0.518);
+    min-height: 0;
+    aspect-ratio: auto;
+    margin-top: 4.6%;
+    padding: clamp(0.48rem, 1.25vw, 0.75rem);
+    flex: 0 0 auto;
+    overflow: hidden;
+  }
+
+  body[data-page="about"] .about-towel-history__copy {
+    min-height: 4.5em;
+    margin-top: 5.9%;
+    padding-right: 3%;
+    font-size: clamp(0.95rem, 2.35vw, 1.2rem);
+  }
+
+  body[data-page="about"] #about-towel-trigger-2023 .about-towel-history__label {
+    font-size: clamp(0.84rem, 2.18vw, 1.14rem);
+    letter-spacing: -0.018em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (min-width: 621px) {
+  body[data-page="about"] .about-towel-history__trigger,
+  body[data-page="about"] .about-towel-history__arrow,
+  body[data-page="about"] .about-towel-history__detail {
+    transition: none;
+  }
+}

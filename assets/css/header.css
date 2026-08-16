@@ -204,7 +204,7 @@ body[data-page="about"] .site-nav .menu-toggle {
     transform: translateX(100%);
     opacity: 1;
     visibility: hidden;
-    pointer-events: auto;
+    pointer-events: none;
     clip-path: none;
     transition: transform 0.24s ease, visibility 0.24s ease;
   }
@@ -246,6 +246,10 @@ body[data-page="about"] .site-nav .menu-toggle {
 }
 
 @media (max-width: 620px) {
+  body.has-open-menu {
+    overscroll-behavior: none;
+  }
+
   .site-nav .nav-inner {
     width: min(calc(100% - 1.5rem), 1180px);
   }
@@ -254,5 +258,142 @@ body[data-page="about"] .site-nav .menu-toggle {
     width: min(14rem, calc(100vw - 5.75rem));
     max-width: none;
     flex: 0 1 auto;
+  }
+
+  .site-nav .nav-links {
+    height: calc(100vh - 5.5rem);
+    height: calc(100dvh - 5.5rem);
+    min-height: 0;
+    padding-bottom: max(2rem, env(safe-area-inset-bottom));
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .site-nav .menu-toggle span {
+    transform-origin: center;
+    transition: transform 0.2s ease, opacity 0.16s ease;
+  }
+
+  body.has-open-menu .site-nav .menu-toggle {
+    border-color: rgba(210, 176, 113, 0.72);
+    color: var(--cream);
+  }
+
+  body.has-open-menu .site-nav .menu-toggle span:first-child {
+    transform: translateY(0.22rem) rotate(45deg);
+  }
+
+  body.has-open-menu .site-nav .menu-toggle span:last-child {
+    transform: translateY(-0.22rem) rotate(-45deg);
+  }
+
+  body[data-page="about"].has-open-menu .site-nav .menu-toggle {
+    border-color: rgba(31, 25, 18, 0.62);
+    color: var(--about-ink);
+  }
+}
+
+@media (max-width: 360px) {
+  .site-nav .nav-inner {
+    gap: 0.75rem;
+  }
+
+  .site-nav .nav-brand {
+    width: min(14rem, calc(100vw - 6.25rem));
+  }
+}
+
+/* Compact-desktop navigation ----------------------------------------------
+   Preserve the existing full-screen menu style while giving it an opaque
+   canvas, a calmer content measure, and a clearer open/active hierarchy. */
+@media (min-width: 621px) and (max-width: 1080px) {
+  body.has-open-menu {
+    overscroll-behavior: none;
+  }
+
+  .site-nav .nav-links {
+    inset: 5.5rem 0 auto;
+    height: calc(100vh - 5.5rem);
+    height: calc(100dvh - 5.5rem);
+    min-height: 0;
+    padding:
+      clamp(2.25rem, 6vh, 3.75rem)
+      max(1.5rem, calc((100vw - 52rem) / 2))
+      clamp(2rem, 5vh, 3rem);
+    align-content: start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-top: 1px solid rgba(184, 150, 90, 0.12);
+    background: linear-gradient(180deg, #081321 0%, #050b14 100%);
+  }
+
+  body[data-page="about"] .site-nav .nav-links {
+    border-top-color: rgba(31, 25, 18, 0.16);
+    background: linear-gradient(180deg, #f2e8d0 0%, #e8d9b8 100%);
+  }
+
+  .site-nav .nav-links li {
+    min-width: 0;
+    border-bottom-color: rgba(184, 150, 90, 0.22);
+  }
+
+  .site-nav .nav-links li:last-child {
+    padding-top: 1.5rem;
+    border-bottom: 0;
+  }
+
+  .site-nav .nav-links a:not(.nav-cta) {
+    min-height: 3.75rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    font-size: clamp(0.8rem, 1.3vw, 0.9rem);
+    letter-spacing: 0.17em;
+  }
+
+  .site-nav .nav-links a:not(.nav-cta)::after {
+    right: auto;
+    bottom: -1px;
+    width: 0;
+    display: block;
+    transition: width 0.2s ease;
+  }
+
+  .site-nav .nav-links a:not(.nav-cta):hover::after,
+  .site-nav .nav-links a:not(.nav-cta):focus-visible::after,
+  .site-nav .nav-links a:not(.nav-cta).is-active::after {
+    width: 3.25rem;
+  }
+
+  .site-nav .nav-links a.nav-cta {
+    width: min(100%, 22rem);
+    min-height: 3.4rem;
+    margin-top: 0;
+    padding-inline: 1.25rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.17em;
+  }
+
+  .site-nav .menu-toggle span {
+    transform-origin: center;
+    transition: transform 0.2s ease, opacity 0.16s ease;
+  }
+
+  body.has-open-menu .site-nav .menu-toggle {
+    border-color: rgba(210, 176, 113, 0.72);
+    color: var(--cream);
+  }
+
+  body.has-open-menu .site-nav .menu-toggle span:first-child {
+    transform: translateY(0.22rem) rotate(45deg);
+  }
+
+  body.has-open-menu .site-nav .menu-toggle span:last-child {
+    transform: translateY(-0.22rem) rotate(-45deg);
+  }
+
+  body[data-page="about"].has-open-menu .site-nav .menu-toggle {
+    border-color: rgba(31, 25, 18, 0.62);
+    color: var(--about-ink);
   }
 }

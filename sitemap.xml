@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>/index.html</loc></url>
-  <url><loc>/services.html</loc></url>
-  <url><loc>/industries.html</loc></url>
-  <url><loc>/pricing.html</loc></url>
-  <url><loc>/about.html</loc></url>
-  <url><loc>/pickup-delivery.html</loc></url>
-  <url><loc>/quote.html</loc></url>
+  <url><loc>https://sheltonlinen.com/</loc></url>
+  <url><loc>https://sheltonlinen.com/services.html</loc></url>
+  <url><loc>https://sheltonlinen.com/industries.html</loc></url>
+  <url><loc>https://sheltonlinen.com/pricing.html</loc></url>
+  <url><loc>https://sheltonlinen.com/about.html</loc></url>
+  <url><loc>https://sheltonlinen.com/quote.html</loc></url>
+  <url><loc>https://sheltonlinen.com/privacy.html</loc></url>
 </urlset>

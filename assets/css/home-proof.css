@@ -4,7 +4,7 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  height: clamp(28rem, 34vw, 34rem);
+  height: var(--proof-height);
   min-height: 28rem;
   padding: 0;
   display: grid;
@@ -50,13 +50,68 @@
   max-width: none;
   display: block;
   object-fit: cover;
-  object-position: center top;
+  object-position: 50% top;
   filter: saturate(0.92) contrast(0.99) brightness(1.01);
 }
 
 @media (min-width: 861px) {
+  /*
+   * The received and clean scenes are pixel-aligned; only the stain differs.
+   * Feather that difference on every non-mobile width so the rectangular
+   * bounds of the source stain mask can never enter the proof crop.
+   */
+  .home-proof__received {
+    -webkit-mask-image: radial-gradient(
+      ellipse 48% 66% at 32% 50%,
+      #000 0,
+      #000 55%,
+      rgba(0, 0, 0, 0.82) 68%,
+      rgba(0, 0, 0, 0.42) 80%,
+      rgba(0, 0, 0, 0.12) 91%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 48% 66% at 32% 50%,
+      #000 0,
+      #000 55%,
+      rgba(0, 0, 0, 0.82) 68%,
+      rgba(0, 0, 0, 0.42) 80%,
+      rgba(0, 0, 0, 0.12) 91%,
+      transparent 100%
+    );
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+  }
+
   .home-proof__received .home-opening__scene-image--received {
     height: calc(100% + var(--opening-hero-height) - var(--opening-scene-top) + 1px);
+  }
+}
+
+@media (min-width: 1400px) {
+  /* Preserve the locked full-desktop stain crop while the narrower desktop
+   * asset uses a lower, broader stain cluster that survives tighter framing. */
+  .home-proof__received {
+    -webkit-mask-image: radial-gradient(
+      ellipse 34% 47% at 31% 49%,
+      #000 0,
+      #000 48%,
+      rgba(0, 0, 0, 0.75) 58%,
+      rgba(0, 0, 0, 0.28) 74%,
+      rgba(0, 0, 0, 0.08) 88%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 34% 47% at 31% 49%,
+      #000 0,
+      #000 48%,
+      rgba(0, 0, 0, 0.75) 58%,
+      rgba(0, 0, 0, 0.28) 74%,
+      rgba(0, 0, 0, 0.08) 88%,
+      transparent 100%
+    );
   }
 }
 
@@ -125,7 +180,7 @@
 .home-proof__control input::-webkit-slider-thumb {
   width: 2.75rem;
   height: 2.75rem;
-  margin-top: calc((clamp(28rem, 34vw, 34rem) - 2.75rem) / 2);
+  margin-top: calc((var(--proof-height) - 2.75rem) / 2);
   border: 2px solid rgba(250, 246, 238, 0.96);
   border-radius: 50%;
   appearance: none;
@@ -161,7 +216,7 @@
   position: relative;
   z-index: 1;
   min-width: 0;
-  padding: clamp(3.3rem, 5.5vw, 5rem) clamp(3rem, 6vw, 6rem) clamp(2.5rem, 4vw, 4rem) clamp(2.25rem, 4.5vw, 4.5rem);
+  padding: clamp(3.3rem, 5.5vw, 5rem) clamp(2.5rem, 4.2vw, 6rem) clamp(2.5rem, 4vw, 4rem) clamp(2.25rem, 4.5vw, 4.5rem);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -256,41 +311,33 @@
   outline-offset: 4px;
 }
 
-@media (max-width: 1040px) {
-  .home-proof__copy {
-    padding-right: 2.5rem;
-    padding-left: 2rem;
-  }
-
-  .home-proof__copy h2 {
-    font-size: clamp(2.9rem, 4.8vw, 3.75rem);
-  }
-}
-
+/* Compact reflow: continue the opening's single clean scene into the proof. */
 @media (max-width: 860px) {
   .home-page .home-proof {
     height: auto;
     min-height: 0;
     grid-template-columns: 1fr;
+    border-bottom: 0;
+    background: transparent;
   }
 
   .home-proof__comparison {
     min-height: clamp(22rem, 78vw, 31rem);
+    background: transparent;
   }
 
-  .home-proof__received .home-opening__scene-image--received {
-    width: 100%;
-    object-position: 38% top;
-  }
-
-  .home-proof__control input::-webkit-slider-thumb {
-    margin-top: calc((clamp(22rem, 78vw, 31rem) - 2.75rem) / 2);
+  .home-proof__received,
+  .home-proof__labels,
+  .home-proof__control,
+  .home-proof__comparison > output {
+    display: none;
   }
 
   .home-proof__copy {
+    width: 100%;
     padding: clamp(3rem, 10vw, 5rem) max(1.5rem, 8vw) clamp(3.4rem, 11vw, 5.5rem);
     justify-content: flex-start;
-    background: #f4eee4;
+    background: #faf6ee;
   }
 
   .home-proof__copy h2 {
@@ -304,33 +351,116 @@
   }
 }
 
-@media (max-width: 520px) {
+/* Roomy compact: use the open stone half for the proof copy, without comparison UI. */
+@media (min-width: 621px) and (max-width: 860px) {
+  .home-page .home-proof {
+    height: var(--proof-media-height);
+    grid-template-rows: var(--proof-media-height);
+  }
+
+  .home-proof__comparison,
+  .home-proof__copy {
+    grid-area: 1 / 1;
+  }
+
   .home-proof__comparison {
-    min-height: 21rem;
+    height: 100%;
+    min-height: 0;
   }
 
-  .home-proof__labels {
-    inset: 1.6rem 1rem auto;
-  }
-
-  .home-proof__labels span {
-    font-size: 0.5rem;
-    letter-spacing: 0.15em;
-  }
-
-  .home-proof__control input::-webkit-slider-thumb {
-    width: 2.8rem;
-    height: 2.8rem;
-    margin-top: calc((21rem - 2.8rem) / 2);
-  }
-
-  .home-proof__control input::-moz-range-thumb {
-    width: 2.8rem;
-    height: 2.8rem;
+  .home-page .home-proof > .home-proof__copy {
+    width: 52%;
+    height: 100%;
+    padding: clamp(2rem, 5vw, 3.25rem) clamp(1.5rem, 4vw, 2.75rem);
+    justify-self: end;
+    justify-content: center;
+    background: transparent;
   }
 
   .home-proof__copy h2 {
-    font-size: clamp(3.15rem, 15vw, 4.6rem);
+    font-size: clamp(2.3rem, 5.9vw, 3.35rem);
+    line-height: 0.86;
+  }
+
+  .home-proof__lead {
+    max-width: 25rem;
+    margin-top: clamp(0.85rem, 1.8vw, 1.15rem);
+    font-size: clamp(0.76rem, 1.55vw, 0.88rem);
+    line-height: 1.46;
+  }
+
+  .home-proof__benefits {
+    width: 100%;
+    max-width: 25rem;
+    margin-top: clamp(0.85rem, 1.8vw, 1.15rem);
+    padding: 0.65rem 0;
+  }
+
+  .home-proof__benefits li {
+    padding-inline: 0.45rem;
+    font-size: clamp(0.55rem, 1.15vw, 0.69rem);
+    white-space: normal;
+  }
+}
+
+/*
+ * Small screens keep the clean scene, but the proof message now uses the
+ * entire frame instead of being squeezed into a separate side or lower box.
+ */
+@media (max-width: 620px) {
+  .home-page .home-opening {
+    --proof-media-height: clamp(29rem, 124vw, 33rem);
+  }
+
+  .home-page .home-proof {
+    height: var(--proof-media-height);
+    grid-template-rows: var(--proof-media-height);
+  }
+
+  .home-proof__comparison,
+  .home-proof__copy {
+    grid-area: 1 / 1;
+  }
+
+  .home-proof__comparison {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .home-page .home-proof > .home-proof__copy {
+    width: 100%;
+    height: 100%;
+    padding: clamp(2.5rem, 8vw, 3.5rem) max(1.5rem, 8vw);
+    align-items: center;
+    justify-self: stretch;
+    justify-content: center;
+    background: transparent;
+    text-align: center;
+  }
+
+  .home-proof__copy h2 {
+    max-width: 31rem;
+    font-size: clamp(3.15rem, 13.2vw, 4.55rem);
+    line-height: 0.86;
+  }
+
+  .home-proof__lead {
+    max-width: 30rem;
+    margin-top: clamp(1rem, 3.5vw, 1.35rem);
+    font-size: clamp(0.8rem, 2.7vw, 0.92rem);
+    line-height: 1.48;
+  }
+
+  .home-proof__benefits {
+    width: min(100%, 30rem);
+    max-width: 30rem;
+    margin-top: clamp(1rem, 3.5vw, 1.35rem);
+  }
+}
+
+@media (max-width: 520px) {
+  .home-proof__copy h2 {
+    font-size: clamp(3rem, 14vw, 4.35rem);
   }
 
   .home-proof__benefits {
@@ -340,8 +470,8 @@
   .home-proof__benefits li,
   .home-proof__benefits li:first-child,
   .home-proof__benefits li:last-child {
-    padding: 0.6rem 0;
-    text-align: left;
+    padding: 0.52rem 0;
+    text-align: center;
   }
 
   .home-proof__benefits li + li {

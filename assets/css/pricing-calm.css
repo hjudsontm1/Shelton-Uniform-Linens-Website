@@ -55,7 +55,7 @@ body.pricing-calm-page {
   position: fixed;
   top: 1rem;
   left: 1rem;
-  z-index: 100;
+  z-index: 300;
   transform: translateY(-180%);
   padding: 0.8rem 1rem;
   background: var(--calm-ivory);
@@ -1293,6 +1293,13 @@ body.pricing-calm-page {
 
 .ownership-list input:checked + span small {
   color: rgba(250, 246, 238, 0.58);
+}
+
+.ownership-list input:focus-visible + span {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid var(--calm-gold-dark);
+  outline-offset: 3px;
 }
 
 .conditional-panel {

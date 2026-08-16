@@ -407,6 +407,7 @@ body.industries-page.program-drawer-open {
   letter-spacing: 0.13em;
   line-height: 1.5;
   text-align: left;
+  text-decoration: none;
   text-transform: uppercase;
   cursor: pointer;
 }
@@ -1640,8 +1641,8 @@ body.industries-page.program-drawer-open {
 
 @media (max-width: 520px) {
   .serve-hero__copy {
-    min-height: 36rem;
-    padding: 7rem 1.25rem 3.5rem;
+    min-height: auto;
+    padding: 6.75rem 1.25rem 3.5rem;
   }
 
   .serve-hero__copy h1 {
@@ -1649,7 +1650,7 @@ body.industries-page.program-drawer-open {
   }
 
   .serve-hero__media {
-    min-height: 22rem;
+    min-height: clamp(20rem, 68vw, 22rem);
   }
 
   .serve-group,
@@ -1813,6 +1814,61 @@ body.industries-page.program-drawer-open {
     grid-column: 2;
   }
 
+}
+
+@media (max-width: 620px) {
+  .serve-hero__copy {
+    min-height: auto;
+    padding: 7rem 1.25rem 3.75rem;
+  }
+
+  .serve-hero__media {
+    min-height: clamp(20rem, 68vw, 26rem);
+  }
+
+  .serve-group .serve-group__word {
+    order: 1;
+  }
+
+  .serve-group .serve-group__media {
+    order: 2;
+  }
+
+  .serve-group .serve-group__programs {
+    order: 3;
+  }
+
+  .serve-directory a::before {
+    font-size: 0.65rem;
+  }
+
+  .serve-program > p:not(.serve-program__eyebrow) {
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+
+  .serve-program__facts h4 {
+    font-size: 0.68rem;
+  }
+
+  .serve-program__facts ul {
+    font-size: 0.86rem;
+    line-height: 1.62;
+  }
+
+  .serve-program__link,
+  .serve-fit__link {
+    min-height: 2.75rem;
+    padding-block: 0.75rem;
+  }
+
+  .industries-page .footer-links a,
+  .industries-page .footer-phone__link {
+    min-height: 2.75rem;
+    margin-block: 0;
+    display: flex;
+    align-items: center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

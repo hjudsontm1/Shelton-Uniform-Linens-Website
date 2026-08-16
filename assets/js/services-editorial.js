@@ -155,6 +155,7 @@
   });
 
   const routeMapElement = document.querySelector("[data-service-route-map]");
+  const routeMapStage = routeMapElement?.closest(".service-route-check__map-stage");
   const routeFacilityControl = document.querySelector("[data-route-facility]");
 
   if (routeMapElement && window.L) {
@@ -187,7 +188,6 @@
       attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
     }).addTo(routeMap);
 
-    window.L.control.zoom({ position: "topright" }).addTo(routeMap);
     window.L.control.scale({ position: "bottomright", imperial: true, metric: false }).addTo(routeMap);
 
     routeCities.forEach((city) => {
@@ -224,7 +224,7 @@
     routeMap.on("move zoom resize", syncFacilityControl);
 
     const fitCountyView = () => {
-      const isNarrow = window.matchMedia("(max-width: 640px)").matches;
+      const isNarrow = window.matchMedia("(max-width: 620px)").matches;
 
       routeMap.fitBounds(countyBounds, {
         padding: [isNarrow ? 18 : 42, isNarrow ? 24 : 42],
@@ -237,6 +237,7 @@
       fitCountyView();
       syncFacilityControl();
       routeMapElement.dataset.mapReady = "true";
+      routeMapStage?.classList.add("has-live-map");
     });
     window.requestAnimationFrame(() => {
       routeMap.invalidateSize(false);
@@ -301,8 +302,15 @@
     }
 
     routeInput?.removeAttribute("aria-invalid");
-    if (routeMessage) routeMessage.textContent = "Your details are ready for a Shelton service review in " + zip + ".";
-    routeForm.classList.add("is-complete");
+    if (routeMessage) routeMessage.textContent = "Opening the quote brief with your route details…";
+
+    try {
+      window.sessionStorage.setItem("sheltonRouteReviewDraft", JSON.stringify({ name, company, email, zip }));
+    } catch {
+      // The quote page still opens in route-review mode when storage is unavailable.
+    }
+
+    window.location.href = "quote.html?request=route-review#quote-form";
   });
 
   const reveals = document.querySelectorAll(".service-reveal");

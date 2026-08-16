@@ -10,14 +10,19 @@ const programs = fs.readFileSync(path.join(root, "assets/js/industries-programs.
 assert.doesNotMatch(html, /data-drawer-image|program-drawer__image/);
 assert.doesNotMatch(css, /program-drawer__image/);
 assert.doesNotMatch(programs, /data-drawer-image|imageAlt|\bimage:\s*["']/);
-assert.match(html, /industries\.css\?v=20260807-hotel-flat-catalog-v25/);
-assert.match(html, /industries-programs\.js\?v=20260807-hotel-flat-catalog-v25/);
-assert.match(html, /data-drawer-rail/);
-assert.match(html, /data-drawer-panels/);
-assert.match(html, /program-drawer__quote/);
-assert.match(html, /data-drawer-quote-label/);
-assert.doesNotMatch(html, /data-drawer-tab=/, "drawer tabs are rendered from program data");
-assert.doesNotMatch(html, /data-drawer-panel=/, "drawer panels are rendered from program data");
+assert.match(html, /industries\.css\?v=20260816-mobile-hardening-v27/);
+assert.doesNotMatch(html, /industries-programs\.js/);
+assert.doesNotMatch(html, /<dialog|program-drawer|data-program=/);
+assert.match(html, /industries-directory\.js\?v=20260816-directory-v1/);
+
+const directoryScript = fs.readFileSync(path.join(root, "assets/js/industries-directory.js"), "utf8");
+assert.match(directoryScript, /classList\.toggle\("is-docked", docked\)/);
+assert.match(directoryScript, /setAttribute\("aria-current", "location"\)/);
+assert.match(directoryScript, /directory\.scrollTo\(/);
+assert.doesNotMatch(directoryScript, /program-drawer|data-program=/);
+
+const directQuoteLinks = html.match(/class="serve-program__link" href="quote\.html\?industry=[^"]+"/g) || [];
+assert.equal(directQuoteLinks.length, 10, "all ten industry programs have direct quote links");
 
 const overviewTitles = [
   "A complete linen program for the way your hotel operates.",
@@ -68,4 +73,4 @@ assert.match(programs, /showPanel\("overview", \{ resetScroll: false \}\)/);
 assert.match(programs, /quote\.href = program\.quoteHref/);
 assert.match(programs, /quoteLabel\.textContent = program\.quoteLabel/);
 
-console.log("Who We Serve drawers expose ten custom Overview pages and six tailored chapters per program.");
+console.log("Who We Serve exposes ten accessible direct quote paths while unfinished drawers remain offline.");

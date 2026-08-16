@@ -63,6 +63,7 @@
   let scaleStep = 0;
   let scaleSequenceOperation = state.operation;
   let pendingInitialHash = window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : "";
+  const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches || false;
 
   const operationPicker = q("[data-operation-picker]");
   const operationTrigger = q("[data-operation-trigger]");
@@ -101,13 +102,23 @@
   const dockRange = q("[data-dock-range]");
   const dockAction = q("[data-dock-action]");
   const clearAnswers = q("[data-clear-answers]");
+  const clearAnswersStatus = q("[data-clear-answers-status]");
   const quoteForm = q("[data-quote-form]");
   const quoteError = q("[data-quote-error]");
   const quoteStatus = q("[data-quote-status]");
   const quoteSubmit = q("[data-quote-submit]");
+  const quoteSubmitIdleLabel = quoteSubmit?.textContent || "Send to Shelton for Review";
+  let clearAnswersArmed = false;
+  let clearAnswersTimer = 0;
+  let quoteInFlight = false;
+  let quoteSubmissionController = null;
 
   const operationForState = () => config.operations.find((item) => item.id === state.operation) || null;
   const selectedGoods = () => state.goods.map((id) => config.goods[id]).filter(Boolean);
+  const restoreRenderedChoiceFocus = (container, name, value) => {
+    const replacement = qa(`input[name="${name}"]`, container).find((input) => input.value === value);
+    replacement?.focus({ preventScroll: true });
+  };
   const scaleSchema = () => config.scaleSchemas[state.operation] || [];
   const directFollowupIds = new Set([
     "weeklyRobes", "weeklyBlankets", "weeklyChefCoats", "weeklyAprons",
@@ -172,6 +183,7 @@
   };
 
   const invalidateEstimate = () => {
+    estimateRequest += 1;
     estimateSignature = "";
     latestResult = null;
     latestRawResult = null;
@@ -1040,6 +1052,7 @@
     const validGoods = operationForState() ? operationForState().goods : [];
     state.goods = state.goods.filter((item) => validGoods.includes(item));
     onStateChange();
+    restoreRenderedChoiceFocus(goodsOptions, "goods", id);
   });
 
   scaleFields.addEventListener("input", (event) => {
@@ -1112,7 +1125,7 @@
     if (next?.disabled) return;
     if (back) scaleStep = Math.max(0, scaleStep - 1);
     if (next && scaleStep >= fields.length - 1) {
-      q("#factor-finish").scrollIntoView({ behavior: "smooth", block: "start" });
+      q("#factor-finish").scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
       return;
     }
     if (next) scaleStep += 1;
@@ -1130,6 +1143,7 @@
       state.rentalQuantity = "";
     }
     onStateChange();
+    restoreRenderedChoiceFocus(ownershipOptions, "ownership", state.ownership);
   });
 
   inventoryCategory.addEventListener("change", () => {
@@ -1187,7 +1201,32 @@
     requestEstimate();
   }));
 
+  const resetClearAnswersConfirmation = (message = "") => {
+    window.clearTimeout(clearAnswersTimer);
+    clearAnswersTimer = 0;
+    clearAnswersArmed = false;
+    clearAnswers.textContent = "Clear answers";
+    delete clearAnswers.dataset.state;
+    clearAnswersStatus.textContent = message;
+  };
+
+  clearAnswers.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !clearAnswersArmed) return;
+    event.preventDefault();
+    resetClearAnswersConfirmation("Clear canceled.");
+  });
+
   clearAnswers.addEventListener("click", () => {
+    if (!clearAnswersArmed) {
+      clearAnswersArmed = true;
+      clearAnswers.textContent = "Confirm clear";
+      clearAnswers.dataset.state = "confirming";
+      clearAnswersStatus.textContent = "Press Confirm clear again within six seconds to erase all estimator and contact answers.";
+      clearAnswersTimer = window.setTimeout(() => resetClearAnswersConfirmation("Clear canceled."), 6000);
+      return;
+    }
+
+    resetClearAnswersConfirmation();
     state = defaultState();
     scaleStep = 0;
     scaleSequenceOperation = "";
@@ -1200,13 +1239,16 @@
     pickerOpen = false;
     operationPanel.hidden = true;
     quoteForm.reset();
+    qa("[aria-invalid]", quoteForm).forEach((control) => control.removeAttribute("aria-invalid"));
     quoteError.hidden = true;
     quoteStatus.hidden = true;
+    quoteStatus.textContent = "";
     window.sessionStorage.removeItem(config.storageKey);
     renderAll();
+    clearAnswersStatus.textContent = "All estimator and contact answers were cleared.";
   });
 
-  const quoteContactValid = () => {
+  const quoteContactValidation = () => {
     const form = new FormData(quoteForm);
     const name = String(form.get("name") || "").trim();
     const business = String(form.get("business") || "").trim();
@@ -1215,20 +1257,46 @@
     const preferred = String(form.get("preferredContact") || "");
     const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const phoneRequired = ["phone", "either"].includes(preferred);
-    const valid = Boolean(name && business && emailValid && preferred && (!phoneRequired || phone));
+    const controls = {
+      name: quoteForm.elements.namedItem("name"),
+      business: quoteForm.elements.namedItem("business"),
+      email: quoteForm.elements.namedItem("email"),
+      phone: quoteForm.elements.namedItem("phone"),
+      preferred: q('[name="preferredContact"]', quoteForm)
+    };
+    const invalidControls = [];
+
+    qa("[aria-invalid]", quoteForm).forEach((control) => control.removeAttribute("aria-invalid"));
+    if (!name) invalidControls.push(controls.name);
+    if (!business) invalidControls.push(controls.business);
+    if (!emailValid) invalidControls.push(controls.email);
+    if (!preferred) invalidControls.push(controls.preferred);
+    if (phoneRequired && !phone) invalidControls.push(controls.phone);
+    invalidControls.filter(Boolean).forEach((control) => control.setAttribute("aria-invalid", "true"));
+
+    const valid = invalidControls.length === 0;
     quoteError.textContent = phoneRequired && !phone && name && business && emailValid
       ? "Add a phone number for your selected contact preference."
       : "Complete the required contact details and select how you prefer to be reached.";
     quoteError.hidden = valid;
-    return valid;
+    return { valid, firstInvalidControl: invalidControls.find(Boolean) || null };
   };
 
   quoteForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    if (!quoteContactValid()) {
-      quoteError.focus && quoteError.focus();
+    if (quoteInFlight) return;
+    const honeypot = quoteForm.elements.namedItem("_gotcha");
+    if (String(honeypot?.value || "").trim()) return;
+    const validation = quoteContactValidation();
+    if (!validation.valid) {
+      validation.firstInvalidControl?.focus();
       return;
     }
+    quoteInFlight = true;
+    quoteSubmissionController = new AbortController();
+    const configuredTimeout = Number.parseInt(quoteForm.dataset.submitTimeout || "15000", 10);
+    const timeoutMs = Number.isFinite(configuredTimeout) && configuredTimeout > 0 ? configuredTimeout : 15000;
+    const timeoutId = window.setTimeout(() => quoteSubmissionController?.abort(), timeoutMs);
     const form = new FormData(quoteForm);
     const contact = {
       businessName: String(form.get("business") || "").trim(),
@@ -1297,28 +1365,49 @@
           idempotencyKey: state.leadIdempotencyKey,
           contact,
           journeySnapshot: snapshot
-        })
+        }),
+        signal: quoteSubmissionController.signal
       });
       const notificationRequest = window.fetch(quoteForm.action, {
         method: "POST",
         headers: { Accept: "application/json" },
-        body: notification
+        body: notification,
+        signal: quoteSubmissionController.signal
       });
       const [durableResult, notificationResult] = await Promise.allSettled([durableRequest, notificationRequest]);
       const durableAccepted = durableResult.status === "fulfilled" && durableResult.value.ok;
       const fallbackAccepted = notificationResult.status === "fulfilled" && notificationResult.value.ok;
-      if (!durableAccepted && !fallbackAccepted) throw new Error("Review intake failed.");
+      if (!durableAccepted && !fallbackAccepted) {
+        const timedOut = [durableResult, notificationResult].some((result) =>
+          result.status === "rejected" && result.reason?.name === "AbortError"
+        );
+        const submissionError = new Error("Review intake failed.");
+        if (timedOut) submissionError.name = "AbortError";
+        throw submissionError;
+      }
 
       window.sessionStorage.removeItem(config.storageKey);
       window.location.assign(quoteForm.dataset.quoteSuccess || "thank-you.html");
-    } catch {
+    } catch (error) {
       quoteStatus.hidden = false;
-      quoteStatus.textContent = "We could not send the request. Your answers are still here; please try again.";
+      quoteStatus.textContent = error?.name === "AbortError"
+        ? "The request took too long. Your answers are still here; please try again."
+        : "We could not send the request. Your answers are still here; please try again.";
       quoteStatus.focus();
       quoteSubmit.disabled = false;
-      quoteSubmit.textContent = "Send to Shelton for review";
+      quoteSubmit.textContent = quoteSubmitIdleLabel;
+    } finally {
+      window.clearTimeout(timeoutId);
+      quoteSubmissionController = null;
+      quoteInFlight = false;
     }
   });
+
+  // Keep native validation as the no-script fallback, then opt into the
+  // estimator's custom validation only after its submit guard is installed.
+  quoteForm.noValidate = true;
+
+  window.addEventListener("pagehide", () => quoteSubmissionController?.abort(), { once: true });
 
   if ("IntersectionObserver" in window) {
     const dockBlockers = new Set();

@@ -3,3 +3,13 @@
 node_modules
 *.zip
 .DS_Store
+.codex-services-stage/
+tmp/
+dist/
+artifacts/
+current-compact-evidence/
+design-audit/
+design-audit-artifacts/
+design-ideation/
+design-qa-artifacts/
+process-loop-concept/

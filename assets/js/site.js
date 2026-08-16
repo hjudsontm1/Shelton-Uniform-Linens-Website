@@ -22,27 +22,50 @@
   if (toggle && menu) {
     const nav = toggle.closest(".site-nav");
     const mobileNavigation = window.matchMedia("(max-width: 1080px)");
+    const phoneNavigation = window.matchMedia("(max-width: 620px)");
+    const compactDesktopNavigation = window.matchMedia("(min-width: 621px) and (max-width: 1080px)");
+    const isolatedSiblings = new Set();
+    const setBackgroundInert = (shouldIsolate) => {
+      if (!nav) return;
+      if (shouldIsolate) {
+        Array.from(document.body.children).forEach((element) => {
+          if (element === nav || element.tagName === "SCRIPT" || element.hasAttribute("inert")) return;
+          element.setAttribute("inert", "");
+          isolatedSiblings.add(element);
+        });
+        return;
+      }
+      isolatedSiblings.forEach((element) => element.removeAttribute("inert"));
+      isolatedSiblings.clear();
+    };
     const menuIsOpen = () => toggle.getAttribute("aria-expanded") === "true";
     const closeMenu = ({ restoreFocus = false } = {}) => {
       toggle.setAttribute("aria-expanded", "false");
       toggle.setAttribute("aria-label", "Open navigation");
       menu.classList.remove("is-open");
       document.body.classList.remove("has-open-menu");
+      setBackgroundInert(false);
       if (restoreFocus) toggle.focus();
     };
-    const openMenu = () => {
+    const openMenu = ({ focusFirst = true } = {}) => {
       toggle.setAttribute("aria-expanded", "true");
       toggle.setAttribute("aria-label", "Close navigation");
       menu.classList.add("is-open");
       document.body.classList.add("has-open-menu");
-      window.setTimeout(() => {
-        if (menuIsOpen()) menu.querySelector("a[href]")?.focus();
-      }, prefersReducedMotion ? 0 : 260);
+      setBackgroundInert(phoneNavigation.matches);
+      if (focusFirst) {
+        window.setTimeout(() => {
+          if (menuIsOpen()) menu.querySelector("a[href]")?.focus();
+        }, prefersReducedMotion ? 0 : 260);
+      }
     };
 
-    toggle.addEventListener("click", () => {
+    toggle.addEventListener("click", (event) => {
       if (menuIsOpen()) closeMenu();
-      else openMenu();
+      else {
+        const openedWithKeyboard = event.detail === 0;
+        openMenu({ focusFirst: openedWithKeyboard || !compactDesktopNavigation.matches });
+      }
     });
     menu.addEventListener("click", (event) => {
       if (event.target.closest("a")) closeMenu();
@@ -74,10 +97,15 @@
     const resetDesktopMenu = (event) => {
       if (!event.matches) closeMenu();
     };
+    const syncPhoneMenuIsolation = (event) => {
+      if (menuIsOpen()) setBackgroundInert(event.matches);
+    };
     if (typeof mobileNavigation.addEventListener === "function") {
       mobileNavigation.addEventListener("change", resetDesktopMenu);
+      phoneNavigation.addEventListener("change", syncPhoneMenuIsolation);
     } else {
       mobileNavigation.addListener(resetDesktopMenu);
+      phoneNavigation.addListener(syncPhoneMenuIsolation);
     }
   }
 
@@ -179,6 +207,7 @@
     const aboutTuneRenderDelay = 24;
     const aboutTuneSettleDelay = 170;
     const aboutWarmupDuration = 180;
+    const aboutPhoneExperience = window.matchMedia("(max-width: 620px)");
 
     const visibleAboutTiles = () => aboutTiles.filter((tile) => window.getComputedStyle(tile).display !== "none");
     const featuredAboutTiles = () => {
@@ -292,11 +321,22 @@
     };
     const scheduleAboutAutoplay = (delay = aboutInitialAutoplayDelay) => {
       clearAboutAutoplay();
-      if (prefersReducedMotion || !aboutMontageInView) return;
+      if (prefersReducedMotion || aboutPhoneExperience.matches || !aboutMontageInView) return;
       aboutAutoplayTimeout = window.setTimeout(() => {
         nextAboutStory({ useFeatured: true });
         scheduleAboutAutoplay(aboutStoryAutoplayInterval);
       }, delay);
+    };
+    const syncAboutPhoneExperience = () => {
+      // Phone playback is intentionally manual, but user-triggered story changes
+      // still need to be announced to assistive technology.
+      tvScreen?.setAttribute("aria-live", "polite");
+      if (aboutPhoneExperience.matches) {
+        clearAboutAutoplay();
+        clearAboutTune();
+        return;
+      }
+      if (!document.hidden && aboutMontageInView) scheduleAboutAutoplay(aboutManualAutoplayDelay);
     };
 
     aboutTiles.forEach((tile) => {
@@ -317,12 +357,18 @@
     });
 
     if (aboutTv && tvScreen) {
+      syncAboutPhoneExperience();
       renderAboutTv(tvInstruction, null);
       if (!prefersReducedMotion) {
         tvScreen.classList.add("is-warming-up");
         aboutWarmupTimeout = window.setTimeout(() => tvScreen.classList.remove("is-warming-up"), aboutWarmupDuration);
       }
       scheduleAboutAutoplay(aboutInitialAutoplayDelay);
+      if (typeof aboutPhoneExperience.addEventListener === "function") {
+        aboutPhoneExperience.addEventListener("change", syncAboutPhoneExperience);
+      } else {
+        aboutPhoneExperience.addListener(syncAboutPhoneExperience);
+      }
       if ("IntersectionObserver" in window) {
         const aboutMontageObserver = new IntersectionObserver(([entry]) => {
           const wasInView = aboutMontageInView;
@@ -412,6 +458,44 @@
     }
   }
 
+  const towelTimelines = Array.from(document.querySelectorAll("[data-towel-timeline-v2]"));
+  towelTimelines.forEach((timeline) => {
+    const items = Array.from(timeline.querySelectorAll("[data-towel-item]"));
+    const triggers = items.map((item) => item.querySelector("[data-towel-trigger]"));
+    const panels = items.map((item) => item.querySelector("[data-towel-panel]"));
+
+    const activateTowel = (nextIndex, { focus = false } = {}) => {
+      if (nextIndex < 0 || nextIndex >= items.length) return;
+      items.forEach((item, index) => {
+        const isActive = index === nextIndex;
+        item.classList.toggle("is-active", isActive);
+        triggers[index]?.setAttribute("aria-expanded", String(isActive));
+        panels[index]?.setAttribute("aria-hidden", String(!isActive));
+      });
+      if (focus) triggers[nextIndex]?.focus();
+    };
+
+    triggers.forEach((trigger, index) => {
+      if (!trigger) return;
+      trigger.addEventListener("click", () => activateTowel(index));
+      trigger.addEventListener("keydown", (event) => {
+        if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        const nextIndex = event.key === 'Home'
+          ? 0
+          : event.key === 'End'
+            ? triggers.length - 1
+            : event.key === 'ArrowDown'
+              ? (index + 1) % triggers.length
+              : (index - 1 + triggers.length) % triggers.length;
+        activateTowel(nextIndex, { focus: true });
+      });
+    });
+
+    const initialIndex = Math.max(0, items.findIndex((item) => item.hasAttribute("data-towel-initial")));
+    activateTowel(initialIndex);
+  });
+
   const storyCarousel = document.querySelector("[data-story-carousel]");
   if (storyCarousel) {
     const slides = Array.from(storyCarousel.querySelectorAll("[data-story-slide]"));
@@ -422,11 +506,18 @@
     const caption = storyCarousel.querySelector("[data-story-current-caption]");
     let activeStoryIndex = Math.max(0, slides.findIndex((slide) => slide.classList.contains("is-active")));
     let isStoryFlipped = false;
+    const storyNonMobile = window.matchMedia("(min-width: 621px)");
+    const storyReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let storyDemoState = "idle";
+    let storyDemoOpenTimer = null;
+    let storyDemoCloseTimer = null;
+    let storyDemoObserver = null;
+    let storyDemoWasFlippedAtInteraction = false;
 
     const storyNumber = (value) => String(value).padStart(2, "0");
     const activeStorySlide = () => slides[activeStoryIndex];
     const visibleQueueCount = () => {
-      if (window.matchMedia("(max-width: 620px)").matches) return 1;
+      if (window.matchMedia("(max-width: 620px)").matches) return 0;
       if (window.matchMedia("(max-width: 980px)").matches) return 2;
       return 4;
     };
@@ -446,8 +537,62 @@
         }
       });
     };
+    const clearStoryDemoTimers = () => {
+      if (storyDemoOpenTimer !== null) window.clearTimeout(storyDemoOpenTimer);
+      if (storyDemoCloseTimer !== null) window.clearTimeout(storyDemoCloseTimer);
+      storyDemoOpenTimer = null;
+      storyDemoCloseTimer = null;
+    };
+    const clearStoryDemoVisual = () => {
+      storyCarousel.classList.remove("is-demo-flipped");
+      slides.forEach((slide) => slide.classList.remove("is-demo-flipped"));
+    };
+    const cancelStoryDemo = ({ restoreFront = false } = {}) => {
+      clearStoryDemoTimers();
+      clearStoryDemoVisual();
+      if (storyDemoState !== "done") storyDemoState = "cancelled";
+      storyDemoObserver?.disconnect();
+      storyDemoObserver = null;
+      if (restoreFront) setStoryFlipped(false);
+    };
+    const startStoryDemo = () => {
+      if (
+        storyDemoState !== "idle"
+        || !storyNonMobile.matches
+        || storyReducedMotion.matches
+        || document.hidden
+      ) return;
+
+      storyDemoState = "scheduled";
+      storyDemoObserver?.disconnect();
+      storyDemoObserver = null;
+      storyDemoOpenTimer = window.setTimeout(() => {
+        storyDemoOpenTimer = null;
+        if (!storyNonMobile.matches || storyReducedMotion.matches || document.hidden) {
+          cancelStoryDemo({ restoreFront: true });
+          return;
+        }
+
+        const currentSlide = activeStorySlide();
+        if (!currentSlide) {
+          cancelStoryDemo();
+          return;
+        }
+
+        storyDemoState = "running";
+        storyCarousel.classList.add("is-demo-flipped");
+        currentSlide.classList.add("is-demo-flipped");
+        storyDemoCloseTimer = window.setTimeout(() => {
+          storyDemoCloseTimer = null;
+          clearStoryDemoVisual();
+          storyDemoState = "done";
+        }, 2400);
+      }, 800);
+    };
     const renderStorySlide = (index) => {
       if (!slides.length) return;
+      clearStoryDemoVisual();
+      storyDemoWasFlippedAtInteraction = false;
       activeStoryIndex = (index + slides.length) % slides.length;
       const maxQueue = Math.min(visibleQueueCount(), Math.floor((slides.length - 1) / 2));
       slides.forEach((slide, slideIndex) => {
@@ -463,7 +608,7 @@
           slide.classList.toggle(`is-next-${queueIndex}`, signedOffset === queueIndex && isQueued);
         }
         slide.setAttribute("aria-hidden", String(!isActive && !isQueued));
-        slide.tabIndex = isActive || isQueued ? 0 : -1;
+        slide.tabIndex = isActive ? 0 : -1;
         if (!isActive) slide.setAttribute("aria-label", storyLabel(slide, "Show"));
       });
       dots.forEach((dot, dotIndex) => {
@@ -479,7 +624,12 @@
     slides.forEach((slide, index) => {
       slide.addEventListener("click", () => {
         if (index === activeStoryIndex) {
-          setStoryFlipped(!isStoryFlipped);
+          if (storyDemoWasFlippedAtInteraction) {
+            storyDemoWasFlippedAtInteraction = false;
+            setStoryFlipped(false);
+          } else {
+            setStoryFlipped(!isStoryFlipped);
+          }
         } else {
           renderStorySlide(index);
         }
@@ -488,10 +638,12 @@
         if (event.key === "ArrowRight") {
           event.preventDefault();
           renderStorySlide(activeStoryIndex + 1);
+          activeStorySlide()?.focus();
         }
         if (event.key === "ArrowLeft") {
           event.preventDefault();
           renderStorySlide(activeStoryIndex - 1);
+          activeStorySlide()?.focus();
         }
       });
     });
@@ -501,10 +653,64 @@
     if (previousButton) previousButton.addEventListener("click", () => renderStorySlide(activeStoryIndex - 1));
     if (nextButton) nextButton.addEventListener("click", () => renderStorySlide(activeStoryIndex + 1));
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") setStoryFlipped(false);
+      if (event.key === "Escape") cancelStoryDemo({ restoreFront: true });
     });
     window.addEventListener("resize", () => renderStorySlide(activeStoryIndex));
     renderStorySlide(activeStoryIndex);
+
+    const cancelStoryDemoForPointer = () => {
+      storyDemoWasFlippedAtInteraction = storyDemoWasFlippedAtInteraction
+        || storyCarousel.classList.contains("is-demo-flipped");
+      cancelStoryDemo();
+    };
+    const cancelStoryDemoForClick = (event) => {
+      if (!event.detail) cancelStoryDemoForPointer();
+    };
+    const cancelStoryDemoForKeyboard = (event) => {
+      if (["Enter", " ", "Spacebar"].includes(event.key)) {
+        storyDemoWasFlippedAtInteraction = storyDemoWasFlippedAtInteraction
+          || storyCarousel.classList.contains("is-demo-flipped");
+      }
+      cancelStoryDemo();
+    };
+    storyCarousel.addEventListener("pointerdown", cancelStoryDemoForPointer, true);
+    storyCarousel.addEventListener("click", cancelStoryDemoForClick, true);
+    storyCarousel.addEventListener("keydown", cancelStoryDemoForKeyboard, true);
+    storyCarousel.addEventListener("focusin", () => cancelStoryDemo({ restoreFront: true }), true);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && ["scheduled", "running"].includes(storyDemoState)) {
+        cancelStoryDemo({ restoreFront: true });
+      }
+    });
+    window.addEventListener("pagehide", () => cancelStoryDemo({ restoreFront: true }), { once: true });
+
+    const cancelStoryDemoForPreference = (event) => {
+      if (!event.matches) return;
+      cancelStoryDemo({ restoreFront: true });
+    };
+    if (typeof storyNonMobile.addEventListener === "function") {
+      storyNonMobile.addEventListener("change", (event) => {
+        if (!event.matches) cancelStoryDemo({ restoreFront: true });
+      });
+      storyReducedMotion.addEventListener("change", cancelStoryDemoForPreference);
+    } else {
+      storyNonMobile.addListener((event) => {
+        if (!event.matches) cancelStoryDemo({ restoreFront: true });
+      });
+      storyReducedMotion.addListener(cancelStoryDemoForPreference);
+    }
+
+    if (
+      "IntersectionObserver" in window
+      && storyNonMobile.matches
+      && !storyReducedMotion.matches
+    ) {
+      storyDemoObserver = new IntersectionObserver((entries) => {
+        const entry = entries[0];
+        if (entry?.isIntersecting && entry.intersectionRatio >= 0.38) startStoryDemo();
+      }, { threshold: [0.38] });
+      storyDemoObserver.observe(storyCarousel);
+    }
   }
 
   const qualityCinema = document.querySelector("[data-quality-cinema]");
@@ -600,7 +806,7 @@
       cta: "Build a Short-Term Rental Program",
       href: "quote.html?program=str",
       secondaryCta: "Learn more about STR laundry programs →",
-      secondaryHref: "industries.html#str-property-managers"
+      secondaryHref: "industries.html#short-term-rentals"
     },
     spa: {
       label: "Spas, Massage & Wellness",
@@ -613,7 +819,7 @@
       cta: "Build a Spa & Wellness Program",
       href: "quote.html?program=spa",
       secondaryCta: "Learn more about spa & wellness laundry →",
-      secondaryHref: "industries.html#spa-wellness"
+      secondaryHref: "industries.html#spas"
     },
     fitness: {
       label: "Gyms, Yoga & Fitness Studios",
@@ -626,7 +832,7 @@
       cta: "Build a Fitness Towel Program",
       href: "quote.html?program=fitness",
       secondaryCta: "Learn more about fitness towel service →",
-      secondaryHref: "industries.html#gyms-fitness"
+      secondaryHref: "industries.html#gyms"
     },
     events: {
       label: "Event Linen Programs",
@@ -639,7 +845,7 @@
       cta: "Build an Event Linen Program",
       href: "quote.html?program=events",
       secondaryCta: "Learn more about event linen care →",
-      secondaryHref: "industries.html#events-convention-centers"
+      secondaryHref: "industries.html#events"
     },
     restaurants: {
       label: "Restaurants & Food Service",
@@ -652,7 +858,7 @@
       cta: "Build a Restaurant Laundry Program",
       href: "quote.html?program=restaurants",
       secondaryCta: "Learn more about restaurant laundry →",
-      secondaryHref: "industries.html#restaurants-food-service"
+      secondaryHref: "industries.html#restaurants"
     },
     uniforms: {
       label: "Uniforms & Casino Programs",
@@ -665,9 +871,9 @@
       cta: "Build a Uniform Program",
       href: "quote.html?program=uniforms",
       secondaryCta: "Learn more about uniform programs →",
-      secondaryHref: "industries.html#uniform-accounts"
+      secondaryHref: "industries.html#uniforms"
     },
-    wholesale: {
+    specialty: {
       label: "Specialty Commercial Accounts",
       summary: "A flexible laundry and dry-cleaning program for theaters, religious organizations, clubs, and commercial accounts with unique fabric, scheduling, or presentation needs.",
       items: ["Costumes", "Choir robes", "Table linens", "Uniforms", "Dry-clean-only garments", "Specialty pieces"],
@@ -676,9 +882,9 @@
       finishing: "Items are professionally finished, hung or folded, and packaged according to their care requirements and your preferences.",
       flow: ["Unique goods", "Careful handling", "Presentation finish", "Packaged return"],
       cta: "Discuss Your Specialty Laundry Needs",
-      href: "quote.html?program=wholesale",
+      href: "quote.html?program=specialty",
       secondaryCta: "Learn more about specialty accounts →",
-      secondaryHref: "industries.html#specialty-accounts"
+      secondaryHref: "industries.html#specialty"
     }
   };
 
@@ -785,10 +991,10 @@
       service: "uniforms",
       message: "I am interested in building a uniform cleaning and finishing program."
     },
-    wholesale: {
-      industry: "wholesale",
-      service: "wholesale",
-      message: "I am interested in discussing wholesale laundry or finishing support."
+    specialty: {
+      industry: "other",
+      service: "not-sure",
+      message: "I am interested in discussing a specialty commercial laundry or garment-care program for unique goods, schedules, or handling requirements."
     }
   };
   const programQuote = programQuoteMap[program];
@@ -811,6 +1017,10 @@
     "route-command": {
       service: "route",
       message: "I would like to request access to Route Command for my commercial account."
+    },
+    "route-review": {
+      service: "route",
+      message: "I would like Shelton to review route availability for my business."
     }
   };
   const requestQuote = requestQuoteMap[request];
@@ -819,28 +1029,25 @@
     if (messageField) messageField.value = requestQuote.message;
   }
 
-  const form = document.querySelector("#quote-form");
-  if (!form) return;
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const status = form.querySelector(".form-status");
-    const submit = form.querySelector("button[type='submit']");
-    if (submit) submit.disabled = true;
-    if (status) status.textContent = "Sending quote request...";
-
+  if (request === "route-review") {
     try {
-      const response = await fetch(form.action, {
-        method: "POST",
-        headers: { Accept: "application/json" },
-        body: new FormData(form),
-      });
-      if (!response.ok) throw new Error("Request failed");
-      window.location.href = "thank-you.html";
+      const savedRouteDraft = window.sessionStorage.getItem("sheltonRouteReviewDraft");
+      if (savedRouteDraft) {
+        const routeDraft = JSON.parse(savedRouteDraft);
+        const companyField = document.querySelector("#quote-form [name='company']");
+        const nameField = document.querySelector("#quote-form [name='name']");
+        const emailField = document.querySelector("#quote-form [name='email']");
+        if (companyField && routeDraft.company) companyField.value = routeDraft.company;
+        if (nameField && routeDraft.name) nameField.value = routeDraft.name;
+        if (emailField && routeDraft.email) emailField.value = routeDraft.email;
+        if (messageField && routeDraft.zip) {
+          messageField.value = `${requestQuoteMap["route-review"].message}\nRoute ZIP: ${routeDraft.zip}.`;
+        }
+        window.sessionStorage.removeItem("sheltonRouteReviewDraft");
+      }
     } catch {
-      if (status) status.textContent = "We could not send the request just now. Please try again.";
-      if (submit) submit.disabled = false;
+      window.sessionStorage.removeItem("sheltonRouteReviewDraft");
     }
-  });
+  }
+
 })();

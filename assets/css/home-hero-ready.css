@@ -1,9 +1,10 @@
 /* Homepage opening: one clean scene spans the hero and proof continuously. */
 
 .home-page .home-opening {
-  --proof-position: 50%;
+  --proof-position: 55%;
   --opening-hero-height: max(100svh, 44rem);
   --opening-scene-top: 5.5rem;
+  --proof-height: clamp(28rem, 34vw, 34rem);
   --proof-media-height: clamp(22rem, 78vw, 31rem);
   position: relative;
   z-index: 1;
@@ -30,7 +31,7 @@
   max-width: none;
   display: block;
   object-fit: cover;
-  object-position: center top;
+  object-position: 50% top;
   filter: saturate(0.92) contrast(0.99) brightness(1.01);
 }
 
@@ -170,6 +171,16 @@
   }
 }
 
+/* Keep the approved two-line desktop composition fluid through the narrow
+   desktop band instead of letting the 4.4rem floor clip the second line. */
+@media (min-width: 861px) and (max-width: 969px) {
+  .ready-hero__copy h1 {
+    font-size: 7.15vw;
+  }
+}
+
+/* Desktop baseline lock: 1041px and wider use only the canonical declarations above. */
+
 @media (max-width: 860px) {
   .home-page .home-opening {
     --opening-hero-height: 100svh;
@@ -177,11 +188,7 @@
 
   .home-opening__scene {
     bottom: auto;
-    height: calc(var(--opening-hero-height) - var(--opening-scene-top) + var(--proof-media-height));
-  }
-
-  .home-opening__scene-image {
-    object-position: 38% top;
+    height: calc(var(--opening-hero-rendered-height, var(--opening-hero-height)) - var(--opening-scene-top) + var(--proof-media-height));
   }
 
   .home-page .home-hero--ready {
@@ -218,6 +225,15 @@
   .ready-hero__intro {
     width: min(100%, 36rem);
     margin-top: 1.35rem;
+  }
+}
+
+/* Roomy compact: center the complete hero group below the fixed header. */
+@media (min-width: 621px) and (max-width: 860px) {
+  .home-page .home-hero--ready .ready-hero__frame {
+    min-height: calc(100svh - var(--opening-scene-top));
+    padding: clamp(2rem, 5svh, 3.25rem) 0;
+    place-items: center;
   }
 }
 
@@ -262,9 +278,9 @@
   }
 }
 
-@media (max-width: 520px) {
-  .home-page .home-opening {
-    --proof-media-height: 21rem;
+@media (max-width: 340px) {
+  .ready-hero__copy h1 {
+    font-size: clamp(1.75rem, 8.3vw, 2.35rem);
   }
 }
 

@@ -360,11 +360,14 @@
     }
     const input = buildEstimateInput(state);
     if (!input) return unavailableRecommendation(state, "This program needs a Shelton review before pricing.", true);
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 10000);
     try {
       const response = await window.fetch(apiUrl(pricingRules.estimatePath), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ estimate: input })
+        body: JSON.stringify({ estimate: input }),
+        signal: controller.signal
       });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok || !payload.estimate) throw new Error(payload.error || "The calculation service is unavailable.");
@@ -377,6 +380,8 @@
       return recommendationFromPublic(state, input, payload);
     } catch (error) {
       return unavailableRecommendation(state, "The automatic range could not be calculated. Your answers can still be sent for manual review.");
+    } finally {
+      window.clearTimeout(timeoutId);
     }
   };
 
