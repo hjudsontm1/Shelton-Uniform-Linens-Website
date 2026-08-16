@@ -4,15 +4,14 @@
   const root = document.querySelector("[data-pricing-journey]");
   const config = window.SheltonPricingJourneyConfig;
   const vectors = window.SheltonPricingJourneyVectors;
-  const pricingEngine = window.SheltonPricingDevelopmentRules;
+  const pricingEngine = window.SheltonPricingEngine;
   if (!root || !config || !vectors || !pricingEngine) return;
 
   const searchParams = new URLSearchParams(window.location.search);
   const quoteMode = searchParams.get("quote") === "fail" ? "fail" : "ready";
+  const liveQuote = root.dataset.quoteMode === "live";
   const reducedMotion = searchParams.get("motion") === "reduce" || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const concept = "orb";
-  const inlineMode = root.hasAttribute("data-inline-pricing-estimator");
-  const storageKey = inlineMode ? `${config.storageKey}-inline` : config.storageKey;
 
   const conceptPanels = Array.from(document.querySelectorAll("[data-concept-panel]"));
   const flow = document.querySelector("[data-journey-flow]");
@@ -37,6 +36,9 @@
   const finishError = document.querySelector("[data-finish-error]");
   const ownershipOptions = document.querySelector("[data-ownership-options]");
   const ownershipError = document.querySelector("[data-ownership-error]");
+  const rentalTierFields = document.querySelector("[data-rental-tier-fields]");
+  const rentalTierInput = document.querySelector("[data-rental-tier]");
+  const rentalQuantityInput = document.querySelector("[data-rental-quantity]");
   const locationForm = document.querySelector("[data-location-form]");
   const locationInput = document.querySelector("[data-location-input]");
   const locationError = document.querySelector("[data-location-error]");
@@ -71,17 +73,21 @@
     finish: [],
     specialtyNeeds: [],
     ownership: null,
+    rentalTier: null,
+    rentalQuantity: "",
     location: { type: null, value: "" },
     recommendation: null,
     contact: {},
     quoteStatus: "idle",
     quotePayload: null,
-    developmentMode: true
+    estimateToken: null,
+    leadIdempotencyKey: crypto.randomUUID?.() || `lead-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    developmentMode: false
   });
 
   const restoreState = () => {
     try {
-      const stored = JSON.parse(window.sessionStorage.getItem(storageKey));
+      const stored = JSON.parse(window.sessionStorage.getItem(config.storageKey));
       if (!stored || stored.version !== config.version) return createInitialState();
       const restored = { ...createInitialState(), ...stored, concept };
       if (!config.operations.some((item) => item.id === restored.operation)) {
@@ -117,6 +123,7 @@
     config.chapterOrder.slice(start).forEach((item) => setComplete(item, false));
     if (start <= config.chapterOrder.indexOf("review")) {
       state.recommendation = null;
+      state.estimateToken = null;
       state.quoteStatus = "idle";
       state.quotePayload = null;
     }
@@ -131,7 +138,7 @@
 
   const saveState = () => {
     try {
-      window.sessionStorage.setItem(storageKey, JSON.stringify(state));
+      window.sessionStorage.setItem(config.storageKey, JSON.stringify(state));
     } catch (error) {
       // The journey remains fully usable when storage is unavailable.
     }
@@ -288,12 +295,17 @@
     return `${value} ${field.unit || ""}`.trim();
   };
 
+  const activeScaleSchema = () => (config.scaleSchemas[state.operation] || [])
+    .filter((field) => !field.goods || field.goods.some((id) => state.goods.includes(id)));
+
   const buildScaleFields = () => {
     const operation = activeOperation();
-    const schema = config.scaleSchemas[operation?.id] || [];
-    if (!operation || scaleFields.dataset.operation === operation.id) return schema;
+    const schema = activeScaleSchema();
+    const signature = `${operation?.id || ""}:${state.goods.join(",")}`;
+    if (!operation || scaleFields.dataset.signature === signature) return schema;
     scaleFields.replaceChildren();
     scaleFields.dataset.operation = operation.id;
+    scaleFields.dataset.signature = signature;
 
     schema.forEach((field) => {
       const label = document.createElement("label");
@@ -436,7 +448,7 @@
   const renderFinishState = () => {
     const operation = activeOperation();
     const chapter = document.querySelector('[data-chapter="finish"]');
-    chapter.hidden = !isComplete("location") || !operation;
+    chapter.hidden = !isComplete("scale") || !operation;
     if (chapter.hidden) return;
 
     const compatibleFinish = compatibleOptions(config.finishOptions);
@@ -526,6 +538,12 @@
     });
     const choice = config.ownershipChoices.find((item) => item.id === state.ownership);
     document.querySelector("[data-ownership-summary-label]").textContent = choice?.label || "";
+    const needsRentalDetail = ["some", "supply"].includes(state.ownership);
+    rentalTierFields.hidden = !needsRentalDetail;
+    rentalTierInput.value = state.rentalTier || "";
+    rentalQuantityInput.value = state.rentalQuantity || "";
+    rentalTierInput.required = needsRentalDetail;
+    rentalQuantityInput.required = needsRentalDetail;
     ownershipError.hidden = true;
     const editor = document.querySelector('[data-chapter-editor="ownership"]');
     const summary = document.querySelector('[data-chapter-summary="ownership"]');
@@ -536,7 +554,7 @@
 
   const renderLocationState = () => {
     const chapter = document.querySelector('[data-chapter="location"]');
-    chapter.hidden = !isComplete("scale");
+    chapter.hidden = !isComplete("ownership");
     if (chapter.hidden) return;
     const editor = document.querySelector('[data-chapter-editor="location"]');
     const summary = document.querySelector('[data-chapter-summary="location"]');
@@ -560,9 +578,9 @@
       { chapter: "operation", number: "01", label: "Operation", value: operation?.label || "" },
       { chapter: "goods", number: "02", label: "Goods", value: state.goods.map((id) => config.goods[id].label).join(" · ") },
       { chapter: "scale", number: "03", label: "Operating signals", value: document.querySelector("[data-scale-summary-label]").textContent },
-      { chapter: "location", number: "04", label: "Location", value: state.location.value },
-      { chapter: "finish", number: "05", label: "Finish and care", value: finishLabels().join(" · ") },
-      { chapter: "ownership", number: "06", label: "Inventory ownership", value: ownership?.label || "" }
+      { chapter: "finish", number: "04", label: "Finish and care", value: finishLabels().join(" · ") },
+      { chapter: "ownership", number: "05", label: "Inventory ownership", value: [ownership?.label, state.rentalTier ? `${state.rentalTier} tier · ${state.rentalQuantity} supplied pieces` : ""].filter(Boolean).join(" · ") },
+      { chapter: "location", number: "06", label: "Location", value: state.location.value }
     ];
   };
 
@@ -591,7 +609,7 @@
   const renderReviewState = () => {
     const operation = activeOperation();
     const chapter = document.querySelector('[data-chapter="review"]');
-    chapter.hidden = !isComplete("ownership") || !operation || ["result", "handoff"].includes(state.activeChapter);
+    chapter.hidden = !isComplete("location") || !operation || ["result", "handoff"].includes(state.activeChapter);
     if (chapter.hidden) return;
     const editor = document.querySelector('[data-chapter-editor="review"]');
     const summary = document.querySelector('[data-chapter-summary="review"]');
@@ -618,6 +636,17 @@
 
   const buildModelComparison = (recommendation) => {
     modelComparison.replaceChildren();
+    if (!recommendation.comparisons.length) {
+      const article = document.createElement("article");
+      const title = document.createElement("h4");
+      const detail = document.createElement("p");
+      title.textContent = recommendation.model.label;
+      detail.textContent = recommendation.model.reason;
+      article.classList.add("is-recommended");
+      article.append(title, detail);
+      modelComparison.append(article);
+      return;
+    }
     recommendation.comparisons.forEach((item) => {
       const article = document.createElement("article");
       const marker = document.createElement("span");
@@ -627,11 +656,7 @@
       marker.textContent = item.recommended ? "Recommended" : "Compare";
       title.textContent = item.label;
       range.textContent = `${formatMoney(item.weeklyLow)}-${formatMoney(item.weeklyHigh)} / week`;
-      detail.textContent = {
-        cog: "Service is planned around inventory the customer already owns.",
-        hybrid: "Owned goods and selected supplied inventory are planned together.",
-        rental: "The planning range includes a development inventory-supply factor."
-      }[item.id];
+      detail.textContent = recommendation.model.reason;
       article.classList.toggle("is-recommended", item.recommended);
       article.dataset.modelId = item.id;
       article.append(marker, title, range, detail);
@@ -649,8 +674,26 @@
     }
     document.querySelector("[data-result-warning]").textContent = recommendation.warning;
     document.querySelector("[data-result-positioning]").textContent = recommendation.positioning;
-    document.querySelector("[data-result-weekly]").textContent = `${formatMoney(recommendation.range.weeklyLow)}-${formatMoney(recommendation.range.weeklyHigh)}`;
-    document.querySelector("[data-result-monthly]").textContent = `${formatMoney(recommendation.range.monthlyLow)}-${formatMoney(recommendation.range.monthlyHigh)} projected per month`;
+    document.querySelector("[data-result-weekly]").textContent = recommendation.range
+      ? `${formatMoney(recommendation.range.weeklyLow)}-${formatMoney(recommendation.range.weeklyHigh)}`
+      : "Exact review required";
+    document.querySelector("[data-result-monthly]").textContent = recommendation.range
+      ? `${formatMoney(recommendation.range.monthlyLow)}-${formatMoney(recommendation.range.monthlyHigh)} projected per month`
+      : "Your answers are retained for a manual Shelton review.";
+    const unitRateWrap = document.querySelector("[data-result-unit-rates]");
+    unitRateWrap.replaceChildren();
+    (recommendation.unitRates || []).forEach((line) => {
+      const item = document.createElement("span");
+      item.textContent = `${line.label}: $${Number(line.rate).toFixed(2)} per ${line.billingUnit}`;
+      unitRateWrap.append(item);
+    });
+    (recommendation.rental || []).forEach((line) => {
+      const item = document.createElement("span");
+      item.textContent = line.weeklyRatePerItem == null
+        ? `${line.tier} ${line.category} rental: Shelton review`
+        : `${line.tier} ${line.category} rental: $${Number(line.weeklyRatePerItem).toFixed(2)} per item / week`;
+      unitRateWrap.append(item);
+    });
     document.querySelector("[data-result-rhythm]").textContent = recommendation.rhythm.label;
     document.querySelector("[data-result-rhythm-reason]").textContent = recommendation.rhythm.reason;
     document.querySelector("[data-result-model]").textContent = recommendation.model.label;
@@ -675,8 +718,8 @@
   };
 
   const buildQuotePayload = () => ({
-    preview: true,
-    endpointIntegrated: false,
+    preview: !liveQuote,
+    endpointIntegrated: liveQuote,
     journeyVersion: config.version,
     pricingRulesVersion: state.recommendation?.rulesVersion || null,
     operation: state.operation,
@@ -686,11 +729,17 @@
     finish: [...state.finish],
     specialtyNeeds: [...state.specialtyNeeds],
     ownership: state.ownership,
+    rentalTier: state.rentalTier,
+    rentalQuantity: state.rentalQuantity,
     location: { ...state.location },
     recommendation: state.recommendation ? {
       rhythm: state.recommendation.rhythm.label,
       model: state.recommendation.model.id,
-      weeklyRange: [state.recommendation.range.weeklyLow, state.recommendation.range.weeklyHigh]
+      weeklyRange: state.recommendation.range
+        ? [state.recommendation.range.weeklyLow, state.recommendation.range.weeklyHigh]
+        : null,
+      unitRates: state.recommendation.unitRates || [],
+      manualReview: Boolean(state.recommendation.rangeUnavailable)
     } : null,
     contact: { ...state.contact }
   });
@@ -704,16 +753,24 @@
       if (input && input.value !== value) input.value = value;
     });
     quoteSubmit.disabled = state.quoteStatus === "loading";
-    quoteSubmit.firstChild.textContent = state.quoteStatus === "loading" ? "Preparing payload " : "Prepare quote payload ";
+    quoteSubmit.firstChild.textContent = state.quoteStatus === "loading"
+      ? (liveQuote ? "Sending request " : "Preparing payload ")
+      : (liveQuote ? "Send to Shelton for review " : "Prepare quote payload ");
     quoteError.hidden = true;
     quoteStatus.hidden = state.quoteStatus === "idle";
     quoteStatus.dataset.status = state.quoteStatus;
-    quoteStatus.textContent = {
-      loading: "Preparing the development payload. No network request is being made.",
-      failure: "The development handoff could not be prepared. Your program and contact details remain available; try again when ready.",
-      ready: "Quote payload ready for endpoint integration. Nothing has been submitted."
-    }[state.quoteStatus] || "";
-    quotePayloadWrap.hidden = state.quoteStatus !== "ready" || !state.quotePayload;
+    const liveMessages = {
+      loading: "Sending your program to Shelton for review.",
+      failure: "We could not send your request just now. Your details remain available; please try again.",
+      ready: "Your request was sent to Shelton."
+    };
+    const previewMessages = {
+      loading: "Preparing the preview payload. No network request is being made.",
+      failure: "The preview handoff could not be prepared. Your program and contact details remain available; try again when ready.",
+      ready: "Preview payload ready. Nothing has been submitted."
+    };
+    quoteStatus.textContent = (liveQuote ? liveMessages : previewMessages)[state.quoteStatus] || "";
+    quotePayloadWrap.hidden = liveQuote || state.quoteStatus !== "ready" || !state.quotePayload;
     quotePayload.textContent = state.quotePayload ? JSON.stringify(state.quotePayload, null, 2) : "";
   };
 
@@ -754,9 +811,9 @@
     if (operation) addSummaryItem("Operation", operation.label);
     if (state.goods.length) addSummaryItem("Goods", state.goods.map((id) => config.goods[id].label).join(" · "));
     if (isComplete("scale")) addSummaryItem("Scale", document.querySelector("[data-scale-summary-label]").textContent);
-    if (isComplete("location")) addSummaryItem("Location", state.location.value);
     if (isComplete("finish")) addSummaryItem("Finish", state.finish.map((id) => config.finishOptions.find((item) => item.id === id)?.label).filter(Boolean).join(" · "));
     if (isComplete("ownership")) addSummaryItem("Ownership", config.ownershipChoices.find((item) => item.id === state.ownership)?.label || "");
+    if (isComplete("location")) addSummaryItem("Location", state.location.value);
   };
 
   const renderFlow = () => {
@@ -768,9 +825,9 @@
     renderOperationState();
     renderGoodsState();
     renderScaleState();
-    renderLocationState();
     renderFinishState();
     renderOwnershipState();
+    renderLocationState();
     renderReviewState();
     renderResultState();
     renderQuoteState();
@@ -832,10 +889,6 @@
       state.view = "flow";
       state.activeChapter = "operation";
       render();
-      const initialOperation = root.dataset.initialOperation;
-      if (initialOperation && config.operations.some((item) => item.id === initialOperation)) {
-        selectOperation(initialOperation);
-      }
       focusChapter("operation");
       announce("Operation chapter ready. Choose the closest type of operation.");
     }, reducedMotion ? 0 : 420);
@@ -920,7 +973,7 @@
   };
 
   const validateScale = () => {
-    const schema = config.scaleSchemas[state.operation] || [];
+    const schema = activeScaleSchema();
     let valid = true;
     schema.forEach((field) => {
       const control = scaleFields.querySelector(`[data-scale-input="${field.id}"]`);
@@ -945,11 +998,11 @@
       return;
     }
     setComplete("scale");
-    invalidateFrom("location");
-    state.activeChapter = "location";
+    invalidateFrom("finish");
+    state.activeChapter = "finish";
     render();
-    focusChapter("location");
-    announce("Operating details saved. Location is ready.");
+    focusChapter("finish");
+    announce("Operating details saved. Finish and return options are ready.");
   };
 
   const toggleAdaptiveChoice = (type, id) => {
@@ -997,12 +1050,20 @@
       announce("Choose the closest ownership situation before continuing.");
       return;
     }
+    if (["some", "supply"].includes(state.ownership) && (!state.rentalTier || Number(state.rentalQuantity) <= 0)) {
+      ownershipError.hidden = false;
+      ownershipError.textContent = "Choose a rental tier and enter the approximate supplied piece count.";
+      (!state.rentalTier ? rentalTierInput : rentalQuantityInput).focus();
+      announce("Choose a rental tier and supplied piece count before continuing.");
+      return;
+    }
+    ownershipError.textContent = "Choose the closest ownership situation to continue.";
     setComplete("ownership");
-    invalidateFrom("review");
-    state.activeChapter = "review";
+    invalidateFrom("location");
+    state.activeChapter = "location";
     render();
-    focusChapter("review");
-    announce("Ownership saved. Your program inputs are ready to review.");
+    focusChapter("location");
+    announce("Ownership saved. Location is ready.");
   };
 
   const completeLocation = () => {
@@ -1019,22 +1080,28 @@
     }
     state.location = { type: isZip ? "zip" : "city", value };
     setComplete("location");
-    invalidateFrom("finish");
-    state.activeChapter = "finish";
+    state.activeChapter = "review";
     render();
-    focusChapter("finish");
-    announce("Location saved. Finish and return options are ready.");
+    focusChapter("review");
+    announce("Location saved. Your program inputs are ready to review.");
   };
 
-  const completeReview = () => {
-    state.recommendation = pricingEngine.calculatePlanningRange(state, pricingEngine.pricingRules);
+  const completeReview = async () => {
+    const button = document.querySelector("[data-build-result]");
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = "Building planning range…";
+    state.recommendation = await pricingEngine.calculatePlanningRange(state, pricingEngine.pricingRules);
+    state.estimateToken = state.recommendation.estimateToken || null;
     setComplete("review");
     state.activeChapter = "result";
     state.quoteStatus = "idle";
     state.quotePayload = null;
     render();
     focusChapter("result");
-    announce(`Development recommendation ready. ${state.recommendation.rhythm.label}; ${state.recommendation.model.label}.`);
+    button.disabled = false;
+    button.textContent = originalText;
+    announce(`${state.recommendation.rangeUnavailable ? "Manual review" : "Planning range"} ready. ${state.recommendation.rhythm.label}; ${state.recommendation.model.label}.`);
   };
 
   const openQuoteHandoff = () => {
@@ -1049,7 +1116,7 @@
     state.activeChapter = "result";
     render();
     focusChapter("result");
-    announce("Returned to the development result.");
+    announce("Returned to the planning result.");
   };
 
   const validateQuoteContact = () => {
@@ -1063,32 +1130,102 @@
       control.setAttribute("aria-invalid", String(!finalValid));
       if (!finalValid) valid = false;
     });
+    const preferredContact = quoteForm.elements.namedItem("preferredContact")?.value;
+    const phone = quoteForm.elements.namedItem("phone");
+    if (["phone", "either"].includes(preferredContact) && !phone.value.trim()) {
+      phone.setAttribute("aria-invalid", "true");
+      valid = false;
+    }
     quoteError.hidden = valid;
     return valid;
   };
 
-  const prepareQuotePayload = () => {
+  const prepareQuotePayload = async () => {
     if (!validateQuoteContact()) {
       quoteForm.querySelector('[aria-invalid="true"]')?.focus();
-      announce("Complete the required contact details before preparing the payload.");
+      announce(liveQuote
+        ? "Complete the required contact details before sending your request."
+        : "Complete the required contact details before preparing the payload.");
       return;
     }
+
+    if (liveQuote) {
+      const payload = buildQuotePayload();
+      const formData = new FormData(quoteForm);
+      const recommendation = payload.recommendation;
+      formData.set("company", state.contact.business || "");
+      formData.set("operation", payload.operationLabel);
+      formData.set("goods", payload.goods.map((id) => config.goods[id]?.label).filter(Boolean).join(", "));
+      formData.set("recommended_service_rhythm", recommendation?.rhythm || "");
+      formData.set("recommended_service_model", recommendation?.model || "");
+      formData.set("planning_weekly_range", recommendation?.weeklyRange
+        ? `${formatMoney(recommendation.weeklyRange[0])}-${formatMoney(recommendation.weeklyRange[1])}`
+        : "");
+      formData.set("pricing_journey", JSON.stringify(payload));
+
+      state.quoteStatus = "loading";
+      state.quotePayload = null;
+      render();
+      announce("Sending your program to Shelton for review.");
+
+      try {
+        const durableRequest = window.fetch(pricingEngine.apiUrl(pricingEngine.pricingRules.leadPath), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Idempotency-Key": state.leadIdempotencyKey
+          },
+          body: JSON.stringify({
+            estimateToken: state.estimateToken,
+            idempotencyKey: state.leadIdempotencyKey,
+            contact: {
+              businessName: state.contact.business || "",
+              contactName: state.contact.name || "",
+              email: state.contact.email || "",
+              phone: state.contact.phone || null,
+              preferredContact: state.contact.preferredContact || "email",
+              location: state.location.value,
+              notes: state.contact.notes || null
+            },
+            journeySnapshot: payload
+          })
+        });
+        const sendNotification = () => window.fetch(quoteForm.action, {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: formData
+        });
+        const notificationRequest = sendNotification().then((response) => response.ok ? response : sendNotification());
+        const [durable] = await Promise.allSettled([durableRequest, notificationRequest]);
+        const durableSaved = durable.status === "fulfilled" && durable.value.ok;
+        if (!durableSaved) throw new Error("Shelton review intake failed.");
+        window.sessionStorage.removeItem(config.storageKey);
+        window.location.assign(quoteForm.dataset.quoteSuccess || "thank-you.html");
+      } catch (error) {
+        state.quoteStatus = "failure";
+        render();
+        quoteStatus.focus?.({ preventScroll: true });
+        announce("We could not send your request. Your details remain available; please try again.");
+      }
+      return;
+    }
+
     state.quoteStatus = "loading";
     state.quotePayload = null;
     render();
-    announce("Preparing the development payload. No network request is being made.");
+    announce("Preparing the preview payload. No network request is being made.");
     window.setTimeout(() => {
       if (quoteMode === "fail") {
         state.quoteStatus = "failure";
         render();
-        announce("The development payload could not be prepared. Your answers remain available.");
+        announce("The preview payload could not be prepared. Your answers remain available.");
         return;
       }
       state.quotePayload = buildQuotePayload();
       state.quoteStatus = "ready";
       render();
       quoteStatus.focus?.({ preventScroll: true });
-      announce("Quote payload ready for endpoint integration. Nothing has been submitted.");
+      announce("Preview payload ready. Nothing has been submitted.");
     }, reducedMotion ? 80 : 650);
   };
 
@@ -1118,17 +1255,13 @@
   const startOver = () => {
     state = createInitialState();
     try {
-      window.sessionStorage.removeItem(storageKey);
+      window.sessionStorage.removeItem(config.storageKey);
     } catch (error) {
       // Clearing the in-memory state is sufficient when storage is unavailable.
     }
     render();
     const button = activePanel()?.querySelector("[data-begin-journey]");
-    if (inlineMode) {
-      activePanel()?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
-    } else {
-      window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
-    }
+    window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
     button?.focus({ preventScroll: true });
     announce(`${config.concepts[state.concept].label} restored. Your private selections were cleared.`);
   };
@@ -1177,6 +1310,14 @@
     control.setAttribute("aria-invalid", "false");
     control.closest(".adaptive-field")?.classList.remove("has-error");
     scaleError.hidden = true;
+    saveState();
+  });
+
+  rentalTierFields?.addEventListener("input", () => {
+    state.rentalTier = rentalTierInput.value || null;
+    state.rentalQuantity = rentalQuantityInput.value;
+    invalidateFrom("ownership");
+    ownershipError.hidden = true;
     saveState();
   });
 

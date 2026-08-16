@@ -5,15 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="assets/Shelton%20Brand%20Assets/brand/website/shelton-favicon.svg" type="image/svg+xml" />
   <title>Commercial Laundry Services | Shelton Linen &amp; Uniform Services</title>
-  <meta name="description" content="Explore Shelton commercial laundry services for linens, towels, uniforms, event goods, specialty cleaning, and wholesale partners across San Diego." />
-  <link rel="canonical" href="services.html" />
+  <meta name="description" content="Explore Shelton commercial laundry services for linens, towels, uniforms, event linens, and specialty cleaning across San Diego." />
+  <link rel="canonical" href="https://sheltonlinen.com/services.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Shelton Linen &amp; Uniform Services" />
+  <meta property="og:title" content="Commercial Laundry Services | Shelton Linen &amp; Uniform Services" />
+  <meta property="og:description" content="Explore commercial linen, towel, uniform, event linen, and specialty cleaning services for San Diego businesses." />
+  <meta property="og:url" content="https://sheltonlinen.com/services.html" />
+  <meta property="og:image" content="https://sheltonlinen.com/assets/images/history/shelton-cleaners-plant-portrait-web.jpeg" />
+  <meta property="og:image:alt" content="Shelton commercial laundry facility in San Diego" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Commercial Laundry Services | Shelton Linen &amp; Uniform Services" />
+  <meta name="twitter:description" content="Commercial linen, towel, uniform, event linen, and specialty cleaning services for San Diego businesses." />
+  <meta name="twitter:image" content="https://sheltonlinen.com/assets/images/history/shelton-cleaners-plant-portrait-web.jpeg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.2/src/regular/style.css" />
-  <link rel="stylesheet" href="assets/css/site.css" />
-  <link rel="stylesheet" href="assets/css/services-editorial.css?v=20260725-chapters4" />
-  <link rel="stylesheet" href="assets/css/header.css?v=20260723-logo-packet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3ynh0/SSNQphPFs4e1tFq6frJspKk=" crossorigin="" />
+  <link rel="stylesheet" href="assets/css/site.css?v=20260816-mobile-launch-v1" />
+  <link rel="stylesheet" href="assets/css/services-editorial.css?v=20260812-launch-responsive-v3" />
+  <link rel="stylesheet" href="assets/css/services-spine-refinement.css?v=20260812-launch-responsive-v2" />
+  <link rel="stylesheet" href="assets/css/services-chapters.css?v=20260816-mobile-launch-v2" />
+  <link rel="stylesheet" href="assets/css/services-standard.css?v=20260812-compact-centered-v5" />
+  <link rel="stylesheet" href="assets/css/services-route-map.css?v=20260812-launch-responsive-v6" />
+  <link rel="stylesheet" href="assets/css/header.css?v=20260816-mobile-launch-v1" />
+  <link rel="stylesheet" href="assets/css/services-final-polish.css?v=20260812-launch-hero-v19" />
 </head>
 <body class="services-experience-page" data-page="services">
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -27,7 +44,7 @@
       </button>
       <ul class="nav-links" id="primary-menu">
         <li><a href="index.html">Home</a></li>
-        <li><a class="is-active" href="services.html">Services</a></li>
+        <li><a class="is-active" href="services.html" aria-current="page">Services</a></li>
         <li><a href="industries.html">Who We Serve</a></li>
         <li><a href="pricing.html">Pricing</a></li>
         <li><a href="about.html">About</a></li>
@@ -40,168 +57,248 @@
     <section class="service-library-hero" aria-labelledby="services-hero-title">
       <div class="service-library-hero__stage">
         <div class="service-library-hero__copy service-reveal">
-          <h1 id="services-hero-title"><span>Build a service </span><span>from what </span><span>you use.</span></h1>
-          <p>Open a collection, choose your goods, and watch your program take shape.</p>
+          <h1 id="services-hero-title"><span>A higher standard</span><span>for every item.</span></h1>
+          <p>Explore professional cleaning and finishing for the goods your operation relies on, from everyday linens and towels to uniforms and specialty items.</p>
+          <div class="service-library-hero__actions">
+            <a class="service-library-hero__explore" href="#linens-bedding" data-start-services>
+              <span>Explore the five services</span>
+              <span class="service-library-hero__explore-icon" aria-hidden="true"><i class="ph ph-arrow-down"></i></span>
+            </a>
+          </div>
         </div>
 
-        <div class="service-library-hero__visual service-reveal" aria-label="Textile service library">
-          <img src="assets/images/generated/services-sample-library-hero-v2.png" alt="A tactile library of towel, linen, uniform, event, and specialty textile sample books" width="1536" height="1024" fetchpriority="high" />
-          <nav class="service-library-hero__index" aria-label="Jump to a service collection">
-            <p>Explore the collections</p>
-            <a href="#linens-bedding"><span>01</span>Linens &amp; Bedding<i class="ph ph-arrow-down" aria-hidden="true"></i></a>
-            <a href="#towels-wellness"><span>02</span>Towels &amp; Wellness<i class="ph ph-arrow-down" aria-hidden="true"></i></a>
-            <a href="#uniforms-chef-coats"><span>03</span>Uniforms &amp; Chef Coats<i class="ph ph-arrow-down" aria-hidden="true"></i></a>
-            <a href="#event-linens"><span>04</span>Event Linens<i class="ph ph-arrow-down" aria-hidden="true"></i></a>
-            <a href="#specialty-cleaning"><span>05</span>Specialty Cleaning<i class="ph ph-arrow-down" aria-hidden="true"></i></a>
-            <a href="#wholesale-support"><span>06</span>Wholesale Support<i class="ph ph-arrow-down" aria-hidden="true"></i></a>
-          </nav>
-        </div>
+        <figure class="service-library-hero__visual service-reveal">
+          <img src="assets/images/generated/services-hero-option2-textiles-v1.png" alt="Finished commercial linens, towels, chef coats, and navy workwear prepared in a laundry facility" width="1086" height="1448" fetchpriority="high" />
+        </figure>
       </div>
     </section>
 
     <div class="service-library-chapters" id="service-collections">
-      <section class="collection-explorer" id="linens-bedding" aria-labelledby="linens-bedding-title" data-service-chapter>
-        <div class="collection-explorer__inner services-shell">
-          <header class="collection-explorer__header service-reveal">
-            <div><p class="collection-explorer__name">Linens &amp; Bedding</p><h2 id="linens-bedding-title">Linens</h2></div>
-            <p>Collection<br /><strong>01</strong> / 06</p>
+      <span class="service-collection-rail__sentinel" data-rail-sentinel aria-hidden="true"></span>
+      <div class="service-collection-rail" data-collection-rail>
+        <nav class="service-library-hero__index" aria-label="Jump to a service collection" data-service-index>
+          <a href="#linens-bedding"><span>01</span><strong>Linens</strong></a>
+          <a href="#towels-wellness"><span>02</span><strong>Towels</strong></a>
+          <a href="#uniforms-chef-coats"><span>03</span><strong>Uniforms</strong></a>
+          <a href="#event-linens"><span>04</span><strong>Event Linens</strong></a>
+          <a href="#specialty-cleaning"><span>05</span><strong>Specialty</strong></a>
+        </nav>
+      </div>
+
+      <section class="shelton-cleaning-standard" id="cleaning-standard" aria-labelledby="cleaning-standard-title" data-cleaning-standard>
+        <div class="shelton-cleaning-standard__inner">
+          <header class="shelton-cleaning-standard__header service-reveal">
+            <p class="shelton-cleaning-standard__eyebrow">The Shelton Cleaning Standard</p>
+            <h2 id="cleaning-standard-title"><span>The difference</span><span>is built into every wash.</span></h2>
           </header>
-          <p class="collection-explorer__intro service-reveal">Flat goods receive a care path built around fabric, soil, presentation, and how your team stages clean inventory.</p>
-          <div class="collection-explorer__layout">
-            <figure class="collection-explorer__media service-reveal"><img class="is-linens" src="assets/images/hero-linen-stack.jpg" alt="Finished commercial linens stacked and ready for service" width="1672" height="941" /></figure>
-            <div class="collection-explorer__details service-reveal">
-              <details class="collection-row"><summary><i class="ph ph-users-three" aria-hidden="true"></i><span>Who it serves</span><span class="collection-row__summary collection-row__chips"><span>Hotels</span><span>Property</span><span>Restaurants</span><span>Hospitality</span></span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Built for hotels, boutique stays, property teams, restaurants, banquet operations, and other businesses with recurring flatwork.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-package" aria-hidden="true"></i><span>What you can send</span><span class="collection-row__summary">Sheets, pillowcases, duvet covers, blankets, table linen, and napkins.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Guest-room bedding, dining-room linen, banquet goods, and other presentation-sensitive flatwork can be grouped into an account-specific care plan.</p></div></details>
-              <details class="collection-row" open><summary><i class="ph ph-drop" aria-hidden="true"></i><span>How we clean</span><span class="collection-row__summary">Sorted for the fabric, soil, color, and finish ahead.</span><i class="ph ph-minus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body collection-row__body--process"><p>Washing and stain treatment are selected around the material, repeated use, and result required.</p><ol class="care-sequence" aria-label="Linens cleaning sequence"><li><i class="ph ph-arrows-down-up" aria-hidden="true"></i><strong>Separate</strong><p>By item, fabric, color, and account.</p></li><li><i class="ph ph-sparkle" aria-hidden="true"></i><strong>Spot</strong><p>Visible soil is identified for treatment.</p></li><li><i class="ph ph-waves" aria-hidden="true"></i><strong>Wash</strong><p>The process follows material and use.</p></li><li><i class="ph ph-check-circle" aria-hidden="true"></i><strong>Prepare</strong><p>Goods move to the correct finish.</p></li></ol></div></details>
-              <details class="collection-row"><summary><i class="ph ph-waves" aria-hidden="true"></i><span>How we finish</span><span class="collection-row__summary">Pressed, folded, or bundled for its next use.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Presentation goods can move through flatwork finishing, while blankets, duvet covers, and other pieces are folded or bundled to the agreed return standard.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-magnifying-glass" aria-hidden="true"></i><span>How we inspect</span><span class="collection-row__summary">Spots, finish quality, condition, and sorting are reviewed.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>The visible result is checked with account instructions, including remaining spots, finish consistency, item condition, sorting accuracy, and readiness for return.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-truck" aria-hidden="true"></i><span>How it returns</span><span class="collection-row__summary">Pressed or folded, bundled, labeled, or cart-ready.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Clean linens can be organized by item, property, department, or storage method and returned in bundles, bags, or linen carts where appropriate.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-warning-circle" aria-hidden="true"></i><span>What requires review</span><span class="collection-row__summary">Delicate construction, heavy staining, damage, or unusual materials.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Specialty fibers, decorative details, unknown care requirements, mold-affected goods, existing damage, and unusual restoration needs should be reviewed first.</p></div></details>
-              <div class="collection-explorer__actions"><a class="services-text-link services-text-link--light" href="#services-hero-title">Back to collections <span aria-hidden="true">↑</span></a><a class="services-button services-button--gold" href="quote.html?service=linens">Discuss linens &amp; bedding <i class="ph ph-arrow-right" aria-hidden="true"></i></a></div>
+
+          <div class="shelton-cleaning-standard__selector service-reveal" role="tablist" aria-label="Explore the four parts of the Shelton Cleaning Standard">
+            <button class="shelton-cleaning-standard__tab is-active" id="cleaning-standard-tab-chemistry" type="button" role="tab" aria-selected="true" aria-controls="cleaning-standard-panel-chemistry" tabindex="0" data-standard-tab="chemistry">
+              <span class="shelton-cleaning-standard__node"><i class="ph ph-flask" aria-hidden="true"></i></span>
+              <span class="shelton-cleaning-standard__label">Professional Chemistry</span>
+            </button>
+            <button class="shelton-cleaning-standard__tab" id="cleaning-standard-tab-temperature" type="button" role="tab" aria-selected="false" aria-controls="cleaning-standard-panel-temperature" tabindex="-1" data-standard-tab="temperature">
+              <span class="shelton-cleaning-standard__node"><i class="ph ph-thermometer-hot" aria-hidden="true"></i></span>
+              <span class="shelton-cleaning-standard__label">Time &amp; Temperature</span>
+            </button>
+            <button class="shelton-cleaning-standard__tab" id="cleaning-standard-tab-protection" type="button" role="tab" aria-selected="false" aria-controls="cleaning-standard-panel-protection" tabindex="-1" data-standard-tab="protection">
+              <span class="shelton-cleaning-standard__node"><i class="ph ph-shield-check" aria-hidden="true"></i></span>
+              <span class="shelton-cleaning-standard__label">Fabric Protection</span>
+            </button>
+            <button class="shelton-cleaning-standard__tab" id="cleaning-standard-tab-equipment" type="button" role="tab" aria-selected="false" aria-controls="cleaning-standard-panel-equipment" tabindex="-1" data-standard-tab="equipment">
+              <span class="shelton-cleaning-standard__node"><i class="ph ph-gear-six" aria-hidden="true"></i></span>
+              <span class="shelton-cleaning-standard__label">Precision Equipment</span>
+            </button>
+          </div>
+
+          <div class="shelton-cleaning-standard__details service-reveal">
+            <article class="shelton-cleaning-standard__panel is-active" id="cleaning-standard-panel-chemistry" role="tabpanel" aria-labelledby="cleaning-standard-tab-chemistry" data-standard-panel="chemistry">
+              <i class="ph ph-flask shelton-cleaning-standard__detail-icon" aria-hidden="true"></i>
+              <div class="shelton-cleaning-standard__copy">
+                <p class="shelton-cleaning-standard__count">01 / 04</p>
+                <h3>Professional Chemistry</h3>
+                <p>Shelton chose Seitz professional chemistry because it represents the highest standard in textile care. Developed in Germany, its highly concentrated formulas are used throughout every laundry and dry-cleaning program and precisely measured for each load. The result is the strength and control needed to remove oils, makeup, and difficult residues while protecting the textile.</p>
+              </div>
+              <ul class="shelton-cleaning-standard__proofs">
+                <li><i class="ph ph-check" aria-hidden="true"></i><span>The highest standard in professional chemistry</span></li>
+                <li><i class="ph ph-check" aria-hidden="true"></i><span>Exceptional cleaning performance</span></li>
+                <li><i class="ph ph-check" aria-hidden="true"></i><span>Longer textile service life</span></li>
+              </ul>
+            </article>
+
+            <article class="shelton-cleaning-standard__panel" id="cleaning-standard-panel-temperature" role="tabpanel" aria-labelledby="cleaning-standard-tab-temperature" data-standard-panel="temperature" hidden>
+              <i class="ph ph-thermometer-hot shelton-cleaning-standard__detail-icon" aria-hidden="true"></i>
+              <div class="shelton-cleaning-standard__copy">
+                <p class="shelton-cleaning-standard__count">02 / 04</p>
+                <h3>Time &amp; Temperature</h3>
+                <p>Commercial cleaning requires more than warm water. Shelton’s industrial water heaters reach and hold 177°F, allowing sheets and towels to be washed at 160°F. Combined with the correct cycle time, chemistry, and mechanical action, that sustained temperature sanitizes textiles, improves the removal of oils and residue, and delivers a deeper clean without harming the fabric.</p>
+              </div>
+              <ul class="shelton-cleaning-standard__proofs">
+                <li><i class="ph ph-check" aria-hidden="true"></i><span>Sanitization built into the process</span></li>
+                <li><i class="ph ph-check" aria-hidden="true"></i><span>Deeper cleaning without compromising fabric quality</span></li>
+                <li><i class="ph ph-check" aria-hidden="true"></i><span>Sheets and towels washed at 160°F</span></li>
+              </ul>
+            </article>
+
+            <article class="shelton-cleaning-standard__panel" id="cleaning-standard-panel-protection" role="tabpanel" aria-labelledby="cleaning-standard-tab-protection" data-standard-panel="protection" hidden>
+              <i class="ph ph-shield-check shelton-cleaning-standard__detail-icon" aria-hidden="true"></i>
+              <div class="shelton-cleaning-standard__copy">
+                <p class="shelton-cleaning-standard__count">03 / 04</p>
+                <h3>Fabric Protection</h3>
+                <p>Whiter should not mean weaker. Shelton never uses chlorine bleach as it weakens fibers and shortens textile life. Instead, we use oxygen bleach to sanitize, brighten, and break down difficult residues while remaining color safe and gentler on fabric. The result is cleaner textiles that retain their strength and appearance through repeated service.</p>
+              </div>
+              <ul class="shelton-cleaning-standard__proofs">
+                <li><i class="ph ph-check" aria-hidden="true"></i><span>Never chlorine bleach</span></li>
+                <li><i class="ph ph-check" aria-hidden="true"></i><span>Color safe oxygen bleach</span></li>
+                <li><i class="ph ph-check" aria-hidden="true"></i><span>Longer fabric service life</span></li>
+              </ul>
+            </article>
+
+            <article class="shelton-cleaning-standard__panel" id="cleaning-standard-panel-equipment" role="tabpanel" aria-labelledby="cleaning-standard-tab-equipment" data-standard-panel="equipment" hidden>
+              <i class="ph ph-gear-six shelton-cleaning-standard__detail-icon" aria-hidden="true"></i>
+              <div class="shelton-cleaning-standard__copy">
+                <p class="shelton-cleaning-standard__count">04 / 04</p>
+                <h3>Precision Equipment</h3>
+                <p>Precision carries through the entire production floor. Yamamoto high-speed, soft-mount washer-extractors provide programmable control over every wash formula. The Girbau FTQ towel folder produces consistent folds, while the Girbau Compact PRO ironer feeds, dries, irons, folds, and stacks flat linens through one controlled system. Our Girbau X20 flatwork ironer delivers consistent, professional finishing for event linens and delicate textiles. Together, this equipment gives Shelton control from the first wash step through final presentation.</p>
+              </div>
+              <ul class="shelton-cleaning-standard__proofs">
+                <li><i class="ph ph-check" aria-hidden="true"></i><span>Precision from first wash to final presentation</span></li>
+                <li><i class="ph ph-check" aria-hidden="true"></i><span>Programmable control for every wash formula</span></li>
+                <li><i class="ph ph-check" aria-hidden="true"></i><span>Consistent pressing, folding, and stacking</span></li>
+              </ul>
+            </article>
+          </div>
+
+          <p class="shelton-cleaning-standard__formula service-reveal">Professional Chemistry <span aria-hidden="true">+</span> Time &amp; Temperature <span aria-hidden="true">+</span> Fabric Protection <span aria-hidden="true">+</span> Precision Equipment</p>
+        </div>
+      </section>
+
+      <section class="service-chapter service-chapter--light service-chapter--image-left service-chapter--linens" id="linens-bedding" aria-labelledby="linens-bedding-title" data-service-chapter>
+        <div class="service-chapter__frame">
+          <figure class="service-chapter__media service-reveal"><img src="assets/images/hero-linen-stack.jpg" alt="Finished commercial linens stacked and ready for service" width="1672" height="941" loading="lazy" decoding="async" /></figure>
+          <div class="service-chapter__content">
+            <header class="service-chapter__header service-reveal"><h2 id="linens-bedding-title">Linens</h2><p>Professional cleaning and finishing for guest-room bedding, dining linens, and other commercial textiles. Each program combines consistent cleaning standards with high-quality pressing, folding, and organization to maintain presentation, protect linen quality, and support a longer service life.</p></header>
+            <div class="service-chapter__disclosures service-reveal">
+              <details class="service-disclosure"><summary><i class="ph ph-users-three" aria-hidden="true"></i><span class="service-disclosure__label">Who it serves</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>For hotels, restaurants, venues, and managed properties that need dependable recurring linen service. Each program is shaped around inventory levels, storage, service frequency, and the presentation standards your guests and customers expect.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-package" aria-hidden="true"></i><span class="service-disclosure__label">What you can send</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Programs can include sheets, pillowcases, duvet covers, tablecloths, napkins, runners, and other commercial linens. During setup, Shelton reviews material, color, construction, and volume so each item receives the appropriate cleaning and finishing process.</p></div></details>
+              <details class="service-disclosure" open data-primary-detail><summary><i class="ph ph-drop" aria-hidden="true"></i><span class="service-disclosure__label">How we clean</span><i class="ph ph-minus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Linens are separated by item type, color, fabric, and use so bedding and dining goods receive the process best suited to them. Each load follows a purpose-built formula using Seitz professional chemistry, with controlled water levels, cycle time, and temperature. Programs for spas and wellness facilities use formulas designed to remove massage oils, lotions, and body oils from sheets and treatment linens. Wash temperatures reach 160°F, with chemistry, time, and mechanical action controlled as part of the complete cleaning process. Shelton never uses chlorine bleach; oxygen-based bleach is used when appropriate to support cleaning and brightness while protecting fiber quality through repeated service.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-sparkle" aria-hidden="true"></i><span class="service-disclosure__label">How we finish</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body service-disclosure__body--flow"><p>Sheets and table linens are professionally pressed, folded to a consistent size, and inspected during finishing. Clean goods are then sorted and organized around your operation’s storage and distribution needs.</p><ol class="service-care-flow" aria-label="Linens finishing sequence"><li><i class="ph ph-magnifying-glass" aria-hidden="true"></i><strong>Inspect</strong><p>Cleanliness and condition are checked.</p></li><li><i class="ph ph-waves" aria-hidden="true"></i><strong>Press</strong><p>Sheets and table linens are professionally pressed.</p></li><li><i class="ph ph-stack" aria-hidden="true"></i><strong>Fold</strong><p>Set to a consistent size and format.</p></li><li><i class="ph ph-check-circle" aria-hidden="true"></i><strong>Organize</strong><p>Sorted around your operation’s needs.</p></li></ol></div></details>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="collection-explorer" id="towels-wellness" aria-labelledby="towels-wellness-title" data-service-chapter>
-        <div class="collection-explorer__inner services-shell">
-          <header class="collection-explorer__header service-reveal"><div><p class="collection-explorer__name">Towels &amp; Wellness</p><h2 id="towels-wellness-title">Towels</h2></div><p>Collection<br /><strong>02</strong> / 06</p></header>
-          <p class="collection-explorer__intro service-reveal">High-use soft goods are processed around soil, odor, feel, repeat use, and a return format that is easy to restock.</p>
-          <div class="collection-explorer__layout">
-            <figure class="collection-explorer__media service-reveal"><img class="is-towels" src="assets/images/generated/services-towels-editorial-v1.png" alt="Finished towels arranged for a hospitality and wellness account" width="1200" height="1200" /></figure>
-            <div class="collection-explorer__details service-reveal">
-              <details class="collection-row"><summary><i class="ph ph-users-three" aria-hidden="true"></i><span>Who it serves</span><span class="collection-row__summary collection-row__chips"><span>Hotels</span><span>Wellness</span><span>Fitness</span><span>Hospitality</span></span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Designed for hotels, spas, massage and wellness practices, gyms, fitness studios, pools, and other operations with recurring towel demand.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-package" aria-hidden="true"></i><span>What you can send</span><span class="collection-row__summary">Bath, hand, workout, pool, and treatment towels, plus robes and mats.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Bath towels, hand towels, washcloths, workout towels, pool goods, treatment-room textiles, bath mats, robes, and face-cradle covers can be planned together.</p></div></details>
-              <details class="collection-row" open><summary><i class="ph ph-drop" aria-hidden="true"></i><span>How we clean</span><span class="collection-row__summary">Processed for use pattern, soil, odor, color, and material.</span><i class="ph ph-minus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body collection-row__body--process"><p>The cleaning path is selected around repeated use, odor and soil conditions, and material needs.</p><ol class="care-sequence" aria-label="Towels cleaning sequence"><li><i class="ph ph-arrows-down-up" aria-hidden="true"></i><strong>Separate</strong><p>By item, color, soil, and account.</p></li><li><i class="ph ph-sparkle" aria-hidden="true"></i><strong>Treat</strong><p>Use patterns guide soil treatment.</p></li><li><i class="ph ph-waves" aria-hidden="true"></i><strong>Clean</strong><p>The process follows fiber and condition.</p></li><li><i class="ph ph-wind" aria-hidden="true"></i><strong>Condition</strong><p>Prepared for consistent finishing.</p></li></ol></div></details>
-              <details class="collection-row"><summary><i class="ph ph-waves" aria-hidden="true"></i><span>How we finish</span><span class="collection-row__summary">Consistently dried, folded, bundled, or hung.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Towels are finished for a repeatable fold and compact storage. Robes can return folded or hanging, and treatment sheets can be pressed where selected.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-magnifying-glass" aria-hidden="true"></i><span>How we inspect</span><span class="collection-row__summary">Cleanliness, remaining spots, condition, and fold are checked.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Finished goods are reviewed for the visible result, remaining soil or spots, item condition, sorting accuracy, and consistency with the return instructions.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-truck" aria-hidden="true"></i><span>How it returns</span><span class="collection-row__summary">Shelf-ready, cart-ready, bundled, or bagged by item.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Goods can be grouped by type, treatment room, department, or storage setup so the team can restock without re-sorting the delivery.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-warning-circle" aria-hidden="true"></i><span>What requires review</span><span class="collection-row__summary">Oils, specialty fabrics, damage, mold, and unusual spa goods.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Heavily oil-affected pieces, specialty wraps, heat-sensitive materials, mold-affected goods, existing damage, and nonstandard treatment textiles require review.</p></div></details>
-              <div class="collection-explorer__actions"><a class="services-text-link services-text-link--light" href="#services-hero-title">Back to collections <span aria-hidden="true">↑</span></a><a class="services-button services-button--gold" href="quote.html?service=towels">Discuss towels &amp; wellness <i class="ph ph-arrow-right" aria-hidden="true"></i></a></div>
+      <section class="service-chapter service-chapter--dark service-chapter--image-right service-chapter--towels" id="towels-wellness" aria-labelledby="towels-wellness-title" data-service-chapter>
+        <div class="service-chapter__frame">
+          <figure class="service-chapter__media service-reveal"><img src="assets/images/generated/services-towels-dark-library-v2.png" alt="Finished white towels arranged on a dark stone counter in a linen room" width="1024" height="1536" loading="lazy" /></figure>
+          <div class="service-chapter__content">
+            <header class="service-chapter__header service-reveal"><h2 id="towels-wellness-title">Towels</h2><p>Professional cleaning, conditioning, and finishing for towels used throughout hotels, spas, fitness facilities, pools, and other high-volume operations. Each program is designed to maintain consistent cleanliness, softness, absorbency, and presentation through repeated use.</p></header>
+            <div class="service-chapter__disclosures service-reveal">
+              <details class="service-disclosure"><summary><i class="ph ph-users-three" aria-hidden="true"></i><span class="service-disclosure__label">Who it serves</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>For hotels, spas, massage practices, wellness facilities, fitness centers, pools, and other operations with steady towel circulation. Programs are shaped around daily volume, towel types, storage capacity, and restocking patterns so clean inventory stays available through treatment schedules, classes, and peak-use periods.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-package" aria-hidden="true"></i><span class="service-disclosure__label">What you can send</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Bath towels, hand towels, washcloths, workout towels, pool towels, bath mats, robes, face-cradle covers, and other textiles. During setup, Shelton reviews material, color, weight, and use so each item receives the appropriate cleaning, conditioning, and finishing process.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-drop" aria-hidden="true"></i><span class="service-disclosure__label">How we clean</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Towels are cleaned with purpose-built formulas using Seitz professional chemistry, controlled water levels, cycle time, and temperatures reaching 160°F. These formulas are designed to remove massage oils, lotions, body oils, makeup, and odor from towels and treatment textiles. Shelton never uses chlorine bleach. Oxygen-based bleach is used to sanitize, clean, and retain brightness while protecting towel quality and absorbency.</p></div></details>
+              <details class="service-disclosure" open data-primary-detail><summary><i class="ph ph-feather" aria-hidden="true"></i><span class="service-disclosure__label">Softness &amp; Conditioning</span><i class="ph ph-minus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Towel programs include measured conditioning within the wash cycle to improve softness and feel after drying. Conditioner levels are set around towel type and use so goods return soft and comfortable without compromising the absorbency needed in daily service.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-sparkle" aria-hidden="true"></i><span class="service-disclosure__label">How we finish</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Towels return soft and pass through our Girbau FTQ towel folder, which automatically detects towel size and produces a precise, repeatable fold across high-volume programs. Finished towels are inspected, bundled, and organized by type, department, or storage location for straightforward restocking. Robes and other specialty items can be folded or hung according to the program.</p></div></details>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="collection-explorer" id="uniforms-chef-coats" aria-labelledby="uniforms-chef-coats-title" data-service-chapter>
-        <div class="collection-explorer__inner services-shell">
-          <header class="collection-explorer__header service-reveal"><div><p class="collection-explorer__name">Uniforms &amp; Chef Coats</p><h2 id="uniforms-chef-coats-title">Uniforms</h2></div><p>Collection<br /><strong>03</strong> / 06</p></header>
-          <p class="collection-explorer__intro service-reveal">Repeated-wear garments need cleaning, finishing, and organization that support both the work and the people wearing them.</p>
-          <div class="collection-explorer__layout">
-            <figure class="collection-explorer__media service-reveal"><img class="is-uniforms" src="assets/images/industry-uniform.jpg" alt="Commercial uniforms prepared for recurring service" width="1672" height="941" /></figure>
-            <div class="collection-explorer__details service-reveal">
-              <details class="collection-row"><summary><i class="ph ph-users-three" aria-hidden="true"></i><span>Who it serves</span><span class="collection-row__summary collection-row__chips"><span>Restaurants</span><span>Hospitality</span><span>Property</span><span>Uniform Accounts</span></span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Built for restaurants, caterers, hotels, casinos, property teams, service departments, and other businesses with recurring staff garments.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-package" aria-hidden="true"></i><span>What you can send</span><span class="collection-row__summary">Chef coats, aprons, uniform shirts, trousers, jackets, and workwear.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Kitchen garments, branded uniforms, service shirts, trousers, jackets, aprons, and practical workwear can be organized around roles, departments, or locations.</p></div></details>
-              <details class="collection-row" open><summary><i class="ph ph-drop" aria-hidden="true"></i><span>How we clean</span><span class="collection-row__summary">Garment-aware care for food soil, grease, repeated wear, and presentation.</span><i class="ph ph-minus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body collection-row__body--process"><p>Commercial laundering, wet cleaning, dry cleaning, or specialty care is selected according to the garment and its use.</p><ol class="care-sequence" aria-label="Uniforms cleaning sequence"><li><i class="ph ph-magnifying-glass" aria-hidden="true"></i><strong>Review</strong><p>Fabric, construction, soil, and finish.</p></li><li><i class="ph ph-sparkle" aria-hidden="true"></i><strong>Treat</strong><p>Visible food and work soil is addressed.</p></li><li><i class="ph ph-waves" aria-hidden="true"></i><strong>Clean</strong><p>The method follows the garment.</p></li><li><i class="ph ph-shirt-folded" aria-hidden="true"></i><strong>Prepare</strong><p>Sorted for pressing or folding.</p></li></ol></div></details>
-              <details class="collection-row"><summary><i class="ph ph-waves" aria-hidden="true"></i><span>How we finish</span><span class="collection-row__summary">Pressed, steamed, hung, folded, or protected as appropriate.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>The finish follows the garment and how the team stores or distributes it. Shirts and chef coats can be pressed and hung while other workwear may return folded.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-magnifying-glass" aria-hidden="true"></i><span>How we inspect</span><span class="collection-row__summary">Spots, pressing, garment condition, and organization are reviewed.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Inspection checks remaining spots, finish quality, visible garment condition, correct sorting, and whether pieces are ready for the next handoff.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-truck" aria-hidden="true"></i><span>How it returns</span><span class="collection-row__summary">Hung or folded, protected, and organized for the team.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Garments can be separated by department, role, location, or account preference and returned on protected hangers, folded, or bundled.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-warning-circle" aria-hidden="true"></i><span>What requires review</span><span class="collection-row__summary">Specialty trims, coatings, damage, contamination, or tracking needs.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Unusual construction, specialty finishes, delicate trims, existing damage, nonstandard contamination, and individually assigned garment requirements need review.</p></div></details>
-              <div class="collection-explorer__actions"><a class="services-text-link services-text-link--light" href="#services-hero-title">Back to collections <span aria-hidden="true">↑</span></a><a class="services-button services-button--gold" href="quote.html?service=uniforms">Discuss uniforms &amp; chef coats <i class="ph ph-arrow-right" aria-hidden="true"></i></a></div>
+      <section class="service-chapter service-chapter--light service-chapter--image-left service-chapter--uniforms" id="uniforms-chef-coats" aria-labelledby="uniforms-chef-coats-title" data-service-chapter>
+        <div class="service-chapter__frame">
+          <figure class="service-chapter__media service-reveal"><img src="assets/images/industry-uniform.jpg" alt="Commercial uniforms and chef coats prepared for recurring service" width="1672" height="941" loading="lazy" decoding="async" /></figure>
+          <div class="service-chapter__content">
+            <header class="service-chapter__header service-reveal"><h2 id="uniforms-chef-coats-title">Uniforms</h2><p>High-quality cleaning and professional finishing for chef coats, kitchen garments, service uniforms, and commercial workwear. Each program is designed to maintain consistent cleanliness and a sharp, professional appearance while protecting garment quality through repeated use.</p></header>
+            <div class="service-chapter__disclosures service-reveal">
+              <details class="service-disclosure"><summary><i class="ph ph-users-three" aria-hidden="true"></i><span class="service-disclosure__label">Who it serves</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>For restaurants, hotels, casinos, catering teams, property operations, and other businesses that rely on clean, professional staff garments. Programs are shaped around garment types, team size, department, service frequency, and whether pieces are shared or assigned to individual employees.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-package" aria-hidden="true"></i><span class="service-disclosure__label">What you can send</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Chef coats, kitchen shirts, aprons, trousers, service jackets, branded shirts, front-of-house uniforms, and other commercial workwear. During setup, Shelton reviews fabric, color, construction, trim, branding, and use so each garment receives the appropriate cleaning and finishing process.</p></div></details>
+              <details class="service-disclosure" open data-primary-detail><summary><i class="ph ph-chef-hat" aria-hidden="true"></i><span class="service-disclosure__label">Chef Coats &amp; Kitchen Garments</span><i class="ph ph-minus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Shelton gives chef coats the high-quality commercial cleaning and professional finishing they need to look sharp through repeated use. Each coat is properly cleaned and pressed, helping your kitchen maintain a consistent, professional appearance and ensuring garments look new on the 500th use. The same standard applies to aprons, kitchen shirts, trousers, and other back-of-house garments.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-drop" aria-hidden="true"></i><span class="service-disclosure__label">How we clean</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Uniforms are cleaned with purpose-built formulas using Seitz professional chemistry, controlled water levels, cycle time, and temperature. Kitchen garments receive formulas designed to remove food, grease, cooking oils, and perspiration while protecting fabric, color, trim, and branding. Shelton never uses chlorine bleach. Oxygen-based bleach is used when appropriate to support sanitation, cleaning, and brightness while protecting garment quality through repeated use.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-sparkle" aria-hidden="true"></i><span class="service-disclosure__label">How we finish</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Chef coats, service jackets, shirts, and other garments are professionally pressed, placed on hangers, and protected for return. Each item is inspected and organized based on your needs.</p></div></details>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="collection-explorer" id="event-linens" aria-labelledby="event-linens-title" data-service-chapter>
-        <div class="collection-explorer__inner services-shell">
-          <header class="collection-explorer__header service-reveal"><div><p class="collection-explorer__name">Event Linens</p><h2 id="event-linens-title">Events</h2></div><p>Collection<br /><strong>04</strong> / 06</p></header>
-          <p class="collection-explorer__intro service-reveal">Event goods are handled around color, fabric, staining, presentation, and the date they need to be ready again.</p>
-          <div class="collection-explorer__layout">
-            <figure class="collection-explorer__media service-reveal"><img class="is-events" src="assets/images/industry-event.jpg" alt="Event linens prepared for presentation" width="1672" height="941" /></figure>
-            <div class="collection-explorer__details service-reveal">
-              <details class="collection-row"><summary><i class="ph ph-users-three" aria-hidden="true"></i><span>Who it serves</span><span class="collection-row__summary collection-row__chips"><span>Events</span><span>Venues</span><span>Catering</span><span>Rental Houses</span></span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Designed for event companies, rental houses, caterers, hotels, venues, convention centers, and production teams managing presentation goods.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-package" aria-hidden="true"></i><span>What you can send</span><span class="collection-row__summary">Tablecloths, napkins, runners, skirting, chair covers, and specialty pieces.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Recurring banquet linen, colored table goods, fitted pieces, large-format skirting, and other presentation-sensitive event textiles can be handled by batch.</p></div></details>
-              <details class="collection-row" open><summary><i class="ph ph-drop" aria-hidden="true"></i><span>How we clean</span><span class="collection-row__summary">Sorted by event, item, fabric, color, stain, and condition.</span><i class="ph ph-minus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body collection-row__body--process"><p>Goods are separated before treatment so fabric, color, soil, and finish can shape the cleaning path.</p><ol class="care-sequence" aria-label="Event linen cleaning sequence"><li><i class="ph ph-stack" aria-hidden="true"></i><strong>Batch</strong><p>Kept together by order or account.</p></li><li><i class="ph ph-sparkle" aria-hidden="true"></i><strong>Treat</strong><p>Staining is reviewed before cleaning.</p></li><li><i class="ph ph-waves" aria-hidden="true"></i><strong>Clean</strong><p>Material and color shape the process.</p></li><li><i class="ph ph-check-circle" aria-hidden="true"></i><strong>Protect</strong><p>Prepared for the selected finish.</p></li></ol></div></details>
-              <details class="collection-row"><summary><i class="ph ph-waves" aria-hidden="true"></i><span>How we finish</span><span class="collection-row__summary">Pressed, hung, or folded for staging and presentation.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>The finish is selected by item and next use. Table goods may be pressed and folded while fitted or specialty pieces may be hung or prepared differently.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-magnifying-glass" aria-hidden="true"></i><span>How we inspect</span><span class="collection-row__summary">Remaining spots, finish, condition, and batch accuracy are checked.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Inspection covers the visible result, presentation finish, existing condition, item separation, and whether each batch matches the established instructions.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-truck" aria-hidden="true"></i><span>How it returns</span><span class="collection-row__summary">Sorted by item, event, order, or storage method.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Finished goods can return folded, hung, bundled, or packaged by item type or production batch when those requirements are established in advance.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-warning-circle" aria-hidden="true"></i><span>What requires review</span><span class="collection-row__summary">Mold, wax, adhesives, dye transfer, delicate details, and rush dates.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Mold-affected goods, unusual staining, wax or adhesive residue, color transfer, specialty construction, existing damage, and production deadlines require review.</p></div></details>
-              <div class="collection-explorer__actions"><a class="services-text-link services-text-link--light" href="#services-hero-title">Back to collections <span aria-hidden="true">↑</span></a><a class="services-button services-button--gold" href="quote.html?service=event">Discuss event linens <i class="ph ph-arrow-right" aria-hidden="true"></i></a></div>
+      <section class="service-chapter service-chapter--dark service-chapter--image-right service-chapter--events" id="event-linens" aria-labelledby="event-linens-title" data-service-chapter>
+        <div class="service-chapter__frame">
+          <figure class="service-chapter__media service-reveal"><img src="assets/images/industry-event.jpg" alt="Event linens prepared for presentation" width="1672" height="941" loading="lazy" decoding="async" /></figure>
+          <div class="service-chapter__content">
+            <header class="service-chapter__header service-reveal"><h2 id="event-linens-title">Event Linens</h2><p>Cleaning and professional finishing for event companies, venues, convention centers, and planners working with presentation goods, colored linens, and tight turnaround windows. Each program is shaped around fabric, color, batch size, finishing needs, and the date each order is required.</p></header>
+            <div class="service-chapter__disclosures service-reveal">
+              <details class="service-disclosure"><summary><i class="ph ph-users-three" aria-hidden="true"></i><span class="service-disclosure__label">Who it serves</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>For event rental companies, caterers, hotels, venues, convention centers, banquet teams, and production partners managing changing orders and fixed deadlines. Programs can accommodate recurring service, seasonal volume, and event-driven production schedules while keeping goods organized by account or batch.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-package" aria-hidden="true"></i><span class="service-disclosure__label">What you can send</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Tablecloths, napkins, runners, skirting, chair covers, fitted pieces, banquet linens, and other specialty event goods. During setup, Shelton reviews fabric, color, construction, batch size, and turnaround needs so each item receives the appropriate cleaning and finishing process.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-palette" aria-hidden="true"></i><span class="service-disclosure__label">Color Care &amp; Cleaning</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Colored event linens are cleaned with Seitz formulas at controlled low pH levels to minimize fading and color loss through repeated use. New linens can receive a color-locking cycle during their first cleaning to help stabilize dyes and keep matching inventory visually consistent for longer. Water levels, cycle time, temperature, and chemistry are tailored to protect the color, appearance, and presentation your clients expect.</p></div></details>
+              <details class="service-disclosure" open data-primary-detail><summary><i class="ph ph-flask" aria-hidden="true"></i><span class="service-disclosure__label">Mold Removal</span><i class="ph ph-minus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Mold affected event linens do not need to be replaced, even on colored items! Shelton uses specialized chemistry and controlled processing to target mold and related discoloration while protecting fabric and color. Recovering affected goods can reduce unnecessary replacement and extend the useful life of your inventory.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-sparkle" aria-hidden="true"></i><span class="service-disclosure__label">How we finish</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Event tablecloths are professionally pressed and hung to prevent fold lines and unnecessary creasing. Napkins are pressed, laid flat, and stacked to maintain a clean, consistent presentation. Runners, skirting, chair covers, fitted pieces, and other specialty goods are folded or hung according to their construction and use. Finished items are inspected and organized by item type or production batch for straightforward staging.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-warning-circle" aria-hidden="true"></i><span class="service-disclosure__label">What requires review</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Items with wax, adhesives, paint, color transfer, existing damage, or specialty construction require review before service. Rush turnaround requests should also be confirmed in advance so cleaning, finishing, and completion timing can be planned around the event date.</p></div></details>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="collection-explorer" id="specialty-cleaning" aria-labelledby="specialty-cleaning-title" data-service-chapter>
-        <div class="collection-explorer__inner services-shell">
-          <header class="collection-explorer__header service-reveal"><div><p class="collection-explorer__name">Specialty Cleaning</p><h2 class="is-long" id="specialty-cleaning-title">Specialty</h2></div><p>Collection<br /><strong>05</strong> / 06</p></header>
-          <p class="collection-explorer__intro service-reveal">When a piece does not fit a standard laundry program, the service begins with its material, construction, condition, and intended use.</p>
-          <div class="collection-explorer__layout">
-            <figure class="collection-explorer__media service-reveal"><img class="is-specialty" src="assets/images/hero-editorial-textiles.jpg" alt="A broad range of commercial textiles for specialty review" width="1672" height="941" /></figure>
-            <div class="collection-explorer__details service-reveal">
-              <details class="collection-row"><summary><i class="ph ph-users-three" aria-hidden="true"></i><span>Who it serves</span><span class="collection-row__summary collection-row__chips"><span>Theaters</span><span>Worship</span><span>Events</span><span>Specialty Accounts</span></span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Relevant for theaters, houses of worship, clubs, event teams, hospitality groups, and commercial accounts with unique fabric or presentation needs.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-package" aria-hidden="true"></i><span>What you can send</span><span class="collection-row__summary">Costumes, choir robes, ceremonial garments, colored linen, and unique pieces.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Specialty garments, performance goods, choir robes, decorative textiles, colored presentation pieces, and other nonstandard commercial goods can be submitted for review.</p></div></details>
-              <details class="collection-row" open><summary><i class="ph ph-drop" aria-hidden="true"></i><span>How we clean</span><span class="collection-row__summary">The treatment path is selected item by item or by compatible batch.</span><i class="ph ph-minus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body collection-row__body--process"><p>Commercial washing, wet cleaning, dry cleaning, or another specialty path is selected only after the item is reviewed.</p><ol class="care-sequence" aria-label="Specialty cleaning sequence"><li><i class="ph ph-magnifying-glass" aria-hidden="true"></i><strong>Assess</strong><p>Material, construction, and condition.</p></li><li><i class="ph ph-flask" aria-hidden="true"></i><strong>Plan</strong><p>A compatible treatment is selected.</p></li><li><i class="ph ph-sparkle" aria-hidden="true"></i><strong>Treat</strong><p>Work follows the agreed care path.</p></li><li><i class="ph ph-check-circle" aria-hidden="true"></i><strong>Review</strong><p>The visible result is inspected.</p></li></ol></div></details>
-              <details class="collection-row"><summary><i class="ph ph-waves" aria-hidden="true"></i><span>How we finish</span><span class="collection-row__summary">Pressed, steamed, hung, folded, or shaped around the item.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Finishing is adapted to the construction and presentation requirement rather than forcing every specialty piece through the same return standard.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-magnifying-glass" aria-hidden="true"></i><span>How we inspect</span><span class="collection-row__summary">Visible results, shape, finish, condition, and instructions are checked.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>The final review considers remaining spots, finish quality, visible components and trim, sorting, and readiness for the piece’s intended use.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-truck" aria-hidden="true"></i><span>How it returns</span><span class="collection-row__summary">Protected and grouped according to the agreed handling plan.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Goods can return hanging, folded, packaged, labeled, or separated by performance, service, event, or account-level batch.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-warning-circle" aria-hidden="true"></i><span>What requires review</span><span class="collection-row__summary">Every nonstandard item is evaluated before its care path is confirmed.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Care labels, fabric, age, construction, trim, existing damage, mold or contamination, and the requested outcome affect eligibility. Not every result can be accepted or promised.</p></div></details>
-              <div class="collection-explorer__actions"><a class="services-text-link services-text-link--light" href="#services-hero-title">Back to collections <span aria-hidden="true">↑</span></a><a class="services-button services-button--gold" href="quote.html?service=specialty">Discuss specialty cleaning <i class="ph ph-arrow-right" aria-hidden="true"></i></a></div>
+      <section class="service-chapter service-chapter--light service-chapter--image-left service-chapter--specialty" id="specialty-cleaning" aria-labelledby="specialty-cleaning-title" data-service-chapter>
+        <div class="service-chapter__frame">
+          <figure class="service-chapter__media service-reveal"><img src="assets/images/hero-editorial-textiles.jpg" alt="A broad range of commercial textiles for specialty review" width="1672" height="941" loading="lazy" decoding="async" /></figure>
+          <div class="service-chapter__content">
+            <header class="service-chapter__header service-reveal"><h2 id="specialty-cleaning-title">Specialty</h2><p>Professional laundry, dry cleaning, and specialty care for garments and textiles that fall outside a standard commercial program. Each item is evaluated around material, construction, color, condition, and intended use to determine the appropriate cleaning and finishing process.</p></header>
+            <div class="service-chapter__disclosures service-reveal">
+              <details class="service-disclosure"><summary><i class="ph ph-users-three" aria-hidden="true"></i><span class="service-disclosure__label">Who it serves</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>For theaters, houses of worship, clubs, hospitality groups, event teams, and other organizations with nonstandard garments or presentation textiles. Programs can be arranged for recurring specialty inventory, compatible batches, or individual items that require assessment before service.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-package" aria-hidden="true"></i><span class="service-disclosure__label">What you can send</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Costumes, choir robes, ceremonial garments, decorative textiles, drapery, specialty uniforms, and other unusual commercial pieces. During review, Shelton will determine the appropriate cleaning and finishing process.</p></div></details>
+              <details class="service-disclosure"><summary><i class="ph ph-drop" aria-hidden="true"></i><span class="service-disclosure__label">Laundry &amp; Dry Cleaning</span><i class="ph ph-plus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Specialty items may be processed through commercial laundry, professional wet cleaning, or dry cleaning. Shelton uses Seitz professional chemistry for both laundry and dry cleaning, allowing each process to be tailored to the item and desired result.</p></div></details>
+              <details class="service-disclosure" open data-primary-detail><summary><i class="ph ph-warning-circle" aria-hidden="true"></i><span class="service-disclosure__label">What requires review</span><i class="ph ph-minus service-disclosure__toggle" aria-hidden="true"></i></summary><div class="service-disclosure__body"><p>Specialty items are Shelton’s specialty. Together with Shelton Cleaners, we can process nearly every type of textile or garment. Because specialty goods vary widely, each account receives a thorough review before a quote is prepared. Contact us with questions or to discuss a specific item.</p></div></details>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="collection-explorer" id="wholesale-support" aria-labelledby="wholesale-support-title" data-service-chapter>
-        <div class="collection-explorer__inner services-shell">
-          <header class="collection-explorer__header service-reveal"><div><p class="collection-explorer__name">Wholesale Support</p><h2 class="is-long" id="wholesale-support-title">Wholesale</h2></div><p>Collection<br /><strong>06</strong> / 06</p></header>
-          <p class="collection-explorer__intro service-reveal">Behind-the-scenes capacity is most useful when processing, finishing, packaging, and return standards are clearly defined.</p>
-          <div class="collection-explorer__layout">
-            <figure class="collection-explorer__media service-reveal"><img class="is-wholesale" src="assets/images/plant-tour.jpg" alt="Shelton production equipment and commercial finishing capacity" width="1672" height="941" /></figure>
-            <div class="collection-explorer__details service-reveal">
-              <details class="collection-row"><summary><i class="ph ph-users-three" aria-hidden="true"></i><span>Who it serves</span><span class="collection-row__summary collection-row__chips"><span>Dry Cleaners</span><span>Laundry Partners</span><span>Rental Operations</span><span>Commercial Programs</span></span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Built for cleaners, laundries, event-rental operations, garment-care businesses, and commercial programs that need overflow or ongoing production support.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-package" aria-hidden="true"></i><span>What you can send</span><span class="collection-row__summary">Shirts, structured garments, household goods, linens, uniforms, and batches.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Pressed shirts, structured garments, specialty pieces, flatwork, uniforms, household goods, and other partner-sorted production batches can be reviewed for fit.</p></div></details>
-              <details class="collection-row" open><summary><i class="ph ph-drop" aria-hidden="true"></i><span>How we clean</span><span class="collection-row__summary">Processed by compatible batch and the partner standard set upfront.</span><i class="ph ph-minus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body collection-row__body--process"><p>Commercial laundering, wet cleaning, dry cleaning, or specialty care is selected according to the work received.</p><ol class="care-sequence" aria-label="Wholesale support cleaning sequence"><li><i class="ph ph-package" aria-hidden="true"></i><strong>Receive</strong><p>Requirements are confirmed by batch.</p></li><li><i class="ph ph-arrows-down-up" aria-hidden="true"></i><strong>Separate</strong><p>By account, item, material, and soil.</p></li><li><i class="ph ph-gear" aria-hidden="true"></i><strong>Process</strong><p>Work follows the partner standard.</p></li><li><i class="ph ph-check-circle" aria-hidden="true"></i><strong>Reconcile</strong><p>Finished batches are prepared to return.</p></li></ol></div></details>
-              <details class="collection-row"><summary><i class="ph ph-waves" aria-hidden="true"></i><span>How we finish</span><span class="collection-row__summary">Pressed, folded, hung, or packaged to the agreed specification.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Finishing can support pressed garments, folded flatwork, hanging pieces, or account-specific packaging when the standard and capacity are confirmed in advance.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-magnifying-glass" aria-hidden="true"></i><span>How we inspect</span><span class="collection-row__summary">Visible quality, finish, separation, and return readiness are reviewed.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Finished work is checked against the agreed presentation and return specification, including remaining spots, finish quality, item condition, and batch separation.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-truck" aria-hidden="true"></i><span>How it returns</span><span class="collection-row__summary">Partner-ready, organized, and separated by batch or account.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Work can return hanging, folded, bundled, labeled, or packaged according to the workflow established with the service partner.</p></div></details>
-              <details class="collection-row"><summary><i class="ph ph-warning-circle" aria-hidden="true"></i><span>What requires review</span><span class="collection-row__summary">Capacity, turnaround, batch makeup, specialty work, and packaging.</span><i class="ph ph-plus collection-row__toggle" aria-hidden="true"></i></summary><div class="collection-row__body"><p>Urgent deadlines, mixed or unmarked batches, high-value or specialty goods, unusual treatment needs, and nonstandard handling must be reviewed before scheduling.</p></div></details>
-              <div class="collection-explorer__actions"><a class="services-text-link services-text-link--light" href="#services-hero-title">Back to collections <span aria-hidden="true">↑</span></a><a class="services-button services-button--gold" href="quote.html?service=wholesale">Discuss wholesale support <i class="ph ph-arrow-right" aria-hidden="true"></i></a></div>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
 
     <section class="service-route-check" id="service-route-check" aria-labelledby="route-check-title">
       <div class="service-route-check__inner">
-        <form class="service-route-check__form service-reveal" data-route-form novalidate>
-          <p class="services-kicker">Check your route</p>
-          <h2 id="route-check-title">See whether your operation fits a current service route.</h2>
-          <label for="service-route-zip">ZIP code</label>
-          <input id="service-route-zip" name="zip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" pattern="[0-9]{5}" value="92101" aria-describedby="route-check-note route-check-message" />
-          <button class="services-button services-button--navy" type="submit">Check availability <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
-          <p id="route-check-note" class="service-route-check__note"><i class="ph ph-check-circle" aria-hidden="true"></i>Routes are confirmed around volume, schedule, and account needs.</p>
-          <p id="route-check-message" class="service-route-check__message" data-route-message aria-live="polite"></p>
-        </form>
-
-        <div class="service-route-check__map service-reveal">
-          <img src="assets/images/generated/services-san-diego-route-map-v1.png" alt="Illustrated Shelton service route along the San Diego coast from Encinitas to downtown" width="1600" height="900" />
-          <div class="service-route-check__result" data-route-result>
-            <strong><i class="ph ph-check-circle" aria-hidden="true"></i><span>San Diego area</span></strong>
-            <span>Route review available</span>
+        <div class="service-route-check__conversion">
+          <div class="service-route-check__copy">
+            <p class="services-kicker">San Diego commercial service</p>
+            <h2 id="route-check-title"><span>Your route</span><span>starts at ours.</span></h2>
+            <p>Tell us about your operation and we’ll review how it fits a current Shelton service route.</p>
           </div>
+
+          <form class="service-route-check__form" data-route-form novalidate>
+            <div class="service-route-check__field service-route-check__field--name">
+              <label for="service-route-name">Name</label>
+              <input id="service-route-name" name="name" type="text" autocomplete="name" required aria-describedby="route-check-note route-check-message" />
+            </div>
+            <div class="service-route-check__field service-route-check__field--company">
+              <label for="service-route-company">Company</label>
+              <input id="service-route-company" name="company" type="text" autocomplete="organization" required aria-describedby="route-check-note route-check-message" />
+            </div>
+            <div class="service-route-check__field service-route-check__field--email">
+              <label for="service-route-email">Work email</label>
+              <input id="service-route-email" name="email" type="email" autocomplete="email" required aria-describedby="route-check-note route-check-message" />
+            </div>
+            <div class="service-route-check__field service-route-check__field--zip">
+              <label for="service-route-zip">ZIP code</label>
+              <input id="service-route-zip" name="zip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" pattern="[0-9]{5}" required aria-describedby="route-check-note route-check-message" />
+            </div>
+            <button class="services-button service-route-check__submit" type="submit">Request route review <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+            <p id="route-check-note" class="service-route-check__note"><i class="ph ph-info" aria-hidden="true"></i>Routes are confirmed around volume, schedule, and account needs.</p>
+            <p id="route-check-message" class="service-route-check__message" data-route-message aria-live="polite"></p>
+          </form>
+        </div>
+
+        <div class="service-route-check__map-stage">
+          <div class="service-route-check__map" data-service-route-map role="region" aria-label="Interactive map of San Diego County showing Shelton's processing facility at 440 16th Street in San Diego"></div>
+          <div class="service-route-check__map-fallback" data-route-map-fallback>
+            <p>Serving commercial accounts across San Diego County.</p>
+            <strong>Shelton processing facility</strong>
+            <span>440 16th Street · San Diego, CA 92101</span>
+          </div>
+          <button class="service-route-check__facility" type="button" data-route-facility aria-label="Zoom to Shelton's processing facility at 440 16th Street, San Diego, California 92101" title="Shelton processing facility, 440 16th Street">
+            <span class="service-route-check__facility-pin" aria-hidden="true">
+              <i class="ph ph-map-pin"></i>
+              <img src="assets/Shelton%20Brand%20Assets/brand/shelton-social-avatar-dark.svg" alt="" width="1000" height="1000" />
+            </span>
+          </button>
         </div>
       </div>
     </section>
@@ -215,7 +312,7 @@
           <a class="footer-logo" href="index.html" aria-label="Shelton Linen and Uniform Services home">
             <img class="footer-brand-logo" src="assets/Shelton%20Brand%20Assets/brand/website/shelton-primary-horizontal-dark.svg" alt="" width="1900" height="480" aria-hidden="true" />
           </a>
-          <p class="footer-text">Commercial-only laundry, linen, towel, uniform, event linen, and wholesale finishing support for San Diego businesses.</p>
+          <p class="footer-text">Commercial-only laundry, linen, towel, uniform, event linen, and specialty cleaning for San Diego businesses.</p>
         </div>
         <nav class="footer-links" aria-label="Footer pages">
           <h2>Pages</h2>
@@ -223,6 +320,7 @@
           <a href="industries.html">Who We Serve</a>
           <a href="pricing.html">Pricing</a>
           <a href="about.html">About</a>
+          <a href="privacy.html">Privacy</a>
         </nav>
         <nav class="footer-links" aria-label="Commercial services">
           <h2>Commercial Services</h2>
@@ -231,23 +329,24 @@
           <a href="services.html#uniforms-chef-coats">Uniform cleaning</a>
           <a href="services.html#event-linens">Event linen</a>
           <a href="services.html#specialty-cleaning">Specialty cleaning</a>
-          <a href="services.html#wholesale-support">Wholesale support</a>
         </nav>
         <nav class="footer-links" aria-label="Get started">
           <h2>Get Started</h2>
           <a href="quote.html">Request a quote</a>
           <a href="quote.html?request=plant-tour">Schedule a plant tour</a>
           <a href="https://www.sheltoncleanerssd.com/" target="_blank" rel="noopener">Shelton Cleaners</a>
+          <div class="footer-phone"><span>Phone</span><a class="footer-phone__link" href="tel:+16193208703">(619) 320-8703</a></div>
         </nav>
       </div>
       <div class="footer-bottom">
         <p>2026 Shelton Linen &amp; Uniform Services. All rights reserved.</p>
-        <p>Sister company to Shelton Cleaners San Diego.</p>
+        <p>A sister company of Shelton Cleaners San Diego.</p>
       </div>
     </div>
   </footer>
 
-  <script src="assets/js/site.js"></script>
-  <script src="assets/js/services-editorial.js?v=20260725-chapters4"></script>
+  <script src="assets/js/site.js?v=20260816-mobile-launch-v1"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="assets/js/services-editorial.js?v=20260812-launch-responsive-v16"></script>
 </body>
 </html>

@@ -1,7 +1,11 @@
-/* Integrated homepage opening: one photographic scene spans the hero and proof. */
+/* Homepage opening: one clean scene spans the hero and proof continuously. */
 
 .home-page .home-opening {
-  --proof-position: 50%;
+  --proof-position: 55%;
+  --opening-hero-height: max(100svh, 44rem);
+  --opening-scene-top: 5.5rem;
+  --proof-height: clamp(28rem, 34vw, 34rem);
+  --proof-media-height: clamp(22rem, 78vw, 31rem);
   position: relative;
   z-index: 1;
   width: 100%;
@@ -13,7 +17,7 @@
 
 .home-opening__scene {
   position: absolute;
-  inset: 5.5rem 0 0;
+  inset: var(--opening-scene-top) 0 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
@@ -27,29 +31,16 @@
   max-width: none;
   display: block;
   object-fit: cover;
-  object-position: center top;
+  object-position: 50% top;
   filter: saturate(0.92) contrast(0.99) brightness(1.01);
-}
-
-.home-opening__received {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 50%;
-  overflow: hidden;
-  clip-path: inset(0 calc(100% - var(--proof-position)) 0 0);
-  will-change: clip-path;
-}
-
-.home-opening__received .home-opening__scene-image {
-  width: 200%;
 }
 
 .home-page .home-hero--ready {
   position: relative;
   z-index: 2;
   width: 100%;
-  height: 100svh;
-  min-height: 44rem;
+  height: var(--opening-hero-height);
+  min-height: 0;
   padding-top: 5.5rem;
   display: block;
   overflow: hidden;
@@ -83,10 +74,10 @@
   margin: 0;
   color: #081b35;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(5.8rem, 7.45vw, 7.15rem);
+  font-size: clamp(5.2rem, 6.65vw, 6.4rem);
   font-weight: 400;
   letter-spacing: -0.052em;
-  line-height: 0.78;
+  line-height: 0.82;
   text-transform: uppercase;
   text-wrap: balance;
 }
@@ -176,21 +167,28 @@
   }
 
   .ready-hero__copy h1 {
-    font-size: clamp(5.15rem, 9vw, 6.75rem);
+    font-size: clamp(4.4rem, 7.15vw, 5rem);
   }
 }
 
+/* Keep the approved two-line desktop composition fluid through the narrow
+   desktop band instead of letting the 4.4rem floor clip the second line. */
+@media (min-width: 861px) and (max-width: 969px) {
+  .ready-hero__copy h1 {
+    font-size: 7.15vw;
+  }
+}
+
+/* Desktop baseline lock: 1041px and wider use only the canonical declarations above. */
+
 @media (max-width: 860px) {
-  .home-opening__scene-image {
-    object-position: 38% top;
+  .home-page .home-opening {
+    --opening-hero-height: 100svh;
   }
 
-  .home-opening__received {
-    width: 100%;
-  }
-
-  .home-opening__received .home-opening__scene-image {
-    width: 100%;
+  .home-opening__scene {
+    bottom: auto;
+    height: calc(var(--opening-hero-rendered-height, var(--opening-hero-height)) - var(--opening-scene-top) + var(--proof-media-height));
   }
 
   .home-page .home-hero--ready {
@@ -212,13 +210,30 @@
   }
 
   .ready-hero__copy h1 {
-    font-size: clamp(3.75rem, 12.3vw, 5.7rem);
-    line-height: 0.82;
+    font-size: clamp(3.75rem, 10vw, 4.65rem);
+    line-height: 0.86;
+  }
+
+  .ready-hero__copy h1 span {
+    white-space: normal;
+  }
+
+  .ready-hero__copy h1 span:first-child {
+    white-space: nowrap;
   }
 
   .ready-hero__intro {
     width: min(100%, 36rem);
     margin-top: 1.35rem;
+  }
+}
+
+/* Roomy compact: center the complete hero group below the fixed header. */
+@media (min-width: 621px) and (max-width: 860px) {
+  .home-page .home-hero--ready .ready-hero__frame {
+    min-height: calc(100svh - var(--opening-scene-top));
+    padding: clamp(2rem, 5svh, 3.25rem) 0;
+    place-items: center;
   }
 }
 
@@ -229,7 +244,7 @@
   }
 
   .ready-hero__copy h1 {
-    font-size: clamp(2.55rem, 10.8vw, 4rem);
+    font-size: clamp(2.35rem, 9.8vw, 4rem);
     letter-spacing: -0.055em;
     line-height: 0.84;
   }
@@ -260,6 +275,12 @@
   .ready-hero__secondary::after {
     right: 24%;
     left: 24%;
+  }
+}
+
+@media (max-width: 340px) {
+  .ready-hero__copy h1 {
+    font-size: clamp(1.75rem, 8.3vw, 2.35rem);
   }
 }
 

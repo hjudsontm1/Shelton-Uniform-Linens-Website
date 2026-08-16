@@ -1,0 +1,217 @@
+body[data-page="quote-success"] {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  color: var(--cream);
+  background: #081321;
+}
+
+body[data-page="quote-success"] .site-nav {
+  background: rgba(5, 12, 22, 0.96);
+  border-bottom-color: rgba(210, 176, 113, 0.18);
+}
+
+body[data-page="quote-success"] main {
+  display: flex;
+  flex: 1 0 auto;
+}
+
+.quote-success {
+  width: 100%;
+  min-height: calc(100svh - 4.5rem);
+  padding: clamp(9rem, 18vh, 12rem) var(--page-gutter) clamp(5rem, 10vh, 7rem);
+  display: grid;
+  place-items: center;
+  background: #081321;
+}
+
+.quote-success__panel {
+  width: min(100%, 48rem);
+  text-align: center;
+}
+
+.quote-success__icon {
+  width: 4rem;
+  height: 4rem;
+  margin-inline: auto;
+  display: grid;
+  place-items: center;
+  color: var(--gold-2);
+  border: 1px solid rgba(210, 176, 113, 0.72);
+  font-size: 1.6rem;
+}
+
+.quote-success h1 {
+  max-width: 46rem;
+  margin: 1.6rem auto 1.25rem;
+  color: var(--cream-2);
+  font-size: clamp(3.6rem, 7.4vw, 6.6rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 0.93;
+}
+
+.quote-success__panel > p:not(.quote-success__contact) {
+  max-width: 36rem;
+  margin-inline: auto;
+  color: rgba(242, 235, 217, 0.66);
+  font-size: clamp(0.9rem, 1.25vw, 1rem);
+  line-height: 1.7;
+}
+
+.quote-success__home {
+  width: min(100%, 18rem);
+  min-height: 4.25rem;
+  margin: 2.2rem auto 0;
+  padding: 0.8rem 0.85rem 0.8rem 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--navy);
+  border: 1px solid var(--gold-2);
+  background: var(--gold-2);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.quote-success__home i {
+  width: 2.65rem;
+  min-height: 2.65rem;
+  display: grid;
+  place-items: center;
+  color: var(--cream-2);
+  background: var(--navy);
+  font-size: 1rem;
+  transition: transform 180ms ease;
+}
+
+.quote-success__home:hover,
+.quote-success__home:focus-visible {
+  border-color: var(--cream-2);
+  background: var(--cream-2);
+  transform: translateY(-2px);
+}
+
+.quote-success__home:hover i,
+.quote-success__home:focus-visible i {
+  transform: translateX(0.2rem);
+}
+
+.quote-success__contact {
+  margin-top: 1.4rem;
+  color: rgba(242, 235, 217, 0.48);
+  font-size: 0.68rem;
+  line-height: 1.7;
+}
+
+.quote-success__contact a {
+  color: rgba(242, 235, 217, 0.82);
+  text-underline-offset: 0.2em;
+}
+
+.quote-success__contact span {
+  margin-inline: 0.35rem;
+  color: rgba(210, 176, 113, 0.72);
+}
+
+.quote-success__contact a:hover,
+.quote-success__contact a:focus-visible {
+  color: var(--cream-2);
+}
+
+.quote-success-footer {
+  min-height: 4.5rem;
+  padding: 1.25rem var(--page-gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: rgba(242, 235, 217, 0.42);
+  border-top: 1px solid rgba(210, 176, 113, 0.18);
+  background: #07111e;
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+}
+
+.quote-success-footer a {
+  color: rgba(242, 235, 217, 0.72);
+  text-underline-offset: 0.2em;
+}
+
+.quote-success-footer a:hover,
+.quote-success-footer a:focus-visible {
+  color: var(--cream-2);
+}
+
+@media (max-width: 620px) {
+  .quote-success {
+    min-height: calc(100svh - 5rem);
+    padding: 8.25rem 1.25rem 4rem;
+  }
+
+  .quote-success__icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.4rem;
+  }
+
+  .quote-success h1 {
+    max-width: 21rem;
+    margin-top: 1.4rem;
+    font-size: clamp(3.45rem, 15.5vw, 4.55rem);
+  }
+
+  .quote-success__panel > p:not(.quote-success__contact) {
+    max-width: 22rem;
+    font-size: 0.88rem;
+  }
+
+  .quote-success__home {
+    width: 100%;
+    max-width: 20rem;
+  }
+
+  .quote-success__contact {
+    max-width: 20rem;
+    margin-inline: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem 0.55rem;
+    font-size: 0.78rem;
+    line-height: 1.55;
+  }
+
+  .quote-success__contact a,
+  .quote-success-footer a {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .quote-success__contact span {
+    display: none;
+  }
+
+  .quote-success-footer {
+    min-height: auto;
+    padding: 1.35rem 1.25rem;
+    flex-direction: column;
+    gap: 0.35rem;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quote-success__home,
+  .quote-success__home i {
+    transition: none;
+  }
+}

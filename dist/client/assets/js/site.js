@@ -22,27 +22,48 @@
   if (toggle && menu) {
     const nav = toggle.closest(".site-nav");
     const mobileNavigation = window.matchMedia("(max-width: 1080px)");
+    const isolatedSiblings = new Set();
+    const setBackgroundInert = (shouldIsolate) => {
+      if (!nav) return;
+      if (shouldIsolate) {
+        Array.from(document.body.children).forEach((element) => {
+          if (element === nav || element.tagName === "SCRIPT" || element.hasAttribute("inert")) return;
+          element.setAttribute("inert", "");
+          isolatedSiblings.add(element);
+        });
+        return;
+      }
+      isolatedSiblings.forEach((element) => element.removeAttribute("inert"));
+      isolatedSiblings.clear();
+    };
     const menuIsOpen = () => toggle.getAttribute("aria-expanded") === "true";
     const closeMenu = ({ restoreFocus = false } = {}) => {
       toggle.setAttribute("aria-expanded", "false");
       toggle.setAttribute("aria-label", "Open navigation");
       menu.classList.remove("is-open");
       document.body.classList.remove("has-open-menu");
+      setBackgroundInert(false);
       if (restoreFocus) toggle.focus();
     };
-    const openMenu = () => {
+    const openMenu = ({ focusFirst = true } = {}) => {
       toggle.setAttribute("aria-expanded", "true");
       toggle.setAttribute("aria-label", "Close navigation");
       menu.classList.add("is-open");
       document.body.classList.add("has-open-menu");
-      window.setTimeout(() => {
-        if (menuIsOpen()) menu.querySelector("a[href]")?.focus();
-      }, prefersReducedMotion ? 0 : 260);
+      setBackgroundInert(mobileNavigation.matches);
+      if (focusFirst) {
+        window.setTimeout(() => {
+          if (menuIsOpen()) menu.querySelector("a[href]")?.focus();
+        }, prefersReducedMotion ? 0 : 260);
+      }
     };
 
-    toggle.addEventListener("click", () => {
+    toggle.addEventListener("click", (event) => {
       if (menuIsOpen()) closeMenu();
-      else openMenu();
+      else {
+        const openedWithKeyboard = event.detail === 0;
+        openMenu({ focusFirst: openedWithKeyboard });
+      }
     });
     menu.addEventListener("click", (event) => {
       if (event.target.closest("a")) closeMenu();
@@ -74,10 +95,15 @@
     const resetDesktopMenu = (event) => {
       if (!event.matches) closeMenu();
     };
+    const syncMenuIsolation = (event) => {
+      if (menuIsOpen()) setBackgroundInert(event.matches);
+    };
     if (typeof mobileNavigation.addEventListener === "function") {
       mobileNavigation.addEventListener("change", resetDesktopMenu);
+      mobileNavigation.addEventListener("change", syncMenuIsolation);
     } else {
       mobileNavigation.addListener(resetDesktopMenu);
+      mobileNavigation.addListener(syncMenuIsolation);
     }
   }
 
@@ -159,6 +185,9 @@
     const tvScreen = aboutTv?.querySelector("[data-about-tv-screen]");
     const tvPhoto = aboutTv?.querySelector("[data-about-tv-photo]");
     const tvPhotoCanvas = aboutTv?.querySelector("[data-about-tv-photo-canvas]");
+    const tvContact = aboutTv?.querySelector("[data-about-tv-contact]");
+    const tvPhone = aboutTv?.querySelector("[data-about-tv-phone]");
+    const tvEmail = aboutTv?.querySelector("[data-about-tv-email]");
     const nextButton = aboutTv?.querySelector("[data-about-tv-next]");
     const tvInstruction = {
       era: "Shelton family archive",
@@ -179,6 +208,7 @@
     const aboutTuneRenderDelay = 24;
     const aboutTuneSettleDelay = 170;
     const aboutWarmupDuration = 180;
+    const aboutPhoneExperience = window.matchMedia("(max-width: 620px)");
 
     const visibleAboutTiles = () => aboutTiles.filter((tile) => window.getComputedStyle(tile).display !== "none");
     const featuredAboutTiles = () => {
@@ -191,8 +221,34 @@
         title: tile?.dataset.title || "Shelton story",
         era: tile?.dataset.era || "Shelton history",
         story: tile?.dataset.story || "A future archive note can live here when this photo is added.",
+        phone: tile?.dataset.phone || "",
+        email: tile?.dataset.email || "",
         photoSrc: tileImage?.currentSrc || tileImage?.getAttribute("src") || ""
       };
+    };
+    const renderAboutTvContact = (data) => {
+      const phone = data.phone?.trim() || "";
+      const email = data.email?.trim() || "";
+      if (tvPhone) {
+        tvPhone.hidden = !phone;
+        tvPhone.textContent = phone;
+        const digits = phone.replace(/\D/g, "");
+        if (digits) {
+          tvPhone.href = `tel:${digits.length === 10 ? "+1" : ""}${digits}`;
+        } else {
+          tvPhone.removeAttribute("href");
+        }
+      }
+      if (tvEmail) {
+        tvEmail.hidden = !email;
+        tvEmail.textContent = email;
+        if (email) {
+          tvEmail.href = `mailto:${email}`;
+        } else {
+          tvEmail.removeAttribute("href");
+        }
+      }
+      if (tvContact) tvContact.hidden = !phone && !email;
     };
     const drawAboutTvPhoto = (tile) => {
       if (!(tvPhotoCanvas instanceof HTMLCanvasElement) || !tvPhoto) return;
@@ -245,6 +301,7 @@
       setText(aboutTv, "[data-about-tv-era]", data.era);
       setText(aboutTv, "[data-about-tv-title]", data.title);
       setText(aboutTv, "[data-about-tv-story]", data.story);
+      renderAboutTvContact(data);
     };
     const setActiveAboutTile = (tile) => {
       if (activeAboutTile && activeAboutTile !== tile) {
@@ -292,11 +349,22 @@
     };
     const scheduleAboutAutoplay = (delay = aboutInitialAutoplayDelay) => {
       clearAboutAutoplay();
-      if (prefersReducedMotion || !aboutMontageInView) return;
+      if (prefersReducedMotion || aboutPhoneExperience.matches || !aboutMontageInView) return;
       aboutAutoplayTimeout = window.setTimeout(() => {
         nextAboutStory({ useFeatured: true });
         scheduleAboutAutoplay(aboutStoryAutoplayInterval);
       }, delay);
+    };
+    const syncAboutPhoneExperience = () => {
+      // Phone playback is intentionally manual, but user-triggered story changes
+      // still need to be announced to assistive technology.
+      tvScreen?.setAttribute("aria-live", "polite");
+      if (aboutPhoneExperience.matches) {
+        clearAboutAutoplay();
+        clearAboutTune();
+        return;
+      }
+      if (!document.hidden && aboutMontageInView) scheduleAboutAutoplay(aboutManualAutoplayDelay);
     };
 
     aboutTiles.forEach((tile) => {
@@ -317,12 +385,18 @@
     });
 
     if (aboutTv && tvScreen) {
+      syncAboutPhoneExperience();
       renderAboutTv(tvInstruction, null);
       if (!prefersReducedMotion) {
         tvScreen.classList.add("is-warming-up");
         aboutWarmupTimeout = window.setTimeout(() => tvScreen.classList.remove("is-warming-up"), aboutWarmupDuration);
       }
       scheduleAboutAutoplay(aboutInitialAutoplayDelay);
+      if (typeof aboutPhoneExperience.addEventListener === "function") {
+        aboutPhoneExperience.addEventListener("change", syncAboutPhoneExperience);
+      } else {
+        aboutPhoneExperience.addListener(syncAboutPhoneExperience);
+      }
       if ("IntersectionObserver" in window) {
         const aboutMontageObserver = new IntersectionObserver(([entry]) => {
           const wasInView = aboutMontageInView;
@@ -412,6 +486,44 @@
     }
   }
 
+  const towelTimelines = Array.from(document.querySelectorAll("[data-towel-timeline-v2]"));
+  towelTimelines.forEach((timeline) => {
+    const items = Array.from(timeline.querySelectorAll("[data-towel-item]"));
+    const triggers = items.map((item) => item.querySelector("[data-towel-trigger]"));
+    const panels = items.map((item) => item.querySelector("[data-towel-panel]"));
+
+    const activateTowel = (nextIndex, { focus = false } = {}) => {
+      if (nextIndex < 0 || nextIndex >= items.length) return;
+      items.forEach((item, index) => {
+        const isActive = index === nextIndex;
+        item.classList.toggle("is-active", isActive);
+        triggers[index]?.setAttribute("aria-expanded", String(isActive));
+        panels[index]?.setAttribute("aria-hidden", String(!isActive));
+      });
+      if (focus) triggers[nextIndex]?.focus();
+    };
+
+    triggers.forEach((trigger, index) => {
+      if (!trigger) return;
+      trigger.addEventListener("click", () => activateTowel(index));
+      trigger.addEventListener("keydown", (event) => {
+        if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        const nextIndex = event.key === 'Home'
+          ? 0
+          : event.key === 'End'
+            ? triggers.length - 1
+            : event.key === 'ArrowDown'
+              ? (index + 1) % triggers.length
+              : (index - 1 + triggers.length) % triggers.length;
+        activateTowel(nextIndex, { focus: true });
+      });
+    });
+
+    const initialIndex = Math.max(0, items.findIndex((item) => item.hasAttribute("data-towel-initial")));
+    activateTowel(initialIndex);
+  });
+
   const storyCarousel = document.querySelector("[data-story-carousel]");
   if (storyCarousel) {
     const slides = Array.from(storyCarousel.querySelectorAll("[data-story-slide]"));
@@ -422,11 +534,18 @@
     const caption = storyCarousel.querySelector("[data-story-current-caption]");
     let activeStoryIndex = Math.max(0, slides.findIndex((slide) => slide.classList.contains("is-active")));
     let isStoryFlipped = false;
+    const storyNonMobile = window.matchMedia("(min-width: 621px)");
+    const storyReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let storyDemoState = "idle";
+    let storyDemoOpenTimer = null;
+    let storyDemoCloseTimer = null;
+    let storyDemoObserver = null;
+    let storyDemoWasFlippedAtInteraction = false;
 
     const storyNumber = (value) => String(value).padStart(2, "0");
     const activeStorySlide = () => slides[activeStoryIndex];
     const visibleQueueCount = () => {
-      if (window.matchMedia("(max-width: 620px)").matches) return 1;
+      if (window.matchMedia("(max-width: 620px)").matches) return 0;
       if (window.matchMedia("(max-width: 980px)").matches) return 2;
       return 4;
     };
@@ -446,8 +565,62 @@
         }
       });
     };
+    const clearStoryDemoTimers = () => {
+      if (storyDemoOpenTimer !== null) window.clearTimeout(storyDemoOpenTimer);
+      if (storyDemoCloseTimer !== null) window.clearTimeout(storyDemoCloseTimer);
+      storyDemoOpenTimer = null;
+      storyDemoCloseTimer = null;
+    };
+    const clearStoryDemoVisual = () => {
+      storyCarousel.classList.remove("is-demo-flipped");
+      slides.forEach((slide) => slide.classList.remove("is-demo-flipped"));
+    };
+    const cancelStoryDemo = ({ restoreFront = false } = {}) => {
+      clearStoryDemoTimers();
+      clearStoryDemoVisual();
+      if (storyDemoState !== "done") storyDemoState = "cancelled";
+      storyDemoObserver?.disconnect();
+      storyDemoObserver = null;
+      if (restoreFront) setStoryFlipped(false);
+    };
+    const startStoryDemo = () => {
+      if (
+        storyDemoState !== "idle"
+        || !storyNonMobile.matches
+        || storyReducedMotion.matches
+        || document.hidden
+      ) return;
+
+      storyDemoState = "scheduled";
+      storyDemoObserver?.disconnect();
+      storyDemoObserver = null;
+      storyDemoOpenTimer = window.setTimeout(() => {
+        storyDemoOpenTimer = null;
+        if (!storyNonMobile.matches || storyReducedMotion.matches || document.hidden) {
+          cancelStoryDemo({ restoreFront: true });
+          return;
+        }
+
+        const currentSlide = activeStorySlide();
+        if (!currentSlide) {
+          cancelStoryDemo();
+          return;
+        }
+
+        storyDemoState = "running";
+        storyCarousel.classList.add("is-demo-flipped");
+        currentSlide.classList.add("is-demo-flipped");
+        storyDemoCloseTimer = window.setTimeout(() => {
+          storyDemoCloseTimer = null;
+          clearStoryDemoVisual();
+          storyDemoState = "done";
+        }, 2400);
+      }, 800);
+    };
     const renderStorySlide = (index) => {
       if (!slides.length) return;
+      clearStoryDemoVisual();
+      storyDemoWasFlippedAtInteraction = false;
       activeStoryIndex = (index + slides.length) % slides.length;
       const maxQueue = Math.min(visibleQueueCount(), Math.floor((slides.length - 1) / 2));
       slides.forEach((slide, slideIndex) => {
@@ -463,7 +636,7 @@
           slide.classList.toggle(`is-next-${queueIndex}`, signedOffset === queueIndex && isQueued);
         }
         slide.setAttribute("aria-hidden", String(!isActive && !isQueued));
-        slide.tabIndex = isActive || isQueued ? 0 : -1;
+        slide.tabIndex = isActive ? 0 : -1;
         if (!isActive) slide.setAttribute("aria-label", storyLabel(slide, "Show"));
       });
       dots.forEach((dot, dotIndex) => {
@@ -479,7 +652,12 @@
     slides.forEach((slide, index) => {
       slide.addEventListener("click", () => {
         if (index === activeStoryIndex) {
-          setStoryFlipped(!isStoryFlipped);
+          if (storyDemoWasFlippedAtInteraction) {
+            storyDemoWasFlippedAtInteraction = false;
+            setStoryFlipped(false);
+          } else {
+            setStoryFlipped(!isStoryFlipped);
+          }
         } else {
           renderStorySlide(index);
         }
@@ -488,10 +666,12 @@
         if (event.key === "ArrowRight") {
           event.preventDefault();
           renderStorySlide(activeStoryIndex + 1);
+          activeStorySlide()?.focus();
         }
         if (event.key === "ArrowLeft") {
           event.preventDefault();
           renderStorySlide(activeStoryIndex - 1);
+          activeStorySlide()?.focus();
         }
       });
     });
@@ -501,10 +681,64 @@
     if (previousButton) previousButton.addEventListener("click", () => renderStorySlide(activeStoryIndex - 1));
     if (nextButton) nextButton.addEventListener("click", () => renderStorySlide(activeStoryIndex + 1));
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") setStoryFlipped(false);
+      if (event.key === "Escape") cancelStoryDemo({ restoreFront: true });
     });
     window.addEventListener("resize", () => renderStorySlide(activeStoryIndex));
     renderStorySlide(activeStoryIndex);
+
+    const cancelStoryDemoForPointer = () => {
+      storyDemoWasFlippedAtInteraction = storyDemoWasFlippedAtInteraction
+        || storyCarousel.classList.contains("is-demo-flipped");
+      cancelStoryDemo();
+    };
+    const cancelStoryDemoForClick = (event) => {
+      if (!event.detail) cancelStoryDemoForPointer();
+    };
+    const cancelStoryDemoForKeyboard = (event) => {
+      if (["Enter", " ", "Spacebar"].includes(event.key)) {
+        storyDemoWasFlippedAtInteraction = storyDemoWasFlippedAtInteraction
+          || storyCarousel.classList.contains("is-demo-flipped");
+      }
+      cancelStoryDemo();
+    };
+    storyCarousel.addEventListener("pointerdown", cancelStoryDemoForPointer, true);
+    storyCarousel.addEventListener("click", cancelStoryDemoForClick, true);
+    storyCarousel.addEventListener("keydown", cancelStoryDemoForKeyboard, true);
+    storyCarousel.addEventListener("focusin", () => cancelStoryDemo({ restoreFront: true }), true);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && ["scheduled", "running"].includes(storyDemoState)) {
+        cancelStoryDemo({ restoreFront: true });
+      }
+    });
+    window.addEventListener("pagehide", () => cancelStoryDemo({ restoreFront: true }), { once: true });
+
+    const cancelStoryDemoForPreference = (event) => {
+      if (!event.matches) return;
+      cancelStoryDemo({ restoreFront: true });
+    };
+    if (typeof storyNonMobile.addEventListener === "function") {
+      storyNonMobile.addEventListener("change", (event) => {
+        if (!event.matches) cancelStoryDemo({ restoreFront: true });
+      });
+      storyReducedMotion.addEventListener("change", cancelStoryDemoForPreference);
+    } else {
+      storyNonMobile.addListener((event) => {
+        if (!event.matches) cancelStoryDemo({ restoreFront: true });
+      });
+      storyReducedMotion.addListener(cancelStoryDemoForPreference);
+    }
+
+    if (
+      "IntersectionObserver" in window
+      && storyNonMobile.matches
+      && !storyReducedMotion.matches
+    ) {
+      storyDemoObserver = new IntersectionObserver((entries) => {
+        const entry = entries[0];
+        if (entry?.isIntersecting && entry.intersectionRatio >= 0.38) startStoryDemo();
+      }, { threshold: [0.38] });
+      storyDemoObserver.observe(storyCarousel);
+    }
   }
 
   const qualityCinema = document.querySelector("[data-quality-cinema]");
@@ -578,107 +812,107 @@
   const programProfiles = {
     hotels: {
       label: "Hotels & Boutique Stays",
-      summary: "A reliable linen program for hospitality accounts of every size, from boutique stays to larger properties.",
-      items: ["Linens", "Towels", "Bath mats", "Robes", "Blankets"],
-      rhythm: "Pickup and delivery built around your schedule, from once weekly to daily service.",
-      helps: "We help hospitality teams keep linens cleaner, brighter, and more consistent over time, reducing replacement headaches and keeping goods ready for the next stay.",
-      finishing: "Folded, bundled, and delivered back in linen carts.",
+      summary: "A dependable linen program for hotels and boutique properties, built around occupancy, volume, and room turnover.",
+      items: ["Bed linens", "Towels", "Bath mats", "Robes", "Blankets"],
+      rhythm: "Pickup and delivery scheduled around your property's needs, from weekly to daily service.",
+      helps: "Shelton combines consistent commercial cleaning with the flexibility and personal attention of a local, family-run company. We learn how your property operates, then shape pickup schedules, finishing, packaging, and returns around your housekeeping workflow. Your linens are cleaned to our high standards, professionally finished, organized to your specifications, and returned on the schedule your team needs.",
+      finishing: "Folded, bundled, and returned in linen carts based on your property's needs.",
       flow: ["Pickup cadence", "Account sorting", "Finishing standards", "Route-ready return"],
-      cta: "Build a hotel program",
+      cta: "Build a Hotel Program",
       href: "quote.html?program=hotels",
       secondaryCta: "Learn more about hospitality laundry →",
       secondaryHref: "industries.html#hotels"
     },
     str: {
-      label: "Short-Term Rentals / Property Managers",
-      summary: "A bulk laundry program for STR operators and property managers who need clean guest linens moving between turns without tying up staff time.",
-      items: ["Sheets", "Towels", "Bath mats", "Duvet covers", "Blankets"],
-      rhythm: "Bulk pickup and delivery to a central location, built around turnover volume, property schedules, and seasonal demand.",
-      helps: "We take laundry off the turnover checklist, helping your team avoid on-site washing, laundromat runs, and last-minute linen shortages between guests.",
-      finishing: "Folded, pressed, bundled, labeled, and returned by property, item type, or account preference.",
+      label: "Short-Term Rentals & Property Managers",
+      summary: "A dependable bulk laundry program for operators and property managers handling frequent guest turnover.",
+      items: ["Bed linens", "Towels", "Bath mats", "Duvet covers", "Blankets"],
+      rhythm: "Bulk pickup and delivery to a central location, scheduled around turnover volume, property needs, and seasonal demand.",
+      helps: "Shelton gives short-term rental operators access to the same efficient bulk-cleaning approach used for hotel linen programs. Consolidating linens for commercial processing provides consistent cleaning standards and hotel-style pricing without requiring hotel-level volume. Dependable scheduled service eliminates on-site washing and laundromat runs while helping prevent linen shortages.",
+      finishing: "All sheets are professionally pressed and folded, while towels are neatly folded. Every item is bundled and organized before return, making distribution straightforward.",
       flow: ["Checkout pickup", "Property labeling", "Guest-ready folds", "Cleaner-friendly return"],
-      cta: "Build an STR program",
+      cta: "Build a Short-Term Rental Program",
       href: "quote.html?program=str",
       secondaryCta: "Learn more about STR laundry programs →",
-      secondaryHref: "industries.html#str-property-managers"
+      secondaryHref: "industries.html#short-term-rentals"
     },
     spa: {
       label: "Spas, Massage & Wellness",
-      summary: "A soft-goods laundry program for spas, massage studios, wellness clinics, and treatment-based businesses.",
+      summary: "A dependable laundry program for spas, massage studios, wellness clinics, and other treatment-based businesses.",
       items: ["Towels", "Sheets", "Robes", "Blankets", "Face cradle covers"],
-      rhythm: "Recurring pickup and delivery built around appointment volume, room turnover, and storage needs.",
-      helps: "We help keep your team stocked with clean, spotless, consistent goods — including pressed sheets — so staff is not spending time washing towels, folding sheets, or managing laundry between appointments.",
-      finishing: "Folded, pressed, bundled, sorted by item type, and returned ready to use.",
+      rhythm: "Recurring service scheduled around appointment volume, treatment-room turnover, and available storage.",
+      helps: "Spa linens influence both client comfort and the presentation of every treatment room. Shelton provides consistently cleaned, professionally finished towels, sheets, and robes on a dependable schedule built around your business. Your staff can stay focused on clients instead of washing, drying, pressing, folding, and restocking throughout the day.",
+      finishing: "Sheets are professionally pressed and folded. Towels are returned soft and professionally folded. Robes and other items are folded, bundled, and organized for easy restocking.",
       flow: ["Treatment-room volume", "Softness standards", "Use-based bundles", "Stocked return"],
-      cta: "Build a spa program",
+      cta: "Build a Spa & Wellness Program",
       href: "quote.html?program=spa",
       secondaryCta: "Learn more about spa & wellness laundry →",
-      secondaryHref: "industries.html#spa-wellness"
+      secondaryHref: "industries.html#spas"
     },
     fitness: {
       label: "Gyms, Yoga & Fitness Studios",
-      summary: "A towel heavy laundry program for gyms, yoga studios, Pilates studios, fitness clubs, and training facilities.",
-      items: ["Towels", "Hand towels"],
-      rhythm: "Recurring pickup and delivery built around class volume, member usage, storage space, and weekly towel demand.",
-      helps: "We keep clean, odorless towels moving through your studio or facility so staff is not constantly washing, drying, folding, and restocking between classes or peak hours.",
-      finishing: "Folded, bundled, and returned ready to stock.",
+      summary: "A dependable towel program for gyms, yoga and Pilates studios, fitness clubs, and training facilities.",
+      items: ["Towels", "Hand towels", "Specialty items"],
+      rhythm: "Recurring service scheduled around towel demand.",
+      helps: "Shelton helps fitness facilities maintain a consistent supply of clean, fresh, and odor-free towels without requiring staff to manage laundry throughout the day. Commercial bulk cleaning handles high towel volume efficiently, while dependable scheduled service helps keep towel stations stocked through classes and peak hours.",
+      finishing: "Towels are returned soft, professionally folded, bundled, and organized for easy restocking.",
       flow: ["Usage planning", "Frequent pickup", "Towel bundles", "Storage-aware return"],
-      cta: "Build a fitness program",
+      cta: "Build a Fitness Towel Program",
       href: "quote.html?program=fitness",
       secondaryCta: "Learn more about fitness towel service →",
-      secondaryHref: "industries.html#gyms-fitness"
+      secondaryHref: "industries.html#gyms"
     },
     events: {
       label: "Event Linen Programs",
-      summary: "A specialty cleaning program for event companies, venues, convention centers, and planners handling presentation goods, colored linens, and tight return windows.",
+      summary: "A specialty linen program for event companies, venues, convention centers, and planners working with presentation goods, colored linens, and tight turnaround windows.",
       items: ["Tablecloths", "Napkins", "Runners", "Skirting", "Chair covers", "Specialty event goods"],
-      rhythm: "Pickup and delivery built around event schedules, return windows, seasonal volume, and production needs.",
-      helps: "We provide high quality cleaning that helps event linens stay presentation ready longer. Our cleaning programs remove stains while staying gentle on fabric and color, and our specialty mold removal programs help reduce waste and replacement costs on items of all color.",
-      finishing: "Pressed, hung or folded, sorted by item type, and returned ready for your team.",
+      rhythm: "Service scheduled around event dates, seasonal volume, and production needs.",
+      helps: "Event linens must look their best and return to circulation quickly. Shelton combines high-quality commercial cleaning with careful handling for specialty fabrics and colors. We also offer specialized stain and mold treatment that can help recover damaged linens, reduce unnecessary replacement, and extend the useful life of your inventory.",
+      finishing: "Linens are professionally pressed, hung or folded, sorted by item type, and organized for your team.",
       flow: ["Event deadline", "Specialty cleaning", "Order sorting", "Presentation-ready return"],
-      cta: "Build an event linen program",
+      cta: "Build an Event Linen Program",
       href: "quote.html?program=events",
       secondaryCta: "Learn more about event linen care →",
-      secondaryHref: "industries.html#events-convention-centers"
+      secondaryHref: "industries.html#events"
     },
     restaurants: {
       label: "Restaurants & Food Service",
-      summary: "A commercial laundry program for restaurants, catering teams, and kitchens that need clean, professional goods on a recurring schedule.",
-      items: ["Chef coats", "Aprons", "Napkins", "Bar towels", "Table linens"],
-      rhythm: "Recurring pickup and delivery built around weekly volume, service schedule, kitchen usage, and dining room needs.",
-      helps: "We help keep kitchen and dining goods clean, sharp, and ready for service while handling food stains, grease, heavy soil, and repeated use.",
-      finishing: "Pressed, folded, bundled, and returned in linen carts or bags, ready for your kitchen or dining room use.",
+      summary: "A dependable commercial laundry program for restaurants, catering teams, and kitchens that need professional goods on a recurring schedule.",
+      items: ["Chef coats", "Aprons", "Napkins", "Bar towels", "Tablecloths"],
+      rhythm: "Recurring service scheduled around daily or weekly volume and kitchen use.",
+      helps: "Shelton gives chef coats the high quality commercial cleaning and professional finishing they need to look sharp through repeated use. Each coat is properly cleaned, pressed, and returned on a dependable schedule, helping your kitchen maintain a consistent, professional appearance ensuring they look brand new on the 500th use. We apply that same standard of care to aprons, napkins, bar towels, and tablecloths.",
+      finishing: "Items are professionally pressed, hung or folded, and returned in linen carts or bags based on your operation.",
       flow: ["Recurring service", "Stain-aware wash", "Dining-room finish", "Consistent return"],
-      cta: "Build a restaurant program",
+      cta: "Build a Restaurant Laundry Program",
       href: "quote.html?program=restaurants",
       secondaryCta: "Learn more about restaurant laundry →",
-      secondaryHref: "industries.html#restaurants-food-service"
+      secondaryHref: "industries.html#restaurants"
     },
     uniforms: {
       label: "Uniforms & Casino Programs",
-      summary: "A uniform cleaning program for casinos, hospitality teams, security, valet services, and staff accounts that need workwear returned clean and organized.",
+      summary: "A dependable uniform-cleaning program for casinos, hospitality teams, security, valet services, and other staff accounts.",
       items: ["Uniform shirts", "Chef coats", "Casino uniforms", "Workwear", "Jackets"],
-      rhythm: "Recurring pickup and delivery built around staff count, weekly usage, change-outs, and return needs.",
-      helps: "We help keep uniforms looking professional longer, with cleaning and finishing built around repeated wear, staff presentation, and organized return.",
-      finishing: "High-quality presentation, packaged according to your needs.",
+      rhythm: "Recurring service scheduled around staff count, uniform use, changeouts, and shift requirements.",
+      helps: "Uniforms are an important part of how your team and brand are presented. Shelton applies consistent cleaning and professional finishing across every garment, with a program built around your staff, departments, and organizational needs. Dependable scheduled service helps keep employees properly outfitted and looking professional for every shift.",
+      finishing: "Uniforms are professionally pressed, hung or folded, and packaged according to your needs.",
       flow: ["Staff count", "Garment grouping", "Hung or folded finish", "Route-ready return"],
-      cta: "Build a uniform program",
+      cta: "Build a Uniform Program",
       href: "quote.html?program=uniforms",
       secondaryCta: "Learn more about uniform programs →",
-      secondaryHref: "industries.html#uniform-accounts"
+      secondaryHref: "industries.html#uniforms"
     },
-    wholesale: {
+    specialty: {
       label: "Specialty Commercial Accounts",
-      summary: "A flexible cleaning program for theaters, religious organizations, clubs, and commercial accounts with unique fabric, schedule, or presentation needs.",
-      items: ["Costumes", "Choir robes", "Table linens", "Uniforms", "Specialty garments"],
-      rhythm: "Scheduled or as-needed pickup and delivery built around performances, services, events, banquets, and seasonal needs.",
-      helps: "We help specialty accounts clean, finish, and maintain items that do not fit neatly into a standard laundry program, with careful handling based on how each piece is used.",
-      finishing: "Finished to the highest quality and packaged by your needs.",
+      summary: "A flexible laundry and dry-cleaning program for theaters, religious organizations, clubs, and commercial accounts with unique fabric, scheduling, or presentation needs.",
+      items: ["Costumes", "Choir robes", "Table linens", "Uniforms", "Dry-clean-only garments", "Specialty pieces"],
+      rhythm: "Scheduled or as-needed service built around performances, services, events, banquets, and seasonal demand.",
+      helps: "Some items do not fit neatly into a standard laundry program. Shelton takes the time to understand how each piece is used, how it should be presented, and how it needs to be handled. We use the appropriate commercial laundry or dry-cleaning process based on each item's fabric, construction, and use. Our professional finishing and local flexibility allow us to build a practical program around unique goods, irregular schedules, and specialized requirements.",
+      finishing: "Items are professionally finished, hung or folded, and packaged according to their care requirements and your preferences.",
       flow: ["Unique goods", "Careful handling", "Presentation finish", "Packaged return"],
-      cta: "Discuss specialty account needs",
-      href: "quote.html?program=wholesale",
+      cta: "Discuss Your Specialty Laundry Needs",
+      href: "quote.html?program=specialty",
       secondaryCta: "Learn more about specialty accounts →",
-      secondaryHref: "industries.html#specialty-accounts"
+      secondaryHref: "industries.html#specialty"
     }
   };
 
@@ -785,10 +1019,10 @@
       service: "uniforms",
       message: "I am interested in building a uniform cleaning and finishing program."
     },
-    wholesale: {
-      industry: "wholesale",
-      service: "wholesale",
-      message: "I am interested in discussing wholesale laundry or finishing support."
+    specialty: {
+      industry: "other",
+      service: "not-sure",
+      message: "I am interested in discussing a specialty commercial laundry or garment-care program for unique goods, schedules, or handling requirements."
     }
   };
   const programQuote = programQuoteMap[program];
@@ -811,6 +1045,10 @@
     "route-command": {
       service: "route",
       message: "I would like to request access to Route Command for my commercial account."
+    },
+    "route-review": {
+      service: "route",
+      message: "I would like Shelton to review route availability for my business."
     }
   };
   const requestQuote = requestQuoteMap[request];
@@ -819,28 +1057,25 @@
     if (messageField) messageField.value = requestQuote.message;
   }
 
-  const form = document.querySelector("#quote-form");
-  if (!form) return;
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const status = form.querySelector(".form-status");
-    const submit = form.querySelector("button[type='submit']");
-    if (submit) submit.disabled = true;
-    if (status) status.textContent = "Sending quote request...";
-
+  if (request === "route-review") {
     try {
-      const response = await fetch(form.action, {
-        method: "POST",
-        headers: { Accept: "application/json" },
-        body: new FormData(form),
-      });
-      if (!response.ok) throw new Error("Request failed");
-      window.location.href = "thank-you.html";
+      const savedRouteDraft = window.sessionStorage.getItem("sheltonRouteReviewDraft");
+      if (savedRouteDraft) {
+        const routeDraft = JSON.parse(savedRouteDraft);
+        const companyField = document.querySelector("#quote-form [name='company']");
+        const nameField = document.querySelector("#quote-form [name='name']");
+        const emailField = document.querySelector("#quote-form [name='email']");
+        if (companyField && routeDraft.company) companyField.value = routeDraft.company;
+        if (nameField && routeDraft.name) nameField.value = routeDraft.name;
+        if (emailField && routeDraft.email) emailField.value = routeDraft.email;
+        if (messageField && routeDraft.zip) {
+          messageField.value = `${requestQuoteMap["route-review"].message}\nRoute ZIP: ${routeDraft.zip}.`;
+        }
+        window.sessionStorage.removeItem("sheltonRouteReviewDraft");
+      }
     } catch {
-      if (status) status.textContent = "We could not send the request just now. Please try again.";
-      if (submit) submit.disabled = false;
+      window.sessionStorage.removeItem("sheltonRouteReviewDraft");
     }
-  });
+  }
+
 })();
