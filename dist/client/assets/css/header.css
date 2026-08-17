@@ -407,7 +407,6 @@ body[data-page="about"] .site-nav .menu-toggle {
     inset: 5.5rem 0 0;
     width: 100vw;
     max-width: none;
-    height: auto;
     min-height: 0;
     padding:
       clamp(1.25rem, 4dvh, 2rem)

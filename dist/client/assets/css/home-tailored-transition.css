@@ -279,6 +279,16 @@
   }
 }
 
+/* The transparent top of the tailored hem already overlaps the live opening
+   photograph. A second, independently cropped texture layer created a visible
+   seam and reversed shadows at compact widths. Let the original scene remain
+   the single source of truth beneath the hem. */
+@media (min-width: 621px) {
+  .home-tailored-transition::before {
+    display: none;
+  }
+}
+
 /* Small screens move directly from the clean photograph into Deep Navy. */
 @media (max-width: 620px) {
   .home-tailored-transition {

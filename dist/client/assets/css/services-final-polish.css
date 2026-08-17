@@ -707,3 +707,63 @@
     transition: none;
   }
 }
+
+/* Compact and phone hero: center the editorial intro without the foreground collage. */
+@media (max-width: 860px) {
+  .service-library-hero {
+    height: auto;
+    min-height: 0;
+    padding: 5.5rem 0 0;
+  }
+
+  .service-library-hero__stage {
+    width: min(calc(100% - 2rem), 46rem);
+    height: auto;
+    min-height: 0;
+    padding: clamp(4rem, 8svh, 5.5rem) 0 clamp(6.25rem, 11svh, 7.5rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    place-items: center;
+    gap: 0;
+  }
+
+  .service-library-hero__copy {
+    width: min(100%, 34rem);
+    max-width: 34rem;
+    margin: 0 auto;
+    padding: 0;
+    align-self: center;
+    justify-self: center;
+    text-align: center;
+  }
+
+  .service-library-hero__copy h1,
+  .service-library-hero__copy > p:not(.services-kicker) {
+    margin-inline: auto;
+  }
+
+  .service-library-hero__actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .service-library-hero__explore {
+    width: min(100%, 18rem);
+  }
+
+  .service-library-hero__visual {
+    display: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .service-library-hero__stage {
+    padding: 3.75rem 0 5.75rem;
+  }
+
+  .service-library-hero__copy {
+    width: 100%;
+  }
+}

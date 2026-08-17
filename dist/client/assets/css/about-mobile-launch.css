@@ -66,6 +66,15 @@
   body[data-page="about"] .about-linen-fold[open] .about-linen-fold__heading {
     grid-template-columns: 5rem minmax(0, 1fr) 2.3rem;
   }
+
+  /* Keep the woven date band neutral in both settled and selected states. */
+  body[data-page="about"] .about-linen-fold__heading time,
+  body[data-page="about"] .about-linen-fold[open] .about-linen-fold__heading time {
+    color: #8a6228;
+    background: none;
+    background-blend-mode: normal;
+    text-shadow: none;
+  }
 }
 
 @media (max-width: 390px) {

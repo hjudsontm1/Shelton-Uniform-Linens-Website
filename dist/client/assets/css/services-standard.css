@@ -399,7 +399,7 @@
   }
 }
 
-@media (min-width: 621px) and (max-width: 860px) {
+@media (max-width: 860px) {
   .shelton-cleaning-standard__details,
   .shelton-cleaning-standard__panel {
     min-height: 0;
@@ -453,6 +453,32 @@
     grid-template-columns: 1.25rem minmax(0, auto);
     justify-content: center;
     text-align: left;
+  }
+}
+
+/* Keep the four proof labels readable on one line throughout compact and
+   phone layouts without changing the approved desktop composition. */
+@media (max-width: 860px) {
+  .shelton-cleaning-standard__tab {
+    padding-inline: 0;
+  }
+
+  .shelton-cleaning-standard__label {
+    max-width: none;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 721px) and (max-width: 860px) {
+  .shelton-cleaning-standard__label {
+    font-size: clamp(0.59rem, 1.3vw, 0.7rem);
+  }
+}
+
+@media (max-width: 340px) {
+  .shelton-cleaning-standard__label {
+    font-size: clamp(0.54rem, 2.9vw, 0.63rem);
   }
 }
 

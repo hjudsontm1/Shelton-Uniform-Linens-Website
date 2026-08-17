@@ -17,14 +17,24 @@
   let wasDocked = false;
   let wasCompact = compactDirectory.matches;
 
+  const getRootLength = (styles, property, fallback = 0) => {
+    const token = styles.getPropertyValue(property).trim();
+    const value = Number.parseFloat(token);
+    if (!Number.isFinite(value)) return fallback;
+    return token.endsWith("rem")
+      ? value * Number.parseFloat(styles.fontSize)
+      : value;
+  };
+
   const getDockedDirectoryHeight = () => {
     const rootStyles = window.getComputedStyle(document.documentElement);
-    const heightToken = rootStyles.getPropertyValue("--serve-directory-docked-height").trim();
-    const tokenValue = Number.parseFloat(heightToken);
-    if (!Number.isFinite(tokenValue)) return siteNavigation.offsetHeight;
-    return heightToken.endsWith("rem")
-      ? tokenValue * Number.parseFloat(rootStyles.fontSize)
-      : tokenValue;
+    const height = getRootLength(
+      rootStyles,
+      "--serve-directory-docked-height",
+      siteNavigation.offsetHeight,
+    );
+    const offset = getRootLength(rootStyles, "--serve-directory-docked-offset");
+    return height + offset;
   };
 
   const setActiveLink = (nextId, { center = false } = {}) => {
@@ -52,7 +62,7 @@
   const updateDirectory = () => {
     frameRequested = false;
     const directoryHeight = getDockedDirectoryHeight();
-    const hasPassedDirectory = directoryShell.getBoundingClientRect().top <= 0 && window.scrollY > 0;
+    const hasPassedDirectory = directoryShell.getBoundingClientRect().top <= 1 && window.scrollY > 0;
     const hasReachedClosingSection = closingSection
       ? closingSection.getBoundingClientRect().top <= directoryHeight
       : false;
@@ -60,7 +70,7 @@
     document.body.classList.toggle("has-directory-header", docked);
     directory.classList.toggle("is-docked", docked);
 
-    const readingLine = (docked ? directory.offsetHeight : siteNavigation.offsetHeight) + 40;
+    const readingLine = (docked ? directoryHeight : siteNavigation.offsetHeight) + 40;
     let nextId = sections[0].id;
     let nextTop = Number.NEGATIVE_INFINITY;
 

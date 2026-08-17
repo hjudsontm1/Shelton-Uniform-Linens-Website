@@ -1,14 +1,14 @@
 /*
  * About timeline v2
- * Nonmobile recreation of the approved towel-stack mockups.
- * The existing timeline remains the mobile experience at 620px and below.
+ * Responsive recreation of the approved towel-stack mockups.
+ * The same physical towel system now carries from desktop through mobile.
  */
 
 body[data-page="about"] .about-towel-history {
   display: none;
 }
 
-@media (min-width: 621px) {
+@media (min-width: 0px) {
   body[data-page="about"] .about-claim-timeline[data-mobile-history] {
     display: none;
   }
@@ -71,46 +71,49 @@ body[data-page="about"] .about-towel-history {
     border: 0;
     border-radius: 0;
     background-color: transparent;
-    background-image: url("../images/generated/about-timeline-row-tight-v2.png");
+    background-image: url("../images/generated/about-timeline-row-dobby-transparent-v1.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    box-shadow: none;
+    filter:
+      drop-shadow(0 0.2rem 0.18rem rgba(50, 39, 27, 0.2))
+      drop-shadow(0 0.62rem 0.72rem rgba(50, 39, 27, 0.12));
     cursor: pointer;
     font-family: "Cormorant Garamond", Georgia, serif;
-    font-weight: 500;
+    font-weight: 600;
     text-align: left;
     transition: filter 180ms ease, transform 280ms cubic-bezier(0.2, 0.72, 0.2, 1);
   }
 
   body[data-page="about"] .about-towel-history__trigger:hover {
-    filter: brightness(1.018);
+    filter:
+      brightness(1.018)
+      drop-shadow(0 0.28rem 0.22rem rgba(50, 39, 27, 0.23))
+      drop-shadow(0 0.76rem 0.84rem rgba(50, 39, 27, 0.15));
   }
 
   body[data-page="about"] .about-towel-history__trigger:focus-visible {
     z-index: 20;
-    outline: 2px solid rgba(168, 124, 54, 0.92);
-    outline-offset: 1px;
+    outline: 0;
+  }
+
+  body[data-page="about"] .about-towel-history__trigger:focus-visible .about-towel-history__label {
+    text-decoration-line: underline;
+    text-decoration-color: rgba(8, 19, 33, 0.88);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.14em;
   }
 
   body[data-page="about"] .about-towel-history__item.is-active .about-towel-history__trigger {
     z-index: 12;
+    filter:
+      brightness(1.012)
+      drop-shadow(0 0.4rem 0.3rem rgba(50, 39, 27, 0.27))
+      drop-shadow(0 0.95rem 1.05rem rgba(50, 39, 27, 0.18));
   }
 
   body[data-page="about"] .about-towel-history__trigger::before {
-    content: "";
-    position: absolute;
-    z-index: 1;
-    display: none;
-    pointer-events: none;
-    background-image: url("../images/generated/about-timeline-active-tab-v2.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-  }
-
-  body[data-page="about"] .about-towel-history__item.is-active .about-towel-history__trigger::before {
-    display: block;
+    content: none;
   }
 
   body[data-page="about"] .about-towel-history__year,
@@ -121,14 +124,24 @@ body[data-page="about"] .about-towel-history {
   }
 
   body[data-page="about"] .about-towel-history__year {
-    color: #a77c36;
+    width: 18%;
+    position: absolute;
+    left: 23.5%;
+    transform: translateX(-50%);
+    color: #8a6228;
     font-weight: 600;
+    text-align: center;
     white-space: nowrap;
   }
 
   body[data-page="about"] .about-towel-history__label {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 35.5%;
     color: var(--timeline-navy);
+    font-weight: 600;
     line-height: 1.03;
+    letter-spacing: -0.024em;
   }
 
   body[data-page="about"] .about-towel-history__arrow {
@@ -165,7 +178,7 @@ body[data-page="about"] .about-towel-history {
   }
 
   body[data-page="about"] .about-towel-history__detail-header time {
-    color: #a77c36;
+    color: #8a6228;
     font-family: "Cormorant Garamond", Georgia, serif;
     font-weight: 600;
     line-height: 1;
@@ -247,29 +260,23 @@ body[data-page="about"] .about-towel-history {
 
   body[data-page="about"] .about-towel-history__trigger {
     height: calc(100% + 0.2rem);
-    grid-template-columns: 32.7% minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     transform: translateY(-0.1rem);
   }
 
   body[data-page="about"] .about-towel-history__item.is-active .about-towel-history__trigger {
-    transform: translateY(-0.1rem);
-  }
-
-  body[data-page="about"] .about-towel-history__trigger::before {
-    width: clamp(1.75rem, 2.5vw, 2.35rem);
-    height: 94%;
-    inset: 3% auto auto clamp(-0.93rem, -0.98vw, -0.72rem);
+    transform: translateY(-0.18rem) scale(1.006);
   }
 
   body[data-page="about"] .about-towel-history__year {
-    padding-left: 5%;
-    font-size: clamp(0.72rem, 1.35vw, 1.24rem);
-    text-align: center;
+    font-size: clamp(0.76rem, 1.42vw, 1.3rem);
   }
 
   body[data-page="about"] .about-towel-history__label {
-    padding: 0.1rem clamp(0.6rem, 1vw, 1rem) 0.1rem 0;
-    font-size: clamp(0.76rem, 1.45vw, 1.34rem);
+    padding-top: 0.1rem;
+    padding-right: clamp(0.72rem, 1.15vw, 1.08rem);
+    padding-bottom: 0.1rem;
+    font-size: clamp(0.94rem, 1.58vw, 1.46rem);
   }
 
   body[data-page="about"] .about-towel-history__detail {
@@ -333,27 +340,29 @@ body[data-page="about"] .about-towel-history {
   }
 
   body[data-page="about"] .about-towel-history__photo {
-    height: 48.5%;
+    height: 46.5%;
     aspect-ratio: auto;
-    margin-top: 7.2%;
+    margin-top: 5.2%;
     flex: 0 0 auto;
     overflow: hidden;
   }
 
   body[data-page="about"] .about-towel-history__copy {
     min-height: 5.2em;
-    margin-top: 7%;
+    margin-top: 1.5%;
     padding-right: 2%;
     font-size: clamp(0.72rem, 1.2vw, 1.1rem);
   }
 
-  body[data-page="about"] #about-towel-trigger-2023 .about-towel-history__label {
-    font-size: clamp(0.7rem, 1.12vw, 1.04rem);
-    letter-spacing: -0.018em;
+}
+
+@media (min-width: 861px) and (max-width: 1100px) {
+  body[data-page="about"] .about-towel-history__photo {
+    height: 44.5%;
   }
 }
 
-@media (min-width: 621px) and (max-width: 860px) {
+@media (max-width: 860px) {
   body[data-page="about"] .about-towel-history {
     padding-top: clamp(2.65rem, 5.7vw, 3.35rem);
     padding-bottom: clamp(3.2rem, 6.7vw, 4.4rem);
@@ -375,21 +384,23 @@ body[data-page="about"] .about-towel-history {
 
   body[data-page="about"] .about-towel-history__trigger {
     height: clamp(3.75rem, 9.15vw, 5.75rem);
-    grid-template-columns: 25.8% minmax(0, 1fr) 3.25rem;
+    grid-template-columns: minmax(0, 1fr) 3.25rem;
   }
 
   body[data-page="about"] .about-towel-history__year {
-    padding-left: 8%;
     font-size: clamp(1rem, 2.52vw, 1.34rem);
-    text-align: center;
   }
 
   body[data-page="about"] .about-towel-history__label {
-    padding: 0.2rem 0.45rem 0.2rem 0.15rem;
-    font-size: clamp(1.02rem, 2.75vw, 1.46rem);
+    grid-column: 1;
+    padding-top: 0.2rem;
+    padding-right: 0.45rem;
+    padding-bottom: 0.2rem;
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
   }
 
   body[data-page="about"] .about-towel-history__arrow {
+    grid-column: 2;
     display: grid;
     place-items: center;
     padding-right: 12%;
@@ -401,12 +412,6 @@ body[data-page="about"] .about-towel-history {
   body[data-page="about"] .about-towel-history__item.is-active .about-towel-history__arrow {
     opacity: 1;
     transform: rotate(180deg);
-  }
-
-  body[data-page="about"] .about-towel-history__trigger::before {
-    width: clamp(1.45rem, 3.8vw, 2rem);
-    height: 94%;
-    inset: 3% auto auto clamp(-0.82rem, -1.8vw, -0.66rem);
   }
 
   body[data-page="about"] .about-towel-history__detail {
@@ -431,12 +436,13 @@ body[data-page="about"] .about-towel-history {
 
   body[data-page="about"] .about-towel-history__detail-surface {
     width: 100%;
-    aspect-ratio: 1 / 1.01;
+    min-height: 0;
+    aspect-ratio: auto;
     background-image: url("../images/generated/about-timeline-compact-open-surface-v2.png");
   }
 
   body[data-page="about"] .about-towel-history__detail-content {
-    height: 100%;
+    height: auto;
     padding: 4.2% 9.1% 11%;
     display: flex;
     flex-direction: column;
@@ -468,13 +474,71 @@ body[data-page="about"] .about-towel-history {
     font-size: clamp(0.95rem, 2.35vw, 1.2rem);
   }
 
-  body[data-page="about"] #about-towel-trigger-2023 .about-towel-history__label {
-    font-size: clamp(0.84rem, 2.18vw, 1.14rem);
-    letter-spacing: -0.018em;
+}
+
+@media (max-width: 620px) {
+  body[data-page="about"] .about-towel-history {
+    padding-top: 2.35rem;
+    padding-bottom: 3.4rem;
+  }
+
+  body[data-page="about"] .about-towel-history__title {
+    width: min(calc(100% - 2rem), calc(52vw + 10rem));
+    margin-bottom: 1.65rem;
+    font-size: clamp(2.4rem, 11.5vw, 3rem);
+  }
+
+  body[data-page="about"] .about-towel-history__stage {
+    width: min(calc(100% - 1.5rem), calc(33vw + 14.4rem));
+  }
+
+  body[data-page="about"] .about-towel-history__trigger {
+    height: clamp(3.9rem, 17vw, 4.7rem);
+    grid-template-columns: minmax(0, 1fr) 2.65rem;
+  }
+
+  body[data-page="about"] .about-towel-history__year {
+    width: 20%;
+    left: 22.5%;
+    font-size: clamp(0.88rem, 4vw, 1rem);
+  }
+
+  body[data-page="about"] .about-towel-history__label {
+    padding-left: 34.5%;
+    padding-right: 0.2rem;
+    font-size: clamp(1rem, 4.65vw, 1.18rem);
+  }
+
+  body[data-page="about"] .about-towel-history__arrow {
+    padding-right: 8%;
+    font-size: 1.55rem;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-content {
+    padding: 6.2% 6.8% 12%;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-header h3 {
+    font-size: clamp(1.9rem, 8vw, 2.35rem);
+  }
+
+  body[data-page="about"] .about-towel-history__photo {
+    height: auto;
+    aspect-ratio: 1.34;
+    margin-top: 5.5%;
+    padding: 0.48rem;
+  }
+
+  body[data-page="about"] .about-towel-history__copy {
+    min-height: 0;
+    margin-top: 6.5%;
+    padding-right: 1%;
+    font-size: 0.95rem;
+    line-height: 1.52;
   }
 }
 
-@media (prefers-reduced-motion: reduce) and (min-width: 621px) {
+@media (prefers-reduced-motion: reduce) {
   body[data-page="about"] .about-towel-history__trigger,
   body[data-page="about"] .about-towel-history__arrow,
   body[data-page="about"] .about-towel-history__detail {

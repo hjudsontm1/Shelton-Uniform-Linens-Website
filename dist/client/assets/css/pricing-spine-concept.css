@@ -2629,4 +2629,30 @@
     color: var(--calm-ink);
     border-bottom-color: var(--calm-gold-dark);
   }
+
+  .pricing-spine-workbench .factor-map li:nth-child(5):last-child {
+    grid-column: 1 / -1;
+    border-right: 0;
+  }
+
+  .pricing-spine-workbench .factor-map li:nth-child(5):last-child a {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* Once the route section stacks, keep both interactive blocks centered and
+   spanning the full compact canvas. Desktop begins at 861px and is locked. */
+@media (max-width: 860px) {
+  .pricing-spine-workbench #factor-route .rhythm-control,
+  .pricing-spine-workbench #factor-route .route-choice-group {
+    grid-column: 1 / -1;
+    width: 100%;
+    justify-self: center;
+  }
+
+  .pricing-spine-workbench #factor-route .route-choice-group > legend {
+    width: 100%;
+    text-align: center;
+  }
 }

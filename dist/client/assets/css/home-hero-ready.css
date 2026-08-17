@@ -240,7 +240,9 @@
 @media (max-width: 620px) {
   .home-page .home-hero--ready .ready-hero__frame {
     width: min(calc(100% - 2rem), 34rem);
-    padding-top: clamp(17.5rem, 71vw, 20rem);
+    min-height: calc(100svh - var(--opening-scene-top));
+    padding: clamp(2rem, 5svh, 3.25rem) 0;
+    place-items: center;
   }
 
   .ready-hero__copy h1 {
