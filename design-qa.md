@@ -1,77 +1,62 @@
-# Design QA: About towel timeline
+# Design QA: About towel timeline realism and copy
 
-## Final result
-
-passed
+final result: passed
 
 ## Source of truth
 
-- Desktop approved mockup: `artifacts/about-towel-timeline-reference-desktop.png`
-- Compact approved mockup: `artifacts/about-towel-timeline-reference-compact.png`
-- Verbal overrides applied after the mockups:
-  - Nine chapters total
-  - No chapter fraction
-  - Last three chapters are c. 2019, c. 2023, and c. 2026
-  - Desktop stack and story towel align at the top and bottom
-  - Compact stack remains one constant width, including the open chapter
-  - Mobile at 620px and below remains unchanged
+- Approved composition mockup: `/Users/jordanhudson/.codex/generated_images/019fe30b-34d4-7441-91d0-8003caffcb12/exec-bf3bc641-0b5c-4fec-a6cb-f1f00c5a1842.png`
+- Supplied real-towel reference: `/var/folders/6w/c0ys3j4904l0y3wqgqsbqn_r0000gn/T/TemporaryItems/NSIRD_screencaptureui_F6ZTKz/Screenshot 2026-08-16 at 11.19.43 AM.png`
+- Supplied woven-band reference: `/var/folders/6w/c0ys3j4904l0y3wqgqsbqn_r0000gn/T/TemporaryItems/NSIRD_screencaptureui_fiaSxp/Screenshot 2026-08-16 at 11.17.32 AM.png`
+- Verbal overrides: neutral date band, larger and heavier titles, stronger fold shadows, no mustard active marker, unchanged right-side story towel, and the exact August 16 copy memo.
 
 ## Implementation evidence
 
-- Desktop implementation: `artifacts/about-towel-timeline-implementation-desktop-full.png`
-- Compact implementation: `artifacts/about-towel-timeline-implementation-compact-full.png`
-- Desktop side-by-side comparison: `artifacts/about-towel-timeline-combined-qa-viewport.png`
-- Compact side-by-side comparison: `artifacts/about-towel-timeline-combined-qa-compact.png`
-
-## Comparison setup
-
-| State | Reference | Implementation | Normalized comparison |
-| --- | --- | --- | --- |
-| Desktop, c. 1955 open | 1487 × 1058 px | 1487 × 1060 px | Reference padded by 2 px to 1487 × 1060 px |
-| Compact, c. 1955 open | 998 × 1576 px | 760 × 1341 px | Reference resized to 760 px wide and padded to 760 × 1341 px |
-
-Browser pixel density was 1 CSS pixel per captured pixel. The page was positioned at `#about-history`, and both comparisons used the same c. 1955 open state.
+- Full fidelity comparison: `tmp/about-towel-design-qa-comparison.png`
+- Desktop browser capture, 1440 px: `tmp/about-towel-realism-desktop-1440x1200.png`
+- Compact browser capture, 768 px: `tmp/about-towel-realism-compact-768x1200-v7.png`
+- Folded-row asset: `assets/images/generated/about-timeline-row-dobby-transparent-v1.png`
 
 ## Findings
 
 ### Visual fidelity
 
-- Desktop hierarchy, centered title, two-column composition, towel texture, folded edges, hem detail, contact shadows, active gold seam, photo treatment, and story copy placement match the approved direction.
-- The desktop stack and story towel now share the same top and bottom visual boundaries.
-- The ninth towel and revised last three chapters are intentional approved changes from the earlier desktop mockup.
-- Compact preserves the approved single-stack interaction and constant width. The open chapter expands vertically inside the stack without tapering or trailing out.
-- No chapter fraction is present in desktop or compact.
+- The desktop composition keeps the approved centered title, towel stack on the left, and full story towel on the right.
+- Folded rows now have transparent edges, a more realistic terry surface, a neutral woven band, and stronger contact shadows against the page background.
+- Dates sit within the woven band. Titles use greater weight and occupy more of each folded towel.
+- The mustard selected-tab treatment is absent. Selection is communicated by the open story panel and stronger stacking depth.
+- The right-side story towel remains unchanged, as requested.
+
+### Copy fidelity
+
+- The homepage archive carousel, About montage, nine desktop/compact timeline entries, nine mobile timeline entries, and all four leadership profiles match the supplied revision memo.
+- Nelson Torres's supplied portrait is connected to his existing montage position.
+- Source and `dist/client` copies are byte-identical.
 
 ### Responsive behavior
 
-- 620px: legacy mobile timeline visible, new towel timeline hidden, no horizontal overflow.
-- 621px: compact towel timeline visible, mobile timeline hidden, no horizontal overflow.
-- 860px: compact layout remains intact, no horizontal overflow.
-- 861px: desktop two-column layout activates cleanly, no horizontal overflow.
-- 1487px: full desktop composition remains aligned and centered.
+- All nine entries were checked at 621, 768, 860, 861, 1024, and 1440 px.
+- No horizontal overflow was present at any checked width.
+- Longer compact stories no longer clip. The open towel surface now grows with its content while preserving the approved constant-width stack.
+- The existing mobile timeline remains the active treatment at 620 px and below.
 
 ### Interaction and accessibility
 
-- Exactly one chapter remains open at a time.
-- Click activation updates the open chapter and ARIA state.
-- Arrow key navigation changes the active chapter and moves focus.
-- Home and End key support is included.
-- Reduced-motion styling removes the transition for users who request it.
-- No browser warnings or errors were reported during the final pass.
+- Exactly one timeline chapter remains open at a time.
+- Click and keyboard activation update the active chapter and ARIA state.
+- Reduced-motion styling remains available.
+- The final browser console contained no warnings or errors.
 
 ## Iteration history
 
-1. Replaced the earlier flat approximation with reusable raster towel surfaces taken from the approved visual direction.
-2. Added the ninth chapter and removed the obsolete chapter fraction.
-3. Rebuilt the desktop proportions so both columns align at the top and bottom.
-4. Rebuilt compact as a constant-width stack with the open chapter unfolding inside itself.
-5. Tightened the transparent story-towel crop so the physical towel, not its transparent canvas, determines alignment.
-6. Verified boundaries, interaction, keyboard behavior, reduced motion, console output, and mobile preservation.
+1. Preserved the approved desktop and compact compositions.
+2. Replaced the visibly cropped folded-row artwork with one transparent, reusable towel asset.
+3. Added the neutral woven date band, heavier titles, stronger shadows, and removed the mustard active marker.
+4. Applied the final archive, timeline, and leadership copy across all duplicated responsive renderings.
+5. Found compact-story clipping during QA and changed the open towel from a fixed aspect ratio to content-driven height.
+6. Rechecked every timeline entry across compact and desktop breakpoints.
 
 ## Severity summary
 
 - P0: none
 - P1: none
 - P2: none
-
-The temporary default remains c. 1955 until a different launch default is selected.

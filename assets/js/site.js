@@ -22,8 +22,6 @@
   if (toggle && menu) {
     const nav = toggle.closest(".site-nav");
     const mobileNavigation = window.matchMedia("(max-width: 1080px)");
-    const phoneNavigation = window.matchMedia("(max-width: 620px)");
-    const compactDesktopNavigation = window.matchMedia("(min-width: 621px) and (max-width: 1080px)");
     const isolatedSiblings = new Set();
     const setBackgroundInert = (shouldIsolate) => {
       if (!nav) return;
@@ -52,7 +50,7 @@
       toggle.setAttribute("aria-label", "Close navigation");
       menu.classList.add("is-open");
       document.body.classList.add("has-open-menu");
-      setBackgroundInert(phoneNavigation.matches);
+      setBackgroundInert(mobileNavigation.matches);
       if (focusFirst) {
         window.setTimeout(() => {
           if (menuIsOpen()) menu.querySelector("a[href]")?.focus();
@@ -64,7 +62,7 @@
       if (menuIsOpen()) closeMenu();
       else {
         const openedWithKeyboard = event.detail === 0;
-        openMenu({ focusFirst: openedWithKeyboard || !compactDesktopNavigation.matches });
+        openMenu({ focusFirst: openedWithKeyboard });
       }
     });
     menu.addEventListener("click", (event) => {
@@ -97,15 +95,15 @@
     const resetDesktopMenu = (event) => {
       if (!event.matches) closeMenu();
     };
-    const syncPhoneMenuIsolation = (event) => {
+    const syncMenuIsolation = (event) => {
       if (menuIsOpen()) setBackgroundInert(event.matches);
     };
     if (typeof mobileNavigation.addEventListener === "function") {
       mobileNavigation.addEventListener("change", resetDesktopMenu);
-      phoneNavigation.addEventListener("change", syncPhoneMenuIsolation);
+      mobileNavigation.addEventListener("change", syncMenuIsolation);
     } else {
       mobileNavigation.addListener(resetDesktopMenu);
-      phoneNavigation.addListener(syncPhoneMenuIsolation);
+      mobileNavigation.addListener(syncMenuIsolation);
     }
   }
 
@@ -187,6 +185,9 @@
     const tvScreen = aboutTv?.querySelector("[data-about-tv-screen]");
     const tvPhoto = aboutTv?.querySelector("[data-about-tv-photo]");
     const tvPhotoCanvas = aboutTv?.querySelector("[data-about-tv-photo-canvas]");
+    const tvContact = aboutTv?.querySelector("[data-about-tv-contact]");
+    const tvPhone = aboutTv?.querySelector("[data-about-tv-phone]");
+    const tvEmail = aboutTv?.querySelector("[data-about-tv-email]");
     const nextButton = aboutTv?.querySelector("[data-about-tv-next]");
     const tvInstruction = {
       era: "Shelton family archive",
@@ -220,8 +221,34 @@
         title: tile?.dataset.title || "Shelton story",
         era: tile?.dataset.era || "Shelton history",
         story: tile?.dataset.story || "A future archive note can live here when this photo is added.",
+        phone: tile?.dataset.phone || "",
+        email: tile?.dataset.email || "",
         photoSrc: tileImage?.currentSrc || tileImage?.getAttribute("src") || ""
       };
+    };
+    const renderAboutTvContact = (data) => {
+      const phone = data.phone?.trim() || "";
+      const email = data.email?.trim() || "";
+      if (tvPhone) {
+        tvPhone.hidden = !phone;
+        tvPhone.textContent = phone;
+        const digits = phone.replace(/\D/g, "");
+        if (digits) {
+          tvPhone.href = `tel:${digits.length === 10 ? "+1" : ""}${digits}`;
+        } else {
+          tvPhone.removeAttribute("href");
+        }
+      }
+      if (tvEmail) {
+        tvEmail.hidden = !email;
+        tvEmail.textContent = email;
+        if (email) {
+          tvEmail.href = `mailto:${email}`;
+        } else {
+          tvEmail.removeAttribute("href");
+        }
+      }
+      if (tvContact) tvContact.hidden = !phone && !email;
     };
     const drawAboutTvPhoto = (tile) => {
       if (!(tvPhotoCanvas instanceof HTMLCanvasElement) || !tvPhoto) return;
@@ -274,6 +301,7 @@
       setText(aboutTv, "[data-about-tv-era]", data.era);
       setText(aboutTv, "[data-about-tv-title]", data.title);
       setText(aboutTv, "[data-about-tv-story]", data.story);
+      renderAboutTvContact(data);
     };
     const setActiveAboutTile = (tile) => {
       if (activeAboutTile && activeAboutTile !== tile) {

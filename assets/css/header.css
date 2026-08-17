@@ -397,3 +397,75 @@ body[data-page="about"] .site-nav .menu-toggle {
     color: var(--about-ink);
   }
 }
+
+/* Phone navigation ---------------------------------------------------------
+   Continue the approved compact menu hierarchy below 621px. The previous
+   phone rules exposed the older, sparse menu and allowed the page beneath it
+   to read through the panel. */
+@media (max-width: 620px) {
+  .site-nav .nav-links {
+    inset: 5.5rem 0 0;
+    width: 100vw;
+    max-width: none;
+    height: auto;
+    min-height: 0;
+    padding:
+      clamp(1.25rem, 4dvh, 2rem)
+      max(1rem, 5vw)
+      max(1.5rem, env(safe-area-inset-bottom));
+    align-content: start;
+    align-items: stretch;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-top: 1px solid rgba(184, 150, 90, 0.14);
+    background: linear-gradient(180deg, #081321 0%, #050b14 100%);
+    isolation: isolate;
+  }
+
+  body[data-page="about"] .site-nav .nav-links {
+    border-top-color: rgba(31, 25, 18, 0.16);
+    background: linear-gradient(180deg, #f2e8d0 0%, #e8d9b8 100%);
+  }
+
+  .site-nav .nav-links li {
+    min-width: 0;
+    border-bottom-color: rgba(184, 150, 90, 0.22);
+  }
+
+  .site-nav .nav-links li:last-child {
+    padding-top: 1rem;
+    border-bottom: 0;
+  }
+
+  .site-nav .nav-links a:not(.nav-cta) {
+    min-height: 3.75rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    font-size: clamp(0.78rem, 3.5vw, 0.88rem);
+    letter-spacing: 0.17em;
+  }
+
+  .site-nav .nav-links a:not(.nav-cta)::after {
+    right: auto;
+    bottom: -1px;
+    width: 0;
+    display: block;
+    transition: width 0.2s ease;
+  }
+
+  .site-nav .nav-links a:not(.nav-cta):hover::after,
+  .site-nav .nav-links a:not(.nav-cta):focus-visible::after,
+  .site-nav .nav-links a:not(.nav-cta).is-active::after {
+    width: 3rem;
+  }
+
+  .site-nav .nav-links a.nav-cta {
+    width: 100%;
+    min-height: 3.6rem;
+    margin-top: 0;
+    padding-inline: 1.25rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.17em;
+  }
+}

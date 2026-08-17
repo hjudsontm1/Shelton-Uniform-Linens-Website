@@ -6,27 +6,23 @@ For each placement, mark one status and add any confirmed names, date, location,
 
 Status key: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 
-## Items that especially need fact-checking
+## Remaining production notes
 
-- `john-shelton-sr-1901.jpeg` is labeled **Circa 1901** on the homepage and timeline, but **1890s** in the montage.
-- `unit-laundry-1930.jpeg` is labeled **Circa 1930** on the homepage, **1930s** in the montage, and **c. 1935** in the timeline.
-- `bonded-cleaners-pressing-area-1950.jpg` is labeled **circa 1950** in the montage but **c. 1955** in the timeline.
-- `state-street-assembly-area-1960s.jpg` is labeled **1960s** in the montage but **c. 1967** in the timeline.
-- `sterling-cleaners-indianapolis-boiler-room-2003.jpg` is labeled **2003** in the montage but **c. 2004** in the timeline.
-- The montage gives `shelton-cleaners-exterior-sign-web.jpeg` the date **today**, while the timeline uses it for **c. 2019 — Shelton Cleaners Opens**.
-- The montage gives `seville-cleaners-pacific-beach-1979.jpeg` the title **Shelton Cleaners roots** without a date; the homepage identifies it as **Seville Cleaners, Pacific Beach, circa 1979**.
-- Amanda Waskin currently has only her name as the story. Jordan Hudson still has a reserved montage slot but no image. Vaile Shelton has a one-sentence story without a role or date.
+- Confirmed dates and facts now align across the homepage, montage, and towel timeline.
+- The legacy filenames `john-shelton-sr-1901.jpeg` and `unit-laundry-pressing-room-1940.jpeg` were retained to avoid breaking existing asset links; their displayed dates now reflect the confirmed history.
+- The current Shelton Cleaners exterior photograph is also used to illustrate the 2019 opening chapter in the timeline.
+- Jordan Hudson has a completed role, biography, phone number, and email, but his reserved montage slot still needs a portrait.
 
 ## 1. Homepage archive carousel — 5 placements
 
 ### Home 01 — John Shelton, Sr.
 
-![John Shelton, Sr. and White Star Laundry staff](assets/images/history/john-shelton-sr-1901.jpeg)
+![Shelton family and others at White Star Laundry](assets/images/history/john-shelton-sr-1901.jpeg)
 
 - File: `assets/images/history/john-shelton-sr-1901.jpeg`
-- Current date: **Circa 1901**
+- Current date and location: **c. 1898 · Oklahoma**
 - Current title: **John Shelton, Sr.**
-- Current story: The family laundry story reaches back to John Shelton, Sr. and the early White Star Laundry years. More than a century later, that background still shapes how Shelton serves commercial accounts today.
+- Current story: Grandpa and Grandma Shelton, together with Gertie, Elma, Mary, John Shelton, Sr., Mason Shelton, and others, opened White Star Laundry in Oklahoma. Their shared undertaking established the family trade that later generations would carry forward.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -35,9 +31,9 @@ Status key: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 ![Unit Laundry before expansion](assets/images/history/unit-laundry-1930.jpeg)
 
 - File: `assets/images/history/unit-laundry-1930.jpeg`
-- Current date: **Circa 1930**
+- Current date and location: **1930s · Tucson**
 - Current title: **Early Laundry Operations**
-- Current story: This early Unit Laundry photo shows the family business before expansion. The work was already built around practical laundry operations: process, care, consistency, and goods returned ready to use.
+- Current story: This view of Unit Laundry captures the family business as it took root in Tucson during the 1930s. Even before later expansion, the work centered on careful processing, dependable service, and goods returned ready to use.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -46,9 +42,9 @@ Status key: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 ![Unit Laundry pressing room](assets/images/history/unit-laundry-pressing-room-1940.jpeg)
 
 - File: `assets/images/history/unit-laundry-pressing-room-1940.jpeg`
-- Current date: **Circa 1940**
+- Current date and location: **Early 1950s · Old Town San Diego**
 - Current title: **Finished Properly**
-- Current story: The pressing room shows how finishing has always been part of the standard. Commercial accounts still depend on goods coming back clean, organized, and ready for staff to use without extra work.
+- Current story: At an early-1950s open house in Old Town San Diego, customers could see the equipment and finishing work behind the service. The machinery has changed dramatically since then, but Shelton's standard for clean, properly finished goods has remained.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -57,9 +53,9 @@ Status key: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 ![Unit Laundry wash room](assets/images/history/unit-laundry-wash-room-1940.jpeg)
 
 - File: `assets/images/history/unit-laundry-wash-room-1940.jpeg`
-- Current date: **Circa 1940**
+- Current date and location: **Early 1940s · Tucson**
 - Current title: **Cleaning Well**
-- Current story: The cleaning room captures the behind-the-scenes discipline of laundry and dry cleaning: sorting, cleaning, handling, and finishing with care. Those habits carry into Shelton's commercial laundry programs today.
+- Current story: Unit Laundry's cleaning room reveals the disciplined work behind every finished order: sorting, spotting, washing, handling, and inspection. Those same fundamentals still guide Shelton's commercial laundry programs today.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -68,9 +64,9 @@ Status key: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 ![Seville Cleaners in Pacific Beach](assets/images/history/seville-cleaners-pacific-beach-1979.jpeg)
 
 - File: `assets/images/history/seville-cleaners-pacific-beach-1979.jpeg`
-- Current date: **Circa 1979**
+- Current date: **1979**
 - Current title: **San Diego Cleaner Roots**
-- Current story: Later generations carried the family cleaning standard into San Diego communities, including Seville Cleaners in Pacific Beach. Shelton Linen & Uniform Services continues that legacy for commercial laundry accounts across San Diego.
+- Current story: Seville Cleaners brought the family's cleaning tradition to Pacific Beach in 1979. Its neighborhood presence joined quality garment care with everyday convenience, values that continue to shape Shelton's service across San Diego.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -82,35 +78,35 @@ The montage also contains a reserved Jordan Hudson slot with a story but no pict
 
 ![White Star Laundry](assets/images/history/john-shelton-sr-1901.jpeg)
 
-- Current era: **1890s**
-- Current story: Our family opened White Star Laundry in the 1890s. That early laundry experience still shapes how Shelton thinks about service today.
+- Current era: **1898**
+- Current story: White Star Laundry opened in 1898, establishing the foundation for four generations of the Shelton family in laundry and dry cleaning.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
-### Montage 02 / photo-wall-02 — Family laundry operations
+### Montage 02 / photo-wall-02 — Unit Laundry
 
-![Family laundry operations](assets/images/history/unit-laundry-1930.jpeg)
+![Unit Laundry](assets/images/history/unit-laundry-1930.jpeg)
 
 - Current era: **1930s**
 - Current story: Every generation of the family has worked in laundry or dry cleaning, carrying forward a standard built on cleaning well, finishing properly, and returning goods ready to use.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
-### Montage 03 / photo-wall-03 — Bonded Cleaners pressing area
+### Montage 03 / photo-wall-03 — Unit Cleaners San Diego
 
 ![Bonded Cleaners pressing area](assets/images/history/bonded-cleaners-pressing-area-1950.jpg)
 
-- Current era: **San Diego, circa 1950**
-- Current story: This San Diego pressing area shows the hands-on finishing work behind garment care before modern commercial laundry programs.
+- Current era: **1950s**
+- Current story: Unit Cleaners marked the family's first San Diego presence. The family built the facility and completed the installation and setup themselves.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
-### Montage 04 / photo-wall-04 — Shelton Cleaners roots
+### Montage 04 / photo-wall-04 — Seville Cleaners
 
 ![Seville Cleaners in Pacific Beach](assets/images/history/seville-cleaners-pacific-beach-1979.jpeg)
 
-- Current era: **San Diego**
-- Current story: Shelton Cleaners represents the family’s retail dry cleaning roots in San Diego. The commercial operation builds on that foundation with larger account programs.
+- Current era: **1979**
+- Current story: Seville Cleaners was one of more than 40 locations serving the San Diego region. Its drive-through window paired convenience with quality, a balance Shelton continues to value today.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -127,7 +123,7 @@ The montage also contains a reserved Jordan Hudson slot with a story but no pict
 
 ![Tucson Steam Laundry](assets/images/history/tucson-steam-laundry-1913.jpg)
 
-- Current era: **Tucson, Arizona, 1913**
+- Current era: **1913**
 - Current story: Early steam-laundry operations depended on plant equipment, route work, and careful finishing long before modern commercial programs.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
@@ -136,7 +132,7 @@ The montage also contains a reserved Jordan Hudson slot with a story but no pict
 
 ![Unit Laundry boiler room](assets/images/history/unit-laundry-boiler-room-1940.jpg)
 
-- Current era: **Tucson, circa 1940**
+- Current era: **Early 1940s**
 - Current story: Boiler rooms powered earlier laundry plants, turning heat, pressure, and equipment into the daily rhythm of cleaning work.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
@@ -173,7 +169,7 @@ The montage also contains a reserved Jordan Hudson slot with a story but no pict
 ![Sterling Cleaners lobby](assets/images/history/sterling-cleaners-las-vegas-lobby-2003.jpg)
 
 - Current era: **Las Vegas, 2003**
-- Current story: The lobby side of the business connected plant work to customer presentation, service, and trust.
+- Current story: Sterling Cleaners used an open layout so customers could see the work in progress and understand the care behind each completed order.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -190,16 +186,16 @@ The montage also contains a reserved Jordan Hudson slot with a story but no pict
 
 ![John W. Shelton Sr. and Mr. Benz](assets/images/history/john-shelton-sr-mr-benz-office-1945.jpg)
 
-- Current era: **Circa 1945**
-- Current story: John W. Shelton Sr. and office manager Mr. Benz stand outside Unit Laundry and Dry Cleaners, another chapter in the family’s laundry and cleaning work.
+- Current era: **Early 1940s**
+- Current story: John W. Shelton Sr. stands with office manager Mr. Benz outside Unit Laundry and Dry Cleaners, documenting another chapter in the family's laundry and cleaning work.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
-### Montage 14 / photo-wall-14 — Bonded Cleaners delivery vans
+### Montage 14 / photo-wall-14 — Unit Cleaners delivery vans
 
 ![Bonded Cleaners delivery vans](assets/images/history/bonded-cleaners-delivery-vans-1950.jpg)
 
-- Current era: **San Diego, circa 1950**
+- Current era: **1950s**
 - Current story: Delivery vans connected the cleaning plant to customers across San Diego, showing how route service has long been part of the work.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
@@ -208,7 +204,7 @@ The montage also contains a reserved Jordan Hudson slot with a story but no pict
 
 ![Shelton family with Bonded Cleaners delivery van](assets/images/history/john-shelton-family-bonded-delivery-1954.jpg)
 
-- Current era: **San Diego, approx. 1954**
+- Current era: **1954**
 - Current story: John Shelton Sr., John Shelton Jr., William K. Brown, and Robert Brown are pictured with a Bonded Cleaners delivery van, tying family history to route service.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
@@ -244,7 +240,7 @@ The montage also contains a reserved Jordan Hudson slot with a story but no pict
 
 ![Unit Laundry pressing room](assets/images/history/unit-laundry-pressing-room-1940.jpeg)
 
-- Current era: **Tucson, circa 1940**
+- Current era: **San Diego, 1950s**
 - Current story: The pressing room shows the hands-on finishing side of laundry and garment care, where clean work became customer-ready work.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
@@ -262,8 +258,10 @@ The montage also contains a reserved Jordan Hudson slot with a story but no pict
 
 ![Amanda Waskin](assets/images/history/amanda-waskin-portrait.jpg)
 
-- Current era: **Shelton team**
-- Current story: Amanda Waskin.
+- Current role: **Owner / Sales Director**
+- Current phone: **760-528-0003**
+- Current email: **amanda@sheltonlinen.com**
+- Current story: Drawing on a long career in sales and customer service, Amanda connects each client's needs with the day-to-day operation, helping ensure clear communication and a program that works in practice.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -271,8 +269,10 @@ The montage also contains a reserved Jordan Hudson slot with a story but no pict
 
 ![Vaile Shelton](assets/images/history/shelton-cleaners-plant-portrait-web.jpeg)
 
-- Current era: **Shelton Cleaners**
-- Current story: Vaile Shelton carries the family standard forward inside today's cleaning operation.
+- Current role: **Owner**
+- Current phone: **619-289-8583**
+- Current email: **vaile@sheltonlinen.com**
+- Current story: Vaile entered the cleaning industry directly after high school and has spent the past four decades helping customers and building service businesses. During that time, he has opened 67 dry-cleaning locations and expanded the family's laundry operations.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -281,7 +281,9 @@ The montage also contains a reserved Jordan Hudson slot with a story but no pict
 ![Nelson Torres](assets/images/history/nelson-torres-general-manager.jpeg)
 
 - Current role: **General Manager**
-- Current story: Nelson Torres serves as General Manager for Shelton.
+- Current phone: **619-324-3563**
+- Current email: **nelson@sheltonlinen.com**
+- Current story: Nelson brings more than 20 years of experience in dry cleaning and laundry to his role as General Manager, guiding the Shelton operation and the team behind its daily service.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -308,7 +310,7 @@ The montage also contains a reserved Jordan Hudson slot with a story but no pict
 ![Imperial Cleaners](assets/images/history/imperial-cleaners-long-beach-1981.jpeg)
 
 - Current era: **Long Beach, 1981**
-- Current story: Imperial Cleaners adds another chapter to the archive of family-operated cleaning work in Southern California.
+- Current story: Opened in Long Beach, Imperial Cleaners reflects the family's growth throughout the twentieth century. With each new operation, the Shelton name became more deeply rooted in professional dry cleaning.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -325,57 +327,57 @@ The montage also contains a reserved Jordan Hudson slot with a story but no pict
 
 The desktop towel timeline and compact/mobile linen-fold timeline use the same nine pictures and the same stories, so each is listed once.
 
-### Timeline 01 — Early Laundry Roots
+### Timeline 01 — White Star Laundry Begins
 
 ![White Star Laundry staff](assets/images/history/john-shelton-sr-1901.jpeg)
 
-- Current date: **c. 1901**
-- Current story: Early family laundry work established the trade that later generations would carry forward.
+- Current date: **c. 1898**
+- Current story: In Oklahoma, Grandpa and Grandma Shelton joined Gertie, Elma, Mary, John Shelton, Sr., Mason Shelton, and others to open White Star Laundry. The business began a family trade in cleaning, finishing, service, and customer care that would continue through four generations.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
-### Timeline 02 — Family Trade Carries Forward
+### Timeline 02 — Unit Laundry Takes Root in Tucson
 
 ![Unit Laundry building and route vehicles](assets/images/history/unit-laundry-1930.jpeg)
 
-- Current date: **c. 1935**
-- Current story: The work of cleaning, finishing, and returning goods properly stayed central to the family story.
+- Current date: **1930s**
+- Current story: By the 1930s, Unit Laundry had become the family's next major chapter in Tucson. The building and route vehicles reflect a growing operation, while the daily work remained grounded in careful processing, reliable pickup and return, and goods finished for immediate use.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
-### Timeline 03 — Cleaning Work Expands
+### Timeline 03 — The Family Reaches San Diego
 
 ![Bonded Cleaners pressing area](assets/images/history/bonded-cleaners-pressing-area-1950.jpg)
 
-- Current date: **c. 1955**
-- Current story: Laundry and dry cleaning experience continued to grow around service, routes, and garment care.
+- Current date: **1950s**
+- Current story: Unit Cleaners marked the family's first presence in San Diego. The family built the facility and completed its installation and setup themselves, bringing hands-on knowledge of plant design, equipment, cleaning, and finishing into a new market.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
-### Timeline 04 — Generations in the Business
+### Timeline 04 — State Street Operations Grow
 
 ![State Street garment assembly area](assets/images/history/state-street-assembly-area-1960s.jpg)
 
-- Current date: **c. 1967**
-- Current story: New generations carried the trade forward as equipment, customers, and expectations changed.
+- Current date: **1960s**
+- Current story: The State Street assembly area shows the organized work required to move finished garments back to customers accurately and efficiently. As the operation grew, new generations carried the trade forward while adapting to changing equipment, greater volume, and higher customer expectations.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
-### Timeline 05 — Retail Cleaning Story
+### Timeline 05 — Imperial Cleaners in Long Beach
 
 ![Imperial Cleaners storefront](assets/images/history/imperial-cleaners-long-beach-1981.jpeg)
 
-- Current date: **c. 1981**
-- Current story: Retail dry cleaning became a visible part of the family's service work.
+- Current date: **1981**
+- Current story: Imperial Cleaners opened in Long Beach as the family's network continued to grow across Southern California. By 1981, the Shelton name had become increasingly rooted in professional dry cleaning through neighborhood locations built around dependable care and service.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
-### Timeline 06 — Modern Service Foundation
+### Timeline 06 — Modern Plant Operations
 
 ![Sterling Cleaners boiler room](assets/images/history/sterling-cleaners-indianapolis-boiler-room-2003.jpg)
 
-- Current date: **c. 2004**
-- Current story: Modern operations brought together plant capacity, finishing work, and customer service.
+- Current date: **2003**
+- Current story: The Sterling Cleaners boiler room in Indianapolis illustrates the infrastructure behind a modern cleaning plant. Reliable heat, pressure, equipment, and maintenance supported the visible service customers experienced at the counter and the quality delivered with every finished order.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -383,8 +385,8 @@ The desktop towel timeline and compact/mobile linen-fold timeline use the same n
 
 ![Shelton Cleaners exterior sign](assets/images/history/shelton-cleaners-exterior-sign-web.jpeg)
 
-- Current date: **c. 2019**
-- Current story: Shelton Cleaners became the retail dry cleaning home for the next chapter in San Diego.
+- Current date: **2019**
+- Current story: Shelton Cleaners opened in San Diego as the retail home for the family's next chapter. The storefront connected decades of cleaning experience with a modern local operation focused on garment care, responsive service, and the trust built through direct customer relationships.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -392,8 +394,8 @@ The desktop towel timeline and compact/mobile linen-fold timeline use the same n
 
 ![Finished Shelton Cleaners garments](assets/images/history/shelton-cleaners-poly-garments-web.jpeg)
 
-- Current date: **c. 2023**
-- Current story: Shelton launched a wholesale department for commercial partners, expanding its finishing and service capabilities.
+- Current date: **2023**
+- Current story: Shelton launched a wholesale department to support commercial partners that needed dependable cleaning and finishing capacity behind the scenes. The expansion brought the family's operating experience into larger-volume relationships while preserving careful handling, organized return, and responsive service.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -401,8 +403,8 @@ The desktop towel timeline and compact/mobile linen-fold timeline use the same n
 
 ![Shelton commercial ironer](assets/images/history/shelton-commercial-ironer.jpeg)
 
-- Current date: **c. 2026**
-- Current story: Commercial laundry service carries the same trade into linen, uniform, towel, event, and wholesale programs.
+- Current date: **2026**
+- Current story: Shelton Linen & Uniform Services carries the family trade into dedicated commercial programs for linens, uniforms, towels, event goods, and wholesale partners. Modern equipment and route service support today's volume, while the standard remains rooted in careful cleaning, proper finishing, and dependable return.
 - Review: `[ ] Approve` `[ ] Revise` `[ ] Replace`
 - Partner notes:
 
@@ -410,6 +412,8 @@ The desktop towel timeline and compact/mobile linen-fold timeline use the same n
 
 - Slot: `photo-wall-22`
 - Name: **Jordan Hudson**
-- Current label: **Reserved portrait**
-- Current story: Reserved portrait slot for Jordan Hudson.
-- Needed: portrait, role, and approved short biography.
+- Current role: **Owner**
+- Current phone: **619-333-0966**
+- Current email: **jordan@sheltonlinen.com**
+- Current story: Jordan leads the family business with a focus on thoughtful growth, practical innovation, and consistently high standards of customer service.
+- Needed: portrait only.
