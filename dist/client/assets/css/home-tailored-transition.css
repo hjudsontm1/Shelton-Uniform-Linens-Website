@@ -4,6 +4,12 @@
  * existing Deep Navy program builder without changing content or controls.
  */
 
+.home-page {
+  --fold-height: clamp(22rem, 29vw, 26rem);
+  --fold-overlap: clamp(9.5rem, 13.5vw, 12.5rem);
+  --fold-exit-overlap: clamp(6.5rem, 9.5vw, 9rem);
+}
+
 .home-page .home-proof {
   border-bottom-color: transparent;
 }
@@ -33,40 +39,19 @@
 }
 
 .home-tailored-transition {
-  --fold-height: clamp(22rem, 29vw, 26rem);
-  --fold-overlap: clamp(9.5rem, 13.5vw, 12.5rem);
-  --fold-exit-overlap: clamp(6.5rem, 9.5vw, 9rem);
   position: relative;
   z-index: 2;
   width: 100%;
   max-width: none;
   height: var(--fold-height);
-  margin: calc(0rem - var(--fold-overlap)) 0 calc(0rem - var(--fold-exit-overlap));
+  margin: calc(0rem - var(--fold-overlap)) 0 0;
   overflow: hidden;
   background: transparent;
   pointer-events: none;
 }
 
 .home-tailored-transition::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: #c9bfb0 url("../images/generated/home-transition-stone-texture-v3.jpg") center / cover no-repeat;
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent calc(var(--fold-overlap) - 1.6rem),
-    #000 calc(var(--fold-overlap) - 0.3rem),
-    #000 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent calc(var(--fold-overlap) - 1.6rem),
-    #000 calc(var(--fold-overlap) - 0.3rem),
-    #000 100%
-  );
+  content: none;
 }
 
 .home-tailored-transition img {
@@ -85,6 +70,7 @@
 .home-page .program-builder {
   --content: 78.75rem;
   z-index: 3;
+  margin-top: calc(0rem - var(--fold-exit-overlap));
   background: linear-gradient(
     180deg,
     transparent 0,
@@ -93,6 +79,25 @@
     rgba(8, 19, 33, 0.82) 8rem,
     #081321 8.55rem
   );
+}
+
+/* The received and clean proof images share the same full opening geometry.
+   Extending both through the in-flow fold keeps one image coordinate system;
+   there is no separately cropped transition photograph. */
+.home-page .home-proof__received .home-opening__scene-image--received {
+  height: calc(
+    100% + var(--opening-hero-height) - var(--opening-scene-top) +
+    var(--fold-height) - var(--fold-overlap)
+  );
+}
+
+@media (min-width: 861px) {
+  .home-page .home-proof__received .home-opening__scene-image--received {
+    height: calc(
+      100% + var(--opening-hero-height) - var(--opening-scene-top) +
+      var(--fold-height) - var(--fold-overlap) + 1px
+    );
+  }
 }
 
 .home-page .program-builder::before {
@@ -190,6 +195,14 @@
 }
 
 @media (max-width: 860px) {
+  .home-page .home-opening__scene {
+    height: calc(
+      var(--opening-hero-rendered-height, var(--opening-hero-height)) -
+      var(--opening-scene-top) + var(--proof-media-height) +
+      var(--fold-height) - var(--fold-overlap)
+    );
+  }
+
   .home-page .home-proof__copy {
     padding-left: max(1.5rem, 8vw);
   }
@@ -225,36 +238,20 @@
  * the layered hem edge all the way down to the 621px breakpoint.
  */
 @media (min-width: 621px) and (max-width: 860px) {
-  .home-tailored-transition {
+  .home-page {
     --fold-height: clamp(15rem, 30vw, 18rem);
     --fold-overlap: clamp(5.75rem, 12vw, 7rem);
     --fold-exit-overlap: clamp(4.25rem, 8vw, 5rem);
+  }
+
+  .home-tailored-transition {
     height: var(--fold-height);
-    margin: calc(0rem - var(--fold-overlap)) 0 calc(0rem - var(--fold-exit-overlap));
+    margin: calc(0rem - var(--fold-overlap)) 0 0;
     background: transparent;
   }
 
-  .home-tailored-transition img,
-  .home-tailored-transition::before {
+  .home-tailored-transition img {
     display: block;
-  }
-
-  /*
-   * Continue the exact photographed scene below the proof edge. Mirroring the
-   * final scene strip keeps the travertine crop, light, and coat shadow in one
-   * coordinate system while the tailored hem stays above it.
-   */
-  .home-tailored-transition::before {
-    inset: var(--fold-overlap) 0 0;
-    background-color: #f4eee4;
-    background-image: url("../images/generated/home-opening-coat-returned-v1.jpg");
-    background-position: center bottom;
-    background-size: auto calc(var(--opening-hero-rendered-height, 100svh) - 5.5rem + clamp(22rem, 78vw, 31rem));
-    background-repeat: no-repeat;
-    -webkit-mask-image: none;
-    mask-image: none;
-    transform: scaleY(-1);
-    transform-origin: center;
   }
 
   .home-tailored-transition img {
@@ -279,20 +276,32 @@
   }
 }
 
-/* The transparent top of the tailored hem already overlaps the live opening
-   photograph. A second, independently cropped texture layer created a visible
-   seam and reversed shadows at compact widths. Let the original scene remain
-   the single source of truth beneath the hem. */
-@media (min-width: 621px) {
-  .home-tailored-transition::before {
-    display: none;
-  }
-}
-
-/* Small screens move directly from the clean photograph into Deep Navy. */
+/* Phone widths keep the same photographed fold instead of switching to a
+   horizontal photo-to-navy cut. The fold asset's 8:3 ratio determines its
+   height so it neither crops nor stretches while the one opening scene stays
+   behind its transparent upper field. */
 @media (max-width: 620px) {
+  .home-page {
+    --fold-height: clamp(7.5rem, 37.5vw, 14.5rem);
+    --fold-overlap: clamp(2rem, 10vw, 3.875rem);
+    --fold-exit-overlap: clamp(1.75rem, 8vw, 3.1rem);
+  }
+
   .home-tailored-transition {
-    display: none;
+    display: block;
+    height: var(--fold-height);
+    margin: calc(0rem - var(--fold-overlap)) 0 0;
+    background: transparent;
+  }
+
+  .home-tailored-transition img {
+    display: block;
+    object-position: center;
+    transform: none;
+  }
+
+  .home-page .program-builder {
+    margin-top: calc(0rem - var(--fold-exit-overlap));
   }
 }
 
@@ -302,7 +311,4 @@
     font-size: clamp(2.55rem, 10.8vw, 3rem);
   }
 
-  .home-tailored-transition {
-    height: 4.5rem;
-  }
 }

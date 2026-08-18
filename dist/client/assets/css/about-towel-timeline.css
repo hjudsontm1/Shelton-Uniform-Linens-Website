@@ -71,7 +71,7 @@ body[data-page="about"] .about-towel-history {
     border: 0;
     border-radius: 0;
     background-color: transparent;
-    background-image: url("../images/generated/about-timeline-row-dobby-transparent-v1.png");
+    background-image: url("../images/generated/about-timeline-row-terry-safe-v2.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -137,11 +137,12 @@ body[data-page="about"] .about-towel-history {
   body[data-page="about"] .about-towel-history__label {
     width: 100%;
     box-sizing: border-box;
-    padding-left: 35.5%;
+    padding-left: calc(35.5% + clamp(0.45rem, 0.85vw, 0.72rem));
     color: var(--timeline-navy);
     font-weight: 600;
     line-height: 1.03;
     letter-spacing: -0.024em;
+    white-space: nowrap;
   }
 
   body[data-page="about"] .about-towel-history__arrow {
@@ -161,6 +162,7 @@ body[data-page="about"] .about-towel-history {
 
   body[data-page="about"] .about-towel-history__detail-surface {
     position: relative;
+    --towel-band-start: 0.905;
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -194,9 +196,11 @@ body[data-page="about"] .about-towel-history {
     margin: 0;
     color: var(--timeline-navy);
     font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: var(--towel-detail-title-size, clamp(1.58rem, 3vw, 2.78rem));
     font-weight: 500;
     line-height: 0.98;
     letter-spacing: -0.038em;
+    white-space: nowrap;
   }
 
   body[data-page="about"] .about-towel-history__photo {
@@ -216,12 +220,12 @@ body[data-page="about"] .about-towel-history {
     object-fit: cover;
     object-position: center;
     border: 1px solid rgba(42, 34, 25, 0.18);
-    filter: grayscale(1) sepia(0.08) contrast(1.12) brightness(0.94);
+    filter: none;
   }
 
   body[data-page="about"] .about-towel-history__copy {
     margin: 0;
-    color: rgba(27, 23, 18, 0.72);
+    color: var(--timeline-navy);
     font-family: Inter, Arial, sans-serif;
     line-height: 1.48;
   }
@@ -276,7 +280,7 @@ body[data-page="about"] .about-towel-history {
     padding-top: 0.1rem;
     padding-right: clamp(0.72rem, 1.15vw, 1.08rem);
     padding-bottom: 0.1rem;
-    font-size: clamp(0.94rem, 1.58vw, 1.46rem);
+    font-size: var(--towel-trigger-title-size, clamp(0.94rem, 1.58vw, 1.46rem));
   }
 
   body[data-page="about"] .about-towel-history__detail {
@@ -303,7 +307,7 @@ body[data-page="about"] .about-towel-history {
   }
 
   body[data-page="about"] .about-towel-history__detail-surface {
-  background-image: url("../images/generated/about-timeline-story-towel-transparent-surface-v4.png");
+    background-image: url("../images/generated/about-timeline-story-towel-terry-surface-v5.png");
   }
 
   body[data-page="about"] .about-towel-history__detail-content {
@@ -315,13 +319,16 @@ body[data-page="about"] .about-towel-history {
 
   body[data-page="about"] .about-towel-history__detail-header {
     display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto auto auto;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    column-gap: clamp(0.65rem, 1vw, 1rem);
+    align-items: end;
   }
 
   body[data-page="about"] .about-towel-history__detail-header time {
     grid-column: 2;
     grid-row: 1;
+    align-self: center;
     justify-self: end;
     font-size: clamp(0.72rem, 1.28vw, 1.18rem);
   }
@@ -333,16 +340,15 @@ body[data-page="about"] .about-towel-history {
   }
 
   body[data-page="about"] .about-towel-history__detail-header h3 {
-    grid-column: 1 / -1;
-    grid-row: 3;
-    margin-top: 6.8%;
-    font-size: clamp(1.58rem, 3vw, 2.78rem);
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
   }
 
   body[data-page="about"] .about-towel-history__photo {
     height: 46.5%;
     aspect-ratio: auto;
-    margin-top: 5.2%;
+    margin-top: 4.2%;
     flex: 0 0 auto;
     overflow: hidden;
   }
@@ -351,14 +357,15 @@ body[data-page="about"] .about-towel-history {
     min-height: 5.2em;
     margin-top: 1.5%;
     padding-right: 2%;
-    font-size: clamp(0.72rem, 1.2vw, 1.1rem);
+    font-size: var(--towel-copy-size, clamp(0.72rem, 1.2vw, 1.1rem));
   }
 
 }
 
 @media (min-width: 861px) and (max-width: 1100px) {
   body[data-page="about"] .about-towel-history__photo {
-    height: 44.5%;
+    height: 44%;
+    margin-top: 3.25%;
   }
 }
 
@@ -396,7 +403,8 @@ body[data-page="about"] .about-towel-history {
     padding-top: 0.2rem;
     padding-right: 0.45rem;
     padding-bottom: 0.2rem;
-    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    --towel-trigger-title-max-size: clamp(1.1rem, 3vw, 1.6rem);
+    font-size: var(--towel-trigger-title-size, var(--towel-trigger-title-max-size));
   }
 
   body[data-page="about"] .about-towel-history__arrow {
@@ -435,10 +443,12 @@ body[data-page="about"] .about-towel-history {
   }
 
   body[data-page="about"] .about-towel-history__detail-surface {
-    width: 100%;
+    width: 96%;
+    margin-inline: 2%;
     min-height: 0;
     aspect-ratio: auto;
     background-image: url("../images/generated/about-timeline-compact-open-surface-v2.png");
+    background-size: 105.85% 100%;
   }
 
   body[data-page="about"] .about-towel-history__detail-content {
@@ -454,7 +464,8 @@ body[data-page="about"] .about-towel-history {
   }
 
   body[data-page="about"] .about-towel-history__detail-header h3 {
-    font-size: clamp(2rem, 5.2vw, 2.72rem);
+    --towel-detail-title-max-size: clamp(2rem, 5.2vw, 2.72rem);
+    font-size: var(--towel-detail-title-size, var(--towel-detail-title-max-size));
   }
 
   body[data-page="about"] .about-towel-history__photo {
@@ -470,8 +481,9 @@ body[data-page="about"] .about-towel-history {
   body[data-page="about"] .about-towel-history__copy {
     min-height: 4.5em;
     margin-top: 5.9%;
+    margin-bottom: clamp(2rem, calc(3rem - 2vw), 2.6rem);
     padding-right: 3%;
-    font-size: clamp(0.95rem, 2.35vw, 1.2rem);
+    font-size: var(--towel-copy-size, clamp(0.95rem, 2.35vw, 1.2rem));
   }
 
 }
@@ -493,25 +505,26 @@ body[data-page="about"] .about-towel-history {
   }
 
   body[data-page="about"] .about-towel-history__trigger {
-    height: clamp(3.9rem, 17vw, 4.7rem);
+    height: clamp(2.75rem, 12vw, 3.55rem);
     grid-template-columns: minmax(0, 1fr) 2.65rem;
   }
 
   body[data-page="about"] .about-towel-history__year {
     width: 20%;
     left: 22.5%;
-    font-size: clamp(0.88rem, 4vw, 1rem);
+    font-size: clamp(0.78rem, 3.35vw, 0.94rem);
   }
 
   body[data-page="about"] .about-towel-history__label {
-    padding-left: 34.5%;
+    padding-left: calc(34.5% + clamp(0.35rem, 1.6vw, 0.5rem));
     padding-right: 0.2rem;
-    font-size: clamp(1rem, 4.65vw, 1.18rem);
+    --towel-trigger-title-max-size: clamp(0.8rem, 3.55vw, 1rem);
+    font-size: var(--towel-trigger-title-size, var(--towel-trigger-title-max-size));
   }
 
   body[data-page="about"] .about-towel-history__arrow {
     padding-right: 8%;
-    font-size: 1.55rem;
+    font-size: 1.35rem;
   }
 
   body[data-page="about"] .about-towel-history__detail-content {
@@ -519,7 +532,8 @@ body[data-page="about"] .about-towel-history {
   }
 
   body[data-page="about"] .about-towel-history__detail-header h3 {
-    font-size: clamp(1.9rem, 8vw, 2.35rem);
+    --towel-detail-title-max-size: clamp(1.9rem, 8vw, 2.35rem);
+    font-size: var(--towel-detail-title-size, var(--towel-detail-title-max-size));
   }
 
   body[data-page="about"] .about-towel-history__photo {
@@ -533,7 +547,7 @@ body[data-page="about"] .about-towel-history {
     min-height: 0;
     margin-top: 6.5%;
     padding-right: 1%;
-    font-size: 0.95rem;
+    font-size: var(--towel-copy-size, 0.95rem);
     line-height: 1.52;
   }
 }

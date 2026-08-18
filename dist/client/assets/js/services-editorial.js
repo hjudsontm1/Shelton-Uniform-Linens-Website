@@ -156,23 +156,13 @@
 
   const routeMapElement = document.querySelector("[data-service-route-map]");
   const routeMapStage = routeMapElement?.closest(".service-route-check__map-stage");
-  const routeFacilityControl = document.querySelector("[data-route-facility]");
 
   if (routeMapElement && window.L) {
-    const countyBounds = window.L.latLngBounds(
-      [32.528, -117.596],
-      [33.506, -116.081]
+    const serviceAreaBounds = window.L.latLngBounds(
+      [32.528, -117.72],
+      [33.7, -116.04]
     );
     const facilityLocation = window.L.latLng(32.7098573, -117.1495465);
-    const routeCities = [
-      { name: "Oceanside", location: [33.19587, -117.37948], side: "left", priority: "primary" },
-      { name: "Carlsbad", location: [33.15809, -117.35059], side: "right", priority: "secondary" },
-      { name: "Escondido", location: [33.11921, -117.08642], side: "right", priority: "secondary" },
-      { name: "Encinitas", location: [33.03699, -117.29198], side: "left", priority: "secondary" },
-      { name: "Del Mar", location: [32.95949, -117.26531], side: "right", priority: "primary" },
-      { name: "La Jolla", location: [32.83281, -117.27127], side: "left", priority: "primary" },
-      { name: "Chula Vista", location: [32.64005, -117.0842], side: "right", priority: "secondary" }
-    ];
     const routeMap = window.L.map(routeMapElement, {
       attributionControl: true,
       zoomControl: false,
@@ -188,45 +178,73 @@
       attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
     }).addTo(routeMap);
 
+    const serviceAreaPane = routeMap.createPane("serviceArea");
+    serviceAreaPane.style.zIndex = "350";
+    serviceAreaPane.style.pointerEvents = "none";
+
+    fetch("assets/data/shelton-service-area.geojson?v=20260817-coverage-v3")
+      .then((response) => {
+        if (!response.ok) throw new Error("Service area geometry did not load");
+        return response.json();
+      })
+      .then((serviceArea) => {
+        window.L.geoJSON(serviceArea, {
+          pane: "serviceArea",
+          interactive: false,
+          style: {
+            className: "service-route-check__service-area",
+            color: "#081321",
+            weight: 2,
+            opacity: 0.86,
+            lineJoin: "round",
+            fillColor: "#b8965a",
+            fillOpacity: 0.34
+          }
+        }).addTo(routeMap);
+        routeMapElement.dataset.serviceAreaReady = "true";
+      })
+      .catch(() => {
+        routeMapElement.dataset.serviceAreaReady = "false";
+      });
+
     window.L.control.scale({ position: "bottomright", imperial: true, metric: false }).addTo(routeMap);
 
-    routeCities.forEach((city) => {
-      const isLeft = city.side === "left";
-      window.L.marker(city.location, {
-        interactive: false,
-        keyboard: false,
-        icon: window.L.divIcon({
-          className: `service-route-check__city-marker is-${city.side} is-${city.priority}`,
-          html: `<span class="service-route-check__city-label"><span>${city.name}</span></span>`,
-          iconSize: [128, 24],
-          iconAnchor: [isLeft ? 118 : 10, 12]
-        })
-      }).addTo(routeMap);
-    });
+    const facilityMarker = window.L.marker(facilityLocation, {
+      alt: "Shelton processing facility at 440 16th Street in San Diego",
+      title: "Shelton processing facility, 440 16th Street",
+      keyboard: true,
+      riseOnHover: true,
+      zIndexOffset: 900,
+      icon: window.L.divIcon({
+        className: "service-route-check__facility-marker",
+        html: '<span class="service-route-check__facility-pin" aria-hidden="true"><i class="ph ph-map-pin"></i><img src="assets/Shelton%20Brand%20Assets/brand/shelton-social-avatar-dark.svg" alt="" width="1000" height="1000" /></span>',
+        iconSize: [54, 62],
+        iconAnchor: [27, 62]
+      })
+    }).addTo(routeMap);
 
-    const syncFacilityControl = () => {
-      if (!routeFacilityControl) return;
-      const point = routeMap.latLngToContainerPoint(facilityLocation);
-      const mapOffsetLeft = routeMapElement.offsetLeft;
-      const mapOffsetTop = routeMapElement.offsetTop;
-      routeFacilityControl.style.left = mapOffsetLeft + point.x + "px";
-      routeFacilityControl.style.top = mapOffsetTop + point.y + "px";
-      routeFacilityControl.classList.add("is-positioned");
-    };
-
-    routeFacilityControl?.addEventListener("click", () => {
+    const zoomToFacility = () => {
       routeMap.flyTo(facilityLocation, 13, {
         animate: !prefersReducedMotion,
         duration: prefersReducedMotion ? 0 : 0.7
       });
+    };
+
+    facilityMarker.on("click", zoomToFacility);
+
+    const facilityMarkerElement = facilityMarker.getElement();
+    facilityMarkerElement?.setAttribute("role", "button");
+    facilityMarkerElement?.setAttribute("aria-label", "Zoom to Shelton's processing facility at 440 16th Street in San Diego");
+    facilityMarkerElement?.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      zoomToFacility();
     });
 
-    routeMap.on("move zoom resize", syncFacilityControl);
-
-    const fitCountyView = () => {
+    const fitServiceAreaView = () => {
       const isNarrow = window.matchMedia("(max-width: 620px)").matches;
 
-      routeMap.fitBounds(countyBounds, {
+      routeMap.fitBounds(serviceAreaBounds, {
         padding: [isNarrow ? 18 : 42, isNarrow ? 24 : 42],
         maxZoom: 9,
         animate: false
@@ -234,15 +252,13 @@
     };
 
     routeMap.whenReady(() => {
-      fitCountyView();
-      syncFacilityControl();
+      fitServiceAreaView();
       routeMapElement.dataset.mapReady = "true";
       routeMapStage?.classList.add("has-live-map");
     });
     window.requestAnimationFrame(() => {
       routeMap.invalidateSize(false);
-      fitCountyView();
-      syncFacilityControl();
+      fitServiceAreaView();
     });
 
     let routeResizeFrame = 0;
@@ -251,8 +267,7 @@
       routeResizeFrame = window.requestAnimationFrame(() => {
         routeResizeFrame = 0;
         routeMap.invalidateSize(false);
-        fitCountyView();
-        syncFacilityControl();
+        fitServiceAreaView();
       });
     }, { passive: true });
   }

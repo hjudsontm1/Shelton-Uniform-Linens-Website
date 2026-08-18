@@ -2641,9 +2641,9 @@
   }
 }
 
-/* Once the route section stacks, keep both interactive blocks centered and
-   spanning the full compact canvas. Desktop begins at 861px and is locked. */
-@media (max-width: 860px) {
+/* Keep the route controls on the chapter centerline whenever the estimator is
+   inside its compact shell. The wide desktop layout already spans both tracks. */
+@media (max-width: 1199px) {
   .pricing-spine-workbench #factor-route .rhythm-control,
   .pricing-spine-workbench #factor-route .route-choice-group {
     grid-column: 1 / -1;
@@ -2654,5 +2654,11 @@
   .pricing-spine-workbench #factor-route .route-choice-group > legend {
     width: 100%;
     text-align: center;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1199px) {
+  .pricing-spine-workbench #factor-route .editorial-choice-list--three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

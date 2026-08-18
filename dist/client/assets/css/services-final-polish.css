@@ -119,11 +119,39 @@
   line-height: 0.84;
 }
 
-.service-route-check__copy > p:last-of-type {
+.service-route-check__copy > .service-route-check__lede {
   max-width: 28rem;
   margin-top: 1.65rem;
   font-size: clamp(0.88rem, 1vw, 1rem);
   line-height: 1.65;
+}
+
+.service-route-check__copy > .service-route-check__coverage {
+  max-width: 31rem;
+  margin: 1.35rem 0 0;
+  padding-top: 1.05rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.45rem 0.8rem;
+  border-top: 1px solid rgba(184, 150, 90, 0.5);
+  font-family: Inter, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.service-route-check__coverage span {
+  color: var(--services-gold-strong);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.service-route-check__coverage strong {
+  color: rgba(8, 19, 33, 0.78);
+  font-size: clamp(0.7rem, 0.8vw, 0.78rem);
+  font-weight: 500;
 }
 
 .service-route-check__copy a {
@@ -271,6 +299,10 @@
   filter: grayscale(0.72) sepia(0.14) saturate(0.72) contrast(1.1) brightness(0.95);
 }
 
+.service-route-check__map .service-route-check__service-area {
+  vector-effect: non-scaling-stroke;
+}
+
 .service-route-check__map .leaflet-control-zoom {
   margin-top: 1rem;
   margin-right: 1rem;
@@ -347,12 +379,12 @@
   color: var(--services-ink);
 }
 
-.service-route-check__facility {
+.service-route-check__facility-marker {
   width: 3.4rem;
   height: 3.9rem;
-  display: grid;
-  place-items: start center;
-  transform: translate(-50%, -100%);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
 .service-route-check__facility-pin {
@@ -381,44 +413,14 @@
   transform: translateX(-50%);
 }
 
-.service-route-check__facility:hover .service-route-check__facility-pin > i,
-.service-route-check__facility:focus-visible .service-route-check__facility-pin > i {
+.service-route-check__facility-marker:hover .service-route-check__facility-pin > i,
+.service-route-check__facility-marker:focus-visible .service-route-check__facility-pin > i {
   color: #96743e;
 }
 
-.service-route-check__city-marker {
-  width: 8rem !important;
-  height: 1.5rem !important;
-  border: 0;
-  background: transparent;
-  pointer-events: none;
-}
-
-.service-route-check__city-label {
-  width: 100%;
-  min-height: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  color: var(--services-ink);
-  font-family: Inter, Arial, sans-serif;
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  text-transform: uppercase;
-  white-space: nowrap;
-  text-shadow:
-    -1px -1px 0 rgba(250, 246, 238, 0.95),
-    1px -1px 0 rgba(250, 246, 238, 0.95),
-    -1px 1px 0 rgba(250, 246, 238, 0.95),
-    1px 1px 0 rgba(250, 246, 238, 0.95);
-}
-
-.service-route-check__city-marker.is-left .service-route-check__city-label {
-  flex-direction: row-reverse;
-  justify-content: flex-start;
-  text-align: right;
+.service-route-check__facility-marker:focus-visible {
+  outline: 2px solid var(--services-navy);
+  outline-offset: 3px;
 }
 
 @media (max-width: 1080px) {
@@ -565,35 +567,10 @@
     min-height: 100%;
   }
 
-  .service-route-check__facility {
-    width: 3rem;
-    height: 3.45rem;
-    transform: translate(-50%, -100%);
+  .service-route-check__copy > .service-route-check__coverage {
+    grid-template-columns: 1fr;
   }
 
-  .service-route-check__facility-pin {
-    width: 3rem;
-    height: 3.45rem;
-  }
-
-  .service-route-check__facility-pin > i {
-    font-size: 3rem;
-  }
-
-  .service-route-check__facility-pin > img {
-    top: 0.49rem;
-    width: 1.56rem;
-    height: 1.56rem;
-  }
-
-  .service-route-check__city-marker.is-secondary {
-    display: none;
-  }
-
-  .service-route-check__city-label {
-    font-size: 0.51rem;
-    letter-spacing: 0.06em;
-  }
 }
 
 /* Preserve the desktop hero composition through the compact range. */
@@ -702,8 +679,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .service-library-hero,
-  .service-route-check__facility {
+  .service-library-hero {
     transition: none;
   }
 }

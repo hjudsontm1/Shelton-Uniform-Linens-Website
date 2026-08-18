@@ -351,63 +351,13 @@
   }
 }
 
-/* Roomy compact: use the open stone half for the proof copy, without comparison UI. */
-@media (min-width: 621px) and (max-width: 860px) {
-  .home-page .home-proof {
-    height: var(--proof-media-height);
-    grid-template-rows: var(--proof-media-height);
-  }
-
-  .home-proof__comparison,
-  .home-proof__copy {
-    grid-area: 1 / 1;
-  }
-
-  .home-proof__comparison {
-    height: 100%;
-    min-height: 0;
-  }
-
-  .home-page .home-proof > .home-proof__copy {
-    width: 52%;
-    height: 100%;
-    padding: clamp(2rem, 5vw, 3.25rem) clamp(1.5rem, 4vw, 2.75rem);
-    justify-self: end;
-    justify-content: center;
-    background: transparent;
-  }
-
-  .home-proof__copy h2 {
-    font-size: clamp(2.3rem, 5.9vw, 3.35rem);
-    line-height: 0.86;
-  }
-
-  .home-proof__lead {
-    max-width: 25rem;
-    margin-top: clamp(0.85rem, 1.8vw, 1.15rem);
-    font-size: clamp(0.76rem, 1.55vw, 0.88rem);
-    line-height: 1.46;
-  }
-
-  .home-proof__benefits {
-    width: 100%;
-    max-width: 25rem;
-    margin-top: clamp(0.85rem, 1.8vw, 1.15rem);
-    padding: 0.65rem 0;
-  }
-
-  .home-proof__benefits li {
-    padding-inline: 0.45rem;
-    font-size: clamp(0.55rem, 1.15vw, 0.69rem);
-    white-space: normal;
-  }
-}
-
 /*
- * Small screens keep the clean scene, but the proof message now uses the
- * entire frame instead of being squeezed into a separate side or lower box.
+ * Compact and phone screens keep the clean scene, but the proof message uses
+ * the entire frame instead of waiting until phone width to leave the squeezed
+ * side column. This is the same centered composition at every width below the
+ * desktop boundary.
  */
-@media (max-width: 620px) {
+@media (max-width: 860px) {
   .home-page .home-opening {
     --proof-media-height: clamp(29rem, 124vw, 33rem);
   }
@@ -465,12 +415,13 @@
 
   .home-proof__benefits {
     grid-template-columns: 1fr;
+    padding-block: 0;
   }
 
   .home-proof__benefits li,
   .home-proof__benefits li:first-child,
   .home-proof__benefits li:last-child {
-    padding: 0.52rem 0;
+    padding: 0.78rem 0;
     text-align: center;
   }
 

@@ -491,6 +491,88 @@
     const items = Array.from(timeline.querySelectorAll("[data-towel-item]"));
     const triggers = items.map((item) => item.querySelector("[data-towel-trigger]"));
     const panels = items.map((item) => item.querySelector("[data-towel-panel]"));
+    const triggerTitles = items.map((item) => item.querySelector(".about-towel-history__label"));
+    const detailTitles = items.map((item) => item.querySelector(".about-towel-history__detail-header h3"));
+    const detailCopies = items.map((item) => item.querySelector(".about-towel-history__copy"));
+    let timelineFitFrame = null;
+
+    const fitSingleLineTitle = (element, sizeProperty) => {
+      if (!element) return;
+      element.style.removeProperty(sizeProperty);
+      const styles = window.getComputedStyle(element);
+      const availableWidth = element.clientWidth
+        - Number.parseFloat(styles.paddingLeft)
+        - Number.parseFloat(styles.paddingRight)
+        - 2;
+      const naturalFontSize = Number.parseFloat(styles.fontSize);
+      const titleRange = document.createRange();
+      titleRange.selectNodeContents(element);
+      const naturalWidth = titleRange.getBoundingClientRect().width;
+      titleRange.detach?.();
+      if (!availableWidth || !naturalFontSize || !naturalWidth) return;
+      const fitScale = naturalWidth > availableWidth
+        ? (availableWidth / naturalWidth) * 0.99
+        : 1;
+      const fittedFontSize = naturalFontSize * fitScale;
+      element.style.setProperty(sizeProperty, `${Math.max(8, fittedFontSize).toFixed(2)}px`);
+      element.dataset.titleLength = String(element.textContent.trim().length);
+      element.dataset.titleFit = fittedFontSize < naturalFontSize - 0.25 ? "scaled" : "natural";
+    };
+
+    const fitMultilineCopy = (element) => {
+      if (!element) return;
+      element.style.removeProperty("--towel-copy-size");
+      const surface = element.closest(".about-towel-history__detail-surface");
+      const naturalFontSize = Number.parseFloat(window.getComputedStyle(element).fontSize);
+      if (!surface || !naturalFontSize || !element.getClientRects().length) return;
+
+      const minimumFontSize = window.innerWidth <= 620
+        ? 13
+        : window.innerWidth <= 860
+          ? 14
+          : 10;
+      const copyFitsAboveBand = () => {
+        const surfaceRect = surface.getBoundingClientRect();
+        const copyRect = element.getBoundingClientRect();
+        const bandStart = Number.parseFloat(window.getComputedStyle(surface).getPropertyValue("--towel-band-start")) || 0.905;
+        const safeGap = window.innerWidth <= 860 ? 14 : 12;
+        return copyRect.bottom <= surfaceRect.top + (surfaceRect.height * bandStart) - safeGap + 0.5;
+      };
+
+      let fittedFontSize = naturalFontSize;
+      if (!copyFitsAboveBand()) {
+        let low = Math.min(minimumFontSize, naturalFontSize);
+        let high = naturalFontSize;
+        element.style.setProperty("--towel-copy-size", `${low.toFixed(2)}px`);
+        fittedFontSize = low;
+        if (copyFitsAboveBand()) {
+          for (let step = 0; step < 9; step += 1) {
+            const candidate = (low + high) / 2;
+            element.style.setProperty("--towel-copy-size", `${candidate.toFixed(2)}px`);
+            if (copyFitsAboveBand()) {
+              low = candidate;
+              fittedFontSize = candidate;
+            } else {
+              high = candidate;
+            }
+          }
+        }
+      }
+
+      element.style.setProperty("--towel-copy-size", `${fittedFontSize.toFixed(2)}px`);
+      element.dataset.copyLength = String(element.textContent.trim().length);
+      element.dataset.copyFit = fittedFontSize < naturalFontSize - 0.25 ? "scaled" : "natural";
+    };
+
+    const scheduleTimelineFits = () => {
+      window.cancelAnimationFrame(timelineFitFrame);
+      timelineFitFrame = window.requestAnimationFrame(() => {
+        triggerTitles.forEach((heading) => fitSingleLineTitle(heading, "--towel-trigger-title-size"));
+        const activeIndex = items.findIndex((item) => item.classList.contains("is-active"));
+        fitSingleLineTitle(detailTitles[activeIndex], "--towel-detail-title-size");
+        fitMultilineCopy(detailCopies[activeIndex]);
+      });
+    };
 
     const activateTowel = (nextIndex, { focus = false } = {}) => {
       if (nextIndex < 0 || nextIndex >= items.length) return;
@@ -500,6 +582,7 @@
         triggers[index]?.setAttribute("aria-expanded", String(isActive));
         panels[index]?.setAttribute("aria-hidden", String(!isActive));
       });
+      scheduleTimelineFits();
       if (focus) triggers[nextIndex]?.focus();
     };
 
@@ -522,6 +605,8 @@
 
     const initialIndex = Math.max(0, items.findIndex((item) => item.hasAttribute("data-towel-initial")));
     activateTowel(initialIndex);
+    window.addEventListener("resize", scheduleTimelineFits, { passive: true });
+    document.fonts?.ready.then(scheduleTimelineFits);
   });
 
   const storyCarousel = document.querySelector("[data-story-carousel]");
