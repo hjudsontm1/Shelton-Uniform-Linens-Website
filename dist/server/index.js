@@ -208,7 +208,7 @@ const requestPublicOffice = async (request, env, upstreamPath, body, extraHeader
       },
       body: JSON.stringify(body),
       signal: controller.signal,
-      redirect: "error"
+      redirect: "manual"
     });
   } catch (error) {
     console.error("Shelton Office proxy fetch failed", {
@@ -219,6 +219,10 @@ const requestPublicOffice = async (request, env, upstreamPath, body, extraHeader
     throw workerError(502, "estimator_unavailable", "The planning estimator could not be reached.");
   } finally {
     clearTimeout(timeoutId);
+  }
+
+  if (upstream.status >= 300 && upstream.status < 400) {
+    throw workerError(502, "estimator_redirect_rejected", "The planning estimator returned an unexpected redirect.");
   }
 
   const text = await upstream.text();
