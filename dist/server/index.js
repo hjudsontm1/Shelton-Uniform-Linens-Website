@@ -5,6 +5,12 @@ const API_ROUTES = new Map([
 const MAX_REQUEST_BYTES = 1_000_000;
 const DEFAULT_UPSTREAM_TIMEOUT_MS = 8_000;
 const FORBIDDEN_RESPONSE_KEY_PARTS = ["assumption", "cost", "economics", "labor", "margin", "wage"];
+const PRIMARY_HOST = "sheltonlinen.com";
+const REDIRECT_HOSTS = new Set([
+  "www.sheltonlinen.com",
+  "sheltonlinenanduniform.com",
+  "www.sheltonlinenanduniform.com"
+]);
 const encoder = new TextEncoder();
 
 const safeString = (value, maxLength = 240) => {
@@ -259,6 +265,18 @@ const handleApiRequest = async (request, env, upstreamPath) => {
 const worker = {
   async fetch(request, env) {
     const requestUrl = new URL(request.url);
+    if (REDIRECT_HOSTS.has(requestUrl.hostname.toLowerCase())) {
+      requestUrl.protocol = "https:";
+      requestUrl.hostname = PRIMARY_HOST;
+      requestUrl.port = "";
+      return new Response(null, {
+        status: 308,
+        headers: {
+          "Cache-Control": "public, max-age=3600",
+          Location: requestUrl.toString()
+        }
+      });
+    }
     const upstreamPath = API_ROUTES.get(requestUrl.pathname);
     if (upstreamPath) return handleApiRequest(request, env, upstreamPath);
 
