@@ -7263,7 +7263,8 @@ body[data-page="about"] .about-tv-screen.is-tuning .about-tv-static {
   body[data-page="about"] .about-tile--five,
   body[data-page="about"] .about-tile--thirteen,
   body[data-page="about"] .about-tile--fourteen,
-  body[data-page="about"] .about-tile--fifteen {
+  body[data-page="about"] .about-tile--fifteen,
+  body[data-page="about"] .about-tile--twentytwo {
     display: block;
   }
   body[data-page="about"] .about-tile img,
