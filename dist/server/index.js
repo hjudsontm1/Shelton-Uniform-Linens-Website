@@ -211,6 +211,10 @@ const requestPublicOffice = async (request, env, upstreamPath, body, extraHeader
       redirect: "error"
     });
   } catch (error) {
+    console.error("Shelton Office proxy fetch failed", {
+      name: error?.name || "Error",
+      message: String(error?.message || "Unknown upstream fetch failure").slice(0, 300)
+    });
     if (error?.name === "AbortError") throw workerError(504, "estimator_timeout", "The planning estimator took too long to respond.");
     throw workerError(502, "estimator_unavailable", "The planning estimator could not be reached.");
   } finally {
