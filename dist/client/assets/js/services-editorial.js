@@ -210,8 +210,8 @@
     window.L.control.scale({ position: "bottomright", imperial: true, metric: false }).addTo(routeMap);
 
     const facilityMarker = window.L.marker(facilityLocation, {
-      alt: "Shelton processing facility at 440 16th Street in San Diego",
-      title: "Shelton processing facility, 440 16th Street",
+      alt: "Shelton processing facility at 1580 J Street in San Diego",
+      title: "Shelton processing facility, 1580 J Street",
       keyboard: true,
       riseOnHover: true,
       zIndexOffset: 900,
@@ -234,7 +234,7 @@
 
     const facilityMarkerElement = facilityMarker.getElement();
     facilityMarkerElement?.setAttribute("role", "button");
-    facilityMarkerElement?.setAttribute("aria-label", "Zoom to Shelton's processing facility at 440 16th Street in San Diego");
+    facilityMarkerElement?.setAttribute("aria-label", "Zoom to Shelton's processing facility at 1580 J Street in San Diego");
     facilityMarkerElement?.addEventListener("keydown", (event) => {
       if (event.key !== "Enter" && event.key !== " ") return;
       event.preventDefault();
