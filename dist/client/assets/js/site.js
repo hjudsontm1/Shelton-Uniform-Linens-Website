@@ -181,6 +181,8 @@
   const aboutMontage = document.querySelector("[data-about-montage]");
   if (aboutMontage) {
     const aboutTiles = Array.from(aboutMontage.querySelectorAll("[data-about-tile]"));
+    const aboutTileStrip = aboutMontage.querySelector("[data-about-tile-strip]");
+    const aboutArchiveRail = aboutMontage.querySelector("[data-about-archive-rail]");
     const aboutTv = aboutMontage.querySelector("[data-about-tv]");
     const tvScreen = aboutTv?.querySelector("[data-about-tv-screen]");
     const tvPhoto = aboutTv?.querySelector("[data-about-tv-photo]");
@@ -201,11 +203,16 @@
     let aboutWarmupTimeout = null;
     let aboutIntroTimeout = null;
     let aboutAutoplayTimeout = null;
+    let aboutArchiveHintTimeout = null;
+    let aboutArchiveHintClearTimeout = null;
+    let aboutArchiveDiscovered = false;
+    let aboutArchiveHintShown = false;
     const aboutTuneRenderDelay = 24;
     const aboutTuneSettleDelay = 170;
     const aboutWarmupDuration = 180;
     const aboutIntroDuration = 4500;
     const aboutStoryAutoplayInterval = 15000;
+    const aboutArchiveHintDelay = aboutIntroDuration + 650;
     const aboutResponsiveArchive = window.matchMedia("(max-width: 900px)");
     const aboutPeopleTiles = aboutTiles.filter((tile) => tile.classList.contains("about-tile--reserved")).slice(0, 4);
     const aboutArchiveTiles = aboutTiles.filter((tile) => !aboutPeopleTiles.includes(tile));
@@ -385,10 +392,38 @@
       window.clearTimeout(aboutIntroTimeout);
       scheduleAboutAutoplay();
     };
+    const clearAboutArchiveHintTimers = () => {
+      window.clearTimeout(aboutArchiveHintTimeout);
+      window.clearTimeout(aboutArchiveHintClearTimeout);
+      aboutArchiveRail?.classList.remove("is-hinting");
+    };
+    const dismissAboutArchiveHint = () => {
+      if (aboutArchiveDiscovered) return;
+      aboutArchiveDiscovered = true;
+      clearAboutArchiveHintTimers();
+      aboutArchiveRail?.classList.add("is-discovered");
+    };
+    const scheduleAboutArchiveHint = () => {
+      window.clearTimeout(aboutArchiveHintTimeout);
+      if (!aboutArchiveRail || !aboutTileStrip || !aboutResponsiveArchive.matches || prefersReducedMotion || aboutArchiveDiscovered || aboutArchiveHintShown) return;
+      aboutArchiveHintTimeout = window.setTimeout(() => {
+        if (document.hidden || aboutArchiveDiscovered || !aboutResponsiveArchive.matches) return;
+        aboutArchiveHintShown = true;
+        aboutArchiveRail.classList.add("is-hinting");
+        aboutArchiveHintClearTimeout = window.setTimeout(() => {
+          aboutArchiveRail.classList.remove("is-hinting");
+        }, 780);
+      }, aboutArchiveHintDelay);
+    };
     const syncAboutResponsiveArchive = () => {
       tvScreen?.setAttribute("aria-live", activeAboutTile ? "polite" : "off");
       clearAboutTune();
       syncAboutTileTabStops(activeAboutTile);
+      if (aboutResponsiveArchive.matches) {
+        scheduleAboutArchiveHint();
+      } else {
+        clearAboutArchiveHintTimers();
+      }
     };
     const revealAboutTvIfNeeded = () => {
       if (!aboutResponsiveArchive.matches || !aboutTv) return;
@@ -439,6 +474,13 @@
       restartAboutAutoplay();
     });
 
+    aboutTileStrip?.addEventListener("scroll", () => {
+      if (aboutTileStrip.scrollLeft > 4) dismissAboutArchiveHint();
+    }, { passive: true });
+    aboutTileStrip?.addEventListener("wheel", (event) => {
+      if (Math.abs(event.deltaX) > 4) dismissAboutArchiveHint();
+    }, { passive: true });
+
     if (aboutTv && tvScreen) {
       syncAboutResponsiveArchive();
       renderAboutTv(tvInstruction, null);
@@ -450,10 +492,13 @@
       document.addEventListener("visibilitychange", () => {
         if (document.hidden) {
           stopAboutAutoplay();
+          clearAboutArchiveHintTimers();
         } else if (activeAboutTile) {
           scheduleAboutAutoplay();
+          scheduleAboutArchiveHint();
         } else {
           scheduleAboutIntro();
+          scheduleAboutArchiveHint();
         }
       });
       if (typeof aboutResponsiveArchive.addEventListener === "function") {

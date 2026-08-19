@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,300,0,0" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/site.css?v=20260819-mobile-skip-link-v2" />
   <link rel="stylesheet" href="assets/css/about-towel-timeline.css?v=20260819-towel-spacing-v25" />
-  <link rel="stylesheet" href="assets/css/about-mobile-launch.css?v=20260819-about-responsive-archive-v2" />
+  <link rel="stylesheet" href="assets/css/about-mobile-launch.css?v=20260819-about-archive-affordance-v1" />
   <link rel="stylesheet" href="assets/css/header.css?v=20260817-phone-menu-height-v2" />
 </head>
 <body class="" data-page="about">
@@ -56,7 +56,8 @@
   <section class="about-montage-hero" aria-labelledby="about-hero-title">
     <div class="about-montage" data-about-montage>
       <!-- Photo wall slots: real historical archive images are used where available. Slots marked data-placeholder="true" are intentionally blank future-photo positions for plant, route, staff, family, equipment, finishing, and goods photography. -->
-      <div class="about-tile-strip" data-about-tile-strip aria-label="Archive photo selector">
+      <div class="about-archive-rail" data-about-archive-rail>
+      <div class="about-tile-strip" data-about-tile-strip aria-label="Archive photo selector. Swipe or scroll horizontally to explore more photographs.">
       <!-- Replace with real White Star Laundry image. -->
       <button class="about-tile about-tile--one" type="button" data-about-tile data-photo-slot="photo-wall-01"
         data-title="White Star Laundry" data-era="1898" data-story="Our family opened White Star Laundry in 1898. It established the foundation for four generations of Shelton family work in laundry and dry cleaning."
@@ -236,6 +237,8 @@
         aria-label="Tune story: GreenEarth cleaning machine">
         <img src="assets/images/history/shelton-cleaners-greenearth-machine-web.jpeg" alt="" loading="lazy" decoding="async" />
       </button>
+      </div>
+      <span class="about-archive-affordance" data-about-archive-affordance aria-hidden="true"><span>More</span><span aria-hidden="true">→</span></span>
       </div>
       <span class="about-tv-bay" aria-hidden="true"></span>
       <div class="about-tv-viewer archive-tv is-instruction" data-about-tv>
@@ -698,6 +701,6 @@
       </div>
     </div>
   </footer>
-  <script src="assets/js/site.js?v=20260819-about-responsive-autoplay-v4"></script>
+  <script src="assets/js/site.js?v=20260819-about-archive-affordance-v1"></script>
 </body>
 </html>
