@@ -4,8 +4,9 @@
   const pricingRules = Object.freeze({
     version: "commercial-estimator.v2.4",
     schemaVersion: "commercial-estimator.v3",
-    estimatePath: "/api/commercial-estimate",
-    leadPath: "/api/commercial-leads"
+    apiBaseUrl: "https://api.sheltonlinen.com",
+    estimatePath: "/api/public/commercial-estimate",
+    leadPath: "/api/public/commercial-leads"
   });
 
   const numberValue = (state, key, fallback = 0) => {
@@ -15,7 +16,7 @@
 
   const positive = (value) => Number(value) > 0 ? Number(value) : undefined;
   const selected = (state, id) => state.goods.includes(id);
-  const apiUrl = (path) => path;
+  const apiUrl = (path) => new URL(path, pricingRules.apiBaseUrl).toString();
   const locationValue = (state) => typeof state.location === "string"
     ? state.location.trim()
     : String(state.location?.value || "").trim();
