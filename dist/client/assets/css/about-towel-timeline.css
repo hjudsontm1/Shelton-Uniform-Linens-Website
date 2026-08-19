@@ -372,6 +372,21 @@ body[data-page="about"] .about-towel-history {
   }
 }
 
+@media (min-width: 1101px) {
+  body[data-page="about"] .about-towel-history__detail-rule {
+    margin-top: 4.5%;
+  }
+
+  body[data-page="about"] .about-towel-history__photo {
+    height: 45.5%;
+    margin-top: 5.35%;
+  }
+
+  body[data-page="about"] .about-towel-history__copy {
+    margin-top: 3.25%;
+  }
+}
+
 @media (max-width: 860px) {
   body[data-page="about"] .about-towel-history {
     padding-top: clamp(2.65rem, 5.7vw, 3.35rem);
@@ -461,12 +476,23 @@ body[data-page="about"] .about-towel-history {
     flex-direction: column;
   }
 
-  body[data-page="about"] .about-towel-history__detail-header time,
-  body[data-page="about"] .about-towel-history__detail-rule {
+  body[data-page="about"] .about-towel-history__detail-header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  body[data-page="about"] .about-towel-history__detail-header time {
     display: none;
   }
 
+  body[data-page="about"] .about-towel-history__detail-rule {
+    order: 2;
+    width: 100%;
+    margin-top: clamp(0.8rem, 2.2vw, 1.15rem);
+  }
+
   body[data-page="about"] .about-towel-history__detail-header h3 {
+    order: 1;
     --towel-detail-title-max-size: clamp(2rem, 5.2vw, 2.72rem);
     font-size: var(--towel-detail-title-size, var(--towel-detail-title-max-size));
   }
@@ -475,7 +501,7 @@ body[data-page="about"] .about-towel-history {
     height: calc(min(70vw, 43.75rem) * 0.518);
     min-height: 0;
     aspect-ratio: auto;
-    margin-top: 4.6%;
+    margin-top: clamp(0.9rem, 2.6vw, 1.35rem);
     padding: clamp(0.48rem, 1.25vw, 0.75rem);
     flex: 0 0 auto;
     overflow: hidden;
