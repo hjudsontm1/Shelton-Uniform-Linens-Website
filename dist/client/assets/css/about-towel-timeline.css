@@ -74,7 +74,7 @@ body[data-page="about"] .about-towel-history {
     background-image: url("../images/generated/about-timeline-row-terry-safe-v2.png");
     background-position: center;
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: 104.5% 100%;
     filter:
       drop-shadow(0 0.2rem 0.18rem rgba(50, 39, 27, 0.2))
       drop-shadow(0 0.62rem 0.72rem rgba(50, 39, 27, 0.12));
@@ -226,8 +226,10 @@ body[data-page="about"] .about-towel-history {
   body[data-page="about"] .about-towel-history__copy {
     margin: 0;
     color: var(--timeline-navy);
-    font-family: Inter, Arial, sans-serif;
-    line-height: 1.48;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.002em;
   }
 
   body[data-page="about"] .about-towel-history__photo img[src*="shelton-cleaners-poly-garments"] {
@@ -308,6 +310,7 @@ body[data-page="about"] .about-towel-history {
 
   body[data-page="about"] .about-towel-history__detail-surface {
     background-image: url("../images/generated/about-timeline-story-towel-terry-surface-v5.png");
+    background-size: 103.5% 102.5%;
   }
 
   body[data-page="about"] .about-towel-history__detail-content {
@@ -357,7 +360,7 @@ body[data-page="about"] .about-towel-history {
     min-height: 5.2em;
     margin-top: 1.5%;
     padding-right: 2%;
-    font-size: var(--towel-copy-size, clamp(0.72rem, 1.2vw, 1.1rem));
+    font-size: var(--towel-copy-size, clamp(0.88rem, 1.32vw, 1.2rem));
   }
 
 }
@@ -483,7 +486,7 @@ body[data-page="about"] .about-towel-history {
     margin-top: 5.9%;
     margin-bottom: clamp(2rem, calc(3rem - 2vw), 2.6rem);
     padding-right: 3%;
-    font-size: var(--towel-copy-size, clamp(0.95rem, 2.35vw, 1.2rem));
+    font-size: var(--towel-copy-size, clamp(1.02rem, 2.5vw, 1.28rem));
   }
 
 }
@@ -547,8 +550,8 @@ body[data-page="about"] .about-towel-history {
     min-height: 0;
     margin-top: 6.5%;
     padding-right: 1%;
-    font-size: var(--towel-copy-size, 0.95rem);
-    line-height: 1.52;
+    font-size: var(--towel-copy-size, 1.06rem);
+    line-height: 1.42;
   }
 }
 
