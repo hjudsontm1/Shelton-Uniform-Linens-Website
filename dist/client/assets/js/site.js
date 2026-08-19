@@ -196,24 +196,36 @@
     };
     let activeAboutTile = null;
     let aboutTuneId = 0;
-    let aboutAutoplayTimeout = null;
     let aboutTuneRenderTimeout = null;
     let aboutTuneClearTimeout = null;
     let aboutWarmupTimeout = null;
-    let aboutMontageInView = true;
-    let aboutMontageWasObserved = false;
-    const aboutInitialAutoplayDelay = 10000;
-    const aboutManualAutoplayDelay = 15000;
-    const aboutStoryAutoplayInterval = 14500;
+    let aboutIntroTimeout = null;
+    let aboutAutoplayTimeout = null;
     const aboutTuneRenderDelay = 24;
     const aboutTuneSettleDelay = 170;
     const aboutWarmupDuration = 180;
-    const aboutPhoneExperience = window.matchMedia("(max-width: 620px)");
+    const aboutIntroDuration = 4500;
+    const aboutStoryAutoplayInterval = 15000;
+    const aboutResponsiveArchive = window.matchMedia("(max-width: 900px)");
+    const aboutPeopleTiles = aboutTiles.filter((tile) => tile.classList.contains("about-tile--reserved")).slice(0, 4);
+    const aboutArchiveTiles = aboutTiles.filter((tile) => !aboutPeopleTiles.includes(tile));
+
+    aboutArchiveTiles.forEach((tile, index) => {
+      tile.style.setProperty("--about-mobile-column", String(Math.floor(index / 2) + 1));
+      tile.style.setProperty("--about-mobile-row", String((index % 2) + 1));
+    });
+    aboutPeopleTiles.forEach((tile, index) => {
+      tile.style.setProperty("--about-mobile-person-column", String(index + 1));
+      tile.style.setProperty("--about-mobile-person-left", `calc(${index} * (var(--about-mobile-tile) + 1px))`);
+    });
 
     const visibleAboutTiles = () => aboutTiles.filter((tile) => window.getComputedStyle(tile).display !== "none");
-    const featuredAboutTiles = () => {
-      const realTiles = visibleAboutTiles().filter((tile) => tile.dataset.placeholder !== "true");
-      return realTiles.length ? realTiles : visibleAboutTiles();
+    const syncAboutTileTabStops = (preferredTile = activeAboutTile) => {
+      const pool = visibleAboutTiles();
+      const keyboardTile = pool.includes(preferredTile) ? preferredTile : pool[0];
+      aboutTiles.forEach((tile) => {
+        tile.tabIndex = tile === keyboardTile ? 0 : -1;
+      });
     };
     const aboutTileData = (tile) => {
       const tileImage = tile?.querySelector("img");
@@ -309,9 +321,13 @@
         activeAboutTile.setAttribute("aria-pressed", "false");
       }
       activeAboutTile = tile;
-      if (!tile) return;
+      if (!tile) {
+        syncAboutTileTabStops(null);
+        return;
+      }
       tile.classList.add("is-tuned");
       tile.setAttribute("aria-pressed", "true");
+      syncAboutTileTabStops(tile);
     };
     const clearAboutTune = () => {
       window.clearTimeout(aboutTuneRenderTimeout);
@@ -319,11 +335,12 @@
       window.clearTimeout(aboutWarmupTimeout);
       tvScreen?.classList.remove("is-tuning", "is-warming-up");
     };
-    const tuneAboutTv = (tile, { flicker = true } = {}) => {
+    const tuneAboutTv = (tile, { flicker = true, announce = true } = {}) => {
       const data = tile ? aboutTileData(tile) : tvInstruction;
       const tuneId = ++aboutTuneId;
       setActiveAboutTile(tile);
       clearAboutTune();
+      tvScreen?.setAttribute("aria-live", announce ? "polite" : "off");
       if (!prefersReducedMotion && flicker && tvScreen) {
         tvScreen.classList.add("is-tuning");
         aboutTuneRenderTimeout = window.setTimeout(() => {
@@ -336,35 +353,54 @@
         renderAboutTv(data, tile);
       }
     };
-    const clearAboutAutoplay = () => {
-      window.clearTimeout(aboutAutoplayTimeout);
-      aboutAutoplayTimeout = null;
-    };
-    const nextAboutStory = ({ useFeatured = false } = {}) => {
-      const pool = useFeatured ? featuredAboutTiles() : visibleAboutTiles();
+    const nextAboutStory = ({ announce = true } = {}) => {
+      const pool = visibleAboutTiles();
       if (!pool.length) return;
       const currentIndex = Math.max(0, pool.indexOf(activeAboutTile));
       const nextIndex = activeAboutTile && pool.includes(activeAboutTile) ? (currentIndex + 1) % pool.length : 0;
-      tuneAboutTv(pool[nextIndex]);
+      tuneAboutTv(pool[nextIndex], { announce });
     };
-    const scheduleAboutAutoplay = (delay = aboutInitialAutoplayDelay) => {
-      clearAboutAutoplay();
-      if (prefersReducedMotion || aboutPhoneExperience.matches || !aboutMontageInView) return;
+    const stopAboutAutoplay = () => {
+      window.clearTimeout(aboutIntroTimeout);
+      window.clearTimeout(aboutAutoplayTimeout);
+    };
+    const scheduleAboutAutoplay = (delay = aboutStoryAutoplayInterval) => {
+      window.clearTimeout(aboutAutoplayTimeout);
       aboutAutoplayTimeout = window.setTimeout(() => {
-        nextAboutStory({ useFeatured: true });
-        scheduleAboutAutoplay(aboutStoryAutoplayInterval);
+        if (document.hidden) return;
+        nextAboutStory({ announce: false });
+        scheduleAboutAutoplay();
       }, delay);
     };
-    const syncAboutPhoneExperience = () => {
-      // Phone playback is intentionally manual, but user-triggered story changes
-      // still need to be announced to assistive technology.
-      tvScreen?.setAttribute("aria-live", "polite");
-      if (aboutPhoneExperience.matches) {
-        clearAboutAutoplay();
-        clearAboutTune();
-        return;
-      }
-      if (!document.hidden && aboutMontageInView) scheduleAboutAutoplay(aboutManualAutoplayDelay);
+    const scheduleAboutIntro = () => {
+      stopAboutAutoplay();
+      aboutIntroTimeout = window.setTimeout(() => {
+        if (document.hidden) return;
+        const pool = visibleAboutTiles();
+        if (!activeAboutTile && pool.length) tuneAboutTv(pool[0], { announce: false });
+        scheduleAboutAutoplay();
+      }, aboutIntroDuration);
+    };
+    const restartAboutAutoplay = () => {
+      window.clearTimeout(aboutIntroTimeout);
+      scheduleAboutAutoplay();
+    };
+    const syncAboutResponsiveArchive = () => {
+      tvScreen?.setAttribute("aria-live", activeAboutTile ? "polite" : "off");
+      clearAboutTune();
+      syncAboutTileTabStops(activeAboutTile);
+    };
+    const revealAboutTvIfNeeded = () => {
+      if (!aboutResponsiveArchive.matches || !aboutTv) return;
+      const tvRect = aboutTv.getBoundingClientRect();
+      const navigationBottom = document.querySelector(".site-nav")?.getBoundingClientRect().bottom || 0;
+      const visibleTop = Math.max(0, navigationBottom);
+      const isFullyVisible = tvRect.top >= visibleTop && tvRect.bottom <= window.innerHeight;
+      if (isFullyVisible) return;
+      aboutTv.scrollIntoView({
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+        block: "start"
+      });
     };
 
     aboutTiles.forEach((tile) => {
@@ -373,7 +409,26 @@
       tile.setAttribute("aria-pressed", "false");
       tile.addEventListener("click", () => {
         tuneAboutTv(tile);
-        scheduleAboutAutoplay(aboutManualAutoplayDelay);
+        restartAboutAutoplay();
+        revealAboutTvIfNeeded();
+      });
+      tile.addEventListener("keydown", (event) => {
+        const pool = visibleAboutTiles();
+        const currentIndex = pool.indexOf(tile);
+        if (currentIndex < 0) return;
+
+        let nextIndex = null;
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (currentIndex + 1) % pool.length;
+        if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (currentIndex - 1 + pool.length) % pool.length;
+        if (event.key === "Home") nextIndex = 0;
+        if (event.key === "End") nextIndex = pool.length - 1;
+        if (nextIndex === null) return;
+
+        event.preventDefault();
+        const nextTile = pool[nextIndex];
+        nextTile.focus();
+        tuneAboutTv(nextTile);
+        restartAboutAutoplay();
       });
     });
 
@@ -381,44 +436,31 @@
       nextButton.classList.add("is-dialing");
       window.setTimeout(() => nextButton.classList.remove("is-dialing"), 340);
       nextAboutStory();
-      scheduleAboutAutoplay(aboutManualAutoplayDelay);
+      restartAboutAutoplay();
     });
 
     if (aboutTv && tvScreen) {
-      syncAboutPhoneExperience();
+      syncAboutResponsiveArchive();
       renderAboutTv(tvInstruction, null);
       if (!prefersReducedMotion) {
         tvScreen.classList.add("is-warming-up");
         aboutWarmupTimeout = window.setTimeout(() => tvScreen.classList.remove("is-warming-up"), aboutWarmupDuration);
       }
-      scheduleAboutAutoplay(aboutInitialAutoplayDelay);
-      if (typeof aboutPhoneExperience.addEventListener === "function") {
-        aboutPhoneExperience.addEventListener("change", syncAboutPhoneExperience);
-      } else {
-        aboutPhoneExperience.addListener(syncAboutPhoneExperience);
-      }
-      if ("IntersectionObserver" in window) {
-        const aboutMontageObserver = new IntersectionObserver(([entry]) => {
-          const wasInView = aboutMontageInView;
-          aboutMontageInView = entry.isIntersecting && entry.intersectionRatio > 0.05;
-          if (aboutMontageWasObserved && aboutMontageInView && !wasInView) {
-            scheduleAboutAutoplay(aboutManualAutoplayDelay);
-          } else if (!aboutMontageInView) {
-            clearAboutAutoplay();
-            clearAboutTune();
-          }
-          aboutMontageWasObserved = true;
-        }, { threshold: [0, 0.05] });
-        aboutMontageObserver.observe(aboutMontage);
-      }
+      scheduleAboutIntro();
       document.addEventListener("visibilitychange", () => {
         if (document.hidden) {
-          clearAboutAutoplay();
-          clearAboutTune();
-          return;
+          stopAboutAutoplay();
+        } else if (activeAboutTile) {
+          scheduleAboutAutoplay();
+        } else {
+          scheduleAboutIntro();
         }
-        scheduleAboutAutoplay(aboutManualAutoplayDelay);
       });
+      if (typeof aboutResponsiveArchive.addEventListener === "function") {
+        aboutResponsiveArchive.addEventListener("change", syncAboutResponsiveArchive);
+      } else {
+        aboutResponsiveArchive.addListener(syncAboutResponsiveArchive);
+      }
     }
   }
 

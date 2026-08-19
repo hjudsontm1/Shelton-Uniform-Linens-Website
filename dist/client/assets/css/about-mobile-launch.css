@@ -1,12 +1,89 @@
-/* Mobile launch adjustments for the About archive.
-   Keep the 621px+ composition unchanged. */
-@media (max-width: 620px) {
+/* Responsive launch adjustments for the About archive. */
+@media (min-width: 621px) and (max-width: 900px) {
+  body[data-page="about"] .about-montage {
+    --about-mobile-tile: calc((100vw - 3px) / 4);
+    width: 100vw;
+    max-width: 100vw;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
   body[data-page="about"] .about-tv-viewer {
-    width: min(calc(100vw - 1rem), 30rem);
-    max-width: calc(100vw - 1rem);
-    aspect-ratio: 1.34;
-    margin: 0.5rem 0 0.75rem 0.5rem;
-    filter: drop-shadow(0 1.1rem 1.8rem rgba(0, 0, 0, 0.66));
+    order: 1;
+    flex: 0 0 auto;
+  }
+
+  body[data-page="about"] .about-tile-strip {
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+    height: calc((var(--about-mobile-tile) * 3) + 2px);
+    padding: 0;
+    display: grid;
+    grid-auto-flow: unset;
+    grid-template-columns: repeat(12, var(--about-mobile-tile));
+    grid-template-rows: repeat(3, var(--about-mobile-tile));
+    gap: 1px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body[data-page="about"] .about-tile-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  body[data-page="about"] .about-tile,
+  body[data-page="about"] .about-tile--optional,
+  body[data-page="about"] .about-tile--quiet {
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  body[data-page="about"] .about-tile:not(.about-tile--reserved) {
+    grid-column: var(--about-mobile-column);
+    grid-row: var(--about-mobile-row);
+    scroll-snap-align: start;
+  }
+
+  body[data-page="about"] .about-tile--reserved {
+    position: sticky;
+    left: var(--about-mobile-person-left);
+    z-index: 8;
+    grid-column: var(--about-mobile-person-column);
+    grid-row: 3;
+    box-shadow: inset 0 1px 0 rgba(239, 228, 204, 0.2);
+  }
+
+  body[data-page="about"] .about-tile__reserved-name {
+    margin: 0.5rem;
+    font-size: clamp(0.54rem, 1.1vw, 0.68rem);
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (max-width: 620px) {
+  body[data-page="about"] .about-montage {
+    --about-mobile-tile: calc((100vw - 3px) / 4);
+  }
+
+  body[data-page="about"] .about-tv-viewer {
+    align-self: stretch;
+    width: 100vw;
+    max-width: none;
+    aspect-ratio: 1.52;
+    margin: 0;
+    scroll-margin-top: 5.5rem;
+    filter: drop-shadow(0 1.35rem 2.15rem rgba(0, 0, 0, 0.72));
   }
 
   body[data-page="about"] .about-tv-viewer::before {
@@ -55,6 +132,58 @@
     min-width: 2.75rem;
     min-height: 2.75rem;
     margin-top: 0;
+  }
+
+  body[data-page="about"] .about-tile-strip {
+    width: 100%;
+    max-width: 100%;
+    height: calc((var(--about-mobile-tile) * 3) + 2px);
+    padding: 0;
+    display: grid;
+    grid-auto-flow: unset;
+    grid-template-columns: repeat(12, var(--about-mobile-tile));
+    grid-template-rows: repeat(3, var(--about-mobile-tile));
+    gap: 1px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body[data-page="about"] .about-tile-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  body[data-page="about"] .about-tile,
+  body[data-page="about"] .about-tile--optional,
+  body[data-page="about"] .about-tile--quiet {
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  body[data-page="about"] .about-tile:not(.about-tile--reserved) {
+    grid-column: var(--about-mobile-column);
+    grid-row: var(--about-mobile-row);
+    scroll-snap-align: start;
+  }
+
+  body[data-page="about"] .about-tile--reserved {
+    position: sticky;
+    left: var(--about-mobile-person-left);
+    z-index: 8;
+    grid-column: var(--about-mobile-person-column);
+    grid-row: 3;
+    box-shadow: inset 0 1px 0 rgba(239, 228, 204, 0.2);
+  }
+
+  body[data-page="about"] .about-tile__reserved-name {
+    margin: 0.34rem;
+    font-size: clamp(0.42rem, 1.75vw, 0.54rem);
+    letter-spacing: 0.08em;
   }
 
   /* Match the approved towel treatment: year and title only. */

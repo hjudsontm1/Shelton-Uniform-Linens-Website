@@ -571,3 +571,32 @@ body[data-page="about"] .about-towel-history {
   body[data-page="about"] .about-towel-history__detail-content {
     padding: 6.2% 6.8% 12%;
   }
+
+  body[data-page="about"] .about-towel-history__detail-header h3 {
+    --towel-detail-title-max-size: clamp(1.9rem, 8vw, 2.35rem);
+    font-size: var(--towel-detail-title-size, var(--towel-detail-title-max-size));
+  }
+
+  body[data-page="about"] .about-towel-history__photo {
+    height: auto;
+    aspect-ratio: 1.34;
+    margin-top: 5.5%;
+    padding: 0.48rem;
+  }
+
+  body[data-page="about"] .about-towel-history__copy {
+    min-height: 0;
+    margin-top: 6.5%;
+    padding-right: 1%;
+    font-size: var(--towel-copy-size, 1.06rem);
+    line-height: 1.42;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-page="about"] .about-towel-history__trigger,
+  body[data-page="about"] .about-towel-history__arrow,
+  body[data-page="about"] .about-towel-history__detail {
+    transition: none;
+  }
+}

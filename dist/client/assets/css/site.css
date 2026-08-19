@@ -200,12 +200,17 @@ section > * { width: min(100%, var(--content)); margin-left: auto; margin-right:
   left: 1rem;
   top: 1rem;
   z-index: 1000;
-  transform: translateY(-160%);
+  transform: translateY(calc(-100% - 2rem));
   background: var(--cream);
   color: var(--navy);
   padding: 0.7rem 1rem;
 }
 .skip-link:focus { transform: none; }
+@supports selector(:focus-visible) {
+  .skip-link:focus:not(:focus-visible) {
+    transform: translateY(calc(-100% - 2rem));
+  }
+}
 .site-nav {
   position: fixed;
   inset: 0 0 auto;
