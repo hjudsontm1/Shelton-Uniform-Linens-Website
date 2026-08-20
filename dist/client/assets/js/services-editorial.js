@@ -93,8 +93,11 @@
       tab.addEventListener("click", () => selectStandard(tab, false));
       tab.addEventListener("keydown", (event) => {
         let nextIndex = null;
-        if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (index + 1) % standardTabs.length;
-        if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (index - 1 + standardTabs.length) % standardTabs.length;
+        const verticalStep = window.matchMedia("(max-width: 720px)").matches ? 2 : 1;
+        if (event.key === "ArrowRight") nextIndex = (index + 1) % standardTabs.length;
+        if (event.key === "ArrowLeft") nextIndex = (index - 1 + standardTabs.length) % standardTabs.length;
+        if (event.key === "ArrowDown") nextIndex = (index + verticalStep) % standardTabs.length;
+        if (event.key === "ArrowUp") nextIndex = (index - verticalStep + standardTabs.length) % standardTabs.length;
         if (event.key === "Home") nextIndex = 0;
         if (event.key === "End") nextIndex = standardTabs.length - 1;
         if (nextIndex === null) return;
@@ -174,6 +177,13 @@
       minZoom: 7,
       maxZoom: 15
     });
+    let mapReady = false;
+    let serviceAreaReady = false;
+
+    const revealLiveMap = () => {
+      if (!mapReady || !serviceAreaReady) return;
+      routeMapStage?.classList.add("has-live-map");
+    };
 
     window.L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", {
       subdomains: "abcd",
@@ -204,12 +214,17 @@
             fillOpacity: 0.34
           }
         }).addTo(routeMap);
+        serviceAreaReady = true;
         routeMapElement.dataset.serviceAreaReady = "true";
+        revealLiveMap();
       })
       .catch(() => {
+        serviceAreaReady = false;
         routeMapElement.dataset.serviceAreaReady = "false";
+        routeMapStage?.classList.remove("has-live-map");
       });
 
+    window.L.control.zoom({ position: "topright" }).addTo(routeMap);
     window.L.control.scale({ position: "bottomright", imperial: true, metric: false }).addTo(routeMap);
 
     const facilityMarker = window.L.marker(facilityLocation, {
@@ -256,8 +271,9 @@
 
     routeMap.whenReady(() => {
       fitServiceAreaView();
+      mapReady = true;
       routeMapElement.dataset.mapReady = "true";
-      routeMapStage?.classList.add("has-live-map");
+      revealLiveMap();
     });
     window.requestAnimationFrame(() => {
       routeMap.invalidateSize(false);

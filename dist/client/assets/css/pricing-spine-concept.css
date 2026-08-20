@@ -1393,6 +1393,15 @@
   }
 }
 
+@media (min-width: 761px) {
+  .pricing-spine-workbench .learning-chapter,
+  .pricing-spine-workbench .pricing-intro,
+  .pricing-spine-workbench .planning-result,
+  .pricing-spine-workbench .quote-handoff {
+    scroll-margin-top: 7.25rem;
+  }
+}
+
 /* Once Section 01 becomes a single-column composition, center its editorial
    hierarchy while keeping the actual form controls left-aligned for scanning. */
 @media (max-width: 1199px) {
@@ -1474,15 +1483,80 @@
 
   .pricing-spine-workbench .estimate-dock a {
     flex: 0 0 auto;
+    display: inline-flex;
+    min-height: 44px;
+    padding: 0.55rem 0.35rem;
+    align-items: center;
+    justify-content: center;
     margin-left: auto;
     white-space: nowrap;
   }
 }
 
-@media (max-width: 1199px) {
-  .pricing-spine-workbench .estimate-dock {
-    display: none !important;
+@media (max-width: 760px) {
+  .pricing-spine-workbench .pricing-calm {
+    padding-bottom: calc(7rem + env(safe-area-inset-bottom));
   }
+
+  .pricing-spine-workbench .estimate-dock {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    min-height: 72px;
+    margin: 0;
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+    gap: 0.75rem;
+    border-width: 1px 0 0;
+    box-shadow: 0 -12px 34px rgba(8, 19, 33, 0.2);
+  }
+
+  .pricing-spine-workbench .estimate-dock[hidden],
+  .pricing-spine-workbench .estimate-dock.is-suppressed {
+    display: none;
+  }
+
+  .pricing-spine-workbench .estimate-dock div {
+    min-width: 0;
+  }
+
+  .pricing-spine-workbench .estimate-dock strong {
+    display: -webkit-box;
+    max-width: none;
+    overflow: hidden;
+    font-size: 0.82rem;
+    line-height: 1.15;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .pricing-spine-workbench .estimate-dock a {
+    flex: 0 0 auto;
+    display: inline-flex;
+    min-height: 44px;
+    padding: 0.6rem 0.75rem;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    font-size: 0.62rem;
+    white-space: nowrap;
+  }
+}
+
+/* Keep explanatory and inactive-state copy readable on the ivory estimator
+   surface while preserving the approved navy/gold hierarchy. */
+.pricing-spine-workbench .volume-choice-grid label > span small,
+.pricing-spine-workbench .volume-choice-field__hint,
+.pricing-spine-workbench .volume-question .volume-question__why,
+.pricing-spine-workbench .ownership-list label span small,
+.pricing-spine-workbench .rhythm-cadence small {
+  color: rgba(23, 32, 42, 0.68);
+  font-size: max(0.68rem, 11px);
+}
+
+.pricing-spine-workbench .rhythm-cadence li {
+  color: rgba(23, 32, 42, 0.68);
 }
 
 /* Detail-first chapter introductions. The estimator chapters should begin
@@ -1933,6 +2007,17 @@
   margin-top: 1.2rem;
 }
 
+.pricing-spine-workbench .return-format__options::before {
+  content: attr(data-automatic-label);
+  grid-column: 1 / -1;
+  color: rgba(8, 19, 33, 0.52);
+  font-family: var(--calm-sans);
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .pricing-spine-workbench .return-format__options article {
   display: flex;
   min-height: 120px;
@@ -1944,7 +2029,28 @@
   border: 1px solid var(--calm-ink-line);
   background: rgba(255, 253, 248, 0.58);
   text-align: center;
+  cursor: default;
+  pointer-events: none;
   transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.pricing-spine-workbench .return-format__options article:not(.is-selected) {
+  opacity: 0.52;
+}
+
+.pricing-spine-workbench .choice-cloud input:checked + span strong,
+.pricing-spine-workbench .choice-cloud input:checked + span small,
+.pricing-spine-workbench .volume-choice-grid input:checked + span strong,
+.pricing-spine-workbench .volume-choice-grid input:checked + span small,
+.pricing-spine-workbench .ownership-list input:checked + span strong,
+.pricing-spine-workbench .ownership-list input:checked + span small,
+.pricing-spine-workbench .editorial-choice-list input:checked + span strong {
+  color: inherit;
+}
+
+.pricing-spine-workbench .rhythm-cadence li {
+  cursor: default;
+  user-select: none;
 }
 
 .pricing-spine-workbench .return-format__options article.is-selected {
@@ -2639,6 +2745,10 @@
     align-items: center;
     text-align: center;
   }
+}
+
+.pricing-spine-workbench .operation-picker-field {
+  scroll-margin-top: 7rem;
 }
 
 /* Keep the route controls on the chapter centerline whenever the estimator is

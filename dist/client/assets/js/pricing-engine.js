@@ -11,7 +11,11 @@
 
   const numberValue = (state, key, fallback = 0) => {
     const value = Number(state.scale?.[key]);
-    return Number.isFinite(value) ? value : fallback;
+    if (!Number.isFinite(value)) return fallback;
+    const field = window.SheltonPricingJourneyConfig?.scaleSchemas?.[state.operation]
+      ?.find((item) => item.id === key && item.type === "number");
+    if (field && (value < Number(field.min) || value > Number(field.max))) return fallback;
+    return value;
   };
 
   const positive = (value) => Number(value) > 0 ? Number(value) : undefined;
@@ -33,17 +37,20 @@
   const requiredDriver = (state, key) => usingDirectPounds(state) ? 1 : numberValue(state, key);
 
   const garmentLines = (state) => [
-    { type: "chef_coat", weeklyPieces: numberValue(state, "weeklyChefCoats") },
-    { type: "uniform_top", weeklyPieces: numberValue(state, "weeklyUniformTops") },
-    { type: "apron", weeklyPieces: numberValue(state, "weeklyAprons") },
-    { type: "pants", weeklyPieces: numberValue(state, "weeklyPants") },
-    { type: "jacket_coverall", weeklyPieces: numberValue(state, "weeklyJackets") }
-  ].filter((item) => item.weeklyPieces > 0);
+    { type: "chef_coat", weeklyPieces: numberValue(state, "weeklyChefCoats"), goods: ["chefCoats"] },
+    { type: "uniform_top", weeklyPieces: numberValue(state, "weeklyUniformTops"), goods: ["uniformShirts"] },
+    { type: "uniform_top", weeklyPieces: numberValue(state, state.operation === "casino" ? "weeklyUniformTops" : "weeklyCasinoUniformTops"), goods: ["casinoUniforms"] },
+    { type: "apron", weeklyPieces: numberValue(state, "weeklyAprons"), goods: ["aprons"] },
+    { type: "pants", weeklyPieces: numberValue(state, "weeklyPants"), goods: ["workwear"] },
+    { type: "jacket_coverall", weeklyPieces: numberValue(state, "weeklyJackets"), goods: ["jackets"] }
+  ].filter((item) => item.weeklyPieces > 0 && item.goods.some((id) => selected(state, id)))
+    .map(({ goods, ...item }) => item);
 
   const specialtyItems = (state) => [
-    { type: "robe", weeklyPieces: numberValue(state, "weeklyRobes") },
-    { type: "blanket", weeklyPieces: numberValue(state, "weeklyBlankets") }
-  ].filter((item) => item.weeklyPieces > 0);
+    { type: "robe", weeklyPieces: numberValue(state, "weeklyRobes"), good: "robes" },
+    { type: "blanket", weeklyPieces: numberValue(state, "weeklyBlankets"), good: "blankets" }
+  ].filter((item) => item.weeklyPieces > 0 && selected(state, item.good))
+    .map(({ good, ...item }) => item);
 
   const rentalCategory = (state) => {
     const explicit = String(state.rentalCategory || "");
@@ -70,8 +77,8 @@
     schemaVersion: "commercial-estimator.v2",
     lane,
     accountName: "Website planning prospect",
-    volumeEvidence: positive(numberValue(state, "knownVolume")) ? "customer_provided" : "estimated",
-    ...(positive(numberValue(state, "knownVolume")) ? { knownWeeklyPounds: numberValue(state, "knownVolume") } : {}),
+    volumeEvidence: usingDirectPounds(state) ? "customer_provided" : "estimated",
+    ...(usingDirectPounds(state) ? { knownWeeklyPounds: numberValue(state, "knownVolume") } : {}),
     productionDaysPerWeek: 5,
     shiftsPerDay: 1,
     productiveHoursPerShift: 7,
@@ -86,9 +93,7 @@
       ...commonInput(state, "hotel"),
       rooms: requiredDriver(state, "rooms"),
       ...(occupancyPercent(state.scale.occupancy) ? { occupancyPercent: occupancyPercent(state.scale.occupancy) } : {}),
-      linenServicePercent: 90,
-      ...(state.scale.bedSystem ? { bedSystem: state.scale.bedSystem } : {}),
-      ...(String(state.scale.duvetPercent ?? "").trim() !== "" ? { duvetPercent: numberValue(state, "duvetPercent") } : {})
+      linenServicePercent: 90
     };
     if (state.operation === "senior_living") return {
       ...commonInput(state, "senior_living"),
@@ -130,7 +135,7 @@
     if (state.operation === "medspa") return {
       ...commonInput(state, "medspa"),
       appointmentsPerWeek: requiredDriver(state, "appointments"),
-      handTowelsPerAppointment: numberValue(state, "handTowelsPerAppointment")
+      ...(selected(state, "handTowels") ? { handTowelsPerAppointment: numberValue(state, "handTowelsPerAppointment") } : {})
     };
     if (state.operation === "gym") return {
       ...commonInput(state, "gym"),
@@ -138,8 +143,8 @@
     };
     if (state.operation === "events") return {
       ...commonInput(state, "event"),
-      weeklyTablecloths: numberValue(state, "weeklyTablecloths"),
-      weeklyNapkins: numberValue(state, "weeklyNapkins"),
+      ...(selected(state, "tablecloths") ? { weeklyTablecloths: numberValue(state, "weeklyTablecloths") } : {}),
+      ...(selected(state, "napkins") ? { weeklyNapkins: numberValue(state, "weeklyNapkins") } : {}),
       ...(positive(numberValue(state, "totalWeeklyPieces")) ? { totalWeeklyPieces: numberValue(state, "totalWeeklyPieces") } : {}),
       specializedHandling: commonInput(state, "event").specializedHandling || state.goods.some((id) => !["tablecloths", "napkins"].includes(id))
     };
@@ -148,7 +153,7 @@
       return {
         ...commonInput(state, "restaurant"),
         ...(includesDiningLinen && positive(numberValue(state, "weeklyCovers")) ? { weeklyCovers: numberValue(state, "weeklyCovers") } : {}),
-        ...(positive(numberValue(state, "knownVolume")) ? { knownWeeklyLinenPounds: numberValue(state, "knownVolume") } : {}),
+        ...(usingDirectPounds(state) ? { knownWeeklyLinenPounds: numberValue(state, "knownVolume") } : {}),
         garments: garmentLines(state)
       };
     }
@@ -158,9 +163,10 @@
     };
     if (state.operation === "casino") {
       const programs = [];
-      if (numberValue(state, "hotelRooms") > 0) programs.push({ lane: "hotel", rooms: numberValue(state, "hotelRooms") });
-      if (numberValue(state, "weeklyCovers") > 0) programs.push({ lane: "restaurant", weeklyCovers: numberValue(state, "weeklyCovers"), garments: [] });
-      if (numberValue(state, "weeklyTablecloths") + numberValue(state, "weeklyNapkins") > 0) programs.push({ lane: "event", weeklyTablecloths: numberValue(state, "weeklyTablecloths"), weeklyNapkins: numberValue(state, "weeklyNapkins") });
+      if (selected(state, "towels") && numberValue(state, "hotelRooms") > 0) programs.push({ lane: "hotel", rooms: numberValue(state, "hotelRooms") });
+      if (state.goods.some((id) => ["napkins", "tableLinens"].includes(id)) && numberValue(state, "weeklyCovers") > 0) programs.push({ lane: "restaurant", weeklyCovers: numberValue(state, "weeklyCovers"), garments: [] });
+      const banquetSelected = state.goods.some((id) => ["napkins", "tableLinens", "banquetLinens"].includes(id));
+      if (banquetSelected && numberValue(state, "weeklyTablecloths") + numberValue(state, "weeklyNapkins") > 0) programs.push({ lane: "event", weeklyTablecloths: numberValue(state, "weeklyTablecloths"), weeklyNapkins: numberValue(state, "weeklyNapkins") });
       const garments = garmentLines(state);
       if (garments.length) programs.push({ lane: "uniform", garments });
       return { ...commonInput(state, "casino"), programs };
@@ -182,13 +188,13 @@
     robes: numberValue(state, "weeklyRobes"), blankets: numberValue(state, "weeklyBlankets"),
     tablecloths: numberValue(state, "weeklyTablecloths"), napkins: numberValue(state, "weeklyNapkins"),
     chefCoats: numberValue(state, "weeklyChefCoats"), aprons: numberValue(state, "weeklyAprons"),
-    uniformShirts: numberValue(state, "weeklyUniformTops"), casinoUniforms: numberValue(state, "weeklyUniformTops"),
+    uniformShirts: numberValue(state, "weeklyUniformTops"), casinoUniforms: numberValue(state, state.operation === "casino" ? "weeklyUniformTops" : "weeklyCasinoUniformTops"),
     workwear: numberValue(state, "weeklyPants"), jackets: numberValue(state, "weeklyJackets")
   }[id] || 0);
 
   const proxyComplete = (state) => {
     const required = {
-      hotel: ["rooms", "occupancy", "bedSystem"],
+      hotel: ["rooms", "occupancy"],
       senior_living: ["licensedCapacity", "occupancy", "careType"],
       residential_treatment: ["licensedCapacity", "occupancy", "careType"],
       str: ["properties", "turnsPerProperty", "bedroomBasis"],
@@ -201,15 +207,18 @@
   const buildEstimateInput = (state) => {
     const legacy = buildLegacyEstimateInput(state);
     if (!legacy) return null;
-    const knownPounds = positive(numberValue(state, "knownVolume"));
-    const pieceCountLane = ["events", "uniforms"].includes(state.operation);
+    const knownPounds = usingDirectPounds(state) ? numberValue(state, "knownVolume") : undefined;
+    const restaurantGarmentOnly = state.operation === "restaurant"
+      && !state.goods.some((id) => ["napkins", "tableLinens", "barTowels"].includes(id))
+      && garmentLines(state).length > 0;
+    const pieceCountLane = ["events", "uniforms"].includes(state.operation) || restaurantGarmentOnly;
     const evidence = knownPounds ? "known_pounds" : pieceCountLane ? "piece_counts" : proxyComplete(state) ? "business_proxy" : "default_mix";
     const selectedGoods = state.goods.map((id) => ({
       id: publicGoodId(id),
       ...(goodQuantity(state, id) > 0 ? { weeklyPieces: goodQuantity(state, id) } : {})
     }));
     const allowedVolumeKeys = [
-      "rooms", "occupancyPercent", "linenServicePercent", "bedSystem", "duvetPercent", "licensedCapacity",
+      "rooms", "occupancyPercent", "linenServicePercent", "licensedCapacity",
       "careType", "memoryCarePercent", "admissionsPerWeek", "averageStayDays", "properties", "weeklyTurns",
       "averageBedrooms", "appointmentsPerWeek", "goodsUse", "handTowelsPerAppointment", "weeklyTowelUses",
       "weeklyCovers", "weeklyTablecloths", "weeklyNapkins", "totalWeeklyPieces"
@@ -220,13 +229,13 @@
     });
     garmentLines(state).forEach((line) => {
       const key = { chef_coat: "weeklyChefCoats", uniform_top: "weeklyUniformTops", apron: "weeklyAprons", pants: "weeklyPants", jacket_coverall: "weeklyJackets" }[line.type];
-      volume[key] = line.weeklyPieces;
+      volume[key] = Number(volume[key] || 0) + line.weeklyPieces;
     });
     if (state.operation === "casino") {
-      volume.hotelRooms = numberValue(state, "hotelRooms");
-      volume.weeklyCovers = numberValue(state, "weeklyCovers");
-      volume.weeklyTablecloths = numberValue(state, "weeklyTablecloths");
-      volume.weeklyNapkins = numberValue(state, "weeklyNapkins");
+      if (selected(state, "towels")) volume.hotelRooms = numberValue(state, "hotelRooms");
+      if (state.goods.some((id) => ["napkins", "tableLinens"].includes(id))) volume.weeklyCovers = numberValue(state, "weeklyCovers");
+      if (state.goods.some((id) => ["tableLinens", "banquetLinens"].includes(id))) volume.weeklyTablecloths = numberValue(state, "weeklyTablecloths");
+      if (state.goods.some((id) => ["napkins", "tableLinens", "banquetLinens"].includes(id))) volume.weeklyNapkins = numberValue(state, "weeklyNapkins");
     }
     const operation = ({ spa: "resort_spa", events: "event", uniforms: "uniform" }[state.operation] || state.operation);
     const ownership = ({ own: "customer_owned", some: "hybrid", supply: "shelton_supplied", unsure: "unsure" }[state.ownership] || "unsure");
@@ -328,6 +337,7 @@
       weeklyPounds,
       rhythm: {
         label: estimate.route.label,
+        pickups: estimate.route.recommendedPickupsPerWeek,
         reason: estimate.route.remoteReview
           ? "This location needs route review before service is confirmed."
           : "The rhythm follows estimated weekly movement; exact pickup days remain part of Shelton review."

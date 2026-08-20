@@ -11,6 +11,7 @@
   const pageUrlField = form.querySelector("[data-quote-page-url]");
   const submittedAtField = form.querySelector("[data-quote-submitted-at]");
   const idleLabel = submit?.dataset.idleLabel || "Send my quote brief";
+  const submissionReceiptKey = "sheltonSubmissionReceiptV1";
   const requiredFields = Array.from(form.querySelectorAll("input[required], select[required], textarea[required]"));
   const fieldNames = {
     company: "business name",
@@ -21,6 +22,18 @@
   let inFlight = false;
   let activeController = null;
   let validationAnnouncementTimer = 0;
+
+  const markSubmissionReceipt = () => {
+    try {
+      window.sessionStorage.setItem(submissionReceiptKey, JSON.stringify({
+        v: 1,
+        kind: "quote",
+        at: Date.now()
+      }));
+    } catch {
+      // Confirmation remains neutral if session storage is unavailable.
+    }
+  };
 
   if (pageUrlField) pageUrlField.value = window.location.href;
 
@@ -157,6 +170,7 @@
 
       setSubmitState("sent");
       setStatus("Quote brief sent. Opening confirmation…", "success");
+      markSubmissionReceipt();
       window.setTimeout(() => window.location.assign("thank-you.html"), 220);
     } catch (error) {
       const timedOut = error?.name === "AbortError";

@@ -3,20 +3,38 @@
 
   const positive = (value) => Number(value) > 0;
   const present = (value) => String(value ?? "").trim() !== "";
-  const anyPositive = (state, ids) => ids.some((id) => positive(state.scale?.[id]));
+  const withinConfiguredRange = (state, id) => {
+    const value = Number(state.scale?.[id]);
+    if (!Number.isFinite(value) || value <= 0) return false;
+    const fields = window.SheltonPricingJourneyConfig?.scaleSchemas?.[state.operation] || [];
+    const field = fields.find((item) => item.id === id);
+    if (!field || field.type !== "number") return true;
+    return value >= Number(field.min) && value <= Number(field.max);
+  };
+  const anyPositive = (state, ids) => ids.some((id) => withinConfiguredRange(state, id));
+  const applicableDriverIds = (state, ids) => {
+    const config = window.SheltonPricingJourneyConfig;
+    const fields = config?.scaleSchemas?.[state.operation] || [];
+    const directField = config?.scaleEntryModes?.[state.operation]?.directField;
+    return ids.filter((id) => {
+      if (id === directField && state.scale?.entryMode !== "direct") return false;
+      const field = fields.find((item) => item.id === id);
+      return !Array.isArray(field?.goods) || field.goods.some((goodId) => state.goods.includes(goodId));
+    });
+  };
 
   const driverRules = {
     hotel: { ids: ["rooms", "knownVolume"], label: "guest-room count or measured weekly pounds" },
     senior_living: { ids: ["licensedCapacity", "knownVolume"], label: "resident capacity or measured weekly pounds" },
     residential_treatment: { ids: ["licensedCapacity", "knownVolume"], label: "bed capacity or measured weekly pounds" },
-    str: { ids: ["properties", "turnsPerProperty", "weeklyTurns", "knownVolume"], label: "property activity or measured weekly pounds" },
-    spa: { ids: ["appointments", "knownVolume"], label: "appointment volume or measured weekly pounds" },
-    medspa: { ids: ["appointments", "knownVolume"], label: "appointment volume or measured weekly pounds" },
+    str: { ids: ["properties", "weeklyTurns", "knownVolume"], label: "property activity or measured weekly pounds" },
+    spa: { ids: ["appointments", "knownVolume"], label: "weekly appointment volume or measured weekly pounds" },
+    medspa: { ids: ["appointments", "knownVolume"], label: "weekly appointment volume or measured weekly pounds" },
     gym: { ids: ["weeklyTowelUses", "knownVolume"], label: "towel use or measured weekly pounds" },
     events: { ids: ["weeklyTablecloths", "weeklyNapkins", "totalWeeklyPieces"], label: "weekly linen count" },
     restaurant: { ids: ["weeklyCovers", "knownVolume", "weeklyChefCoats", "weeklyAprons"], label: "weekly cover, linen, or garment count" },
     casino: { ids: ["hotelRooms", "weeklyCovers", "weeklyTablecloths", "weeklyNapkins", "weeklyChefCoats", "weeklyUniformTops"], label: "active department volume" },
-    uniforms: { ids: ["weeklyUniformTops", "weeklyChefCoats", "weeklyPants", "weeklyJackets"], label: "weekly garment count" },
+    uniforms: { ids: ["weeklyUniformTops", "weeklyCasinoUniformTops", "weeklyChefCoats", "weeklyPants", "weeklyJackets"], label: "weekly garment count" },
     wholesale: { ids: ["weeklyVolume"], label: "approximate weekly volume", manualReview: true },
     other: { ids: ["weeklyVolume"], label: "approximate weekly volume", manualReview: true }
   };
@@ -30,9 +48,9 @@
     }
     const rule = driverRules[state.operation];
     if (!rule) {
-      return { ready: false, message: "Add one meaningful sizing answer in Section 02 to begin.", label: "sizing answer", manualReview: false };
+      return { ready: false, message: "Add one meaningful sizing answer in Section 03 to begin.", label: "sizing answer", manualReview: false };
     }
-    const ready = anyPositive(state, rule.ids);
+    const ready = anyPositive(state, applicableDriverIds(state, rule.ids));
     return {
       ready,
       label: rule.label,
@@ -41,7 +59,7 @@
         ? rule.manualReview
           ? "Enough information is available to open the Shelton review path."
           : "Your first planning range is available. Additional answers will narrow it."
-        : `Add a ${rule.label} in Section 02 to see your first ${rule.manualReview ? "review path" : "broad range"}.`
+        : `Add a ${rule.label} in Section 03 to see your first ${rule.manualReview ? "review path" : "broad range"}.`
     };
   };
 

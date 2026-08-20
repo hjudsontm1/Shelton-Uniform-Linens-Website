@@ -169,7 +169,7 @@
 
 .service-route-check__map-fallback {
   position: absolute;
-  z-index: 0;
+  z-index: 2;
   inset: 0;
   padding: clamp(2rem, 5vw, 4.5rem);
   display: flex;
@@ -221,9 +221,23 @@
 
 .service-route-check__map {
   position: absolute;
+  z-index: 1;
   inset: 0;
   min-height: 100%;
   overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.service-route-check__map-stage.has-live-map .service-route-check__map {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.service-route-check__map-stage.has-live-map .service-route-check__map-fallback {
+  display: none;
 }
 
 /* Keep Leaflet's core layout intact if its external stylesheet is delayed or blocked. */
@@ -361,6 +375,11 @@
 
 .service-route-check__field input:focus {
   border-bottom-color: var(--services-gold-strong);
+}
+
+.service-route-check__field input:focus-visible {
+  outline: 2px solid var(--services-navy);
+  outline-offset: 3px;
 }
 
 .service-route-check__submit.services-button {
@@ -666,15 +685,19 @@
 
   .service-library-hero__index a strong {
     max-width: 7.4rem;
-    font-size: clamp(0.56rem, 1.05vw, 0.6rem);
-    letter-spacing: 0.1em;
-    line-height: 1.25;
+    font-size: clamp(0.64rem, 1.25vw, 0.68rem);
+    letter-spacing: 0.07em;
+    line-height: 1.2;
     text-align: center;
     white-space: normal;
   }
 
   .service-collection-rail.is-docked .service-library-hero__index {
     height: 3.75rem;
+  }
+
+  .service-chapter {
+    scroll-margin-top: 9.75rem;
   }
 }
 
@@ -741,5 +764,9 @@
 
   .service-library-hero__copy {
     width: 100%;
+  }
+
+  .service-chapter {
+    scroll-margin-top: 9.35rem;
   }
 }

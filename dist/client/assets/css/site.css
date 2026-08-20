@@ -1454,8 +1454,8 @@ body.has-about-dialog { overflow: hidden; }
   opacity: 0.9;
 }
 .story-carousel__controls button {
-  width: 1.42rem;
-  height: 1.42rem;
+  width: 1.5rem;
+  height: 1.5rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1474,8 +1474,10 @@ body.has-about-dialog { overflow: hidden; }
   outline: 0;
 }
 .story-carousel__dots button {
-  width: 0.62rem;
-  height: 1.42rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: grid;
+  place-items: center;
   border: 0;
   background: transparent;
 }
