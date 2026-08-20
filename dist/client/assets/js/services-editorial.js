@@ -157,7 +157,10 @@
   const routeMapElement = document.querySelector("[data-service-route-map]");
   const routeMapStage = routeMapElement?.closest(".service-route-check__map-stage");
 
-  if (routeMapElement && window.L) {
+  const initializeRouteMap = () => {
+    if (!routeMapElement || !window.L || routeMapElement.dataset.mapInitializing === "true") return;
+    routeMapElement.dataset.mapInitializing = "true";
+
     const serviceAreaBounds = window.L.latLngBounds(
       [32.528, -117.72],
       [33.7, -116.04]
@@ -270,6 +273,20 @@
         fitServiceAreaView();
       });
     }, { passive: true });
+  };
+
+  if (routeMapElement && window.L) {
+    if (!("IntersectionObserver" in window)) {
+      initializeRouteMap();
+    } else {
+      const routeMapObserver = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        routeMapObserver.disconnect();
+        initializeRouteMap();
+      }, { rootMargin: "900px 0px", threshold: 0.01 });
+
+      routeMapObserver.observe(routeMapStage || routeMapElement);
+    }
   }
 
   const routeForm = document.querySelector("[data-route-form]");

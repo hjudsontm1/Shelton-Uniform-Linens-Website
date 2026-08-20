@@ -476,7 +476,7 @@
     z-index: 1;
     height: 2740px;
     background-color: var(--calm-ivory);
-    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.png");
+    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.webp");
     background-position: center top;
     background-repeat: repeat-x;
     background-size: 744px auto;
@@ -492,7 +492,7 @@
     z-index: 0;
     height: 2740px;
     background-color: var(--calm-navy);
-    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.png");
+    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.webp");
     background-position: center top;
     background-repeat: repeat-x;
     background-size: 744px auto;
@@ -513,7 +513,7 @@
     z-index: 0;
     display: block;
     background-color: var(--calm-navy);
-    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.png");
+    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.webp");
     background-position: center top;
     background-repeat: repeat-x;
     background-size: 744px auto;
@@ -588,7 +588,7 @@
 
   .pricing-spine-workbench body.pricing-calm-page {
     background-color: var(--calm-navy);
-    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.png");
+    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.webp");
     background-position: center 5.5rem;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -2196,7 +2196,7 @@
   .pricing-spine-workbench .pricing-calm::after {
     background-image:
       linear-gradient(180deg, var(--calm-navy) 0, rgba(8, 19, 33, 0.96) 5rem, rgba(8, 19, 33, 0) 14rem),
-      url("../images/generated/pricing-halftone-transition-tall-v5.png");
+      url("../images/generated/pricing-halftone-transition-tall-v5.webp");
     background-position: center top, center top;
     background-repeat: no-repeat, repeat-x;
     background-size: 100% 14rem, 744px auto;
@@ -2388,7 +2388,7 @@
     z-index: 1;
     height: 2740px;
     background-color: var(--calm-ivory);
-    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.png");
+    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.webp");
     background-position: center top;
     background-repeat: repeat-x;
     background-size: 744px auto;

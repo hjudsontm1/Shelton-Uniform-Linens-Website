@@ -15,7 +15,7 @@
   z-index: 0;
   inset: 5.5rem 0 0;
   pointer-events: none;
-  background: url("../images/history/shelton-cleaners-greenearth-machine-web.jpeg") 46% 48% / cover no-repeat;
+  background: url("../images/history/shelton-cleaners-greenearth-machine-web.webp") 46% 48% / cover no-repeat;
   opacity: 0.16;
   filter: grayscale(0.88) saturate(0.32) contrast(1.2) brightness(0.58) blur(2.5px);
   transform: scale(1.018);

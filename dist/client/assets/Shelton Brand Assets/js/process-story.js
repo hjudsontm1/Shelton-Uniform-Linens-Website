@@ -37,7 +37,7 @@
       caption: 'Hung and protected for return'
     },
     bundled: {
-      image: 'assets/images/history/shelton-cleaners-poly-garments-web.jpeg',
+      image: 'assets/images/history/shelton-cleaners-poly-garments-web.webp',
       alt: 'Finished garments protected in Shelton packaging on a return rail',
       mark: 'BUNDLE',
       status: 'Bundled and labeled by item type, property, department, or account preference.',

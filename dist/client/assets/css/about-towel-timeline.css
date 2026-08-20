@@ -71,7 +71,7 @@ body[data-page="about"] .about-towel-history {
     border: 0;
     border-radius: 0;
     background-color: transparent;
-    background-image: url("../images/generated/about-timeline-row-terry-safe-v2.png");
+    background-image: url("../images/generated/about-timeline-row-terry-safe-v2.webp");
     background-position: center;
     background-repeat: no-repeat;
     background-size: 104.5% 100%;
@@ -309,7 +309,7 @@ body[data-page="about"] .about-towel-history {
   }
 
   body[data-page="about"] .about-towel-history__detail-surface {
-    background-image: url("../images/generated/about-timeline-story-towel-terry-surface-v5.png");
+    background-image: url("../images/generated/about-timeline-story-towel-terry-surface-v5.webp");
     background-size: 103.5% 102.5%;
   }
 
@@ -477,7 +477,7 @@ body[data-page="about"] .about-towel-history {
     margin-inline: 2%;
     min-height: 0;
     aspect-ratio: auto;
-    background-image: url("../images/generated/about-timeline-compact-open-surface-v2.png");
+    background-image: url("../images/generated/about-timeline-compact-open-surface-v2.webp");
     background-size: 105.85% 100%;
   }
 
