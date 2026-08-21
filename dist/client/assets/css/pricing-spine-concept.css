@@ -533,6 +533,241 @@
 
 }
 
+/* Estimator reconciliation: the basic journey is four decisions. Ownership
+   stays compact, while derived rhythm, finish, and return details live with
+   the planning range instead of looking like another required question. */
+@media (min-width: 761px) {
+  .pricing-spine-workbench .factor-map {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .pricing-spine-workbench .factor-map li:nth-child(3),
+  .pricing-spine-workbench .factor-map li:nth-child(4) {
+    border-bottom: 0;
+  }
+}
+
+.pricing-spine-workbench #factor-ownership .ownership-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid var(--calm-ink-line);
+}
+
+.pricing-spine-workbench #factor-ownership .ownership-list label span,
+.pricing-spine-workbench #factor-ownership .ownership-list input:checked + span {
+  display: flex;
+  min-height: 78px;
+  height: 100%;
+  padding: 1rem;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--calm-ink-line);
+  border-bottom: 0;
+  text-align: center;
+}
+
+.pricing-spine-workbench #factor-ownership .ownership-list label:last-child span {
+  border-right: 0;
+}
+
+.pricing-spine-workbench #factor-ownership .ownership-list strong {
+  font-size: clamp(0.68rem, 0.9vw, 0.82rem);
+  letter-spacing: 0.09em;
+  line-height: 1.35;
+}
+
+.pricing-spine-workbench .ownership-explainer {
+  margin-top: 1rem;
+  border-top: 1px solid var(--calm-ink-line);
+  border-bottom: 1px solid var(--calm-ink-line);
+}
+
+.pricing-spine-workbench .ownership-explainer summary {
+  min-height: 44px;
+  padding: 0.9rem 2rem 0.9rem 0;
+  color: var(--calm-gold-dark);
+  font-family: var(--calm-sans);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.pricing-spine-workbench .ownership-explainer summary:focus-visible {
+  outline: 2px solid var(--calm-gold-dark);
+  outline-offset: 3px;
+}
+
+.pricing-spine-workbench .ownership-explainer__body {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  padding: 0 0 1rem;
+  background: var(--calm-ink-line);
+}
+
+.pricing-spine-workbench .ownership-explainer__body section {
+  padding: 1rem;
+  background: var(--calm-ivory);
+}
+
+.pricing-spine-workbench .ownership-explainer__body h4 {
+  margin: 0;
+  color: var(--calm-navy);
+  font-family: var(--calm-serif);
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.pricing-spine-workbench .ownership-explainer__body p {
+  margin: 0.55rem 0 0;
+  color: rgba(8, 19, 33, 0.62);
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+.pricing-spine-workbench .range-program-overview {
+  margin-top: 2.5rem;
+  padding-top: 2.25rem;
+  border-top: 1px solid var(--calm-ink-line);
+}
+
+.pricing-spine-workbench .range-program-overview__heading > span,
+.pricing-spine-workbench .range-program-overview__card > span {
+  color: var(--calm-gold-dark);
+  font-family: var(--calm-sans);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.pricing-spine-workbench .range-program-overview__heading h3 {
+  margin: 0.55rem 0 0;
+  color: var(--calm-navy);
+  font-family: var(--calm-serif);
+  font-size: clamp(1.9rem, 3.1vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.pricing-spine-workbench .range-program-overview__heading p {
+  max-width: 62ch;
+  margin: 0.75rem 0 0;
+  color: rgba(8, 19, 33, 0.62);
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.pricing-spine-workbench .range-program-overview__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.pricing-spine-workbench .range-program-overview__card {
+  min-width: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--calm-ink-line);
+  background: rgba(255, 253, 248, 0.42);
+}
+
+.pricing-spine-workbench .range-program-overview__card--finish > h4 {
+  margin: 0.6rem 0 1.1rem;
+  color: var(--calm-navy);
+  font-family: var(--calm-serif);
+  font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+  font-weight: 400;
+  line-height: 1.08;
+}
+
+.pricing-spine-workbench .range-program-overview .rhythm-recommendation {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.15rem;
+  margin-top: 0.6rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.pricing-spine-workbench .range-program-overview .rhythm-cadence {
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--calm-ink-line);
+  border-left: 0;
+}
+
+.pricing-spine-workbench .range-program-overview .rhythm-cadence li {
+  min-height: 36px;
+}
+
+.pricing-spine-workbench .range-program-overview .rhythm-recommendation__actions {
+  grid-column: 1;
+}
+
+.pricing-spine-workbench .range-program-overview .finish-recommendation {
+  gap: 1rem;
+}
+
+.pricing-spine-workbench .range-program-overview .finish-goods-list li {
+  padding: 0.75rem 0;
+}
+
+.pricing-spine-workbench .range-program-overview .finish-goods-list strong {
+  font-size: 1.08rem;
+}
+
+.pricing-spine-workbench .range-program-overview .return-format__summary {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .pricing-spine-workbench .range-program-overview__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .pricing-spine-workbench #factor-ownership .ownership-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pricing-spine-workbench #factor-ownership .ownership-list label span,
+  .pricing-spine-workbench #factor-ownership .ownership-list input:checked + span {
+    min-height: 62px;
+    border-right: 0;
+    border-bottom: 1px solid var(--calm-ink-line);
+  }
+
+  .pricing-spine-workbench #factor-ownership .ownership-list label:last-child span {
+    border-bottom: 0;
+  }
+
+  .pricing-spine-workbench .ownership-explainer__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pricing-spine-workbench .range-program-overview {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+  }
+
+  .pricing-spine-workbench .range-program-overview__card {
+    padding: 1rem;
+  }
+
+  .pricing-spine-workbench .range-program-overview .rhythm-recommendation__actions {
+    flex-direction: column;
+  }
+}
+
 @media (min-width: 1051px) and (max-width: 1199px) {
   .pricing-spine-workbench #factor-ownership .ownership-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1079,6 +1314,36 @@
   }
 }
 
+/* The planning summary uses one centered editorial axis at every viewport.
+   Keep the detailed program cards below on their existing reading alignment. */
+.pricing-spine-workbench .range-guidance {
+  text-align: center;
+}
+
+.pricing-spine-workbench .range-guidance p {
+  max-width: 68ch;
+  margin-right: auto;
+  margin-left: auto;
+  text-wrap: balance;
+}
+
+.pricing-spine-workbench .range-program-overview__heading {
+  max-width: 64rem;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+}
+
+.pricing-spine-workbench .range-program-overview__heading h3,
+.pricing-spine-workbench .range-program-overview__heading p {
+  text-wrap: balance;
+}
+
+.pricing-spine-workbench .range-program-overview__heading p {
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .pricing-spine-workbench #factor-route .calm-field--large {
   grid-column: 1 / -1;
   width: min(100%, 960px);
@@ -1393,6 +1658,15 @@
   }
 }
 
+@media (min-width: 761px) {
+  .pricing-spine-workbench .learning-chapter,
+  .pricing-spine-workbench .pricing-intro,
+  .pricing-spine-workbench .planning-result,
+  .pricing-spine-workbench .quote-handoff {
+    scroll-margin-top: 7.25rem;
+  }
+}
+
 /* Once Section 01 becomes a single-column composition, center its editorial
    hierarchy while keeping the actual form controls left-aligned for scanning. */
 @media (max-width: 1199px) {
@@ -1474,15 +1748,98 @@
 
   .pricing-spine-workbench .estimate-dock a {
     flex: 0 0 auto;
+    display: inline-flex;
+    min-height: 44px;
+    padding: 0.55rem 0.35rem;
+    align-items: center;
+    justify-content: center;
     margin-left: auto;
     white-space: nowrap;
   }
 }
 
-@media (max-width: 1199px) {
-  .pricing-spine-workbench .estimate-dock {
-    display: none !important;
+@media (max-width: 760px) {
+  .pricing-spine-workbench .pricing-calm {
+    padding-bottom: calc(7rem + env(safe-area-inset-bottom));
   }
+
+  .pricing-spine-workbench .estimate-dock {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    min-height: 72px;
+    margin: 0;
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+    gap: 0.75rem;
+    border-width: 1px 0 0;
+    box-shadow: 0 -12px 34px rgba(8, 19, 33, 0.2);
+  }
+
+  .pricing-spine-workbench .estimate-dock[hidden],
+  .pricing-spine-workbench .estimate-dock.is-suppressed {
+    display: none;
+  }
+
+  .pricing-spine-workbench .estimate-dock div {
+    min-width: 0;
+  }
+
+  .pricing-spine-workbench .estimate-dock strong {
+    display: -webkit-box;
+    max-width: none;
+    overflow: hidden;
+    font-size: 0.82rem;
+    line-height: 1.15;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .pricing-spine-workbench .estimate-dock a {
+    flex: 0 0 auto;
+    display: inline-flex;
+    min-height: 44px;
+    padding: 0.6rem 0.75rem;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    font-size: 0.62rem;
+    white-space: nowrap;
+  }
+}
+
+/* Keep explanatory and inactive-state copy readable on the ivory estimator
+   surface while preserving the approved navy/gold hierarchy. */
+.pricing-spine-workbench .volume-choice-grid label > span small,
+.pricing-spine-workbench .volume-choice-field__hint,
+.pricing-spine-workbench .volume-question .volume-question__why,
+.pricing-spine-workbench .ownership-list label span small,
+.pricing-spine-workbench .rhythm-cadence small {
+  color: rgba(23, 32, 42, 0.68);
+  font-size: max(0.68rem, 11px);
+}
+
+.pricing-spine-workbench .rhythm-cadence li {
+  color: rgba(23, 32, 42, 0.68);
+}
+
+.pricing-spine-workbench .rhythm-cadence ol {
+  width: 100%;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.pricing-spine-workbench .rhythm-cadence li {
+  min-width: 0;
+}
+
+.pricing-spine-workbench .rhythm-cadence li b {
+  color: inherit;
+}
+
+.pricing-spine-workbench .rhythm-cadence li.is-active,
+.pricing-spine-workbench .rhythm-cadence li.is-active b {
+  color: var(--calm-ivory);
 }
 
 /* Detail-first chapter introductions. The estimator chapters should begin
@@ -1908,7 +2265,25 @@
   padding-top: 0.2rem;
 }
 
-.pricing-spine-workbench .return-format__heading > span {
+.pricing-spine-workbench .return-format__summary {
+  display: block;
+  padding: 1.15rem 0;
+  border-top: 1px solid var(--calm-ink-line);
+  border-bottom: 1px solid var(--calm-ink-line);
+}
+
+.pricing-spine-workbench .return-format__summary > img {
+  width: 38px;
+  height: 38px;
+  opacity: 0.72;
+}
+
+.pricing-spine-workbench .return-format__summary > img[hidden] {
+  display: none;
+}
+
+.pricing-spine-workbench .return-format__summary > div > span {
+  display: block;
   color: var(--calm-gold-dark);
   font-family: var(--calm-sans);
   font-size: 0.58rem;
@@ -1917,60 +2292,33 @@
   text-transform: uppercase;
 }
 
-.pricing-spine-workbench .return-format__heading h4 {
+.pricing-spine-workbench .return-format__summary h4 {
   margin: 0.55rem 0 0;
   color: var(--calm-navy);
   font-family: var(--calm-serif);
-  font-size: clamp(1.65rem, 2.4vw, 2.15rem);
+  font-size: clamp(1.42rem, 2.1vw, 1.9rem);
   font-weight: 400;
   line-height: 1.05;
 }
 
-.pricing-spine-workbench .return-format__options {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.65rem;
-  margin-top: 1.2rem;
+.pricing-spine-workbench .choice-cloud input:checked + span strong,
+.pricing-spine-workbench .choice-cloud input:checked + span small,
+.pricing-spine-workbench .volume-choice-grid input:checked + span strong,
+.pricing-spine-workbench .volume-choice-grid input:checked + span small,
+.pricing-spine-workbench .ownership-list input:checked + span strong,
+.pricing-spine-workbench .ownership-list input:checked + span small,
+.pricing-spine-workbench .editorial-choice-list input:checked + span strong {
+  color: inherit;
 }
 
-.pricing-spine-workbench .return-format__options article {
-  display: flex;
-  min-height: 120px;
-  padding: 1rem;
-  flex-direction: column;
-  gap: 0.8rem;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--calm-ink-line);
-  background: rgba(255, 253, 248, 0.58);
-  text-align: center;
-  transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+.pricing-spine-workbench .rhythm-cadence li {
+  cursor: default;
+  user-select: none;
 }
 
-.pricing-spine-workbench .return-format__options article.is-selected {
-  border-color: var(--calm-gold);
-  background: rgba(184, 150, 90, 0.11);
-  box-shadow: inset 0 0 0 1px var(--calm-gold);
-}
-
-.pricing-spine-workbench .return-format__options img {
-  width: 48px;
-  height: 48px;
-}
-
-.pricing-spine-workbench .return-format__options strong {
-  color: var(--calm-navy);
-  font-family: var(--calm-sans);
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.13em;
-  line-height: 1.35;
-  text-transform: uppercase;
-}
-
-.pricing-spine-workbench .return-format > p {
+.pricing-spine-workbench .return-format__summary p {
   max-width: 45ch;
-  margin: 0.8rem 0 0;
+  margin: 0.48rem 0 0;
   color: rgba(8, 19, 33, 0.58);
   font-size: 0.72rem;
   line-height: 1.55;
@@ -2011,14 +2359,9 @@
     padding: 0.9rem 0;
   }
 
-  .pricing-spine-workbench .return-format__options article {
-    min-height: 108px;
-    padding: 0.8rem 0.55rem;
-  }
-
-  .pricing-spine-workbench .return-format__options img {
-    width: 42px;
-    height: 42px;
+  .pricing-spine-workbench .return-format__summary {
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 0.8rem;
   }
 }
 
@@ -2602,7 +2945,7 @@
   .pricing-spine-workbench .rhythm-options span small,
   .pricing-spine-workbench .range-progress button,
   .pricing-spine-workbench .range-number span,
-  .pricing-spine-workbench .return-format > p {
+  .pricing-spine-workbench .return-format__summary p {
     color: rgba(23, 32, 42, 0.68);
   }
 
@@ -2641,6 +2984,10 @@
   }
 }
 
+.pricing-spine-workbench .operation-picker-field {
+  scroll-margin-top: 7rem;
+}
+
 /* Keep the route controls on the chapter centerline whenever the estimator is
    inside its compact shell. The wide desktop layout already spans both tracks. */
 @media (max-width: 1199px) {
@@ -2660,5 +3007,879 @@
 @media (min-width: 761px) and (max-width: 1199px) {
   .pricing-spine-workbench #factor-route .editorial-choice-list--three {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Selected-answer contrast is a component invariant, not a breakpoint detail.
+   Keep every line of copy legible after an answer card turns navy, including
+   phone rules that intentionally darken unselected helper text. */
+.pricing-spine-workbench .choice-cloud input:checked + span,
+.pricing-spine-workbench .choice-list input:checked + span,
+.pricing-spine-workbench .segmented-choice input:checked + span,
+.pricing-spine-workbench .volume-choice-grid input:checked + span,
+.pricing-spine-workbench .ownership-list input:checked + span,
+.pricing-spine-workbench .editorial-choice-list input:checked + span,
+.pricing-spine-workbench .rhythm-use-recommendation input:checked + span {
+  color: var(--calm-ivory);
+}
+
+.pricing-spine-workbench .choice-cloud input:checked + span strong,
+.pricing-spine-workbench .choice-list input:checked + span strong,
+.pricing-spine-workbench .segmented-choice input:checked + span strong,
+.pricing-spine-workbench .volume-choice-grid input:checked + span strong,
+.pricing-spine-workbench .ownership-list input:checked + span strong,
+.pricing-spine-workbench .editorial-choice-list input:checked + span strong,
+.pricing-spine-workbench .rhythm-use-recommendation input:checked + span strong {
+  color: inherit;
+}
+
+.pricing-spine-workbench .choice-cloud input:checked + span small,
+.pricing-spine-workbench .choice-list input:checked + span small,
+.pricing-spine-workbench .segmented-choice input:checked + span small,
+.pricing-spine-workbench .volume-choice-grid input:checked + span small,
+.pricing-spine-workbench .ownership-list input:checked + span small,
+.pricing-spine-workbench .editorial-choice-list input:checked + span small,
+.pricing-spine-workbench .rhythm-use-recommendation input:checked + span small {
+  color: rgba(250, 246, 238, 0.74);
+}
+
+.pricing-spine-workbench .operation-picker__options button[aria-pressed="true"] strong {
+  color: var(--calm-ivory);
+}
+
+.pricing-spine-workbench .operation-picker__options button[aria-pressed="true"] small {
+  color: rgba(250, 246, 238, 0.74);
+}
+
+/* Optional precision belongs after the first useful answer. It stays out of
+   the basic journey and opens as a compact, text-led disclosure only after a
+   planning range exists. */
+.pricing-spine-workbench .precision-refinement {
+  width: 100%;
+  margin: 1.4rem auto 0;
+  color: var(--calm-ink);
+  background: var(--calm-ivory);
+  box-shadow: 0 18px 58px rgba(0, 0, 0, 0.2);
+}
+
+.pricing-spine-workbench .precision-refinement__toggle {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.9fr) auto;
+  gap: 0.55rem 2rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 1.6rem 2rem;
+  color: var(--calm-ink);
+  border: 1px solid rgba(184, 150, 90, 0.55);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pricing-spine-workbench .precision-refinement__toggle > span,
+.pricing-spine-workbench .precision-refinement__intro > span {
+  grid-column: 1 / -1;
+  color: var(--calm-gold-dark);
+  font-family: var(--calm-sans);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.pricing-spine-workbench .precision-refinement__toggle > strong {
+  font-family: var(--calm-serif);
+  font-size: clamp(1.65rem, 2.5vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.pricing-spine-workbench .precision-refinement__toggle > small {
+  align-self: center;
+  color: rgba(8, 19, 33, 0.64);
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.pricing-spine-workbench .precision-refinement__toggle > b {
+  align-self: center;
+  justify-self: end;
+  color: var(--calm-navy);
+  border-bottom: 1px solid var(--calm-gold-dark);
+  font-family: var(--calm-sans);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pricing-spine-workbench .precision-refinement__toggle:focus-visible,
+.pricing-spine-workbench .precision-refinement__footer button:focus-visible {
+  outline: 2px solid var(--calm-gold);
+  outline-offset: 3px;
+}
+
+.pricing-spine-workbench .precision-refinement__panel {
+  padding: 2rem;
+  border: 1px solid rgba(184, 150, 90, 0.55);
+  border-top: 0;
+}
+
+.pricing-spine-workbench .precision-refinement__intro p {
+  max-width: 72ch;
+  margin: 0.55rem 0 0;
+  color: rgba(8, 19, 33, 0.64);
+  font-size: 0.72rem;
+  line-height: 1.6;
+}
+
+.pricing-spine-workbench .precision-refinement__fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4rem;
+  margin-top: 1.8rem;
+}
+
+.pricing-spine-workbench .precision-refinement__fields .calm-field {
+  margin: 0;
+}
+
+.pricing-spine-workbench .precision-refinement__fields .calm-field > span {
+  min-height: 2.7em;
+}
+
+.pricing-spine-workbench .precision-refinement__fields select {
+  min-height: 52px;
+  padding-right: 2.4rem;
+  color: var(--calm-navy);
+  border-bottom-color: rgba(8, 19, 33, 0.44);
+  background-color: rgba(255, 253, 248, 0.4);
+}
+
+.pricing-spine-workbench .precision-refinement__fields small {
+  display: block;
+  margin-top: 0.6rem;
+  color: rgba(8, 19, 33, 0.58);
+  font-size: 0.64rem;
+  line-height: 1.5;
+}
+
+.pricing-spine-workbench .precision-refinement__footer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.8rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--calm-ink-line);
+}
+
+.pricing-spine-workbench .precision-refinement__footer p {
+  margin: 0;
+  color: rgba(8, 19, 33, 0.62);
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+.pricing-spine-workbench .precision-refinement__footer button {
+  min-height: 44px;
+  padding: 0.75rem 1.1rem;
+  color: var(--calm-ivory);
+  border: 1px solid var(--calm-navy);
+  background: var(--calm-navy);
+  font-family: var(--calm-sans);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .pricing-spine-workbench .precision-refinement__toggle {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .pricing-spine-workbench .precision-refinement__toggle > small {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+
+  .pricing-spine-workbench .precision-refinement__fields {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-spine-workbench .precision-refinement__fields .calm-field > span {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .pricing-spine-workbench .precision-refinement {
+    margin-top: 0.85rem;
+  }
+
+  .pricing-spine-workbench .precision-refinement__toggle {
+    display: block;
+    padding: 1.25rem;
+  }
+
+  .pricing-spine-workbench .precision-refinement__toggle > strong,
+  .pricing-spine-workbench .precision-refinement__toggle > small,
+  .pricing-spine-workbench .precision-refinement__toggle > b {
+    display: block;
+  }
+
+  .pricing-spine-workbench .precision-refinement__toggle > strong {
+    margin-top: 0.55rem;
+  }
+
+  .pricing-spine-workbench .precision-refinement__toggle > small {
+    margin-top: 0.75rem;
+  }
+
+  .pricing-spine-workbench .precision-refinement__toggle > b {
+    width: max-content;
+    margin-top: 1rem;
+  }
+
+  .pricing-spine-workbench .precision-refinement__panel {
+    padding: 1.25rem;
+  }
+
+  .pricing-spine-workbench .precision-refinement__footer {
+    display: block;
+  }
+
+  .pricing-spine-workbench .precision-refinement__footer button {
+    width: 100%;
+    margin-top: 1rem;
+  }
+}
+
+/* A typical program should feel ready, while a custom program should be fast
+   to scan. The icon grid deliberately removes the previous explanatory card
+   height and keeps every custom choice at a compact, accessible target size. */
+.pricing-spine-workbench .goods-starting-point,
+.pricing-spine-workbench .goods-customizer {
+  margin-top: 1rem;
+}
+
+.pricing-spine-workbench .goods-customizer {
+  padding: 0;
+}
+
+.pricing-spine-workbench .goods-starting-point {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(14rem, 0.9fr) auto;
+  gap: 1.25rem 1.5rem;
+  padding: 1.35rem;
+  align-items: center;
+  border: 1px solid rgba(184, 150, 90, 0.58);
+  background: rgba(184, 150, 90, 0.07);
+}
+
+.pricing-spine-workbench .goods-starting-point[hidden],
+.pricing-spine-workbench .goods-customizer[hidden] {
+  display: none;
+}
+
+.pricing-spine-workbench .goods-starting-point__copy > span,
+.pricing-spine-workbench .goods-customizer__heading span {
+  display: block;
+  color: var(--calm-gold-dark);
+  font-family: var(--calm-sans);
+  font-size: 0.57rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.pricing-spine-workbench .goods-starting-point__copy > strong,
+.pricing-spine-workbench .goods-customizer__heading strong {
+  display: block;
+  margin-top: 0.42rem;
+  color: var(--calm-navy);
+  font-family: var(--calm-serif);
+  font-size: clamp(1.25rem, 2vw, 1.7rem);
+  font-weight: 500;
+  line-height: 1.04;
+}
+
+.pricing-spine-workbench .goods-starting-point__copy p,
+.pricing-spine-workbench .goods-customizer__heading p {
+  margin: 0.5rem 0 0;
+  color: rgba(8, 19, 33, 0.62);
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+.pricing-spine-workbench .goods-starting-point__list {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.pricing-spine-workbench .goods-starting-point__list > span {
+  display: grid;
+  grid-template-columns: 1.35rem minmax(0, 1fr) 1rem;
+  gap: 0.6rem;
+  min-height: 44px;
+  padding: 0.55rem 0.7rem;
+  align-items: center;
+  color: var(--calm-ivory);
+  background: var(--calm-navy);
+}
+
+.pricing-spine-workbench .goods-starting-point__list > span > i:first-child {
+  color: var(--calm-gold);
+  font-size: 1.15rem;
+}
+
+.pricing-spine-workbench .goods-starting-point__list > span > i:last-child {
+  font-size: 0.85rem;
+}
+
+.pricing-spine-workbench .goods-starting-point__list strong {
+  font-family: var(--calm-sans);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.pricing-spine-workbench .goods-starting-point button,
+.pricing-spine-workbench .goods-customizer__heading button {
+  min-height: 44px;
+  padding: 0.72rem 0.9rem;
+  color: var(--calm-navy);
+  border: 1px solid var(--calm-gold-dark);
+  background: transparent;
+  font-family: var(--calm-sans);
+  font-size: 0.57rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.pricing-spine-workbench .goods-starting-point button:hover,
+.pricing-spine-workbench .goods-customizer__heading button:hover {
+  color: var(--calm-ivory);
+  background: var(--calm-navy);
+}
+
+.pricing-spine-workbench .goods-starting-point button:focus-visible,
+.pricing-spine-workbench .goods-customizer__heading button:focus-visible {
+  outline: 2px solid var(--calm-gold-dark);
+  outline-offset: 3px;
+}
+
+.pricing-spine-workbench .goods-customizer__heading {
+  display: flex;
+  gap: 1rem;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.pricing-spine-workbench #factor-program .goods-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.pricing-spine-workbench #factor-program .goods-icon-grid label span {
+  display: grid;
+  grid-template-columns: 1.35rem minmax(0, 1fr) 1rem;
+  gap: 0.55rem;
+  width: 100%;
+  min-height: 58px;
+  padding: 0.65rem 0.7rem;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.pricing-spine-workbench #factor-program .goods-icon-grid label span > i:first-child {
+  color: var(--calm-gold-dark);
+  font-size: 1.16rem;
+}
+
+.pricing-spine-workbench #factor-program .goods-icon-grid label span strong {
+  font-family: var(--calm-sans);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.075em;
+  line-height: 1.28;
+  text-transform: uppercase;
+}
+
+.pricing-spine-workbench #factor-program .goods-icon-grid label span .goods-icon-grid__check {
+  visibility: hidden;
+  color: inherit;
+  font-size: 0.85rem;
+}
+
+.pricing-spine-workbench #factor-program .goods-icon-grid input:checked + span > i:first-child,
+.pricing-spine-workbench #factor-program .goods-icon-grid input:checked + span .goods-icon-grid__check {
+  visibility: visible;
+  color: var(--calm-gold);
+}
+
+@media (max-width: 900px) {
+  .pricing-spine-workbench .goods-starting-point {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .pricing-spine-workbench .goods-starting-point__list {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-row: 2;
+  }
+
+  .pricing-spine-workbench .goods-starting-point > button {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+@media (max-width: 620px) {
+  .pricing-spine-workbench .goods-starting-point {
+    display: block;
+    padding: 1rem;
+  }
+
+  .pricing-spine-workbench .goods-starting-point__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 1rem;
+  }
+
+  .pricing-spine-workbench .goods-starting-point > button {
+    width: 100%;
+    margin-top: 0.9rem;
+  }
+
+  .pricing-spine-workbench .goods-customizer__heading {
+    display: block;
+  }
+
+  .pricing-spine-workbench .goods-customizer__heading button {
+    width: 100%;
+    margin-top: 0.9rem;
+  }
+
+  .pricing-spine-workbench #factor-program .goods-icon-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pricing-spine-workbench #factor-program .goods-icon-grid label span {
+    grid-template-columns: 1.2rem minmax(0, 1fr) 0.85rem;
+    gap: 0.42rem;
+    min-height: 54px;
+    padding: 0.55rem;
+  }
+
+  .pricing-spine-workbench #factor-program .goods-icon-grid label span strong {
+    font-size: 0.57rem;
+    letter-spacing: 0.055em;
+  }
+}
+
+/* Keep the reconciled four-step and three-choice layouts authoritative after
+   the older breakpoint experiments above. */
+@media (min-width: 761px) {
+  .pricing-spine-workbench .factor-map {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .pricing-spine-workbench #factor-ownership .ownership-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pricing-spine-workbench #factor-ownership .ownership-list label span,
+  .pricing-spine-workbench #factor-ownership .ownership-list input:checked + span {
+    min-height: 78px;
+    padding: 1rem;
+    border-right: 1px solid var(--calm-ink-line);
+    border-bottom: 0;
+    border-top: 0;
+  }
+
+  /* A prior two-column compact experiment removed the second cell's right
+     edge. The reconciled ownership row has three columns, so restore both
+     internal dividers before removing only the final outer edge. */
+  .pricing-spine-workbench #factor-ownership .ownership-list label:nth-child(2n) span {
+    border-right: 1px solid var(--calm-ink-line);
+  }
+
+  .pricing-spine-workbench #factor-ownership .ownership-list label:last-child span {
+    border-right: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .pricing-spine-workbench .factor-map li:nth-child(3),
+  .pricing-spine-workbench .factor-map li:nth-child(4) {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .pricing-spine-workbench #factor-ownership .ownership-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pricing-spine-workbench #factor-ownership .ownership-list label span,
+  .pricing-spine-workbench #factor-ownership .ownership-list input:checked + span {
+    min-height: 62px;
+    border-right: 0;
+    border-bottom: 1px solid var(--calm-ink-line);
+  }
+
+  .pricing-spine-workbench #factor-ownership .ownership-list label:last-child span {
+    border-bottom: 0;
+  }
+}
+
+/* The reconciled estimator keeps supporting information compact so the broad
+   range remains the visual destination rather than another full chapter. */
+.pricing-spine-workbench #factor-ownership {
+  padding-block: clamp(4.5rem, 6vw, 5.5rem);
+}
+
+.pricing-spine-workbench .range-program-overview {
+  padding-bottom: 2.75rem;
+}
+
+.pricing-spine-workbench .precision-refinement {
+  padding-block: clamp(3rem, 5vw, 4rem);
+}
+
+/* Ownership comparison: make the disclosure a real planning guide without
+   introducing a second heavy chapter or a divider-colored background. */
+.pricing-spine-workbench .ownership-explainer {
+  margin-top: 1.2rem;
+  border: 0;
+}
+
+.pricing-spine-workbench .ownership-explainer summary {
+  display: flex;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.85rem 1rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(184, 150, 90, 0.66);
+  background: rgba(184, 150, 90, 0.06);
+  text-align: center;
+}
+
+.pricing-spine-workbench .ownership-explainer[open] summary {
+  color: var(--calm-ivory);
+  border-color: var(--calm-navy);
+  background: var(--calm-navy);
+}
+
+.pricing-spine-workbench .ownership-explainer__body {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem 0 0;
+  background: transparent;
+}
+
+.pricing-spine-workbench .ownership-explainer__body section {
+  min-width: 0;
+  padding: clamp(1.2rem, 2vw, 1.65rem);
+  border: 1px solid rgba(8, 19, 33, 0.16);
+  background: rgba(255, 253, 248, 0.58);
+}
+
+.pricing-spine-workbench .ownership-explainer__body .ownership-comparison--supplied {
+  border-color: rgba(184, 150, 90, 0.82);
+  background: rgba(184, 150, 90, 0.09);
+}
+
+.pricing-spine-workbench .ownership-explainer__body .ownership-comparison--unsure {
+  grid-column: 1 / -1;
+}
+
+.pricing-spine-workbench .ownership-comparison > span,
+.pricing-spine-workbench .ownership-comparison dt {
+  color: var(--calm-gold-dark);
+  font-family: var(--calm-sans);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.pricing-spine-workbench .ownership-explainer__body h4 {
+  margin-top: 0.5rem;
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+}
+
+.pricing-spine-workbench .ownership-explainer__body .ownership-comparison__lead {
+  margin-top: 0.75rem;
+  color: rgba(8, 19, 33, 0.72);
+  font-size: 0.72rem;
+  line-height: 1.62;
+}
+
+.pricing-spine-workbench .ownership-comparison dl {
+  display: grid;
+  gap: 0.85rem;
+  margin: 1.1rem 0 0;
+}
+
+.pricing-spine-workbench .ownership-comparison dl > div {
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(184, 150, 90, 0.46);
+}
+
+.pricing-spine-workbench .ownership-comparison dd {
+  margin: 0.32rem 0 0;
+  color: rgba(8, 19, 33, 0.64);
+  font-size: 0.66rem;
+  line-height: 1.55;
+}
+
+.pricing-spine-workbench .ownership-comparison--unsure dl {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pricing-spine-workbench .ownership-comparison__note {
+  margin: 1.15rem 0 0;
+  padding: 0.9rem 1rem;
+  color: var(--calm-navy);
+  border-left: 2px solid var(--calm-gold-dark);
+  background: rgba(255, 253, 248, 0.62);
+  font-size: 0.64rem;
+  line-height: 1.55;
+}
+
+/* Finish and return are generated program facts, so they read as editorial
+   summaries with supporting icons rather than selectable tiles. */
+.pricing-spine-workbench .finish-program-heading {
+  display: grid;
+  grid-template-columns: 1.7rem minmax(0, 1fr);
+  gap: 0.8rem;
+  align-items: start;
+}
+
+.pricing-spine-workbench .finish-program-heading > i,
+.pricing-spine-workbench .return-format__summary > i {
+  color: var(--calm-gold-dark);
+  font-size: 1.45rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.pricing-spine-workbench .finish-program-heading span {
+  color: var(--calm-gold-dark);
+  font-family: var(--calm-sans);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.pricing-spine-workbench .range-program-overview__card--finish .finish-program-heading h4 {
+  margin: 0.42rem 0 1.1rem;
+  color: var(--calm-navy);
+  font-family: var(--calm-serif);
+  font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+  font-weight: 400;
+  line-height: 1.08;
+}
+
+.pricing-spine-workbench .range-program-overview .finish-goods-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1rem;
+}
+
+.pricing-spine-workbench .range-program-overview .finish-goods-list li {
+  grid-template-columns: 1.45rem minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: start;
+  padding: 0.8rem 0;
+}
+
+.pricing-spine-workbench .finish-goods-list__icon {
+  display: flex;
+  min-height: 1.35rem;
+  align-items: center;
+  justify-content: center;
+  color: var(--calm-gold-dark);
+  font-size: 1.1rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.pricing-spine-workbench .finish-goods-list li > div {
+  min-width: 0;
+}
+
+.pricing-spine-workbench .finish-goods-list li > div > span {
+  display: block;
+}
+
+.pricing-spine-workbench .finish-goods-list li > div > strong {
+  display: block;
+  margin-top: 0.22rem;
+}
+
+.pricing-spine-workbench .range-program-overview .return-format__summary {
+  display: grid;
+  grid-template-columns: 1.7rem minmax(0, 1fr);
+  gap: 0.8rem;
+  align-items: start;
+  padding: 1rem 0 0;
+  border-top-color: rgba(184, 150, 90, 0.72);
+}
+
+.pricing-spine-workbench .range-program-overview__card--finish,
+.pricing-spine-workbench .range-program-overview__card--finish * {
+  cursor: default;
+}
+
+/* Compact and phone layouts should feel guided rather than vertically padded.
+   Center short decision copy, but keep explanatory paragraphs left aligned. */
+@media (max-width: 1199px) {
+  .pricing-spine-workbench #factor-volume .volume-question,
+  .pricing-spine-workbench #factor-volume .volume-estimator__fields {
+    min-height: 0;
+  }
+
+  .pricing-spine-workbench #factor-volume .volume-question__navigation {
+    margin-top: 1.35rem;
+    padding-top: 0;
+  }
+
+  .pricing-spine-workbench #factor-volume .volume-estimator__status {
+    max-width: 44rem;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+  }
+
+  .pricing-spine-workbench .answer-heading,
+  .pricing-spine-workbench .volume-choice-field > legend {
+    text-align: center;
+  }
+
+  .pricing-spine-workbench .volume-choice-grid label > span,
+  .pricing-spine-workbench .segmented-choice label > span,
+  .pricing-spine-workbench .rhythm-options label > span {
+    align-items: center;
+    text-align: center;
+  }
+
+  .pricing-spine-workbench .ownership-explainer__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pricing-spine-workbench .ownership-explainer__body .ownership-comparison--unsure {
+    grid-column: auto;
+  }
+
+  .pricing-spine-workbench .ownership-comparison--unsure dl {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .pricing-spine-workbench #factor-ownership {
+    padding-block: 3rem;
+  }
+
+  .pricing-spine-workbench .range-program-overview {
+    padding-bottom: 2rem;
+  }
+
+  .pricing-spine-workbench .precision-refinement {
+    padding-block: 2.25rem;
+  }
+
+  .pricing-spine-workbench .ownership-explainer__body section {
+    padding: 1.1rem;
+  }
+
+  .pricing-spine-workbench .ownership-explainer__body h4,
+  .pricing-spine-workbench .ownership-comparison > span {
+    text-align: center;
+  }
+
+  .pricing-spine-workbench .range-program-overview .finish-goods-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pricing-spine-workbench .finish-program-heading {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.55rem;
+    text-align: center;
+  }
+
+  .pricing-spine-workbench .finish-program-heading > i {
+    justify-self: center;
+  }
+}
+
+/* The compact and phone estimator use a centered decision axis. Keep longer
+   reading copy left aligned, but center the short prompts called out in the
+   responsive review. */
+@media (max-width: 1199px) {
+  .pricing-spine-workbench #factor-volume .volume-question--empty {
+    align-items: center;
+    text-align: center;
+  }
+
+  .pricing-spine-workbench #factor-volume .volume-question--empty .volume-question__eyebrow {
+    width: 100%;
+    text-align: center;
+  }
+
+  .pricing-spine-workbench #factor-program .operation-picker-field > span,
+  .pricing-spine-workbench #factor-program .calm-fieldset > legend,
+  .pricing-spine-workbench #factor-program .calm-fieldset > p {
+    text-align: center;
+  }
+
+  .pricing-spine-workbench #factor-program .operation-picker__trigger {
+    position: relative;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .pricing-spine-workbench #factor-program .operation-picker__trigger strong {
+    width: 100%;
+    padding-right: 2.5rem;
+    padding-left: 2.5rem;
+    text-align: center;
+  }
+
+  .pricing-spine-workbench #factor-program .operation-picker__trigger i {
+    position: absolute;
+    top: 50%;
+    right: 0.25rem;
+    transform: translateY(-50%);
+  }
+
+  .pricing-spine-workbench #factor-program .calm-fieldset > p {
+    max-width: 48rem;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .pricing-spine-workbench .quote-privacy-note {
+    max-width: 48rem;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+    text-wrap: balance;
   }
 }

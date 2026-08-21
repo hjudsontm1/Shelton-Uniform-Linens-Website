@@ -11,7 +11,23 @@
   const qa = (selector, scope) => Array.from((scope || root).querySelectorAll(selector));
   const money = (value) => "$" + Math.round(Number(value) || 0).toLocaleString("en-US");
   const positive = (value) => Number(value) > 0 ? Number(value) : 0;
-  const validLocation = (value) => /^\d{5}(?:-\d{4})?$/.test(String(value || "").trim());
+  const setText = (element, value) => {
+    const next = String(value ?? "");
+    if (element && element.textContent !== next) element.textContent = next;
+  };
+  const validLocation = (value) => /^\d{5}$/.test(String(value || "").trim());
+  const submissionReceiptKey = "sheltonSubmissionReceiptV1";
+  const markSubmissionReceipt = () => {
+    try {
+      window.sessionStorage.setItem(submissionReceiptKey, JSON.stringify({
+        v: 1,
+        kind: "estimator",
+        at: Date.now()
+      }));
+    } catch {
+      // Confirmation remains neutral if session storage is unavailable.
+    }
+  };
   const makeId = () => {
     if (window.crypto && typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
     return "pricing-" + Date.now() + "-" + Math.random().toString(16).slice(2);
@@ -20,6 +36,7 @@
   const defaultState = () => ({
     operation: "",
     goods: [],
+    goodsMode: "",
     specialtyNeeds: [],
     scale: {},
     finish: [],
@@ -28,10 +45,11 @@
     rentalTier: "",
     rentalQuantity: "",
     inventory: { par: "", customization: "" },
+    refinement: { storage: "", demand: "" },
     location: "",
     requestedPickups: "",
     returnWindow: "",
-    access: "",
+    access: "standard",
     leadIdempotencyKey: makeId()
   });
 
@@ -43,14 +61,17 @@
         ...defaultState(),
         ...saved,
         goods: Array.isArray(saved.goods) ? saved.goods : [],
+        goodsMode: ["typical", "custom"].includes(saved.goodsMode) ? saved.goodsMode : "",
         specialtyNeeds: [],
         scale: saved.scale && typeof saved.scale === "object" ? saved.scale : {},
-        inventory: saved.inventory && typeof saved.inventory === "object" ? saved.inventory : { par: "", customization: "" }
+        inventory: saved.inventory && typeof saved.inventory === "object" ? saved.inventory : { par: "", customization: "" },
+        refinement: saved.refinement && typeof saved.refinement === "object" ? saved.refinement : { storage: "", demand: "" }
       };
     }
   } catch {
     state = defaultState();
   }
+  if (!["standard", "limited", "complex"].includes(state.access)) state.access = "standard";
 
   let latestResult = null;
   let latestRawResult = null;
@@ -78,6 +99,13 @@
   const goodsOptions = q("[data-goods-options]");
   const goodsLegend = q("[data-goods-legend]");
   const goodsHelp = q("[data-goods-help]");
+  const goodsTypical = q("[data-goods-typical]");
+  const goodsTypicalTitle = q("[data-goods-typical-title]");
+  const goodsTypicalCopy = q("[data-goods-typical-copy]");
+  const goodsTypicalList = q("[data-goods-typical-list]");
+  const goodsCustomize = q("[data-goods-customize]");
+  const goodsCustomizer = q("[data-goods-customizer]");
+  const goodsUseTypical = q("[data-goods-use-typical]");
   const programHeading = q("[data-program-heading]");
   const operationGuideLink = q("[data-operation-guide-link]");
   const scaleFields = q("[data-volume-estimator-fields]");
@@ -87,16 +115,26 @@
   const inventoryDetails = q("[data-inventory-details]");
   const inventoryCategory = q("[data-inventory-category]");
   const inventoryTier = q("[data-inventory-tier]");
-  const inventoryUnits = q("[data-inventory-units]");
+  const precisionRefinement = q("[data-precision-refinement]");
+  const precisionToggle = q("[data-precision-toggle]");
+  const precisionToggleLabel = q("[data-precision-toggle-label]");
+  const precisionPanel = q("[data-precision-panel]");
+  const precisionDone = q("[data-precision-done]");
+  const precisionStatus = q("[data-precision-status]");
+  const refinementStorage = q("[data-refinement-storage]");
+  const refinementDemand = q("[data-refinement-demand]");
   const locationInput = q("[data-location-input]");
+  const locationError = q("[data-location-error]");
   const rangeLocked = q("[data-range-locked]");
   const rangeRevealed = q("[data-range-revealed]");
+  const rangeLive = q(".range-live");
   const unlockCopy = q("[data-unlock-copy]");
   const weeklyRange = q("[data-weekly-range]");
   const poundRange = q("[data-pound-range]");
   const rangeStage = q("[data-range-stage]");
   const guidanceTitle = q("[data-range-guidance-title]");
   const guidanceCopy = q("[data-range-guidance-copy]");
+  const programOverview = q("[data-program-overview]");
   const estimateDock = q("[data-estimate-dock]");
   const dockProgress = q("[data-dock-progress]");
   const dockRange = q("[data-dock-range]");
@@ -112,6 +150,7 @@
   let clearAnswersTimer = 0;
   let quoteInFlight = false;
   let quoteSubmissionController = null;
+  let precisionOpen = false;
 
   const operationForState = () => config.operations.find((item) => item.id === state.operation) || null;
   const selectedGoods = () => state.goods.map((id) => config.goods[id]).filter(Boolean);
@@ -119,16 +158,32 @@
     const replacement = qa(`input[name="${name}"]`, container).find((input) => input.value === value);
     replacement?.focus({ preventScroll: true });
   };
+  const syncScaleControlValidity = (control, field) => {
+    if (!control || !field || field.type !== "number") return;
+    const hasValue = String(control.value || "").trim() !== "";
+    const valid = !hasValue || basicFieldValid(field);
+    control.setAttribute("aria-invalid", String(!valid));
+  };
   const scaleSchema = () => config.scaleSchemas[state.operation] || [];
   const directFollowupIds = new Set([
     "weeklyRobes", "weeklyBlankets", "weeklyChefCoats", "weeklyAprons",
-    "weeklyUniformTops", "weeklyPants", "weeklyJackets", "storage",
-    "seasonality", "variability", "peakPattern"
+    "weeklyUniformTops", "weeklyCasinoUniformTops", "weeklyPants", "weeklyJackets"
   ]);
   const scaleEntryMeta = () => {
     const meta = config.scaleEntryModes?.[state.operation];
     if (!meta) return null;
     if (Array.isArray(meta.directGoods) && !meta.directGoods.some((id) => state.goods.includes(id))) return null;
+    if (state.operation === "restaurant") {
+      const hasDining = state.goods.some((id) => ["napkins", "tableLinens"].includes(id));
+      const hasGarments = state.goods.some((id) => ["chefCoats", "aprons"].includes(id));
+      if (state.goods.includes("barTowels") && !hasDining && !hasGarments) return { ...meta, onlyDirect: true };
+    }
+    if (state.operation === "events" && !state.goods.some((id) => ["tablecloths", "napkins"].includes(id))) {
+      return { ...meta, onlyDirect: true };
+    }
+    if (state.operation === "spa" && !state.goods.some((id) => ["towels", "sheets", "robes"].includes(id))) {
+      return { ...meta, onlyDirect: true };
+    }
     return meta;
   };
   const entryModeField = (meta) => ({
@@ -159,6 +214,17 @@
     const meta = scaleEntryMeta();
     if (!meta) return fields;
     const entry = entryModeField(meta);
+    if (meta.onlyDirect) {
+      const direct = fields.find((field) => field.id === meta.directField);
+      const followups = fields.filter((field) => field.id !== meta.directField && directFollowupIds.has(field.id));
+      const directRequired = direct ? {
+        ...direct,
+        required: true,
+        routing: true,
+        emptyAction: meta.directField === "totalWeeklyPieces" ? "Enter weekly pieces" : "Enter weekly pounds"
+      } : null;
+      return [...(directRequired ? [directRequired] : []), ...followups];
+    }
     if (!state.scale.entryMode) return [entry];
     if (state.scale.entryMode === "direct") {
       const direct = fields.find((field) => field.id === meta.directField);
@@ -182,11 +248,13 @@
     }
   };
 
-  const invalidateEstimate = () => {
+  const invalidateEstimate = ({ clearResult = false } = {}) => {
     estimateRequest += 1;
     estimateSignature = "";
-    latestResult = null;
-    latestRawResult = null;
+    if (clearResult) {
+      latestResult = null;
+      latestRawResult = null;
+    }
   };
 
   const restoreInitialHash = () => {
@@ -208,7 +276,6 @@
 
   const syncPickerSemantics = () => {
     const modal = modalPicker();
-    if (!window.matchMedia("(max-width: 760px)").matches) estimateDock.classList.remove("is-suppressed");
     operationPanel.setAttribute("role", modal ? "dialog" : "region");
     if (modal) {
       operationPanel.setAttribute("aria-modal", "true");
@@ -283,6 +350,8 @@
     || state.rentalCategory
     || state.rentalTier
     || state.rentalQuantity
+    || state.refinement.storage
+    || state.refinement.demand
   );
 
   const applyOperation = (operationId) => {
@@ -291,18 +360,30 @@
       return;
     }
     state.operation = operationId;
-    state.goods = [];
+    const operation = operationForState();
+    state.goodsMode = operation?.typicalGoods?.length ? "typical" : "custom";
+    state.goods = operation?.typicalGoods?.slice() || [];
     state.specialtyNeeds = [];
     state.scale = {};
     state.finish = [];
     state.rentalCategory = "";
     state.rentalTier = "";
     state.rentalQuantity = "";
+    state.refinement = { storage: "", demand: "" };
+    precisionOpen = false;
     scaleStep = 0;
     scaleSequenceOperation = operationId;
-    invalidateEstimate();
+    invalidateEstimate({ clearResult: true });
     setPickerOpen(false, { returnFocus: true });
     renderAll();
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        operationPicker.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "start"
+        });
+      });
+    });
   };
 
   const selectOperation = (operationId) => {
@@ -348,13 +429,49 @@
   const renderGoods = () => {
     const operation = operationForState();
     goodsOptions.replaceChildren();
+    goodsTypicalList.replaceChildren();
     if (!operation) {
       goodsHelp.textContent = "Choose an operation first, then select every item that belongs in the program.";
+      goodsTypical.hidden = true;
+      goodsCustomizer.hidden = true;
       return;
     }
-    goodsHelp.textContent = operation.id === "other"
-      ? "Choose the closest goods. Shelton can refine the program with you during review."
-      : "Select everything Shelton would pick up, process, and return in a normal service week.";
+    const typicalGoods = Array.isArray(operation.typicalGoods) ? operation.typicalGoods : [];
+    if (!state.goodsMode) {
+      state.goodsMode = typicalGoods.length ? "typical" : "custom";
+      if (state.goodsMode === "typical") state.goods = typicalGoods.slice();
+    }
+    const typicalMode = state.goodsMode === "typical" && typicalGoods.length > 0;
+    goodsTypical.hidden = !typicalMode;
+    goodsCustomizer.hidden = typicalMode;
+    goodsUseTypical.hidden = typicalGoods.length === 0;
+    goodsHelp.textContent = typicalMode
+      ? "The common goods are ready to go. Customize only if this program needs a different mix."
+      : "Build this program from a blank list. Nothing is preselected.";
+
+    if (typicalMode) {
+      goodsTypicalTitle.textContent = "Typical " + operation.label + " program";
+      goodsTypicalCopy.textContent = typicalGoods.length === 1
+        ? "We selected the most common starting item for this operation."
+        : "We selected the most common starting goods for this operation.";
+      typicalGoods.forEach((id) => {
+        const good = config.goods[id];
+        if (!good) return;
+        const item = document.createElement("span");
+        const icon = document.createElement("i");
+        icon.className = "ph " + (good.icon || "ph-package");
+        icon.setAttribute("aria-hidden", "true");
+        const label = document.createElement("strong");
+        label.textContent = good.label;
+        const check = document.createElement("i");
+        check.className = "ph ph-check";
+        check.setAttribute("aria-hidden", "true");
+        item.append(icon, label, check);
+        goodsTypicalList.appendChild(item);
+      });
+      return;
+    }
+
     operation.goods.forEach((id) => {
       const good = config.goods[id];
       if (!good) return;
@@ -365,16 +482,15 @@
       input.value = id;
       input.checked = state.goods.includes(id);
       const copy = document.createElement("span");
+      const icon = document.createElement("i");
+      icon.className = "ph " + (good.icon || "ph-package");
+      icon.setAttribute("aria-hidden", "true");
       const strong = document.createElement("strong");
       strong.textContent = good.label;
-      copy.appendChild(strong);
-      if (good.short) {
-        const small = document.createElement("small");
-        small.textContent = good.short;
-        copy.appendChild(small);
-      } else {
-        copy.classList.add("is-label-only");
-      }
+      const check = document.createElement("i");
+      check.className = "ph ph-check goods-icon-grid__check";
+      check.setAttribute("aria-hidden", "true");
+      copy.append(icon, strong, check);
       label.append(input, copy);
       goodsOptions.appendChild(label);
     });
@@ -431,6 +547,7 @@
     if (field.type === "select") {
       const fieldset = document.createElement("fieldset");
       fieldset.className = "volume-choice-field";
+      if (field.required) fieldset.setAttribute("aria-required", "true");
       const legend = document.createElement("legend");
       legend.textContent = titleText;
       const choices = document.createElement("div");
@@ -444,6 +561,7 @@
         input.value = item.value;
         input.dataset.scaleField = field.id;
         input.checked = state.scale[field.id] === item.value;
+        if (field.required) input.required = true;
         const card = document.createElement("span");
         const strong = document.createElement("strong");
         strong.textContent = item.label;
@@ -483,18 +601,25 @@
       control.step = String(field.step || 1);
       control.dataset.scaleField = field.id;
       control.value = state.scale[field.id] === undefined ? "" : state.scale[field.id];
+      if (field.required) {
+        control.required = true;
+        control.setAttribute("aria-required", "true");
+      }
       const unit = document.createElement("em");
       unit.textContent = field.unit;
       wrap.append(control, unit);
       label.append(title, wrap);
       const hint = document.createElement("small");
       hint.className = "volume-question__why";
+      hint.id = `scale-${field.id}-hint`;
       const hintLabel = document.createElement("strong");
       hintLabel.textContent = "Why it matters";
       const hintCopy = document.createElement("span");
       hintCopy.textContent = field.hint;
       hint.append(hintLabel, hintCopy);
       label.appendChild(hint);
+      control.setAttribute("aria-describedby", hint.id);
+      syncScaleControlValidity(control, field);
       fieldElement = label;
     }
 
@@ -509,9 +634,9 @@
     next.type = "button";
     next.dataset.scaleNext = "";
     const lastQuestion = scaleStep === fields.length - 1;
-    const routeRequired = Boolean(field.routing);
-    next.disabled = routeRequired && !basicFieldValid(field);
-    next.textContent = routeRequired && !basicFieldValid(field)
+    const answerRequired = Boolean(field.routing || field.required);
+    next.disabled = answerRequired && !basicFieldValid(field);
+    next.textContent = answerRequired && !basicFieldValid(field)
       ? (field.emptyAction || "Choose a starting point")
       : lastQuestion
         ? "Finish section"
@@ -544,6 +669,7 @@
     weeklyChefCoats: ["chefCoats"],
     weeklyAprons: ["aprons"],
     weeklyUniformTops: ["uniformShirts", "casinoUniforms"],
+    weeklyCasinoUniformTops: ["casinoUniforms"],
     weeklyPants: ["workwear"],
     weeklyJackets: ["jackets"]
   };
@@ -591,15 +717,26 @@
     };
   };
 
+  const invalidEnteredScaleField = () => visibleScaleFields().find((field) => (
+    field.type === "number"
+    && String(state.scale[field.id] ?? "").trim() !== ""
+    && !basicFieldValid(field)
+  ));
+
   function updateScaleStatus() {
     const validation = validateScale();
     const minimum = progressiveRange.minimumDriver(state);
+    const invalidField = invalidEnteredScaleField();
+    if (invalidField) {
+      scaleStatus.textContent = `Correct ${invalidField.label.toLowerCase()} before calculating the range.`;
+      return;
+    }
     if (!minimum.ready) {
       scaleStatus.textContent = minimum.message;
     } else if (!validation.ready) {
-      scaleStatus.textContent = "Early range available. " + validation.message;
+      scaleStatus.textContent = "Enough sizing information is saved. Optional answers can refine the range later. " + validation.message;
     } else {
-      scaleStatus.textContent = "The key sizing inputs are included. Optional details can continue to narrow the range.";
+      scaleStatus.textContent = "Your first range is open. Ownership, optional volume details, and the service ZIP will tighten it.";
     }
   }
 
@@ -648,9 +785,9 @@
     const title = q("[data-finish-recommendation-title]");
     const list = q("[data-finish-goods-list]");
     const returnFormat = q("[data-return-format]");
+    const returnIcon = q("[data-return-format-icon]");
     const returnTitle = q("[data-return-format-title]");
     const returnStatus = q("[data-return-format-status]");
-    const returnOptions = qa("[data-return-format-option]", returnFormat);
     state.finish = finishForGoods();
     list.replaceChildren();
     if (!operation || !state.goods.length) {
@@ -663,27 +800,37 @@
       const good = config.goods[id];
       if (!good) return;
       const item = document.createElement("li");
+      const iconWrap = document.createElement("span");
+      iconWrap.className = "finish-goods-list__icon";
+      const icon = document.createElement("i");
+      icon.className = "ph " + (good.icon || "ph-package");
+      icon.setAttribute("aria-hidden", "true");
+      iconWrap.appendChild(icon);
+      const copy = document.createElement("div");
       const name = document.createElement("span");
       const finish = document.createElement("strong");
       name.textContent = good.label;
       finish.textContent = finishByGood[id] || "Cleaned and finished";
-      item.append(name, finish);
+      copy.append(name, finish);
+      item.append(iconWrap, copy);
       list.appendChild(item);
     });
 
     returnFormat.hidden = false;
     const weeklyPounds = currentWeeklyPounds();
     const format = weeklyPounds ? (weeklyPounds >= 500 ? "cart" : "bag") : "";
-    returnOptions.forEach((option) => option.classList.toggle("is-selected", option.dataset.returnFormatOption === format));
     if (format === "cart") {
+      returnIcon.className = "ph ph-shopping-cart-simple";
       returnTitle.textContent = "Linen cart return";
       returnStatus.textContent = "Selected automatically from the program volume.";
     } else if (format === "bag") {
+      returnIcon.className = "ph ph-bag-simple";
       returnTitle.textContent = "Bag return";
       returnStatus.textContent = "Selected automatically from the program volume.";
     } else {
+      returnIcon.className = "ph ph-package";
       returnTitle.textContent = "Set by program volume";
-      returnStatus.textContent = "Enter a sizing detail in Section 02 and the return format will update automatically.";
+      returnStatus.textContent = "Enter a sizing detail in Section 03 and the return format will update automatically.";
     }
   };
 
@@ -696,20 +843,20 @@
       input.name = "ownership";
       input.value = item.id;
       input.checked = state.ownership === item.id;
+      input.required = true;
       const copy = document.createElement("span");
       const strong = document.createElement("strong");
       strong.textContent = item.label;
-      const small = document.createElement("small");
-      small.textContent = item.description;
-      copy.append(strong, small);
+      copy.append(strong);
       label.append(input, copy);
       ownershipOptions.appendChild(label);
     });
-    const supplied = ["some", "supply"].includes(state.ownership);
+    const supplied = state.ownership === "supply";
     inventoryDetails.hidden = !supplied;
     renderRentalCategories();
     inventoryTier.value = state.rentalTier || "";
-    inventoryUnits.value = state.rentalQuantity || "";
+    inventoryTier.required = false;
+    inventoryTier.removeAttribute("aria-required");
     qa("[data-inventory-par]").forEach((input) => {
       input.checked = input.value === state.inventory.par;
     });
@@ -758,20 +905,58 @@
 
   const completion = () => {
     const scale = validateScale().ready;
+    const ownershipReady = Boolean(state.ownership);
     return {
       program: Boolean(state.operation && state.goods.length),
       volume: scale,
       finish: Boolean(state.goods.length && state.finish.length),
-      ownership: Boolean(state.ownership),
+      ownership: ownershipReady,
       route: validLocation(state.location)
     };
   };
 
   const minimumEstimate = () => progressiveRange.minimumDriver(state);
-  const estimateReady = () => Boolean(minimumEstimate().ready);
-  const currentPrecision = () => progressiveRange.precision(state, visibleScaleFields(), {
-    locationValid: validLocation(state.location)
-  });
+  const estimateRequirement = () => {
+    const minimum = minimumEstimate();
+    if (!minimum.ready) return { ready: false, message: minimum.message, href: "#factor-volume", action: "Add sizing answer" };
+    const invalidField = invalidEnteredScaleField();
+    if (invalidField) return { ready: false, message: `Correct ${invalidField.label.toLowerCase()} in Section 03.`, href: "#factor-volume", action: "Correct sizing answer" };
+    return { ready: true, message: "Ready to calculate a broad range.", href: "#planning-range", action: "View planning range" };
+  };
+  const estimateReady = () => estimateRequirement().ready;
+  const currentPrecision = () => {
+    const extraCapacity = 3 + (state.ownership === "supply" ? 1 : 0);
+    const extraAnswered = [
+      state.refinement.storage,
+      state.refinement.demand,
+      state.access && state.access !== "standard" ? state.access : "",
+      state.ownership === "supply" ? state.rentalTier : ""
+    ]
+      .filter(Boolean).length;
+    return progressiveRange.precision(state, visibleScaleFields(), {
+      locationValid: validLocation(state.location),
+      extraCapacity,
+      extraAnswered
+    });
+  };
+
+  const renderPrecisionRefinement = () => {
+    const answered = [
+      state.refinement.storage,
+      state.refinement.demand,
+      state.access && state.access !== "standard" ? state.access : "",
+      state.ownership === "supply" ? state.rentalTier : ""
+    ].filter(Boolean).length;
+    const available = 3 + (state.ownership === "supply" ? 1 : 0);
+    precisionToggle.setAttribute("aria-expanded", String(precisionOpen));
+    precisionToggleLabel.textContent = precisionOpen ? "Hide optional questions" : "Show optional questions";
+    precisionPanel.hidden = !precisionOpen;
+    refinementStorage.value = state.refinement.storage || "";
+    refinementDemand.value = state.refinement.demand || "";
+    precisionStatus.textContent = answered
+      ? `${answered} of ${available} optional details added. Your range has been refined.`
+      : "Your current broad range remains available without these questions.";
+  };
 
   const stateForEngine = () => ({
     operation: state.operation,
@@ -784,7 +969,8 @@
     rentalTier: state.rentalTier,
     rentalQuantity: state.rentalQuantity,
     location: { type: /^\d{5}$/.test(state.location.trim()) ? "zip" : "city", value: state.location.trim() },
-    requestedPickups: state.requestedPickups || ""
+    requestedPickups: state.requestedPickups || "",
+    access: state.access || ""
   });
 
   const estimateKey = () => JSON.stringify(stateForEngine());
@@ -801,10 +987,16 @@
       } else if (key === "volume") {
         if (!state.operation) label.textContent = "Choose an operation first";
         else if (value) label.textContent = "Included in your review";
-        else if (estimateReady()) label.textContent = "Range open · keep refining";
+        else if (minimumEstimate().ready) label.textContent = "Sizing saved · optional details remain";
         else label.textContent = "Add the first sizing answer";
       }
       else if (key === "finish") label.textContent = value ? "Finish ready" : "Choose goods in Section 01";
+      else if (key === "ownership") {
+        if (value) label.textContent = "Included in your range";
+        else if (state.ownership === "supply") label.textContent = "Choose an inventory tier";
+        else label.textContent = "Add to tighten your range";
+      }
+      else if (key === "route") label.textContent = value ? "Included in your range" : "Add ZIP to refine route · access optional";
       else label.textContent = value ? "Included in your review" : "Optional";
       label.classList.toggle("is-complete", value);
     });
@@ -817,22 +1009,24 @@
         dockAction.textContent = "Finish section 01";
         dockAction.href = "#factor-program";
       } else if (!estimateReady()) {
-        dockRange.textContent = minimumEstimate().message;
-        dockAction.textContent = "Add first sizing answer";
-        dockAction.href = "#factor-volume";
-      } else if (estimateLoading) {
-        dockRange.textContent = "Calculating your planning range…";
-        dockAction.textContent = "View progress";
-        dockAction.href = "#planning-range";
+        const requirement = estimateRequirement();
+        dockRange.textContent = requirement.message;
+        dockAction.textContent = requirement.action;
+        dockAction.href = requirement.href;
       } else if (latestResult && latestResult.range) {
+        dockProgress.textContent = estimateLoading ? "Updating your planning range" : `${latestResult.precision?.label || "Planning"} range`;
         dockRange.textContent = Number(latestResult.range.weeklyLow) === Number(latestResult.range.weeklyHigh)
           ? money(latestResult.range.weeklyBase) + " / week"
           : money(latestResult.range.weeklyLow) + "–" + money(latestResult.range.weeklyHigh) + " / week";
         dockAction.textContent = "View planning range";
         dockAction.href = "#planning-range";
+      } else if (estimateLoading) {
+        dockRange.textContent = "Calculating your first broad range…";
+        dockAction.textContent = "View progress";
+        dockAction.href = "#planning-range";
       } else {
-        dockRange.textContent = "Shelton review path ready";
-        dockAction.textContent = "View review";
+        dockRange.textContent = latestResult?.manualReview ? "Shelton review path ready" : "Range temporarily unavailable";
+        dockAction.textContent = latestResult?.manualReview ? "View review" : "See status";
         dockAction.href = "#planning-range";
       }
     } else {
@@ -840,7 +1034,12 @@
     }
   };
 
-  const rhythmDaysFor = (label) => {
+  const rhythmDaysFor = (label, pickups) => {
+    const count = Number(pickups);
+    if (count === 5) return [0, 1, 2, 3, 4];
+    if (count === 3) return [0, 2, 4];
+    if (count === 2) return [1, 4];
+    if (count === 1) return [2];
     const text = String(label || "").toLowerCase();
     if (text.includes("weekday")) return [0, 1, 2, 3, 4];
     if (text.includes("three")) return [0, 2, 4];
@@ -854,68 +1053,127 @@
     const label = q("[data-rhythm-recommendation-label]");
     const cadence = q("[data-rhythm-cadence]");
     const days = qa("[data-rhythm-day]");
+    const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     const toggle = q("[data-rhythm-toggle]");
     const overrides = q("[data-rhythm-overrides]");
+    const rhythmLabels = {
+      weekly: "Once weekly",
+      twiceWeekly: "Twice weekly",
+      threeWeekly: "Three times weekly",
+      weekday: "Weekdays",
+    };
     qa("[data-rhythm-input]").forEach((input) => {
       input.checked = state.requestedPickups ? input.value === state.requestedPickups : input.value === "recommended";
     });
+    const recommendedInput = q('[data-rhythm-input][value="recommended"]');
+    if (recommendedInput) recommendedInput.disabled = !latestResult || latestResult.rangeUnavailable;
+    toggle.textContent = state.requestedPickups
+      ? `${rhythmLabels[state.requestedPickups] || "Custom frequency"} selected · Change`
+      : "Change pickup frequency";
     toggle.hidden = !latestResult || latestResult.rangeUnavailable;
-    if (!latestResult || latestResult.rangeUnavailable) overrides.hidden = true;
+    if (!latestResult || latestResult.rangeUnavailable) {
+      const keepCustomFrequencyVisible = Boolean(state.requestedPickups);
+      overrides.hidden = !keepCustomFrequencyVisible;
+      toggle.setAttribute("aria-expanded", String(keepCustomFrequencyVisible));
+    }
     if (!latestResult) {
       kicker.textContent = estimateLoading ? "Calculating service rhythm" : "Recommendation pending";
-      label.textContent = estimateReady() ? "Calculating the likely service rhythm." : minimumEstimate().message;
+      label.textContent = estimateReady() ? "Calculating the likely service rhythm." : estimateRequirement().message;
       cadence.dataset.rhythm = "pending";
-      days.forEach((day) => day.classList.remove("is-active"));
+      days.forEach((day, index) => {
+        day.classList.remove("is-active");
+        day.setAttribute("aria-label", `${dayNames[index]} · recommendation pending`);
+      });
       return;
     }
-    kicker.textContent = latestResult.rangeUnavailable ? "Shelton route review" : "Planning recommendation";
+    const routeNeedsReview = String(latestResult.rhythm?.reason || "").startsWith("This location needs route review");
+    kicker.textContent = latestResult.rangeUnavailable
+      ? (latestResult.manualReview ? "Shelton route review" : "Recommendation temporarily unavailable")
+      : latestResult.usingPlanningZip
+        ? "Preliminary route assumption"
+      : routeNeedsReview
+        ? "Route review required"
+        : "Planning recommendation";
     label.textContent = latestResult.rhythm.label;
-    const active = rhythmDaysFor(latestResult.rhythm.label);
-    days.forEach((day, index) => day.classList.toggle("is-active", active.includes(index)));
+    const active = rhythmDaysFor(latestResult.rhythm.label, latestResult.rhythm.pickups);
+    days.forEach((day, index) => {
+      const recommended = active.includes(index);
+      day.classList.toggle("is-active", recommended);
+      day.setAttribute("aria-label", `${dayNames[index]} · ${recommended ? "recommended service day" : "not in the recommended cadence"}`);
+    });
   };
 
   const renderResult = () => {
     renderProgress();
     renderRouteRecommendation();
+    rangeLive.setAttribute("aria-busy", String(estimateLoading));
 
     if (!estimateReady()) {
       rangeLocked.hidden = false;
       rangeRevealed.hidden = true;
-      unlockCopy.textContent = minimumEstimate().message;
+      programOverview.hidden = true;
+      precisionRefinement.hidden = true;
+      setText(unlockCopy, estimateRequirement().message);
       return;
     }
-    if (estimateLoading || !latestResult) {
+    if (!latestResult) {
       rangeLocked.hidden = false;
       rangeRevealed.hidden = true;
-      unlockCopy.textContent = "Calculating your planning range…";
+      programOverview.hidden = true;
+      precisionRefinement.hidden = true;
+      setText(unlockCopy, "Calculating your first broad range…");
       return;
     }
 
     rangeLocked.hidden = true;
     rangeRevealed.hidden = false;
+    programOverview.hidden = false;
+    precisionRefinement.hidden = false;
     rangeRevealed.classList.toggle("is-range-unavailable", latestResult.rangeUnavailable);
 
     if (latestResult.rangeUnavailable || !latestResult.range) {
-      weeklyRange.textContent = "Shelton review";
-      poundRange.textContent = "Pricing is confirmed after a quick program review.";
-      rangeStage.textContent = "Personalized pricing review";
-      guidanceTitle.textContent = "Your answers are ready to send";
-      guidanceCopy.textContent = "Request a quote with the information you have. Shelton will confirm the remaining service details with you.";
+      weeklyRange.textContent = latestResult.manualReview ? "Shelton review" : "Range unavailable";
+      poundRange.textContent = latestResult.manualReview
+        ? "Pricing is confirmed after a quick program review."
+        : "The automatic calculation could not be reached. Your answers are still saved.";
+      rangeStage.textContent = latestResult.manualReview ? "Personalized pricing review" : "Temporary calculation issue";
+      guidanceTitle.textContent = latestResult.manualReview ? "Your answers are ready to send" : "Try the calculation again";
+      guidanceCopy.textContent = latestResult.manualReview
+        ? "Request a quote with the information you have. Shelton will confirm the remaining service details with you."
+        : "Adjust an answer or retry shortly. You can still send the completed details to Shelton if the issue continues.";
     } else {
       const collapsed = Number(latestResult.range.weeklyLow) === Number(latestResult.range.weeklyHigh);
+      const routeNeedsReview = String(latestResult.rhythm?.reason || "").startsWith("This location needs route review");
       weeklyRange.textContent = collapsed
         ? money(latestResult.range.weeklyBase)
         : money(latestResult.range.weeklyLow) + "–" + money(latestResult.range.weeklyHigh);
       poundRange.textContent = latestResult.unitPricing
-        ? "$" + latestResult.unitPricing.poundLow.toFixed(2) + " / lb fixed recommended rate"
+        ? "Estimated processing rate · $" + latestResult.unitPricing.poundLow.toFixed(2) + "–$" + latestResult.unitPricing.poundHigh.toFixed(2) + " / lb"
         : "Per-pound pricing is confirmed during review.";
-      rangeStage.textContent = collapsed ? "Likely typical weekly amount" : "Typical weekly amount and quantity range";
-      guidanceTitle.textContent = latestResult.manualReview || latestResult.warning.includes("REVIEW")
-        ? "Let’s confirm this program"
+      const precisionLabel = latestResult.precision?.label || "Planning";
+      rangeStage.textContent = estimateLoading
+        ? `Updating your ${precisionLabel.toLowerCase()} weekly range`
+        : `${precisionLabel} weekly planning range`;
+      const missingRefiners = [];
+      if (!state.ownership) missingRefiners.push("who owns the goods");
+      else if (state.ownership === "supply" && !state.rentalTier) missingRefiners.push("the supplied-inventory tier");
+      if (!validLocation(state.location)) missingRefiners.push("your service ZIP");
+      guidanceTitle.textContent = latestResult.usingPlanningZip
+        ? "Add your ZIP to tighten this range"
+        : routeNeedsReview
+        ? "Route review required"
+        : latestResult.manualReview || latestResult.warning.includes("REVIEW")
+          ? "Let’s confirm this program"
         : latestResult.confidence?.explanation
           ? "What still matters"
           : "Ready for a conversation";
-      guidanceCopy.textContent = latestResult.confidence?.explanation || "Shelton will confirm your goods and route before final pricing.";
+      guidanceCopy.textContent = latestResult.usingPlanningZip
+        ? `This early range uses a central San Diego planning route. Add ${missingRefiners.join(" and ") || "more operating detail"} to make it more specific.`
+        : missingRefiners.length
+          ? `Add ${missingRefiners.join(" and ")} to make this range more specific.`
+        : routeNeedsReview
+        ? `${latestResult.rhythm.reason} ${latestResult.confidence?.explanation || "Shelton will confirm the route before final pricing."}`
+        : latestResult.confidence?.explanation || "Shelton will confirm your goods and route before final pricing.";
     }
   };
 
@@ -946,8 +1204,6 @@
     estimateSignature = signature;
     const requestId = ++estimateRequest;
     estimateLoading = true;
-    latestResult = null;
-    latestRawResult = null;
     renderResult();
     const result = await pricingEngine.calculatePlanningRange(stateForEngine());
     if (requestId !== estimateRequest) return;
@@ -971,15 +1227,19 @@
     renderScale();
     renderFinish();
     renderOwnership();
+    renderPrecisionRefinement();
     locationInput.value = state.location;
     qa("[data-return-window]").forEach((input) => { input.checked = input.value === state.returnWindow; });
-    qa("[data-access-input]").forEach((input) => { input.checked = input.value === state.access; });
+    qa("[data-access-input]").forEach((input) => {
+      if (input.tagName === "SELECT") input.value = state.access;
+      else input.checked = input.value === state.access;
+    });
     persist();
     requestEstimate();
   };
 
-  const onStateChange = () => {
-    invalidateEstimate();
+  const onStateChange = (clearResult = false) => {
+    invalidateEstimate({ clearResult });
     renderAll();
   };
 
@@ -1046,19 +1306,62 @@
   goodsOptions.addEventListener("change", (event) => {
     if (!event.target.matches('input[name="goods"]')) return;
     const id = event.target.value;
+    const previousEntryMeta = scaleEntryMeta();
     state.goods = event.target.checked
       ? Array.from(new Set(state.goods.concat(id)))
       : state.goods.filter((item) => item !== id);
     const validGoods = operationForState() ? operationForState().goods : [];
     state.goods = state.goods.filter((item) => validGoods.includes(item));
-    onStateChange();
+    const nextEntryMeta = scaleEntryMeta();
+    scaleSchema().forEach((field) => {
+      if (Array.isArray(field.goods) && !field.goods.some((goodId) => state.goods.includes(goodId))) {
+        delete state.scale[field.id];
+      }
+    });
+    if (!nextEntryMeta && previousEntryMeta) {
+      delete state.scale.entryMode;
+      delete state.scale[previousEntryMeta.directField];
+    }
+    if (nextEntryMeta?.onlyDirect) {
+      state.scale.entryMode = "direct";
+      const keep = new Set(["entryMode", nextEntryMeta.directField]);
+      Object.keys(state.scale).forEach((key) => {
+        if (!keep.has(key)) delete state.scale[key];
+      });
+    }
+    onStateChange(true);
     restoreRenderedChoiceFocus(goodsOptions, "goods", id);
+  });
+
+  goodsCustomize.addEventListener("click", () => {
+    state.goodsMode = "custom";
+    state.goods = [];
+    state.scale = {};
+    state.finish = [];
+    scaleStep = 0;
+    onStateChange(true);
+    window.requestAnimationFrame(() => goodsOptions.querySelector("input")?.focus());
+  });
+
+  goodsUseTypical.addEventListener("click", () => {
+    const operation = operationForState();
+    const typicalGoods = operation?.typicalGoods || [];
+    if (!typicalGoods.length) return;
+    state.goodsMode = "typical";
+    state.goods = typicalGoods.slice();
+    state.scale = {};
+    state.finish = [];
+    scaleStep = 0;
+    onStateChange(true);
+    window.requestAnimationFrame(() => goodsCustomize.focus());
   });
 
   scaleFields.addEventListener("input", (event) => {
     const id = event.target.dataset.scaleField;
     if (!id) return;
     state.scale[id] = event.target.value;
+    const editedField = visibleScaleFields().find((item) => item.id === id);
+    syncScaleControlValidity(event.target, editedField);
     invalidateEstimate();
     persist();
     updateScaleStatus();
@@ -1068,9 +1371,9 @@
     const field = visibleScaleFields().find((item) => item.id === id);
     if (next && field) {
       const lastQuestion = scaleStep === visibleScaleFields().length - 1;
-      const routeRequired = Boolean(field.routing);
-      next.disabled = routeRequired && !basicFieldValid(field);
-      next.textContent = routeRequired && !basicFieldValid(field)
+      const mustAnswer = Boolean(field.routing || field.required);
+      next.disabled = mustAnswer && !basicFieldValid(field);
+      next.textContent = mustAnswer && !basicFieldValid(field)
         ? (field.emptyAction || "Choose a starting point")
         : lastQuestion
           ? "Finish section"
@@ -1125,7 +1428,9 @@
     if (next?.disabled) return;
     if (back) scaleStep = Math.max(0, scaleStep - 1);
     if (next && scaleStep >= fields.length - 1) {
-      q("#factor-finish").scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
+      const target = q("#factor-route");
+      target.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
+      window.setTimeout(() => q("#factor-route-title")?.focus({ preventScroll: true }), prefersReducedMotion ? 0 : 350);
       return;
     }
     if (next) scaleStep += 1;
@@ -1137,7 +1442,7 @@
   ownershipOptions.addEventListener("change", (event) => {
     if (!event.target.matches('input[name="ownership"]')) return;
     state.ownership = event.target.value;
-    if (!["some", "supply"].includes(state.ownership)) {
+    if (state.ownership !== "supply") {
       state.rentalCategory = "";
       state.rentalTier = "";
       state.rentalQuantity = "";
@@ -1154,11 +1459,27 @@
     state.rentalTier = inventoryTier.value;
     onStateChange();
   });
-  inventoryUnits.addEventListener("input", () => {
-    state.rentalQuantity = inventoryUnits.value;
-    invalidateEstimate();
+  precisionToggle.addEventListener("click", () => {
+    precisionOpen = !precisionOpen;
+    renderPrecisionRefinement();
+    if (precisionOpen) window.setTimeout(() => precisionPanel.querySelector("select:not([hidden])")?.focus(), 0);
+  });
+  precisionDone.addEventListener("click", () => {
+    precisionOpen = false;
+    renderPrecisionRefinement();
+    precisionToggle.focus();
+  });
+  refinementStorage.addEventListener("change", () => {
+    state.refinement.storage = refinementStorage.value;
     persist();
-    requestEstimate();
+    refreshProgressiveResult();
+    renderPrecisionRefinement();
+  });
+  refinementDemand.addEventListener("change", () => {
+    state.refinement.demand = refinementDemand.value;
+    persist();
+    refreshProgressiveResult();
+    renderPrecisionRefinement();
   });
   qa("[data-inventory-par]").forEach((input) => input.addEventListener("change", () => {
     state.inventory.par = input.value;
@@ -1172,10 +1493,14 @@
   }));
 
   locationInput.addEventListener("input", () => {
+    locationInput.value = locationInput.value.replace(/\D/g, "").slice(0, 5);
     state.location = locationInput.value;
+    const showError = Boolean(state.location) && !validLocation(state.location);
+    locationInput.setAttribute("aria-invalid", String(showError));
+    locationError.hidden = !showError;
     persist();
     invalidateEstimate();
-    requestEstimate();
+    scheduleEstimate(180);
   });
   qa("[data-return-window]").forEach((input) => input.addEventListener("change", () => {
     state.returnWindow = input.value;
@@ -1243,6 +1568,7 @@
     quoteError.hidden = true;
     quoteStatus.hidden = true;
     quoteStatus.textContent = "";
+    syncPhoneRequirement();
     window.sessionStorage.removeItem(config.storageKey);
     renderAll();
     clearAnswersStatus.textContent = "All estimator and contact answers were cleared.";
@@ -1262,25 +1588,54 @@
       business: quoteForm.elements.namedItem("business"),
       email: quoteForm.elements.namedItem("email"),
       phone: quoteForm.elements.namedItem("phone"),
-      preferred: q('[name="preferredContact"]', quoteForm)
+      preferred: q('[name="preferredContact"]', quoteForm),
+      preferredGroup: q("[data-contact-choice-group]", quoteForm)
     };
-    const invalidControls = [];
+    const invalidEntries = [];
 
-    qa("[aria-invalid]", quoteForm).forEach((control) => control.removeAttribute("aria-invalid"));
-    if (!name) invalidControls.push(controls.name);
-    if (!business) invalidControls.push(controls.business);
-    if (!emailValid) invalidControls.push(controls.email);
-    if (!preferred) invalidControls.push(controls.preferred);
-    if (phoneRequired && !phone) invalidControls.push(controls.phone);
-    invalidControls.filter(Boolean).forEach((control) => control.setAttribute("aria-invalid", "true"));
+    qa("[aria-invalid]", quoteForm).forEach((control) => {
+      control.removeAttribute("aria-invalid");
+      control.removeAttribute("aria-errormessage");
+    });
+    if (!name) invalidEntries.push({ control: controls.name, message: "Add your name." });
+    if (!business) invalidEntries.push({ control: controls.business, message: "Add your business name." });
+    if (!email) invalidEntries.push({ control: controls.email, message: "Add your email address." });
+    else if (!emailValid) invalidEntries.push({ control: controls.email, message: "Enter a valid email address." });
+    if (!preferred) invalidEntries.push({ control: controls.preferredGroup, message: "Choose how you prefer to be contacted." });
+    if (phoneRequired && !phone) invalidEntries.push({ control: controls.phone, message: "Add a phone number for your selected contact preference." });
+    const invalidControls = invalidEntries.map((entry) => entry.control);
+    invalidControls.filter(Boolean).forEach((control) => {
+      control.setAttribute("aria-invalid", "true");
+      control.setAttribute("aria-errormessage", "quote-error");
+    });
 
     const valid = invalidControls.length === 0;
-    quoteError.textContent = phoneRequired && !phone && name && business && emailValid
-      ? "Add a phone number for your selected contact preference."
-      : "Complete the required contact details and select how you prefer to be reached.";
+    quoteError.textContent = invalidEntries[0]?.message || "";
     quoteError.hidden = valid;
-    return { valid, firstInvalidControl: invalidControls.find(Boolean) || null };
+    const firstInvalid = invalidControls.find(Boolean) || null;
+    return { valid, firstInvalidControl: firstInvalid === controls.preferredGroup ? controls.preferred : firstInvalid };
   };
+
+  const syncPhoneRequirement = () => {
+    const preferred = String(new FormData(quoteForm).get("preferredContact") || "");
+    const phone = quoteForm.elements.namedItem("phone");
+    const required = ["phone", "either"].includes(preferred);
+    phone.required = required;
+    if (required) phone.setAttribute("aria-required", "true");
+    else phone.removeAttribute("aria-required");
+    q("[data-phone-required-note]", quoteForm).hidden = !required;
+  };
+  qa('[name="preferredContact"]', quoteForm).forEach((input) => input.addEventListener("change", syncPhoneRequirement));
+  const clearQuoteValidationState = () => {
+    qa("[aria-invalid]", quoteForm).forEach((control) => {
+      control.removeAttribute("aria-invalid");
+      control.removeAttribute("aria-errormessage");
+    });
+    quoteError.hidden = true;
+  };
+  quoteForm.addEventListener("input", clearQuoteValidationState);
+  quoteForm.addEventListener("change", clearQuoteValidationState);
+  syncPhoneRequirement();
 
   quoteForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -1289,7 +1644,13 @@
     if (String(honeypot?.value || "").trim()) return;
     const validation = quoteContactValidation();
     if (!validation.valid) {
-      validation.firstInvalidControl?.focus();
+      if (validation.firstInvalidControl) {
+        validation.firstInvalidControl.focus({ preventScroll: true });
+        validation.firstInvalidControl.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "center"
+        });
+      }
       return;
     }
     quoteInFlight = true;
@@ -1325,9 +1686,13 @@
       rental: {
         category: state.rentalCategory || null,
         tier: state.rentalTier || null,
-        quantity: positive(state.rentalQuantity) || null,
+        quantity: null,
         par: state.inventory.par || null,
         customization: state.inventory.customization || null
+      },
+      refinement: {
+        storage: state.refinement.storage || null,
+        demand: state.refinement.demand || null
       },
       route: {
         location: state.location.trim() || null,
@@ -1374,19 +1739,22 @@
         body: notification,
         signal: quoteSubmissionController.signal
       });
-      const [durableResult, notificationResult] = await Promise.allSettled([durableRequest, notificationRequest]);
-      const durableAccepted = durableResult.status === "fulfilled" && durableResult.value.ok;
-      const fallbackAccepted = notificationResult.status === "fulfilled" && notificationResult.value.ok;
-      if (!durableAccepted && !fallbackAccepted) {
-        const timedOut = [durableResult, notificationResult].some((result) =>
-          result.status === "rejected" && result.reason?.name === "AbortError"
-        );
+      const requireAccepted = async (request) => {
+        const response = await request;
+        if (!response.ok) throw new Error("Review intake rejected.");
+        return response;
+      };
+      try {
+        await Promise.any([requireAccepted(durableRequest), requireAccepted(notificationRequest)]);
+      } catch (aggregateError) {
+        const reasons = Array.isArray(aggregateError?.errors) ? aggregateError.errors : [aggregateError];
         const submissionError = new Error("Review intake failed.");
-        if (timedOut) submissionError.name = "AbortError";
+        if (reasons.some((reason) => reason?.name === "AbortError")) submissionError.name = "AbortError";
         throw submissionError;
       }
 
       window.sessionStorage.removeItem(config.storageKey);
+      markSubmissionReceipt();
       window.location.assign(quoteForm.dataset.quoteSuccess || "thank-you.html");
     } catch (error) {
       quoteStatus.hidden = false;
@@ -1413,13 +1781,15 @@
     const dockBlockers = new Set();
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) dockBlockers.add(entry.target);
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.08) dockBlockers.add(entry.target);
         else dockBlockers.delete(entry.target);
       });
       estimateDock.classList.toggle("is-suppressed", dockBlockers.size > 0);
-    }, { threshold: 0.1 });
-    observer.observe(q("[data-range-shell]"));
-    observer.observe(quoteForm);
+    }, { threshold: [0, 0.08], rootMargin: "0px 0px -72px 0px" });
+    // Keep the quick range visible through the service-location step. Suppress
+    // it only once the actual range readout (rather than the surrounding
+    // planning section) has meaningfully entered the viewport.
+    [rangeLive, q(".quote-handoff"), document.querySelector(".site-footer")].filter(Boolean).forEach((target) => observer.observe(target));
   }
 
   renderOperationOptions();

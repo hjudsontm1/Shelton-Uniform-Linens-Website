@@ -26,9 +26,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.2/src/regular/style.css" />
   <link rel="stylesheet" href="assets/css/site.css?v=20260816-mobile-launch-v1" />
-  <link rel="stylesheet" href="assets/css/pricing-calm.css?v=20260816-mobile-accessibility-v18" />
-  <link rel="stylesheet" href="assets/css/pricing-spine-concept.css?v=20260819-performance-v1" />
+  <link rel="stylesheet" href="assets/css/pricing-calm.css?v=20260820-starting-point-v7" />
+  <link rel="stylesheet" href="assets/css/pricing-spine-concept.css?v=20260820-centered-summary-v16" />
   <link rel="stylesheet" href="assets/css/header.css?v=20260817-phone-menu-height-v2" />
 </head>
 <body class="pricing-calm-page" data-page="pricing">
@@ -73,15 +74,14 @@
       <section class="pricing-intro" id="pricing-guide" tabindex="-1" aria-labelledby="pricing-intro-title">
         <div class="pricing-intro__hero">
           <p class="calm-eyebrow">How Pricing Works</p>
-          <h2 id="pricing-intro-title">Five compact steps build your commercial planning estimate.</h2>
-          <p>Start with the operation and one useful sizing detail. Add only the goods, rhythm, ownership, and route facts that apply; each priced answer changes the estimate or resolves a named uncertainty.</p>
+          <h2 id="pricing-intro-title">Four compact steps build your commercial planning estimate.</h2>
+          <p>Start with the operation and a typical goods program, then add ownership, one familiar sizing detail, and your service ZIP. Your price, service rhythm, finish, and return plan stay together in one planning view.</p>
         </div>
-        <ol class="factor-map" aria-label="Five estimator steps">
+        <ol class="factor-map" aria-label="Four estimator steps">
           <li><a href="#factor-program"><span>01</span>Operation</a></li>
-          <li><a href="#factor-volume"><span>02</span>Goods &amp; volume</a></li>
-          <li><a href="#factor-finish"><span>03</span>Rhythm &amp; storage</a></li>
-          <li><a href="#factor-ownership"><span>04</span>Ownership</a></li>
-          <li><a href="#factor-route"><span>05</span>ZIP &amp; access</a></li>
+          <li><a href="#factor-ownership"><span>02</span>Ownership</a></li>
+          <li><a href="#factor-volume"><span>03</span>Weekly volume</a></li>
+          <li><a href="#factor-route"><span>04</span>Service ZIP</a></li>
         </ol>
       </section>
     </div>
@@ -109,8 +109,8 @@
             </button>
             <div class="operation-picker__panel" id="operation-picker-panel" data-operation-panel role="region" aria-label="Choose an operation" hidden>
               <div class="operation-picker__options" data-operation-options aria-label="Available operations"></div>
-              <div class="operation-picker__confirmation" data-operation-confirmation role="alert" hidden>
-                <strong data-operation-confirmation-title>Change operation?</strong>
+              <div class="operation-picker__confirmation" data-operation-confirmation role="group" aria-labelledby="operation-confirmation-title" hidden>
+                <strong id="operation-confirmation-title" data-operation-confirmation-title>Change operation?</strong>
                 <p>This clears the goods and sizing details already entered for the current operation.</p>
                 <div>
                   <button type="button" data-operation-confirm>Change operation</button>
@@ -125,14 +125,111 @@
           <fieldset class="calm-fieldset">
             <legend data-goods-legend>What should Shelton clean and return?</legend>
             <p data-goods-help>Choose an operation first, then select every item that belongs in the program.</p>
-            <div class="choice-cloud" data-goods-options></div>
+            <section class="goods-starting-point" data-goods-typical hidden aria-labelledby="goods-starting-point-title">
+              <div class="goods-starting-point__copy">
+                <span>Typical starting point</span>
+                <strong id="goods-starting-point-title" data-goods-typical-title>Common goods are ready</strong>
+                <p data-goods-typical-copy>We selected the goods most programs like this use every week.</p>
+              </div>
+              <div class="goods-starting-point__list" data-goods-typical-list aria-label="Automatically selected goods"></div>
+              <button type="button" data-goods-customize>Customize goods</button>
+            </section>
+            <section class="goods-customizer" data-goods-customizer hidden aria-labelledby="goods-customizer-title">
+              <div class="goods-customizer__heading">
+                <div>
+                  <span>Custom program</span>
+                  <strong id="goods-customizer-title">Choose only what you need</strong>
+                  <p>Nothing is preselected here. Add every item Shelton should pick up, process, and return.</p>
+                </div>
+                <button type="button" data-goods-use-typical hidden>Use typical program</button>
+              </div>
+              <div class="choice-cloud goods-icon-grid" data-goods-options></div>
+            </section>
           </fieldset>
+        </div>
+      </section>
+
+      <section class="learning-chapter learning-chapter--ownership" id="factor-ownership" data-factor="ownership" aria-labelledby="factor-ownership-title">
+        <div class="learning-chapter__lesson">
+          <p class="chapter-index">02 | Inventory ownership</p>
+          <h2 class="chapter-editorial-title" id="factor-ownership-title">Who owns the goods changes how the price is built.</h2>
+          <p class="chapter-editorial-copy">Choose the closest starting point. Shelton can confirm the exact inventory structure during review.</p>
+        </div>
+        <div class="learning-chapter__answer">
+          <div class="answer-heading">
+            <span data-factor-state="ownership">Strongly refines your range</span>
+            <h3>Who owns the goods in this program?</h3>
+          </div>
+          <div class="ownership-list" role="radiogroup" aria-label="Inventory ownership" data-ownership-options></div>
+          <details class="ownership-explainer">
+            <summary>Compare ownership options</summary>
+            <div class="ownership-explainer__body">
+              <section class="ownership-comparison ownership-comparison--owned">
+                <span>Processing-only model</span>
+                <h4>Customer-owned goods</h4>
+                <p class="ownership-comparison__lead">You provide and own the circulating inventory. Shelton handles the recurring pickup, cleaning, finishing, packaging, and return service.</p>
+                <dl>
+                  <div>
+                    <dt>You manage</dt>
+                    <dd>Initial purchasing, stocking levels, replacement decisions, and any owner-specific standards.</dd>
+                  </div>
+                  <div>
+                    <dt>Shelton manages</dt>
+                    <dd>Scheduled route service, professional processing, finishing, packaging, and return.</dd>
+                  </div>
+                  <div>
+                    <dt>Usually fits</dt>
+                    <dd>Operations with usable inventory already in place or goods that must remain customer-owned.</dd>
+                  </div>
+                </dl>
+              </section>
+              <section class="ownership-comparison ownership-comparison--supplied">
+                <span>Full inventory program</span>
+                <h4>Shelton-supplied goods</h4>
+                <p class="ownership-comparison__lead">Shelton helps specify and supply the working inventory, then plans the circulating stock, route service, laundering, finishing, and normal replacement needs as one program.</p>
+                <dl>
+                  <div>
+                    <dt>Shelton plans</dt>
+                    <dd>Item specifications, starting quantities, circulating backup, route cadence, processing, and the replacement approach.</dd>
+                  </div>
+                  <div>
+                    <dt>You confirm</dt>
+                    <dd>Material and quality level, color, branding needs, usage patterns, storage limits, and presentation standards.</dd>
+                  </div>
+                  <div>
+                    <dt>What shapes price</dt>
+                    <dd>The goods selected, working par, expected loss and wear, finishing requirements, weekly volume, and service frequency.</dd>
+                  </div>
+                  <div>
+                    <dt>Usually fits</dt>
+                    <dd>New programs, inconsistent or aging stock, and teams that want inventory planning handled with the laundry service.</dd>
+                  </div>
+                </dl>
+                <p class="ownership-comparison__note">The planning range is an early guide. Exact inventory quantities, replacement terms, and item specifications are confirmed in the account review.</p>
+              </section>
+              <section class="ownership-comparison ownership-comparison--unsure">
+                <span>Side-by-side review</span>
+                <h4>Not sure yet</h4>
+                <p class="ownership-comparison__lead">You do not need to decide now. Start with the broad planning range, then compare the cost and operating responsibility of customer-owned and Shelton-supplied inventory.</p>
+                <dl>
+                  <div>
+                    <dt>Bring to review</dt>
+                    <dd>Your approximate weekly use, the condition of any existing goods, and what your team wants to stop managing.</dd>
+                  </div>
+                  <div>
+                    <dt>Shelton will compare</dt>
+                    <dd>Upfront inventory responsibility, ongoing service, replacement planning, and the practical fit of each model.</dd>
+                  </div>
+                </dl>
+              </section>
+            </div>
+          </details>
         </div>
       </section>
 
       <section class="learning-chapter" id="factor-volume" data-factor="volume" aria-labelledby="factor-volume-title">
         <div class="learning-chapter__lesson">
-          <p class="chapter-index">02 | Scale &amp; weekly volume</p>
+          <p class="chapter-index">03 | Scale &amp; weekly volume</p>
           <h2 class="chapter-editorial-title" id="factor-volume-title">Weekly volume determines the scale of your laundry program.</h2>
           <p class="chapter-editorial-copy">Share the number you know best, such as pounds, pieces, rooms, or another familiar measure. Shelton uses your selected goods to estimate weekly volume and plan the right production capacity and pickup schedule.</p>
         </div>
@@ -141,7 +238,7 @@
             <span data-factor-state="volume">Choose an operation first</span>
             <h3>Choose the number you know best.</h3>
           </div>
-          <div class="volume-estimator" data-volume-estimator aria-live="polite">
+          <div class="volume-estimator" data-volume-estimator>
             <div class="volume-estimator__fields" data-volume-estimator-fields></div>
             <p class="volume-estimator__status" data-volume-estimator-status></p>
             <p class="conversion-note" data-volume-help-conversion hidden></p>
@@ -149,83 +246,11 @@
         </div>
       </section>
 
-      <section class="learning-chapter" id="factor-finish" data-factor="finish" aria-labelledby="factor-finish-title">
-        <div class="learning-chapter__lesson">
-          <p class="chapter-index">03 | Finish &amp; return</p>
-          <h2 class="chapter-editorial-title" id="factor-finish-title">Clean is only part of the service.</h2>
-          <p class="chapter-editorial-copy">Pressing, hanging, folding, bundling, labeling, and protective packaging require different levels of labor and handling. They also determine how easily your team can put finished goods back into use.</p>
-        </div>
-        <div class="learning-chapter__answer learning-chapter__answer--recommendation" data-finish-recommendation aria-live="polite">
-          <div class="answer-heading">
-            <span data-factor-state="finish">Choose goods in Section 01</span>
-            <h3 data-finish-recommendation-title>How your selected goods will be finished and returned.</h3>
-          </div>
-          <div class="finish-recommendation">
-            <ul class="finish-goods-list" data-finish-goods-list aria-label="Finishing by selected item"></ul>
-            <section class="return-format" data-return-format aria-labelledby="return-format-title">
-              <div class="return-format__heading">
-                <span>Return format</span>
-                <h4 id="return-format-title" data-return-format-title>Set by program volume</h4>
-              </div>
-              <div class="return-format__options" aria-hidden="true">
-                <article data-return-format-option="bag">
-                  <img src="assets/icons/bootstrap/bag.svg" alt="" width="64" height="64" />
-                  <strong>Bag return</strong>
-                </article>
-                <article data-return-format-option="cart">
-                  <img src="assets/icons/bootstrap/cart3.svg" alt="" width="64" height="64" />
-                  <strong>Linen cart return</strong>
-                </article>
-              </div>
-              <p data-return-format-status>Enter a sizing detail in Section 02 and the return format will update automatically.</p>
-            </section>
-          </div>
-        </div>
-      </section>
-
-      <section class="learning-chapter learning-chapter--ownership" id="factor-ownership" data-factor="ownership" aria-labelledby="factor-ownership-title">
-        <div class="learning-chapter__lesson">
-          <p class="chapter-index">04 | Inventory ownership</p>
-          <h2 class="chapter-editorial-title" id="factor-ownership-title">Who owns the goods changes how the program is structured.</h2>
-          <p class="chapter-editorial-copy">Customer-owned programs focus on cleaning, finishing, packaging, and return. Shelton-supplied programs also include inventory planning, replacements, and the working stock needed between service days. Many operations use a combination of both.</p>
-        </div>
-        <div class="learning-chapter__answer">
-          <div class="answer-heading">
-            <h3>Which description is closest to your operation?</h3>
-          </div>
-          <div class="ownership-list" role="radiogroup" aria-label="Inventory ownership" data-ownership-options></div>
-          <div class="conditional-panel inventory-details" data-inventory-details hidden>
-            <div class="conditional-panel__heading">
-              <span>Supplied inventory tier</span>
-              <p>Choose a planning quality tier. Exact goods, quantities, par, freight, setup, and customization are confirmed during Shelton review.</p>
-            </div>
-            <div class="conditional-grid inventory-control-grid">
-              <label class="calm-field">
-                <span>Rental quality tier</span>
-                <select data-inventory-tier>
-                  <option value="">Choose a tier</option>
-                  <option value="economy">Economy</option>
-                  <option value="standard">Standard</option>
-                  <option value="premium">Premium</option>
-                </select>
-                <small>Rental remains a separate provisional weekly line and always receives Shelton review.</small>
-              </label>
-            </div>
-            <select data-inventory-category hidden><option value=""></option></select>
-            <input type="hidden" data-inventory-units value="1" />
-          </div>
-          <div class="lesson-note ownership-note">
-            <span>There is no wrong starting point</span>
-            <p>Many operations use a hybrid of owned and supplied goods. Shelton can help compare the models.</p>
-          </div>
-        </div>
-      </section>
-
       <section class="learning-chapter learning-chapter--route" id="factor-route" data-factor="route" aria-labelledby="factor-route-title">
         <div class="learning-chapter__lesson">
-          <p class="chapter-index">05 | Location &amp; route</p>
-          <h2 class="chapter-editorial-title" id="factor-route-title">Your location and service schedule shape the route.</h2>
-          <p class="chapter-editorial-copy">Distance, traffic, building access, loading constraints, and pickup frequency all affect what dependable service requires. Share a ZIP code or address, then add any timing or access needs that apply to your operation.</p>
+          <p class="chapter-index">04 | Service location</p>
+          <h2 class="chapter-editorial-title" id="factor-route-title" tabindex="-1">Your location shapes the service route.</h2>
+          <p class="chapter-editorial-copy">Add the ZIP where service will occur. Shelton uses it to replace the central San Diego planning assumption with a more specific route.</p>
         </div>
         <div class="learning-chapter__answer">
           <div class="route-entry-row">
@@ -234,73 +259,12 @@
             </div>
             <label class="calm-field calm-field--large">
               <span>Service ZIP code</span>
-              <input type="text" data-location-input autocomplete="postal-code" inputmode="numeric" maxlength="10" placeholder="92101" />
-              <small>Unknown or unseeded ZIPs still receive an outer-zone estimate with a review note.</small>
+              <input type="text" data-location-input autocomplete="postal-code" inputmode="numeric" maxlength="5" pattern="[0-9]{5}" aria-describedby="location-hint location-error" placeholder="92101" />
+              <small id="location-hint">Add your ZIP to replace the central San Diego planning assumption with your actual route.</small>
+              <small id="location-error" data-location-error role="alert" hidden>Enter a five-digit ZIP code.</small>
             </label>
-            <div class="rhythm-control" data-rhythm-control>
-              <div class="rhythm-recommendation" data-rhythm-recommendation aria-live="polite">
-                <div class="rhythm-recommendation__copy">
-                  <span data-rhythm-recommendation-kicker>Recommendation pending</span>
-                  <strong data-rhythm-recommendation-label>Add the operation and weekly volume to see a recommendation.</strong>
-                </div>
-                <div class="rhythm-cadence" data-rhythm-cadence>
-                  <span>Cadence preview</span>
-                  <ol aria-label="Illustrative weekly service cadence">
-                    <li data-rhythm-day><b>M</b></li>
-                    <li data-rhythm-day><b>T</b></li>
-                    <li data-rhythm-day><b>W</b></li>
-                    <li data-rhythm-day><b>T</b></li>
-                    <li data-rhythm-day><b>F</b></li>
-                    <li data-rhythm-day><b>S</b></li>
-                    <li data-rhythm-day><b>S</b></li>
-                  </ol>
-                  <small>Exact service days are confirmed during route review.</small>
-                </div>
-                <div class="rhythm-recommendation__actions">
-                  <label class="rhythm-use-recommendation">
-                    <input type="radio" name="service-rhythm" value="recommended" data-rhythm-input checked />
-                    <span>Use recommendation</span>
-                  </label>
-                  <button type="button" class="rhythm-override-toggle" data-rhythm-toggle aria-expanded="false" aria-controls="rhythm-overrides">Choose a different rhythm</button>
-                </div>
-              </div>
-              <fieldset class="rhythm-overrides" id="rhythm-overrides" data-rhythm-overrides hidden>
-                <legend>Choose a different rhythm</legend>
-                <div class="rhythm-options">
-                  <label>
-                    <input type="radio" name="service-rhythm" value="weekly" data-rhythm-input />
-                    <span><strong>Once weekly</strong><small>One planned pickup and return cycle.</small></span>
-                  </label>
-                  <label>
-                    <input type="radio" name="service-rhythm" value="twiceWeekly" data-rhythm-input />
-                    <span><strong>Twice weekly</strong><small>A shorter interval between service days.</small></span>
-                  </label>
-                  <label>
-                    <input type="radio" name="service-rhythm" value="threeWeekly" data-rhythm-input />
-                    <span><strong>Three times weekly</strong><small>More frequent movement and returns.</small></span>
-                  </label>
-                  <label>
-                    <input type="radio" name="service-rhythm" value="weekday" data-rhythm-input />
-                    <span><strong>Weekdays</strong><small>High-frequency recurring service.</small></span>
-                  </label>
-                  <label>
-                    <input type="radio" name="service-rhythm" value="event" data-rhythm-input />
-                    <span><strong>Event-driven</strong><small>Service around events or production windows.</small></span>
-                  </label>
-                </div>
-              </fieldset>
-              <p class="rhythm-override-note" data-rhythm-override-note hidden></p>
-            </div>
-            <fieldset class="editorial-choice-group route-choice-group">
-              <legend>Site access <em>optional</em></legend>
-              <div class="editorial-choice-list editorial-choice-list--three" data-access-options>
-                <label><input type="radio" name="site-access" value="" data-access-input /><span><strong>Standard or not sure</strong></span></label>
-                <label><input type="radio" name="site-access" value="limited" data-access-input /><span><strong>Limited loading hours or access</strong></span></label>
-                <label><input type="radio" name="site-access" value="complex" data-access-input /><span><strong>Multiple stops, departments, or special access</strong></span></label>
-              </div>
-            </fieldset>
           </div>
-          <p class="route-entry-explainer">Distance, traffic, building access, loading constraints, and the practical pickup cadence all affect what a dependable program requires.</p>
+          <p class="route-entry-explainer">Building access and loading constraints can be added later only if you want a more precise quote.</p>
         </div>
       </section>
     </div>
@@ -308,11 +272,11 @@
     <section class="planning-result" id="planning-range" aria-labelledby="planning-result-title">
       <div class="range-shell" data-range-shell>
         <div class="range-progress">
-          <p class="chapter-index range-progress__label" id="planning-result-title">Your Planning Range</p>
+          <h2 class="chapter-index range-progress__label" id="planning-result-title">Your Planning Range</h2>
           <button type="button" data-clear-answers aria-describedby="clear-answers-status">Clear answers</button>
           <span class="sr-only" id="clear-answers-status" data-clear-answers-status role="status" aria-live="polite"></span>
         </div>
-        <div class="range-live" aria-live="polite">
+        <div class="range-live" role="status" aria-live="polite" aria-atomic="true">
           <div class="range-locked" data-range-locked>
             <p data-unlock-copy>Choose your operation, select the goods, and add one sizing detail to open a broad weekly range.</p>
             <a href="#factor-program">Start With Your Operation</a>
@@ -327,7 +291,140 @@
             </div>
           </div>
         </div>
+        <section class="range-program-overview" data-program-overview hidden aria-labelledby="range-program-overview-title">
+          <div class="range-program-overview__heading">
+            <span>Program overview</span>
+            <h3 id="range-program-overview-title">What this service plan includes</h3>
+            <p>Your price and the operating shape of the program stay together here. Exact details are confirmed during review.</p>
+          </div>
+          <div class="range-program-overview__grid">
+            <div class="range-program-overview__card range-program-overview__card--rhythm">
+              <span>Service rhythm</span>
+              <div class="rhythm-control" data-rhythm-control>
+                <div class="rhythm-recommendation" data-rhythm-recommendation>
+                  <div class="rhythm-recommendation__copy">
+                    <span data-rhythm-recommendation-kicker>Recommendation pending</span>
+                    <strong data-rhythm-recommendation-label>Add the operation and weekly volume to see a recommendation.</strong>
+                  </div>
+                  <div class="rhythm-cadence" data-rhythm-cadence>
+                    <span>Recommended cadence</span>
+                    <ol aria-label="Recommended weekly service cadence">
+                      <li data-rhythm-day><b>M</b></li>
+                      <li data-rhythm-day><b>T</b></li>
+                      <li data-rhythm-day><b>W</b></li>
+                      <li data-rhythm-day><b>T</b></li>
+                      <li data-rhythm-day><b>F</b></li>
+                      <li data-rhythm-day><b>S</b></li>
+                      <li data-rhythm-day><b>S</b></li>
+                    </ol>
+                    <small>The filled days show the recommended frequency. Exact route days are confirmed during review.</small>
+                  </div>
+                  <div class="rhythm-recommendation__actions">
+                    <label class="rhythm-use-recommendation">
+                      <input type="radio" name="service-rhythm" value="recommended" data-rhythm-input checked disabled />
+                      <span>Use recommendation</span>
+                    </label>
+                    <button type="button" class="rhythm-override-toggle" data-rhythm-toggle aria-expanded="false" aria-controls="rhythm-overrides">Change pickup frequency</button>
+                  </div>
+                </div>
+                <fieldset class="rhythm-overrides" id="rhythm-overrides" data-rhythm-overrides hidden>
+                  <legend>Change pickup frequency</legend>
+                  <div class="rhythm-options">
+                    <label><input type="radio" name="service-rhythm" value="weekly" data-rhythm-input /><span><strong>Once weekly</strong><small>One planned pickup and return cycle.</small></span></label>
+                    <label><input type="radio" name="service-rhythm" value="twiceWeekly" data-rhythm-input /><span><strong>Twice weekly</strong><small>A shorter interval between service days.</small></span></label>
+                    <label><input type="radio" name="service-rhythm" value="threeWeekly" data-rhythm-input /><span><strong>Three times weekly</strong><small>More frequent movement and returns.</small></span></label>
+                    <label><input type="radio" name="service-rhythm" value="weekday" data-rhythm-input /><span><strong>Weekdays</strong><small>High-frequency recurring service.</small></span></label>
+                  </div>
+                </fieldset>
+                <p class="rhythm-override-note" data-rhythm-override-note hidden></p>
+              </div>
+            </div>
+            <div class="range-program-overview__card range-program-overview__card--finish" data-finish-recommendation>
+              <div class="finish-program-heading">
+                <i class="ph ph-sparkle" aria-hidden="true"></i>
+                <div>
+                  <span>Finish &amp; return</span>
+                  <h4 data-finish-recommendation-title>How your selected goods will be finished and returned.</h4>
+                </div>
+              </div>
+              <div class="finish-recommendation">
+                <ul class="finish-goods-list" data-finish-goods-list aria-label="Finishing by selected item"></ul>
+                <section class="return-format" data-return-format aria-labelledby="return-format-title">
+                  <div class="return-format__summary">
+                    <i class="ph ph-package" data-return-format-icon aria-hidden="true"></i>
+                    <div>
+                      <span>Return format</span>
+                      <h4 id="return-format-title" data-return-format-title>Set by program volume</h4>
+                      <p data-return-format-status>Enter a sizing detail in Section 03 and the return format will update automatically.</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
+
+      <section class="precision-refinement" data-precision-refinement hidden aria-labelledby="precision-refinement-title">
+        <button class="precision-refinement__toggle" type="button" data-precision-toggle aria-expanded="false" aria-controls="precision-refinement-panel">
+          <span>Optional detail</span>
+          <strong id="precision-refinement-title">Want a more precise quote?</strong>
+          <small>Your broad range is ready. Add only the details you know if you want to refine the handoff.</small>
+          <b data-precision-toggle-label>Show optional questions</b>
+        </button>
+        <div class="precision-refinement__panel" id="precision-refinement-panel" data-precision-panel hidden>
+          <div class="precision-refinement__intro">
+            <span>More in-depth quote</span>
+            <p>These details are optional. They can make the planning range and Shelton review more specific, but you can request a quote without them.</p>
+          </div>
+          <div class="precision-refinement__fields">
+            <label class="calm-field inventory-details" data-inventory-details hidden>
+              <span>Supplied-inventory quality</span>
+              <select data-inventory-tier aria-describedby="inventory-tier-hint">
+                <option value="">Not sure yet</option>
+                <option value="economy">Economy</option>
+                <option value="standard">Standard</option>
+                <option value="premium">Premium</option>
+              </select>
+              <small id="inventory-tier-hint">Choose only if Shelton would supply the goods. Exact items and quantities are confirmed during review.</small>
+            </label>
+            <label class="calm-field">
+              <span>Clean-goods storage</span>
+              <select data-refinement-storage>
+                <option value="">Not sure or skip</option>
+                <option value="ample">Ample on-site storage</option>
+                <option value="limited">Limited storage</option>
+                <option value="veryTight">Very tight storage</option>
+              </select>
+              <small>Helps Shelton plan return size and cadence; it is not needed for your first range.</small>
+            </label>
+            <label class="calm-field">
+              <span>Typical demand pattern</span>
+              <select data-refinement-demand>
+                <option value="">Not sure or skip</option>
+                <option value="steady">Mostly steady</option>
+                <option value="seasonal">Seasonal</option>
+                <option value="variable">Large week-to-week swings</option>
+              </select>
+              <small>Helps explain peaks without adding another step to the basic estimator.</small>
+            </label>
+            <label class="calm-field">
+              <span>Site access</span>
+              <select data-access-input>
+                <option value="standard">Standard or not sure</option>
+                <option value="limited">Limited loading hours or access</option>
+                <option value="complex">Multiple stops, departments, or special access</option>
+              </select>
+              <small>Add this only when loading hours, departments, or access constraints will shape service.</small>
+            </label>
+          </div>
+          <select data-inventory-category hidden><option value=""></option></select>
+          <div class="precision-refinement__footer">
+            <p data-precision-status>Your current range remains available.</p>
+            <button type="button" data-precision-done>Done refining</button>
+          </div>
+        </div>
+      </section>
     </section>
 
     <section class="quote-handoff" id="quote-handoff" aria-labelledby="quote-title">
@@ -343,8 +440,8 @@
           <label><span>Name</span><input type="text" name="name" autocomplete="name" required maxlength="100" /></label>
           <label><span>Business</span><input type="text" name="business" autocomplete="organization" required maxlength="120" /></label>
           <label><span>Email</span><input type="email" name="email" autocomplete="email" required maxlength="254" /></label>
-          <label><span>Phone</span><input type="tel" name="phone" autocomplete="tel" maxlength="32" /></label>
-          <fieldset class="quote-contact-choice">
+          <label><span>Phone <em data-phone-required-note hidden>required for phone contact</em></span><input type="tel" name="phone" autocomplete="tel" maxlength="32" /></label>
+          <fieldset class="quote-contact-choice" data-contact-choice-group>
             <legend>Preferred contact</legend>
             <label><input type="radio" name="preferredContact" value="email" required /><span>Email</span></label>
             <label><input type="radio" name="preferredContact" value="phone" /><span>Phone</span></label>
@@ -352,14 +449,14 @@
           </fieldset>
           <label class="quote-field--notes"><span>Notes <em>optional</em></span><textarea name="notes" rows="3" maxlength="1200"></textarea></label>
         </div>
-        <p class="quote-error" data-quote-error role="alert" hidden>Complete the required contact details and select how you prefer to be reached.</p>
+        <p class="quote-error" id="quote-error" data-quote-error role="alert" hidden>Complete the required contact details and select how you prefer to be reached.</p>
         <p class="quote-privacy-note">We use these details to review your commercial laundry needs and follow up about your account. See our <a href="privacy.html">privacy notice</a>.</p>
         <button type="submit" data-quote-submit>Send to Shelton for Review</button>
       </form>
       <div class="quote-status" data-quote-status role="status" tabindex="-1" hidden></div>
     </section>
 
-    <aside class="estimate-dock" data-estimate-dock hidden aria-live="polite">
+    <aside class="estimate-dock" data-estimate-dock hidden>
       <div>
         <span data-dock-progress>Your planning range</span>
         <strong data-dock-range>Add one sizing answer to open your range</strong>
@@ -409,9 +506,9 @@
   </footer>
 
   <script src="assets/js/site.js?v=20260816-mobile-launch-v1"></script>
-  <script src="assets/js/pricing-journey-config.js?v=20260803-estimator-v24"></script>
-  <script src="assets/js/pricing-engine.js?v=20260818-production-api-v26"></script>
-  <script src="assets/js/pricing-progressive-range.js?v=20260803-estimator-v24"></script>
-  <script src="assets/js/pricing-learning.js?v=20260816-mobile-accessibility-v26"></script>
+  <script src="assets/js/pricing-journey-config.js?v=20260820-estimator-reconcile-v9"></script>
+  <script src="assets/js/pricing-engine.js?v=20260820-progressive-detail-v6"></script>
+  <script src="assets/js/pricing-progressive-range.js?v=20260820-confidence-lanes-v17"></script>
+  <script src="assets/js/pricing-learning.js?v=20260820-confidence-lanes-v17"></script>
 </body>
 </html>

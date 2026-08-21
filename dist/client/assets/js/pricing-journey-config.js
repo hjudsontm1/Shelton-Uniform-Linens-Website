@@ -189,29 +189,51 @@
     });
   });
 
+  const goodsIcons = {
+    sheets: "ph-bed",
+    towels: "ph-towel",
+    handTowels: "ph-towel",
+    bathMats: "ph-square",
+    robes: "ph-coat-hanger",
+    blankets: "ph-stack",
+    duvetCovers: "ph-stack",
+    faceCradleCovers: "ph-square",
+    tablecloths: "ph-table",
+    napkins: "ph-square-half",
+    runners: "ph-ruler",
+    skirting: "ph-waves",
+    chairCovers: "ph-armchair",
+    specialtyEventGoods: "ph-sparkle",
+    chefCoats: "ph-chef-hat",
+    aprons: "ph-t-shirt",
+    barTowels: "ph-towel",
+    tableLinens: "ph-table",
+    casinoUniforms: "ph-t-shirt",
+    banquetLinens: "ph-table",
+    uniformShirts: "ph-t-shirt",
+    workwear: "ph-vest",
+    jackets: "ph-coat-hanger",
+    shirts: "ph-t-shirt",
+    suits: "ph-tie",
+    dresses: "ph-dress",
+    specialtyGarments: "ph-sparkle",
+    choirRobes: "ph-music-notes"
+  };
+
+  Object.entries(goodsIcons).forEach(([id, icon]) => {
+    if (goods[id]) goods[id].icon = icon;
+  });
+
   const select = (id, label, hint, options, required = true) => ({ id, label, hint, type: "select", options, required });
   const number = (id, label, unit, hint, min, max, required = true, goodsIds) => ({ id, label, unit, hint, type: "number", min, max, step: 1, required, goods: goodsIds });
   const option = (value, label, description) => ({ value, label, ...(description ? { description } : {}) });
 
-  const storageOptions = [
-    option("ample", "Ample on-site storage"),
-    option("limited", "Limited storage"),
-    option("tight", "Very tight storage")
-  ];
-  const seasonalityOptions = [
-    option("steady", "Mostly steady"),
-    option("seasonal", "Clear seasonal swings"),
-    option("eventDriven", "Event or calendar driven")
-  ];
   const volumeUnitOptions = [option("pounds", "Pounds"), option("pieces", "Pieces"), option("unknown", "Not sure")];
 
   const scaleSchemas = {
     hotel: [
       number("rooms", "Guest rooms", "rooms", "Room count sets the program's potential scale before occupancy is applied.", 1, 5000),
       select("occupancy", "Approximate occupancy", "Occupancy converts total rooms into rooms likely to need linen service in a normal week.", [option("under50", "Under 50%"), option("50to74", "50-74%"), option("75to89", "75-89%"), option("90plus", "90% or more")]),
-      select("bedSystem", "Bed-linen system", "Duvet and triple-sheet rooms use different quantities and finishing paths, so the mix changes weekly pounds and labor.", [option("duvet", "Duvet cover"), option("triple_sheet", "Triple sheet"), option("mixed", "A mix of both")]),
-      number("duvetPercent", "Duvet share when mixed", "%", "The approximate duvet share lets the estimator weight both bed systems correctly.", 0, 100, false),
-      select("storage", "Clean-goods storage", "On-site storage determines how much clean inventory can wait between bulk returns and helps shape service cadence.", storageOptions),
       number("knownVolume", "Total weekly pounds", "lb / week", "A normal measured weekly total replaces room-based assumptions and gives the closest starting range.", 1, 250000, false),
       number("weeklyRobes", "Robes per week", "pieces", "Robes follow a separate per-piece handling path, so their labor is estimated apart from room-linen pounds.", 0, 250000, false, ["robes"]),
       number("weeklyBlankets", "Blankets per week", "pieces", "Blankets receive separate specialty handling, so their count is estimated apart from standard room linen.", 0, 250000, false, ["blankets"])
@@ -242,34 +264,27 @@
       ]),
       number("averageBedrooms", "Average bedrooms per property", "bedrooms / property", "Typical bedrooms per property set the linen pounds for each property turnover.", 0.1, 30),
       number("totalBedrooms", "Total bedrooms across the program", "total bedrooms", "The combined bedroom count lets the estimator derive the program's average property size.", 1, 300000),
-      select("seasonality", "Seasonal movement", "Seasonal movement keeps an average week from understating the capacity needed during peak periods.", seasonalityOptions),
       number("knownVolume", "Total weekly pounds", "lb / week", "A normal measured weekly total bypasses property and turnover assumptions and gives the closest starting range.", 1, 250000, false),
       number("weeklyBlankets", "Blankets per week", "pieces", "Blankets receive separate per-piece handling, so their count is estimated apart from standard linen pounds.", 0, 250000, false, ["blankets"])
     ],
     spa: [
       number("appointments", "Appointments per week", "appointments", "Appointment volume establishes how many treatment-room changeovers occur in a normal week.", 1, 50000),
-      select("goodsUse", "Soft-goods use per appointment", "The towels, sheets, and robes used at each appointment determine the linen weight created by every changeover.", [option("light", "Light · two towels"), option("standard", "Standard · three towels and one sheet"), option("heavy", "Heavy · four towels, one sheet, and one robe")]),
-      select("storage", "Clean-goods storage", "On-site storage determines how much clean inventory can wait between returns and helps shape service cadence.", storageOptions),
+      select("goodsUse", "Soft-goods use per appointment", "Choose the closest overall use level for the goods in this program; Shelton confirms the exact item mix during review.", [option("light", "Light use"), option("standard", "Standard use"), option("heavy", "Heavy use")]),
       number("knownVolume", "Total weekly pounds", "lb / week", "A normal measured weekly total bypasses appointment-based assumptions and gives the closest starting range.", 1, 100000, false)
     ],
     medspa: [
       number("appointments", "Appointments per week", "appointments", "Appointment volume establishes the number of treatment-table resets; the starting model uses two twin sheets per appointment.", 1, 50000),
-      number("handTowelsPerAppointment", "Hand towels per appointment", "towels", "Hand towels add processing weight to every appointment and should be included only when they are part of the service.", 0, 20),
-      select("storage", "Clean-goods storage", "On-site storage determines how much clean inventory can wait between returns and helps shape service cadence.", storageOptions),
+      number("handTowelsPerAppointment", "Hand towels per appointment", "towels", "Hand towels add processing weight to every appointment and should be included only when they are part of the service.", 0, 20, false, ["handTowels"]),
       number("knownVolume", "Total weekly pounds", "lb / week", "A normal measured weekly total bypasses appointment-based assumptions and gives the closest starting range.", 1, 100000, false)
     ],
     gym: [
       number("weeklyTowelUses", "Weekly towel uses", "uses", "Member and class towel uses establish the program's base weekly processing volume.", 1, 500000),
-      select("peakPattern", "Peak-use pattern", "Peak concentration shows how much clean stock may be needed at once, even when total weekly use stays the same.", [option("concentrated", "A few concentrated peaks"), option("balanced", "Balanced across the week"), option("variable", "Highly variable")]),
-      number("activeDays", "Active days per week", "days", "Operating days show how weekly towel demand is distributed and help shape the return rhythm.", 1, 7),
-      select("storage", "Clean-towel storage", "Storage capacity determines how much clean towel inventory can wait between returns.", storageOptions),
       number("knownVolume", "Total weekly pounds", "lb / week", "A normal measured weekly total bypasses towel-use assumptions and gives the closest starting range.", 1, 250000, false)
     ],
     events: [
       number("weeklyTablecloths", "Tablecloths per week", "pieces", "Tablecloth count maps the larger finished pieces that move through the event-linen production path each week.", 0, 500000, false, ["tablecloths"]),
       number("weeklyNapkins", "Napkins per week", "pieces", "Napkins use a different finishing path from tablecloths, so their weekly count is estimated separately.", 0, 2000000, false, ["napkins"]),
-      number("totalWeeklyPieces", "Total pieces per week", "pieces", "When individual counts are unavailable, total pieces establish the base volume using a planning mix of one tablecloth to eight napkins.", 1, 2500000, false),
-      select("seasonality", "Volume pattern", "Season and venue calendars reveal peak weeks that an average volume could otherwise hide.", seasonalityOptions)
+      number("totalWeeklyPieces", "Total pieces per week", "pieces", "When item-by-item counts are unavailable, a total piece count establishes the base volume; Shelton confirms the exact mix during review.", 1, 2500000, false)
     ],
     restaurant: [
       number("weeklyCovers", "Approximate weekly covers", "covers", "Dining volume establishes the likely movement of napkins and table linen in a normal week.", 1, 1000000, false, ["napkins", "tableLinens"]),
@@ -278,15 +293,16 @@
       number("weeklyAprons", "Aprons per week", "pieces", "Aprons use a separate garment and folding path, so their weekly count adds labor beyond dining linen.", 0, 250000, false, ["aprons"])
     ],
     casino: [
-      number("hotelRooms", "Hotel rooms", "rooms", "Room count establishes the hotel-linen portion of the program; leave it blank when room linen is not included.", 0, 5000, false),
-      number("weeklyCovers", "Restaurant covers per week", "covers", "Covers establish the dining-linen portion of the program; leave it blank when restaurant linen is not included.", 0, 1000000, false),
-      number("weeklyTablecloths", "Banquet tablecloths per week", "pieces", "Tablecloth count captures the larger finished pieces moving through the banquet production path.", 0, 500000, false),
-      number("weeklyNapkins", "Banquet napkins per week", "pieces", "Napkins use a different finishing path from tablecloths, so their weekly count is estimated separately.", 0, 2000000, false),
+      number("hotelRooms", "Hotel rooms", "rooms", "Room count establishes the hotel-linen portion of the program; leave it blank when room linen is not included.", 0, 5000, false, ["towels"]),
+      number("weeklyCovers", "Restaurant covers per week", "covers", "Covers establish the dining-linen portion of the program; leave it blank when restaurant linen is not included.", 0, 1000000, false, ["napkins", "tableLinens"]),
+      number("weeklyTablecloths", "Banquet tablecloths per week", "pieces", "Tablecloth count captures the larger finished pieces moving through the banquet production path.", 0, 500000, false, ["tableLinens", "banquetLinens"]),
+      number("weeklyNapkins", "Banquet napkins per week", "pieces", "Napkins use a different finishing path from tablecloths, so their weekly count is estimated separately.", 0, 2000000, false, ["napkins", "tableLinens", "banquetLinens"]),
       number("weeklyChefCoats", "Chef coats per week", "pieces", "Chef coats require garment cleaning and finishing, so their weekly count is estimated apart from linen.", 0, 250000, false, ["chefCoats"]),
       number("weeklyUniformTops", "Uniform tops per week", "pieces", "Uniform quantity sets the garment-processing portion of the program and should include only pieces Shelton will service.", 0, 250000, false, ["casinoUniforms"])
     ],
     uniforms: [
-      number("weeklyUniformTops", "Uniform shirts per week", "pieces", "Actual weekly shirt count sets the cleaning, pressing, and presentation labor for this garment type.", 0, 500000, false, ["uniformShirts", "casinoUniforms"]),
+      number("weeklyUniformTops", "Uniform shirts per week", "pieces", "Actual weekly shirt count sets the cleaning, pressing, and presentation labor for this garment type.", 0, 500000, false, ["uniformShirts"]),
+      number("weeklyCasinoUniformTops", "Casino uniform pieces per week", "pieces", "Actual weekly casino-uniform count sets the cleaning, finishing, and organized return required for this garment group.", 0, 500000, false, ["casinoUniforms"]),
       number("weeklyChefCoats", "Chef coats per week", "pieces", "Chef coats have their own garment-finishing requirements, so their weekly count is estimated separately.", 0, 500000, false, ["chefCoats"]),
       number("weeklyPants", "Pants or workwear per week", "pieces", "Pants and workwear follow a different finishing path from shirts, so their actual weekly count matters.", 0, 500000, false, ["workwear"]),
       number("weeklyJackets", "Jackets or coveralls per week", "pieces", "Heavier construction changes cleaning and finishing labor, so jackets and coveralls require a separate count and review.", 0, 500000, false, ["jackets"])
@@ -301,20 +317,28 @@
     other: [
       number("weeklyVolume", "Approximate weekly volume", "volume", "Even a rough weekly amount gives the estimator a base scale for an uncommon program.", 1, 1000000),
       select("volumeUnit", "Volume unit", "The unit prevents pounds and pieces from being interpreted as the same type of workload.", volumeUnitOptions),
-      number("activeDays", "Operating days per week", "days", "Operating days show how demand is distributed and help shape the service rhythm.", 1, 7),
-      select("variability", "Volume pattern", "Volume swings reveal the peak capacity an average week could otherwise hide.", seasonalityOptions),
-      select("storage", "Clean-goods storage", "On-site storage determines how much clean inventory can wait between returns and helps shape service cadence.", storageOptions)
+      number("activeDays", "Operating days per week", "days", "Operating days show how demand is distributed and help shape the service rhythm.", 1, 7)
     ]
   };
 
+  // A first planning range needs one familiar sizing answer. The remaining
+  // questions refine that range, so they should never look mandatory or trap
+  // a user who does not know every operating detail.
+  const primaryRequiredField = {
+    hotel: "rooms",
+    senior_living: "licensedCapacity",
+    residential_treatment: "licensedCapacity",
+    str: "properties",
+    spa: "appointments",
+    medspa: "appointments",
+    gym: "weeklyTowelUses",
+    wholesale: "weeklyVolume",
+    other: "weeklyVolume"
+  };
   Object.entries(scaleSchemas).forEach(([operationId, fields]) => {
-    if (["wholesale", "other"].includes(operationId)) return;
-    if (!fields.some((field) => field.id === "storage")) {
-      fields.push(select("storage", "Clean-goods storage", "Storage changes the recommended pickup cadence; limited storage adds service frequency without lowering the priced recommendation.", storageOptions, false));
-    }
-    if (!fields.some((field) => ["seasonality", "variability"].includes(field.id))) {
-      fields.push(select("seasonality", "Typical and peak pattern", "A seasonal account keeps one fixed rate; when an exact peak is unknown the estimator tests 25% above typical.", seasonalityOptions, false));
-    }
+    fields.forEach((field) => {
+      field.required = field.id === primaryRequiredField[operationId];
+    });
   });
 
   const scaleEntryModes = {
@@ -357,10 +381,23 @@
 
   const ownershipChoices = [
     { id: "own", label: "We already own the goods", model: "Customer-Owned Goods", description: "Shelton cleans, finishes, packages, and returns the inventory you own." },
-    { id: "some", label: "We own some and need some supplied", model: "Hybrid Program", description: "Owned goods and supplied inventory can be considered together." },
     { id: "supply", label: "We want Shelton to supply the goods", model: "Rental Program", description: "Shelton-supplied inventory can be evaluated around the account." },
     { id: "unsure", label: "We are not sure", model: "Recommend a Model", description: "The result can recommend a starting structure from the completed inputs." }
   ];
+
+  const typicalGoodsByOperation = {
+    hotel: ["sheets", "towels"],
+    senior_living: ["sheets", "towels"],
+    residential_treatment: ["sheets", "towels"],
+    str: ["sheets", "towels"],
+    spa: ["towels"],
+    medspa: ["sheets"],
+    gym: ["towels"],
+    events: ["tablecloths", "napkins"],
+    restaurant: ["napkins", "barTowels"],
+    casino: ["casinoUniforms"],
+    uniforms: ["uniformShirts"]
+  };
 
   const operation = (id, number, label, context, goodsIds, guideTitle, drivers, note) => ({
     id,
@@ -368,33 +405,34 @@
     label,
     context,
     goods: goodsIds,
+    typicalGoods: (typicalGoodsByOperation[id] || []).filter((goodId) => goodsIds.includes(goodId)),
     guide: { title: guideTitle, drivers, note }
   });
 
   const config = {
-    version: 9,
-    storageKey: "shelton-pricing-spine-v9",
+    version: 14,
+    storageKey: "shelton-pricing-spine-v14",
     concepts: {
       orb: { number: "A", label: "Textile Begin Orb" }
     },
-    chapterOrder: ["operation", "goods", "scale", "finish", "ownership", "location", "review"],
+    chapterOrder: ["operation", "goods", "ownership", "scale", "location", "review"],
     operations: [
-      operation("hotel", "01", "Hotel / Boutique Stay", "Hospitality programs combine guest-facing presentation with occupancy shifts, storage limits, and repeat room turns.", ["sheets", "duvetCovers", "towels", "bathMats", "robes", "blankets"], "A room-ready program starts with the way the property turns.", ["Guest rooms", "Approximate occupancy", "Bed-linen system"], "Known weekly pounds, robe counts, and blanket counts are useful when your team already tracks them."),
+      operation("hotel", "01", "Hotel / Boutique Stay", "Hospitality programs combine guest-facing presentation with occupancy shifts and repeat room turns.", ["sheets", "duvetCovers", "towels", "bathMats", "robes", "blankets"], "A room-ready program starts with the way the property turns.", ["Guest rooms", "Approximate occupancy"], "Known weekly pounds, robe counts, and blanket counts are useful when your team already tracks them."),
       operation("senior_living", "02", "Senior Living", "Senior-living programs balance occupied-resident volume, care mix, dependable stock, and recurring resident use.", ["sheets", "towels", "bathMats", "blankets"], "Resident use and care mix shape the linen plan.", ["Licensed resident capacity", "Approximate occupancy", "Resident care mix"], "A known weekly volume or blanket count can make the first plan more precise."),
       operation("residential_treatment", "03", "Residential Treatment", "Treatment programs combine occupied-bed volume with setting, admissions, and turnover needs.", ["sheets", "towels", "bathMats", "blankets"], "The treatment setting changes how recurring and turnover linen move.", ["Licensed bed capacity", "Approximate occupancy", "Treatment setting"], "Admissions, average stay, and known weekly pounds help refine turnover assumptions when available."),
       {
-        ...operation("str", "04", "STR / Property Manager", "Bulk pickup and return support central turnover staging for multi-property programs.", ["sheets", "towels", "bathMats", "duvetCovers", "blankets"], "A useful STR plan follows turns through one central staging point.", ["Properties in the program", "Average turns per property", "Average or total bedrooms", "Central location required"], "Seasonality and measured weekly pounds help plan for peak turnover periods."),
+        ...operation("str", "04", "STR / Property Manager", "Bulk pickup and return support central turnover staging for multi-property programs.", ["sheets", "towels", "bathMats", "duvetCovers", "blankets"], "A useful STR plan follows turns through one central staging point.", ["Properties in the program", "Average turns per property", "Average or total bedrooms", "Central location required"], "Measured weekly pounds can replace property assumptions when your team already tracks them."),
         centralLocationRequired: true
       },
-      operation("spa", "05", "Resort / Day Spa", "Treatment-room programs are shaped by appointment volume, soft-goods use, feel, and compact storage.", ["towels", "sheets", "robes", "blankets", "faceCradleCovers"], "Treatment volume and the guest experience move together.", ["Appointments per week", "Soft-goods use per appointment", "Clean-goods storage"], "Known weekly pounds can refine the plan, but appointment volume is enough to begin."),
-      operation("medspa", "06", "Medspa", "Medspa programs usually start with treatment-table sheets and add hand towels only when they are part of the service.", ["sheets", "handTowels", "faceCradleCovers"], "The program should reflect what each appointment actually uses.", ["Appointments per week", "Hand towels per appointment", "Clean-goods storage"], "Hand-towel use can remain at zero when treatment sheets are the primary item."),
-      operation("gym", "07", "Gym / Fitness", "Fitness programs center on towel movement, peak usage, odor control, and steady restocking.", ["towels", "handTowels"], "Peak towel demand matters as much as the weekly total.", ["Weekly towel uses", "Peak-use pattern", "Active days", "Clean-towel storage"], "A simple estimate of member and class towel use is enough to start."),
-      operation("events", "08", "Event / Venue / Convention Center", "Event programs balance presentation, fabric and color, variable volume, and specialty cleaning needs.", ["tablecloths", "napkins", "runners", "skirting", "chairCovers", "specialtyEventGoods"], "Presentation and production needs define an event-linen program.", ["Weekly linen pieces", "Selected goods", "Seasonal or event-driven volume"], "Separate tablecloth and napkin counts improve finishing and capacity planning."),
+      operation("spa", "05", "Resort / Day Spa", "Treatment-room programs are shaped by appointment volume, soft-goods use, feel, and presentation.", ["towels", "sheets", "robes", "blankets", "faceCradleCovers"], "Treatment volume and the guest experience move together.", ["Appointments per week", "Soft-goods use per appointment"], "Known weekly pounds can refine the plan, but appointment volume is enough to begin."),
+      operation("medspa", "06", "Medspa", "Medspa programs usually start with treatment-table sheets and add hand towels only when they are part of the service.", ["sheets", "handTowels", "faceCradleCovers"], "The program should reflect what each appointment actually uses.", ["Appointments per week", "Hand towels per appointment"], "Hand-towel use can remain at zero when treatment sheets are the primary item."),
+      operation("gym", "07", "Gym / Fitness", "Fitness programs center on towel movement, odor control, and dependable restocking.", ["towels", "handTowels"], "Weekly towel demand sets the program's starting scale.", ["Weekly towel uses"], "A simple estimate of member and class towel use is enough to start."),
+      operation("events", "08", "Event / Venue / Convention Center", "Event programs balance presentation, fabric and color, recurring volume, and specialty cleaning needs.", ["tablecloths", "napkins", "runners", "skirting", "chairCovers", "specialtyEventGoods"], "Presentation and production needs define an event-linen program.", ["Weekly linen pieces", "Selected goods"], "Separate tablecloth and napkin counts improve finishing and capacity planning."),
       operation("restaurant", "09", "Restaurant / Food Service", "Restaurant programs combine recurring kitchen soil with dining-room presentation and service schedules.", ["chefCoats", "aprons", "napkins", "barTowels", "tableLinens"], "Kitchen soil and dining-room presentation need different care paths.", ["Dining covers", "Weekly linen or garment counts", "Goods in the program"], "Choose the goods first; the next section will show only the counts that apply."),
       operation("casino", "10", "Casino / Entertainment", "Casino programs may span hotel rooms, staff departments, restaurants, banquets, and presentation-driven goods.", ["casinoUniforms", "chefCoats", "napkins", "tableLinens", "towels", "banquetLinens"], "One property can contain several distinct laundry programs.", ["Departments in scope", "Hotel rooms or dining covers", "Uniform and banquet counts"], "Include only the departments and goods Shelton would service in this program."),
       operation("uniforms", "11", "Uniform Account", "Uniform programs are organized around weekly garment movement, professional presentation, and repeat wear.", ["uniformShirts", "chefCoats", "casinoUniforms", "workwear", "jackets"], "Weekly garment movement is the clearest starting point.", ["Weekly garment counts", "Garment mix", "Presentation and return needs"], "Actual pieces entering service each week are more useful than total employee count."),
       operation("wholesale", "12", "Wholesale Laundry / Finishing Partner", "Wholesale programs provide behind-the-scenes cleaning, pressing, finishing, or overflow capacity for another operator.", ["sheets", "tablecloths", "tableLinens", "shirts", "suits", "specialtyGarments"], "Capacity, turnaround, and finishing define a wholesale partnership.", ["Weekly batch volume", "Production days", "Turnaround requirement", "Capacity need"], "Wholesale programs receive a direct Shelton review rather than a generic public price."),
-      operation("other", "13", "Other / Not Sure", "Some commercial programs do not fit a standard category. Start with the goods and Shelton can shape the remaining questions.", ["sheets", "tableLinens", "tablecloths", "uniformShirts", "choirRobes", "specialtyGarments"], "Start with what moves through the program.", ["Approximate weekly volume", "Operating days", "Volume pattern", "Clean-goods storage"], "A rough amount is enough to begin. Shelton can refine the program during review.")
+      operation("other", "13", "Other / Not Sure", "Some commercial programs do not fit a standard category. Start with the goods and Shelton can shape the remaining questions.", ["sheets", "tableLinens", "tablecloths", "uniformShirts", "choirRobes", "specialtyGarments"], "Start with what moves through the program.", ["Approximate weekly volume", "Operating days"], "A rough amount is enough to begin. Shelton can refine the program during review.")
     ],
     goods,
     scaleSchemas,

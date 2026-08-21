@@ -46,7 +46,8 @@ body.pricing-calm-page {
 .pricing-calm-page button:focus-visible,
 .pricing-calm-page a:focus-visible,
 .pricing-calm-page input:focus-visible,
-.pricing-calm-page select:focus-visible {
+.pricing-calm-page select:focus-visible,
+.pricing-calm-page textarea:focus-visible {
   outline: 2px solid var(--calm-gold);
   outline-offset: 5px;
 }
@@ -1021,7 +1022,6 @@ body.pricing-calm-page {
   margin: 0;
   padding-top: 1rem;
   color: rgba(23, 32, 42, 0.52);
-  border-top: 1px solid var(--calm-ink-line);
   font-size: 0.7rem;
   line-height: 1.55;
 }
@@ -1218,7 +1218,6 @@ body.pricing-calm-page {
   padding: 0.65rem 0;
   color: var(--calm-ink);
   border: 0;
-  border-bottom: 1px solid var(--calm-gold);
   background: transparent;
   font-size: 0.61rem;
   font-weight: 700;
@@ -1234,17 +1233,21 @@ body.pricing-calm-page {
   background: var(--calm-navy);
 }
 
+.volume-question__navigation button[data-scale-back][hidden] + button[data-scale-next] {
+  margin-inline: auto;
+}
+
 .volume-question__navigation button[data-scale-next]:disabled {
   color: rgba(23, 32, 42, 0.42);
-  border-color: var(--calm-ink-line);
-  background: transparent;
+  border-color: transparent;
+  background: rgba(23, 32, 42, 0.045);
   cursor: default;
 }
 
 .volume-question--empty {
   justify-content: center;
   border-top: 1px solid var(--calm-ink-line);
-  border-bottom: 1px solid var(--calm-ink-line);
+  border-bottom: 0;
 }
 
 .volume-question--empty p {
