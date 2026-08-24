@@ -73,15 +73,20 @@
 
   const precision = (state, fields, options = {}) => {
     const visibleFields = Array.isArray(fields) ? fields : [];
-    const all = [
+    const core = [
       Boolean(state?.operation),
       Boolean(state?.goods?.length),
       ...visibleFields.filter((field) => field.required).map((field) => fieldAnswered(state, field)),
       Boolean(state?.ownership),
       Boolean(options.locationValid)
     ];
-    const answered = all.filter(Boolean).length;
-    const total = Math.max(1, all.length);
+    const optionalFields = visibleFields.filter((field) => !field.required && !field.routing);
+    const optionalCapacity = Math.min(3, optionalFields.length);
+    const optionalAnswered = Math.min(optionalCapacity, optionalFields.filter((field) => fieldAnswered(state, field)).length);
+    const extraCapacity = Math.max(0, Number(options.extraCapacity) || 0);
+    const extraAnswered = Math.min(extraCapacity, Math.max(0, Number(options.extraAnswered) || 0));
+    const answered = core.filter(Boolean).length + optionalAnswered + extraAnswered;
+    const total = Math.max(1, core.length + optionalCapacity + extraCapacity);
     const ratio = Math.max(0, Math.min(1, answered / total));
     const label = ratio < 0.42 ? "Early" : ratio < 0.66 ? "Developing" : ratio < 0.88 ? "Refined" : "Detailed";
     return {
@@ -94,13 +99,62 @@
     };
   };
 
-  const roundedMoney = (value) => Math.round(Number(value) / 5) * 5;
+  const roundedMoney = (value, direction = "nearest") => {
+    const normalized = Number(value) / 5;
+    const rounded = direction === "down"
+      ? Math.floor(normalized)
+      : direction === "up"
+        ? Math.ceil(normalized)
+        : Math.round(normalized);
+    return rounded * 5;
+  };
+
+  const evidenceProfile = (result) => {
+    const evidence = String(result?.sourceInput?.volume?.evidence || "default_mix");
+    return ({
+      known_pounds: { baseline: 0.05, ceiling: 0.10, label: "measured pounds" },
+      piece_counts: { baseline: 0.07, ceiling: 0.14, label: "piece counts" },
+      business_proxy: { baseline: 0.10, ceiling: 0.20, label: "room and occupancy inputs" },
+      default_mix: { baseline: 0.14, ceiling: 0.26, label: "early operating inputs" }
+    })[evidence] || { baseline: 0.14, ceiling: 0.26, label: "early operating inputs" };
+  };
+
+  const rangedUnitPricing = (unitPricing, spread) => {
+    if (!unitPricing) return null;
+    const currentLow = Number(unitPricing.poundLow);
+    const currentHigh = Number(unitPricing.poundHigh);
+    if (!Number.isFinite(currentLow) || !Number.isFinite(currentHigh)) return unitPricing;
+    const midpoint = (currentLow + currentHigh) / 2;
+    return {
+      ...unitPricing,
+      poundBase: Number(midpoint.toFixed(4)),
+      poundLow: Number((midpoint * (1 - spread)).toFixed(4)),
+      poundHigh: Number((midpoint * (1 + spread)).toFixed(4))
+    };
+  };
 
   const refine = (result, detail) => {
     if (!result || result.rangeUnavailable || !result.range) return result;
+    const serverLow = Number(result.range.weeklyLow);
+    const serverHigh = Number(result.range.weeklyHigh);
+    const base = Number(result.range.weeklyBase) || (serverLow + serverHigh) / 2;
+    const ratio = Math.max(0, Math.min(1, Number(detail?.ratio) || 0));
+    const profile = evidenceProfile(result);
+    const uncertaintySpread = profile.baseline + ((profile.ceiling - profile.baseline) * (1 - ratio));
+    const weeklyLow = Math.max(0, roundedMoney(base * (1 - uncertaintySpread), "down"));
+    const weeklyHigh = roundedMoney(base * (1 + uncertaintySpread), "up");
     return {
       ...result,
+      range: {
+        ...result.range,
+        weeklyLow,
+        weeklyHigh
+      },
+      unitPricing: rangedUnitPricing(result.unitPricing, uncertaintySpread),
       precision: { ...detail },
+      uncertaintySpread,
+      uncertaintyBasis: profile.label,
+      serverRange: { weeklyLow: serverLow, weeklyHigh: serverHigh },
       factors: result.factors || []
     };
   };

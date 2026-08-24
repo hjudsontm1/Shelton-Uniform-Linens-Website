@@ -6,7 +6,8 @@
     schemaVersion: "commercial-estimator.v3",
     apiBaseUrl: "https://api.sheltonlinen.com",
     estimatePath: "/api/public/commercial-estimate",
-    leadPath: "/api/public/commercial-leads"
+    leadPath: "/api/public/commercial-leads",
+    planningZip: "92101"
   });
 
   const numberValue = (state, key, fallback = 0) => {
@@ -24,6 +25,9 @@
   const locationValue = (state) => typeof state.location === "string"
     ? state.location.trim()
     : String(state.location?.value || "").trim();
+  const routeZip = (state) => /^\d{5}$/.test(locationValue(state))
+    ? locationValue(state)
+    : pricingRules.planningZip;
 
   const ownershipModel = (state) => ({
     own: { id: "cog", label: "Customer-Owned Goods", reason: "The service range covers cleaning and processing of customer-owned goods." },
@@ -32,7 +36,20 @@
     unsure: { id: "review", label: "Shelton Model Review", reason: "Shelton will confirm whether customer-owned, hybrid, or rental service best fits the account." }
   }[state.ownership] || { id: "review", label: "Shelton Model Review", reason: "Shelton will confirm the right ownership structure." });
 
+  const occupancyBounds = (value) => ({
+    under50: [0, 49],
+    "50to74": [50, 74],
+    "75to89": [75, 89],
+    "90plus": [90, 100]
+  }[value]);
   const occupancyPercent = (value) => ({ under50: 40, "50to74": 62, "75to89": 82, "90plus": 94 }[value]);
+  const resolvedOccupancyPercent = (state) => {
+    const bounds = occupancyBounds(state.scale?.occupancy);
+    const raw = String(state.scale?.occupancyExact ?? "").trim();
+    const exact = Number(raw);
+    if (bounds && raw !== "" && Number.isFinite(exact) && exact >= bounds[0] && exact <= bounds[1]) return exact;
+    return occupancyPercent(state.scale?.occupancy);
+  };
   const usingDirectPounds = (state) => state.scale?.entryMode === "direct" && positive(numberValue(state, "knownVolume"));
   const requiredDriver = (state, key) => usingDirectPounds(state) ? 1 : numberValue(state, key);
 
@@ -92,20 +109,20 @@
     if (state.operation === "hotel") return {
       ...commonInput(state, "hotel"),
       rooms: requiredDriver(state, "rooms"),
-      ...(occupancyPercent(state.scale.occupancy) ? { occupancyPercent: occupancyPercent(state.scale.occupancy) } : {}),
+      ...(resolvedOccupancyPercent(state) !== undefined ? { occupancyPercent: resolvedOccupancyPercent(state) } : {}),
       linenServicePercent: 90
     };
     if (state.operation === "senior_living") return {
       ...commonInput(state, "senior_living"),
       licensedCapacity: requiredDriver(state, "licensedCapacity"),
-      ...(occupancyPercent(state.scale.occupancy) ? { occupancyPercent: occupancyPercent(state.scale.occupancy) } : {}),
+      ...(resolvedOccupancyPercent(state) !== undefined ? { occupancyPercent: resolvedOccupancyPercent(state) } : {}),
       ...(state.scale.careType ? { careType: state.scale.careType } : {}),
       ...(String(state.scale.memoryCarePercent ?? "").trim() !== "" ? { memoryCarePercent: numberValue(state, "memoryCarePercent") } : {})
     };
     if (state.operation === "residential_treatment") return {
       ...commonInput(state, "residential_treatment"),
       licensedCapacity: requiredDriver(state, "licensedCapacity"),
-      ...(occupancyPercent(state.scale.occupancy) ? { occupancyPercent: occupancyPercent(state.scale.occupancy) } : {}),
+      ...(resolvedOccupancyPercent(state) !== undefined ? { occupancyPercent: resolvedOccupancyPercent(state) } : {}),
       ...(state.scale.careType ? { careType: state.scale.careType } : {}),
       ...(positive(numberValue(state, "admissionsPerWeek")) ? { admissionsPerWeek: numberValue(state, "admissionsPerWeek") } : {}),
       ...(positive(numberValue(state, "averageStayDays")) ? { averageStayDays: numberValue(state, "averageStayDays") } : {})
@@ -240,6 +257,10 @@
     const operation = ({ spa: "resort_spa", events: "event", uniforms: "uniform" }[state.operation] || state.operation);
     const ownership = ({ own: "customer_owned", some: "hybrid", supply: "shelton_supplied", unsure: "unsure" }[state.ownership] || "unsure");
     const resolvedOwnership = ownership === "shelton_supplied" && !state.rentalTier ? "unsure" : ownership;
+    // The public estimate contract currently accepts 1, 2, 3, or 5 weekly
+    // movements. Keep daily service as a real customer request (it is retained
+    // in the lead snapshot), but do not let the unsupported value erase an
+    // otherwise useful planning range.
     const cadence = ({ weekly: 1, twiceWeekly: 2, threeWeekly: 3, weekday: 5 }[state.requestedPickups]);
     return {
       schemaVersion: pricingRules.schemaVersion,
@@ -247,14 +268,14 @@
       accountName: "Website planning prospect",
       selectedGoods,
       volume,
-      pattern: { seasonal: ["seasonal", "eventDriven", "variable"].includes(String(state.scale?.seasonality || state.scale?.variability || state.scale?.peakPattern || "")) },
+      pattern: { seasonal: false },
       service: {
-        storage: state.scale?.storage === "tight" ? "very_tight" : state.scale?.storage || "ample",
+        storage: "ample",
         ...(cadence ? { requestedPickupsPerWeek: cadence } : {}),
         customSorting: state.specialtyNeeds.some((id) => ["propertySort", "departmentSort"].includes(id))
       },
       route: {
-        zip: locationValue(state),
+        zip: routeZip(state),
         access: state.access === "complex" ? "difficult" : state.access || "standard"
       },
       ownership: {
@@ -291,6 +312,7 @@
   const recommendationFromPublic = (state, input, payload) => {
     const estimate = payload.estimate;
     const model = ownershipModel(state);
+    const hasActualRoute = /^\d{5}$/.test(locationValue(state));
     if (!estimate.pricing) {
       return {
         ...unavailableRecommendation(state, (estimate.reviewMessages || ["Shelton review is required before pricing."]).join(" "), true),
@@ -338,7 +360,9 @@
       rhythm: {
         label: estimate.route.label,
         pickups: estimate.route.recommendedPickupsPerWeek,
-        reason: estimate.route.remoteReview
+        reason: !hasActualRoute
+          ? "A central San Diego route is being used for this early range; add your ZIP to refine it."
+          : estimate.route.remoteReview
           ? "This location needs route review before service is confirmed."
           : "The rhythm follows estimated weekly movement; exact pickup days remain part of Shelton review."
       },
@@ -356,12 +380,16 @@
       factors: [
         `${Number(estimate.sizing.weeklyPounds || 0).toLocaleString("en-US")} typical pounds per week`,
         ...unitRates.map((line) => `${line.label}: $${Number(line.rate).toFixed(2)} per ${line.billingUnit}`),
+        ...(state.requestedPickups === "daily"
+          ? ["7-day pickup and return requested; weekend route availability and final pricing require Shelton review."]
+          : []),
         ...(estimate.unresolvedFactors || []),
         ...(estimate.reviewMessages || []),
-        locationValue(state) ? `Route review for ${locationValue(state)}` : "Location pending route review"
+        hasActualRoute ? `Route review for ${locationValue(state)}` : `Central San Diego planning route (${pricingRules.planningZip})`
       ],
-      estimateToken: payload.estimateToken,
-      sourceInput: input
+      estimateToken: hasActualRoute ? payload.estimateToken : null,
+      sourceInput: input,
+      usingPlanningZip: !hasActualRoute
     };
   };
 

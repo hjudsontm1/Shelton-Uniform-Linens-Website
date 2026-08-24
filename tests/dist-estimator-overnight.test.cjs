@@ -24,6 +24,7 @@ const config = window.SheltonPricingJourneyConfig;
 const progressive = window.SheltonProgressiveRange;
 const engine = window.SheltonPricingEngine;
 const pricingHtml = fs.readFileSync(path.join(clientRoot, "pricing.html"), "utf8");
+const pricingSpineCss = fs.readFileSync(path.join(clientRoot, "assets/css/pricing-spine-concept.css"), "utf8");
 const learningSource = fs.readFileSync(scriptPath("pricing-learning.js"), "utf8");
 
 const tests = [];
@@ -60,16 +61,46 @@ test("canonical dist/client operation and factor order", () => {
     "hotel", "senior_living", "residential_treatment", "str", "spa", "medspa", "gym",
     "events", "restaurant", "casino", "uniforms", "wholesale", "other"
   ]);
-  assert.deepEqual(config.chapterOrder, ["operation", "goods", "ownership", "scale", "finish", "location", "review"]);
+  assert.deepEqual(config.chapterOrder, ["operation", "goods", "ownership", "scale", "location", "review"]);
   assert.equal(config.storageKey, `shelton-pricing-spine-v${config.version}`);
 
-  const factorOrder = ["factor-program", "factor-ownership", "factor-volume", "factor-finish", "factor-route", "planning-range"];
+  const factorOrder = ["factor-program", "factor-ownership", "factor-volume", "factor-route", "planning-range"];
   let previous = -1;
   factorOrder.forEach((id) => {
     const position = pricingHtml.indexOf(`id="${id}"`);
     assert.ok(position > previous, `${id} follows the preceding estimator section`);
     previous = position;
   });
+  assert.doesNotMatch(pricingHtml, /id="factor-finish"/, "finish and return no longer impersonate a required estimator step");
+  assert.match(pricingHtml, /data-program-overview/, "derived service rhythm, finish, and return stay with the planning range");
+  assert.ok(pricingHtml.indexOf("data-access-input") > pricingHtml.indexOf("data-precision-refinement"), "site access lives inside the optional precise-quote disclosure");
+  assert.deepEqual(config.ownershipChoices.map((choice) => choice.id), ["own", "supply", "unsure"], "the basic ownership choice omits the hybrid path");
+  assert.match(pricingHtml, /class="ownership-explainer"/, "ownership explanations are available on demand");
+  assert.doesNotMatch(pricingHtml, /data-return-format-option/, "derived return format is no longer presented as clickable choices");
+  assert.match(pricingHtml, /data-return-format-icon[^>]*aria-hidden="true"/, "the derived return summary may use a decorative icon without becoming a control");
+  assert.match(pricingHtml, /data-precision-refinement[^>]*hidden/, "optional precision questions stay hidden until a range exists");
+  assert.match(pricingHtml, /Want a more precise quote\?/, "the optional precision layer is clearly invited after the broad range");
+  assert.match(pricingHtml, /data-refinement-storage/, "storage remains available only as an optional refinement");
+  assert.match(pricingHtml, /data-refinement-demand/, "demand pattern remains available only as an optional refinement");
+  assert.match(pricingHtml, /data-inventory-tier/, "supplied-inventory quality remains available only as an optional refinement");
+  assert.doesNotMatch(pricingHtml, /data-ownership-options[^>]*aria-required/, "ownership refines rather than blocks the first range");
+  assert.doesNotMatch(pricingHtml, /data-location-input[^>]*\srequired(?:\s|>)/, "ZIP refines rather than blocks the first range");
+});
+
+test("operation presets are explicit and custom goods begin blank", () => {
+  const hotel = config.operations.find((item) => item.id === "hotel");
+  assert.deepEqual(hotel.typicalGoods, ["sheets", "towels"]);
+  config.operations.forEach((operation) => {
+    assert.ok(Array.isArray(operation.typicalGoods), `${operation.id} exposes an explicit typical-goods preset`);
+    operation.typicalGoods.forEach((goodId) => {
+      assert.ok(operation.goods.includes(goodId), `${operation.id} typical good ${goodId} is selectable`);
+    });
+  });
+  assert.match(learningSource, /goodsCustomize\.addEventListener[\s\S]*?state\.goodsMode = "custom";[\s\S]*?state\.goods = \[\]/);
+  assert.match(learningSource, /goodsUseTypical\.addEventListener[\s\S]*?state\.goods = typicalGoods\.slice\(\)/);
+  assert.match(learningSource, /good\.icon \|\| "ph-package"/);
+  assert.match(pricingHtml, /data-goods-customize/);
+  assert.match(pricingHtml, /goods-icon-grid/);
 });
 
 test("hotel legacy fields remain removed from config and payload", () => {
@@ -87,6 +118,40 @@ test("hotel legacy fields remain removed from config and payload", () => {
   });
   assert.equal("bedSystem" in input.volume, false);
   assert.equal("duvetPercent" in input.volume, false);
+});
+
+test("exact occupancy refines a selected occupancy band", () => {
+  ["hotel", "senior_living", "residential_treatment"].forEach((operation) => {
+    const exactField = field(operation, "occupancyExact");
+    assert.ok(exactField, `${operation} offers exact occupancy after the broad band`);
+    assert.equal(exactField.required, false, `${operation} exact occupancy remains optional`);
+    assert.ok(fieldIds(operation).indexOf("occupancyExact") > fieldIds(operation).indexOf("occupancy"));
+  });
+
+  const exact = inputFor({
+    scale: { entryMode: "drivers", rooms: "100", occupancy: "50to74", occupancyExact: "72" }
+  });
+  assert.equal(exact.volume.occupancyPercent, 72, "a valid exact percentage replaces the band midpoint");
+
+  const bandOnly = inputFor({
+    scale: { entryMode: "drivers", rooms: "100", occupancy: "50to74" }
+  });
+  assert.equal(bandOnly.volume.occupancyPercent, 62, "the band midpoint remains the fast-answer fallback");
+
+  const contradictory = inputFor({
+    scale: { entryMode: "drivers", rooms: "100", occupancy: "50to74", occupancyExact: "82" }
+  });
+  assert.equal(contradictory.volume.occupancyPercent, 62, "an exact value outside the selected band cannot silently contradict it");
+
+  const hotelFields = config.scaleSchemas.hotel;
+  const early = progressive.precision(makeState({
+    scale: { entryMode: "drivers", rooms: "100", occupancy: "50to74" }
+  }), hotelFields);
+  const refined = progressive.precision(makeState({
+    scale: { entryMode: "drivers", rooms: "100", occupancy: "50to74", occupancyExact: "72" }
+  }), hotelFields);
+  assert.ok(refined.ratio > early.ratio, "exact occupancy tightens the planning precision without becoming required");
+  assert.match(learningSource, /field\.id === "occupancyExact"[\s\S]*state\.scale\.occupancy/);
 });
 
 test("access and requested cadence map exactly to the public contract", () => {
@@ -109,6 +174,14 @@ test("access and requested cadence map exactly to the public contract", () => {
   cadenceCases.forEach(([answer, expected]) => {
     assert.equal(inputFor({ requestedPickups: answer }).service.requestedPickupsPerWeek, expected);
   });
+  assert.equal(
+    "requestedPickupsPerWeek" in inputFor({ requestedPickups: "daily" }).service,
+    false,
+    "daily service remains a lead-level route request until the public estimate contract supports seven movements"
+  );
+  assert.match(pricingHtml, /value="daily"[\s\S]*?<strong>7 days a week<\/strong>/);
+  assert.match(learningSource, /daily: 7[\s\S]*?selectedRhythm/);
+  assert.match(learningSource, /Seven-day service will be included with your quote request/);
   assert.equal("requestedPickupsPerWeek" in inputFor({ requestedPickups: "" }).service, false);
   assert.equal("requestedPickupsPerWeek" in inputFor({ requestedPickups: "recommended" }).service, false);
 });
@@ -179,27 +252,99 @@ test("specialty-event topology uses the direct piece path", () => {
   const directState = makeState({
     operation: "events",
     goods: ["runners"],
-    scale: { entryMode: "direct", totalWeeklyPieces: "500", seasonality: "eventDriven" }
+    scale: { entryMode: "direct", totalWeeklyPieces: "500" }
   });
   assert.equal(progressive.minimumDriver(directState).ready, true);
   const input = engine.buildEstimateInput(directState);
   assert.equal(input.operation, "event");
   assert.equal(input.volume.evidence, "piece_counts");
   assert.equal(input.volume.totalWeeklyPieces, 500);
-  assert.equal(input.pattern.seasonal, true);
+  assert.equal(input.pattern.seasonal, false);
 });
 
-test("gym exposes one demand-pattern control and no duplicate seasonality", () => {
-  const ids = fieldIds("gym");
-  assert.equal(ids.filter((id) => id === "peakPattern").length, 1);
-  assert.equal(ids.includes("seasonality"), false);
-  assert.equal(ids.includes("variability"), false);
-  assert.deepEqual(field("gym", "peakPattern").options.map((option) => option.value), ["balanced", "variable"]);
-  assert.equal(inputFor({
-    operation: "gym",
-    goods: ["towels"],
-    scale: { entryMode: "drivers", weeklyTowelUses: "1200", peakPattern: "variable" }
-  }).pattern.seasonal, true);
+test("low-value storage and demand-pattern questions stay out of every estimator path", () => {
+  const removed = new Set(["storage", "seasonality", "variability", "peakPattern"]);
+  config.operations.forEach(({ id }) => {
+    assert.equal(fieldIds(id).some((fieldId) => removed.has(fieldId)), false, `${id} has no low-value storage or pattern step`);
+  });
+  const staleState = inputFor({
+    scale: { entryMode: "drivers", rooms: "80", storage: "tight", seasonality: "eventDriven" }
+  });
+  assert.deepEqual(staleState.pattern, { seasonal: false });
+  assert.equal(staleState.service.storage, "ample");
+});
+
+test("early ranges use a transparent planning ZIP and real ZIPs replace it", async () => {
+  const earlyState = makeState({ ownership: "", location: { type: "city", value: "" } });
+  const earlyInput = engine.buildEstimateInput(earlyState);
+  assert.equal(earlyInput.route.zip, engine.pricingRules.planningZip);
+  assert.equal(earlyInput.ownership.model, "unsure");
+
+  window.fetch = async () => response(readyPayload());
+  const early = await engine.calculatePlanningRange(earlyState);
+  assert.equal(early.usingPlanningZip, true);
+  assert.equal(early.estimateToken, null, "a planning-route estimate token cannot be attached to a lead");
+  assert.match(early.rhythm.reason, /central San Diego route/i);
+
+  const routedState = makeState({ location: { type: "zip", value: "92037" } });
+  assert.equal(engine.buildEstimateInput(routedState).route.zip, "92037");
+  const routed = await engine.calculatePlanningRange(routedState);
+  assert.equal(routed.usingPlanningZip, false);
+  assert.equal(routed.estimateToken, "overnight-token");
+});
+
+test("progressive uncertainty narrows as useful details are added", () => {
+  const result = {
+    rangeUnavailable: false,
+    range: { weeklyLow: 400, weeklyBase: 500, weeklyHigh: 600 },
+    sourceInput: { volume: { evidence: "business_proxy" } },
+    factors: []
+  };
+  const early = progressive.refine(result, { ratio: 0.35, label: "Early" });
+  const detailed = progressive.refine(result, { ratio: 1, label: "Detailed" });
+  assert.ok((early.range.weeklyHigh - early.range.weeklyLow) > (detailed.range.weeklyHigh - detailed.range.weeklyLow));
+  assert.deepEqual(early.range, { weeklyLow: 415, weeklyBase: 500, weeklyHigh: 585 });
+  assert.deepEqual(detailed.range, { weeklyLow: 450, weeklyBase: 500, weeklyHigh: 550 });
+  assert.ok(Math.abs(early.uncertaintySpread - 0.165) < Number.EPSILON);
+  assert.equal(detailed.uncertaintySpread, 0.10);
+});
+
+test("confidence lanes start at five, seven, and ten percent", () => {
+  const resultFor = (evidence) => ({
+    rangeUnavailable: false,
+    range: { weeklyLow: 5200, weeklyBase: 6604, weeklyHigh: 7800 },
+    sourceInput: { volume: { evidence } },
+    unitPricing: { poundLow: 0.88, poundHigh: 0.88 },
+    factors: []
+  });
+
+  const pounds = progressive.refine(resultFor("known_pounds"), { ratio: 1, label: "Detailed" });
+  const pieces = progressive.refine(resultFor("piece_counts"), { ratio: 1, label: "Detailed" });
+  const rooms = progressive.refine(resultFor("business_proxy"), { ratio: 1, label: "Detailed" });
+
+  assert.equal(pounds.uncertaintySpread, 0.05);
+  assert.deepEqual(pounds.range, { weeklyLow: 6270, weeklyBase: 6604, weeklyHigh: 6935 });
+  assert.deepEqual(pounds.unitPricing, { poundLow: 0.836, poundHigh: 0.924, poundBase: 0.88 });
+  assert.equal(pieces.uncertaintySpread, 0.07);
+  assert.equal(rooms.uncertaintySpread, 0.10);
+  assert.ok(pounds.range.weeklyLow > resultFor("known_pounds").range.weeklyLow, "measured pounds replace the older generic lower bound");
+  assert.ok(pounds.range.weeklyHigh < resultFor("known_pounds").range.weeklyHigh, "measured pounds replace the older generic upper bound");
+});
+
+test("missing refiners add uncertainty above each evidence baseline", () => {
+  const makeResult = (evidence) => ({
+    rangeUnavailable: false,
+    range: { weeklyLow: 400, weeklyBase: 500, weeklyHigh: 600 },
+    sourceInput: { volume: { evidence } },
+    factors: []
+  });
+  const pounds = progressive.refine(makeResult("known_pounds"), { ratio: 0.5, label: "Developing" });
+  const pieces = progressive.refine(makeResult("piece_counts"), { ratio: 0.5, label: "Developing" });
+  const rooms = progressive.refine(makeResult("business_proxy"), { ratio: 0.5, label: "Developing" });
+
+  assert.ok(Math.abs(pounds.uncertaintySpread - 0.075) < Number.EPSILON);
+  assert.ok(Math.abs(pieces.uncertaintySpread - 0.105) < Number.EPSILON);
+  assert.ok(Math.abs(rooms.uncertaintySpread - 0.15) < Number.EPSILON);
 });
 
 test("medspa hand-towel quantity is scoped to selected hand towels", () => {
@@ -418,6 +563,33 @@ const readyPayload = (overrides = {}) => ({
 });
 
 const response = (payload, ok = true) => ({ ok, json: async () => payload });
+
+test("selected estimator cards preserve readable copy at every breakpoint", () => {
+  const phoneHelperRule = pricingSpineCss.indexOf(".pricing-spine-workbench .choice-cloud--described label span small");
+  const selectedInvariant = pricingSpineCss.lastIndexOf("/* Selected-answer contrast is a component invariant");
+
+  assert.match(pricingHtml, /pricing-spine-concept\.css\?v=20260823-overview-merge-v18/);
+  assert.match(pricingHtml, /pricing-progressive-range\.js\?v=20260820-confidence-lanes-v17/);
+  assert.match(pricingHtml, /pricing-learning\.js\?v=20260823-daily-cadence-v3/);
+  assert.match(learningSource, /Estimated processing rate · \$/);
+  assert.match(pricingSpineCss, /#factor-volume \.volume-question--empty \{\s*align-items: center;\s*text-align: center;/);
+  assert.match(pricingSpineCss, /#factor-program \.operation-picker-field > span,[\s\S]*?#factor-program \.calm-fieldset > legend,[\s\S]*?#factor-program \.calm-fieldset > p \{\s*text-align: center;/);
+  assert.match(pricingSpineCss, /\.quote-privacy-note \{[\s\S]*?text-align: center;/);
+  assert.match(pricingSpineCss, /#factor-ownership \.ownership-list label:nth-child\(2n\) span \{\s*border-right: 1px solid var\(--calm-ink-line\);/);
+  assert.match(pricingSpineCss, /\.range-guidance \{\s*text-align: center;/);
+  assert.match(pricingSpineCss, /\.range-program-overview__heading \{[\s\S]*?margin-right: auto;[\s\S]*?margin-left: auto;[\s\S]*?text-align: center;/);
+  assert.ok(selectedInvariant > phoneHelperRule, "selected contrast invariant must follow phone helper-color overrides");
+  assert.match(pricingSpineCss.slice(selectedInvariant), /\.ownership-list input:checked \+ span small[\s\S]*rgba\(250, 246, 238, 0\.74\)/);
+  assert.match(pricingSpineCss.slice(selectedInvariant), /\.choice-cloud input:checked \+ span strong[\s\S]*color: inherit/);
+  assert.match(pricingSpineCss.slice(selectedInvariant), /button\[aria-pressed="true"\] small[\s\S]*rgba\(250, 246, 238, 0\.74\)/);
+});
+
+test("planning range dock remains visible until the actual range readout is in view", () => {
+  assert.match(learningSource, /\[rangeLive, q\("\.quote-handoff"\), document\.querySelector\("\.site-footer"\)\]/);
+  assert.doesNotMatch(learningSource, /\[q\("\.planning-result"\), q\("\.quote-handoff"\)/);
+  assert.match(learningSource, /entry\.intersectionRatio >= 0\.08/);
+  assert.match(learningSource, /threshold: \[0, 0\.08\], rootMargin: "0px 0px -72px 0px"/);
+});
 
 test("engine handles success, manual, and failure responses without stale numbers", async () => {
   const state = makeState({ requestedPickups: "twiceWeekly" });

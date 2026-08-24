@@ -360,7 +360,8 @@ body[data-page="about"] .about-towel-history {
     min-height: 5.2em;
     margin-top: 1.5%;
     padding-right: 2%;
-    font-size: var(--towel-copy-size, clamp(0.88rem, 1.32vw, 1.2rem));
+    font-size: var(--towel-copy-size, clamp(1.04rem, 1.25vw, 1.2rem));
+    line-height: 1.42;
   }
 
 }
