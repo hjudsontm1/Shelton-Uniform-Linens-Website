@@ -159,6 +159,7 @@ test("analytics loads only on canonical public pages with stable high-value iden
     const html = fs.readFileSync(path.join(distClient, file), "utf8");
     assert.match(html, /assets\/js\/analytics\.js\?v=20260825-first-party-v1/);
     assert.match(html, /data-analytics-id="[a-z0-9-]+"/);
+    assert.match(html, /<html[^>]*data-analytics-enabled="true"/);
   });
   prototypePages.forEach((file) => {
     const html = fs.readFileSync(path.join(distClient, file), "utf8");
@@ -174,7 +175,7 @@ test("analytics client is anonymous, session-only, and avoids page or form conte
   assert.match(analyticsSource, /document\.documentElement\?\.dataset\?\.analyticsEnabled === "true"/);
   canonicalPages.forEach((file) => {
     const html = fs.readFileSync(path.join(distClient, file), "utf8");
-    assert.doesNotMatch(html, /data-analytics-enabled=/);
+    assert.match(html, /<html[^>]*data-analytics-enabled="true"/);
   });
   assert.doesNotMatch(analyticsSource, /localStorage|document\.cookie|location\.search|location\.hash|\.textContent/);
   assert.doesNotMatch(analyticsSource, /getSessionId|analyticsSessionId/);
