@@ -3,6 +3,7 @@
 
   const endpoint = "/api/website-events";
   const schemaVersion = "website-analytics.v1";
+  const activationEnabled = document.documentElement?.dataset?.analyticsEnabled === "true";
   const sessionKey = "sheltonAnalyticsSessionV1";
   const queueKey = "sheltonAnalyticsQueueV2";
   const onceKey = "sheltonAnalyticsOnceV2";
@@ -90,7 +91,8 @@
   const bodyPage = String(document.body?.dataset?.page || "");
   const pageKey = bodyPage === "quote-success" ? "thank_you" : bodyPage;
   const pagePath = pagePathByKey[pageKey] || "";
-  const disabled = localhost
+  const disabled = !activationEnabled
+    || localhost
     || window.navigator?.globalPrivacyControl === true
     || dnt
     || !storage

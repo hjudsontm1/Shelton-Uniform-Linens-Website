@@ -58,6 +58,7 @@ const nextUuid = () => {
 };
 
 const executeAnalytics = ({
+  activationEnabled = true,
   page = "pricing",
   hostname = "sheltonlinen.com",
   origin = "https://sheltonlinen.com",
@@ -75,6 +76,9 @@ const executeAnalytics = ({
   const timers = new Map();
   let timerId = 0;
   const document = {
+    documentElement: {
+      dataset: activationEnabled ? { analyticsEnabled: "true" } : {}
+    },
     body: { dataset: { page } },
     referrer,
     visibilityState: "visible",
@@ -167,6 +171,11 @@ test("analytics loads only on canonical public pages with stable high-value iden
 });
 
 test("analytics client is anonymous, session-only, and avoids page or form content", () => {
+  assert.match(analyticsSource, /document\.documentElement\?\.dataset\?\.analyticsEnabled === "true"/);
+  canonicalPages.forEach((file) => {
+    const html = fs.readFileSync(path.join(distClient, file), "utf8");
+    assert.doesNotMatch(html, /data-analytics-enabled=/);
+  });
   assert.doesNotMatch(analyticsSource, /localStorage|document\.cookie|location\.search|location\.hash|\.textContent/);
   assert.doesNotMatch(analyticsSource, /getSessionId|analyticsSessionId/);
   assert.doesNotMatch(pricingSource + quoteSource + servicesSource, /analyticsSessionId/);
@@ -181,6 +190,7 @@ test("analytics client is anonymous, session-only, and avoids page or form conte
 
 test("localhost, Global Privacy Control, and Do Not Track prevent collection", () => {
   [
+    { activationEnabled: false },
     { hostname: "localhost" },
     { gpc: true },
     { dnt: "1" },
