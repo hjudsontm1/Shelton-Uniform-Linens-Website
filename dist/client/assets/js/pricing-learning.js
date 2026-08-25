@@ -7,6 +7,33 @@
   const progressiveRange = window.SheltonProgressiveRange;
   if (!root || !config || !pricingEngine || !progressiveRange) return;
 
+  const trackAnalytics = (name, properties, context) => window.SheltonAnalytics?.track?.(name, properties, context) || false;
+  const trackAnalyticsOnce = (name, key, properties, context) => window.SheltonAnalytics?.trackOnce?.(name, key, properties, context) || false;
+  const analyticsOperationValue = (operationId) => ({
+    events: "event",
+    spa: "resort_spa",
+    uniforms: "uniform"
+  })[operationId] || operationId;
+  const analyticsCountBucket = (value) => {
+    const count = Math.max(0, Number(value) || 0);
+    if (!count) return "none";
+    if (count === 1) return "1";
+    if (count <= 3) return "2_3";
+    return "4_plus";
+  };
+  const analyticsEvidence = (result) => ({
+    known_pounds: "known_pounds",
+    piece_counts: "piece_counts",
+    business_proxy: "proxy",
+    default_mix: "operation_default"
+  })[String(result?.sourceInput?.volume?.evidence || "")] || "operation_default";
+  const analyticsConfidence = (precision) => {
+    const label = String(precision?.label || "").toLowerCase();
+    if (label === "detailed" || label === "refined") return "high";
+    if (label === "developing") return "medium";
+    return "low";
+  };
+
   const q = (selector, scope) => (scope || root).querySelector(selector);
   const qa = (selector, scope) => Array.from((scope || root).querySelectorAll(selector));
   const money = (value) => "$" + Math.round(Number(value) || 0).toLocaleString("en-US");
@@ -409,6 +436,16 @@
     precisionOpen = false;
     scaleStep = 0;
     scaleSequenceOperation = operationId;
+    trackAnalyticsOnce("estimator_started", "estimator-started", { stage: "started" }, { estimatorStep: "operation" });
+    trackAnalytics("estimator_operation_selected", {
+      operation: analyticsOperationValue(operationId),
+      stage: "selected"
+    }, { estimatorStep: "operation" });
+    trackAnalytics("estimator_goods_mode_selected", {
+      goodsCountBucket: analyticsCountBucket(state.goods.length),
+      mode: state.goodsMode,
+      stage: "default"
+    }, { estimatorStep: "goods" });
     invalidateEstimate({ clearResult: true });
     setPickerOpen(false, { returnFocus: true });
     renderAll();
@@ -1195,6 +1232,19 @@
         ? "Request a quote with the information you have. Shelton will confirm the remaining service details with you."
         : "Adjust an answer or retry shortly. You can still send the completed details to Shelton if the issue continues.";
     } else {
+      const analyticsRangeStage = currentPrecision().label === "Early" ? "initial" : "refined";
+      trackAnalyticsOnce(
+        "estimator_range_viewed",
+        `estimator-range-${analyticsRangeStage}`,
+        {
+          answerCountBucket: analyticsCountBucket(currentPrecision().answered),
+          confidence: analyticsConfidence(currentPrecision()),
+          evidence: analyticsEvidence(latestResult),
+          goodsCountBucket: analyticsCountBucket(state.goods.length),
+          stage: analyticsRangeStage
+        },
+        { estimatorStep: "range" }
+      );
       const collapsed = Number(latestResult.range.weeklyLow) === Number(latestResult.range.weeklyHigh);
       const routeNeedsReview = String(latestResult.rhythm?.reason || "").startsWith("This location needs route review");
       weeklyRange.textContent = collapsed
@@ -1395,6 +1445,11 @@
     state.scale = {};
     state.finish = [];
     scaleStep = 0;
+    trackAnalytics("estimator_goods_mode_selected", {
+      goodsCountBucket: analyticsCountBucket(state.goods.length),
+      mode: "custom",
+      stage: "custom"
+    }, { estimatorStep: "goods" });
     onStateChange(true);
     window.requestAnimationFrame(() => goodsOptions.querySelector("input")?.focus());
   });
@@ -1408,6 +1463,11 @@
     state.scale = {};
     state.finish = [];
     scaleStep = 0;
+    trackAnalytics("estimator_goods_mode_selected", {
+      goodsCountBucket: analyticsCountBucket(state.goods.length),
+      mode: "typical",
+      stage: "typical"
+    }, { estimatorStep: "goods" });
     onStateChange(true);
     window.requestAnimationFrame(() => goodsCustomize.focus());
   });
@@ -1520,11 +1580,22 @@
   });
   precisionToggle.addEventListener("click", () => {
     precisionOpen = !precisionOpen;
+    if (precisionOpen) {
+      trackAnalyticsOnce("estimator_precision_opened", "estimator-precision-opened", {
+        answerCountBucket: analyticsCountBucket(currentPrecision().answered),
+        stage: "opened"
+      }, { estimatorStep: "precision" });
+    }
     renderPrecisionRefinement();
     if (precisionOpen) window.setTimeout(() => precisionPanel.querySelector("select:not([hidden])")?.focus(), 0);
   });
   precisionDone.addEventListener("click", () => {
     precisionOpen = false;
+    trackAnalyticsOnce("estimator_precision_completed", "estimator-precision-completed", {
+      answerCountBucket: analyticsCountBucket(currentPrecision().answered),
+      confidence: analyticsConfidence(currentPrecision()),
+      stage: "completed"
+    }, { estimatorStep: "precision" });
     renderPrecisionRefinement();
     precisionToggle.focus();
   });
@@ -1714,6 +1785,7 @@
   };
   qa('[name="preferredContact"]', quoteForm).forEach((input) => input.addEventListener("change", syncPhoneRequirement));
   const clearQuoteValidationState = () => {
+    trackAnalyticsOnce("estimator_quote_started", "estimator-quote-started", { stage: "started" }, { estimatorStep: "quote" });
     qa("[aria-invalid]", quoteForm).forEach((control) => {
       control.removeAttribute("aria-invalid");
       control.removeAttribute("aria-errormessage");
@@ -1744,6 +1816,7 @@
       }
       return;
     }
+    trackAnalytics("lead_submit_attempt", { stage: "submitted" }, { estimatorStep: "quote" });
     quoteInFlight = true;
     quoteSubmissionController = new AbortController();
     const configuredTimeout = Number.parseInt(quoteForm.dataset.submitTimeout || "15000", 10);
@@ -1836,7 +1909,15 @@
         return response;
       };
       try {
-        await Promise.any([requireAccepted(durableRequest), requireAccepted(notificationRequest)]);
+        const durableAccepted = requireAccepted(durableRequest).then((response) => {
+          trackAnalytics("lead_submit_success", { result: "accepted" }, { estimatorStep: "quote" });
+          window.SheltonAnalytics?.flush?.({ beacon: true });
+          return { channel: "office", response };
+        });
+        await Promise.any([
+          durableAccepted,
+          requireAccepted(notificationRequest).then((response) => ({ channel: "notification", response }))
+        ]);
       } catch (aggregateError) {
         const reasons = Array.isArray(aggregateError?.errors) ? aggregateError.errors : [aggregateError];
         const submissionError = new Error("Review intake failed.");
@@ -1852,6 +1933,9 @@
       quoteStatus.textContent = error?.name === "AbortError"
         ? "The request took too long. Your answers are still here; please try again."
         : "We could not send the request. Your answers are still here; please try again.";
+      trackAnalytics("lead_submit_error", {
+        result: error?.name === "AbortError" ? "timeout" : "failed"
+      }, { estimatorStep: "quote" });
       quoteStatus.focus();
       quoteSubmit.disabled = false;
       quoteSubmit.textContent = quoteSubmitIdleLabel;

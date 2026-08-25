@@ -74,7 +74,7 @@
           <li><a class="" href="industries.html">Who We Serve</a></li>
           <li><a class="" href="pricing.html">Pricing</a></li>
           <li><a class="" href="about.html">About</a></li>
-        <li><a class="nav-cta " href="quote.html">Request a Quote</a></li>
+        <li><a class="nav-cta " href="quote.html" data-analytics-id="request-quote-nav" data-analytics-destination="quote">Request a Quote</a></li>
       </ul>
     </div>
   </nav>
@@ -93,8 +93,8 @@
         </h1>
         <p class="ready-hero__intro">Commercial laundry for linens, towels, uniforms, and more. Professionally finished and delivered on a schedule built around your operation.</p>
         <div class="ready-hero__actions">
-          <a class="ready-hero__primary" href="#build-program">Build Your Program</a>
-          <a class="ready-hero__secondary" href="quote.html">Request a Quote</a>
+          <a class="ready-hero__primary" href="#build-program" data-analytics-id="home-build-program" data-analytics-destination="home-build-program">Build Your Program</a>
+          <a class="ready-hero__secondary" href="quote.html" data-analytics-id="home-request-quote-hero" data-analytics-destination="quote">Request a Quote</a>
         </div>
       </div>
     </div>
@@ -139,7 +139,7 @@
 
   <!-- Banked positioning copy for later: Every account moves laundry differently. We shape each program around your volume, schedule, standards, packaging, and return needs. -->
 
-  <section class="section-block program-builder" id="build-program" aria-labelledby="program-builder-title">
+  <section class="section-block program-builder" id="build-program" aria-labelledby="program-builder-title" data-analytics-module="home-program-builder">
     <div class="section-head section-head--wide">
       <div>
         <p class="section-eyebrow">Build Your Laundry Program</p>
@@ -236,7 +236,7 @@
 
   <section class="then-now-story reveal" id="shelton-story" aria-labelledby="shelton-story-title">
     <h2 class="sr-only" id="shelton-story-title">Shelton story photo carousel</h2>
-    <div class="story-carousel" data-story-carousel role="group" aria-roledescription="carousel" aria-label="Shelton archive photo carousel">
+    <div class="story-carousel" data-story-carousel data-analytics-module="home-story-carousel" role="group" aria-roledescription="carousel" aria-label="Shelton archive photo carousel">
       <div class="story-carousel__surface">
         <div class="story-carousel__stage">
           <div class="story-carousel__slides" aria-live="polite">
@@ -338,7 +338,7 @@
       <h2>Ready to build a better laundry program?</h2>
       <p>Tell us what you need cleaned, how often you need service, and how you want everything finished and returned. We&rsquo;ll help build a program around your volume, schedule, and standards.</p>
     </div>
-    <a class="btn-primary" href="quote.html">Request a Quote</a>
+    <a class="btn-primary" href="quote.html" data-analytics-id="home-request-quote-final" data-analytics-destination="quote">Request a Quote</a>
   </section>
   </main>
   <footer class="site-footer">
@@ -367,12 +367,12 @@
         </nav>
         <nav class="footer-links" aria-label="Get started">
           <h2>Get Started</h2>
-          <a href="quote.html">Request a quote</a>
-          <a href="quote.html?request=plant-tour">Schedule a plant tour</a>
+          <a href="quote.html" data-analytics-id="request-quote-footer" data-analytics-destination="quote">Request a quote</a>
+          <a href="quote.html?request=plant-tour" data-analytics-id="plant-tour-footer" data-analytics-destination="plant-tour">Schedule a plant tour</a>
           <a href="https://www.sheltoncleanerssd.com/" target="_blank" rel="noopener">Shelton Cleaners</a>
           <div class="footer-phone">
             <span>Phone</span>
-            <a class="footer-phone__link" href="tel:+16193208703">(619) 320-8703</a>
+            <a class="footer-phone__link" href="tel:+16193208703" data-analytics-id="phone-footer" data-analytics-channel="phone">(619) 320-8703</a>
           </div>
         </nav>
       </div>
@@ -384,5 +384,6 @@
   </footer>
   <script src="assets/js/home-proof.js?v=20260811-proof-autoslide-v5"></script>
   <script src="assets/js/site.js?v=20260816-mobile-launch-v1"></script>
+  <script src="assets/js/analytics.js?v=20260825-first-party-v1"></script>
 </body>
 </html>

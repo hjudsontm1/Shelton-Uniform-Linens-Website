@@ -76,7 +76,7 @@
         <li><a href="industries.html">Who We Serve</a></li>
         <li><a class="is-active" href="pricing.html" aria-current="page">Pricing</a></li>
         <li><a href="about.html">About</a></li>
-        <li><a class="nav-cta" href="quote.html">Request a Quote</a></li>
+        <li><a class="nav-cta" href="quote.html" data-analytics-id="request-quote-nav" data-analytics-destination="quote">Request a Quote</a></li>
       </ul>
     </div>
   </nav>
@@ -88,8 +88,8 @@
           <h1 id="calm-hero-title">Commercial laundry pricing built around your operation.</h1>
           <p class="calm-hero__support">Every laundry program is different. Learn what shapes your cost, share the details you know, and build a planning range based on your actual needs.</p>
           <div class="calm-hero__actions">
-            <a class="calm-text-action" href="#pricing-guide">See What Shapes Pricing</a>
-            <a class="calm-quiet-action" href="#factor-program">Build Your Range</a>
+            <a class="calm-text-action" href="#pricing-guide" data-analytics-id="pricing-see-factors" data-analytics-destination="pricing">See What Shapes Pricing</a>
+            <a class="calm-quiet-action" href="#factor-program" data-analytics-id="pricing-build-range" data-analytics-destination="pricing">Build Your Range</a>
           </div>
         </div>
         <figure class="calm-hero__image" aria-hidden="true">
@@ -114,7 +114,7 @@
     </div>
 
     <div class="learning-chapters">
-      <section class="learning-chapter" id="factor-program" data-factor="program" aria-labelledby="factor-program-title">
+      <section class="learning-chapter" id="factor-program" data-factor="program" aria-labelledby="factor-program-title" data-analytics-module="pricing-program-builder">
         <div class="learning-chapter__lesson">
           <p class="chapter-index">01 | Operation &amp; goods</p>
           <h2 class="chapter-editorial-title" id="factor-program-title">What you clean matters as much as how much you clean.</h2>
@@ -159,7 +159,7 @@
                 <p data-goods-typical-copy>We selected the goods most programs like this use every week.</p>
               </div>
               <div class="goods-starting-point__list" data-goods-typical-list aria-label="Automatically selected goods"></div>
-              <button type="button" data-goods-customize>Customize goods</button>
+              <button type="button" data-goods-customize data-analytics-id="estimator-customize-goods" data-analytics-destination="pricing">Customize goods</button>
             </section>
             <section class="goods-customizer" data-goods-customizer hidden aria-labelledby="goods-customizer-title">
               <div class="goods-customizer__heading">
@@ -167,7 +167,7 @@
                   <span>Custom program</span>
                   <strong id="goods-customizer-title">Choose only what you need</strong>
                 </div>
-                <button type="button" data-goods-use-typical hidden>Use typical program</button>
+                <button type="button" data-goods-use-typical hidden data-analytics-id="estimator-use-typical" data-analytics-destination="pricing">Use typical program</button>
               </div>
               <div class="choice-cloud goods-icon-grid" data-goods-options></div>
             </section>
@@ -385,7 +385,7 @@
           </div>
 
           <section class="precision-refinement" data-precision-refinement hidden aria-labelledby="precision-refinement-title">
-        <button class="precision-refinement__toggle" type="button" data-precision-toggle aria-expanded="false" aria-controls="precision-refinement-panel">
+        <button class="precision-refinement__toggle" type="button" data-precision-toggle aria-expanded="false" aria-controls="precision-refinement-panel" data-analytics-id="estimator-optional-details" data-analytics-destination="pricing">
           <span>Optional detail</span>
           <strong id="precision-refinement-title">Want a more precise quote?</strong>
           <small>Your broad range is ready. Add only the details you know if you want to refine the handoff.</small>
@@ -473,7 +473,7 @@
         </div>
         <p class="quote-error" id="quote-error" data-quote-error role="alert" hidden>Complete the required contact details and select how you prefer to be reached.</p>
         <p class="quote-privacy-note">We use these details to review your commercial laundry needs and follow up about your account. See our <a href="privacy.html">privacy notice</a>.</p>
-        <button type="submit" data-quote-submit>Send to Shelton for Review</button>
+        <button type="submit" data-quote-submit data-analytics-id="estimator-send-review" data-analytics-destination="quote">Send to Shelton for Review</button>
       </form>
       <div class="quote-status" data-quote-status role="status" tabindex="-1" hidden></div>
     </section>
@@ -514,10 +514,10 @@
         </nav>
         <nav class="footer-links" aria-label="Get started">
           <h2>Get Started</h2>
-          <a href="quote.html">Request a quote</a>
-          <a href="quote.html?request=plant-tour">Schedule a plant tour</a>
+          <a href="quote.html" data-analytics-id="request-quote-footer" data-analytics-destination="quote">Request a quote</a>
+          <a href="quote.html?request=plant-tour" data-analytics-id="plant-tour-footer" data-analytics-destination="plant-tour">Schedule a plant tour</a>
           <a href="https://www.sheltoncleanerssd.com/" target="_blank" rel="noopener">Shelton Cleaners</a>
-          <div class="footer-phone"><span>Phone</span><a class="footer-phone__link" href="tel:+16193208703">(619) 320-8703</a></div>
+          <div class="footer-phone"><span>Phone</span><a class="footer-phone__link" href="tel:+16193208703" data-analytics-id="phone-footer" data-analytics-channel="phone">(619) 320-8703</a></div>
         </nav>
       </div>
       <div class="footer-bottom">
@@ -528,6 +528,7 @@
   </footer>
 
   <script src="assets/js/site.js?v=20260816-mobile-launch-v1"></script>
+  <script src="assets/js/analytics.js?v=20260825-first-party-v1"></script>
   <script src="assets/js/pricing-journey-config.js?v=20260823-exact-occupancy-v1"></script>
   <script src="assets/js/pricing-engine.js?v=20260824-approved-fixes-v1"></script>
   <script src="assets/js/pricing-progressive-range.js?v=20260824-approved-fixes-v1"></script>

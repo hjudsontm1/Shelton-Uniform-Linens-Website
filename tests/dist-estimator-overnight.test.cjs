@@ -2,9 +2,11 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 
-// This suite intentionally exercises the publishable website tree, not the
-// editable source mirror. It has no third-party dependencies and runs with:
+// This suite intentionally exercises the canonical publishable website tree.
+// Root-level pricing files are ignored legacy snapshots, not a source mirror.
+// It has no third-party dependencies and runs with:
 //   node tests/dist-estimator-overnight.test.cjs
+const repoRoot = path.resolve(__dirname, "..");
 const clientRoot = path.resolve(__dirname, "../dist/client");
 const scriptPath = (name) => path.join(clientRoot, "assets/js", name);
 
@@ -85,6 +87,18 @@ test("canonical dist/client operation and factor order", () => {
   assert.match(pricingHtml, /data-inventory-tier/, "supplied-inventory quality remains available only as an optional refinement");
   assert.doesNotMatch(pricingHtml, /data-ownership-options[^>]*aria-required/, "ownership refines rather than blocks the first range");
   assert.doesNotMatch(pricingHtml, /data-location-input[^>]*\srequired(?:\s|>)/, "ZIP refines rather than blocks the first range");
+});
+
+test("dist/client remains the only canonical Pricing source", () => {
+  const sourceGuide = fs.readFileSync(path.join(repoRoot, "PRODUCTION-SOURCE.md"), "utf8");
+  const ignoreRules = fs.readFileSync(path.join(repoRoot, ".gitignore"), "utf8");
+
+  assert.match(sourceGuide, /`dist\/client` is the sole source of truth/);
+  assert.match(sourceGuide, /python3 -m http\.server 8045 --directory dist\/client/);
+  assert.doesNotMatch(ignoreRules, /^\/?dist\/?$/m, "the canonical production tree must not be ignored");
+  assert.match(ignoreRules, /^\/pricing\.html$/m, "the root Pricing snapshot stays outside version control");
+  assert.match(ignoreRules, /^\/assets\/css\/pricing-\*\.css$/m);
+  assert.match(ignoreRules, /^\/assets\/js\/pricing-\*\.js$/m);
 });
 
 test("operation presets are explicit and custom goods begin blank", () => {

@@ -48,7 +48,7 @@
           <li><a class="" href="industries.html">Who We Serve</a></li>
           <li><a class="" href="pricing.html">Pricing</a></li>
           <li><a class="is-active" href="about.html" aria-current="page">About</a></li>
-        <li><a class="nav-cta " href="quote.html">Request a Quote</a></li>
+        <li><a class="nav-cta " href="quote.html" data-analytics-id="request-quote-nav" data-analytics-destination="quote">Request a Quote</a></li>
       </ul>
     </div>
   </nav>
@@ -56,7 +56,7 @@
   <section class="about-montage-hero" aria-labelledby="about-hero-title">
     <div class="about-montage" data-about-montage>
       <!-- Photo wall slots: real historical archive images are used where available. Slots marked data-placeholder="true" are intentionally blank future-photo positions for plant, route, staff, family, equipment, finishing, and goods photography. -->
-      <div class="about-archive-rail" data-about-archive-rail>
+      <div class="about-archive-rail" data-about-archive-rail data-analytics-module="about-archive">
       <div class="about-tile-strip" data-about-tile-strip aria-label="Archive photo selector. Swipe or scroll horizontally to explore more photographs.">
       <!-- Replace with real White Star Laundry image. -->
       <button class="about-tile about-tile--one" type="button" data-about-tile data-photo-slot="photo-wall-01"
@@ -275,7 +275,7 @@
   </div>
 
   <div class="about-history-shell" id="about-history">
-  <section class="about-towel-history reveal" aria-labelledby="about-towel-history-title" data-towel-timeline-v2>
+  <section class="about-towel-history reveal" aria-labelledby="about-towel-history-title" data-towel-timeline-v2 data-analytics-module="about-towel-timeline">
     <h2 class="about-towel-history__title" id="about-towel-history-title">A family trade, carried forward.</h2>
     <div class="about-towel-history__stage">
       <ol class="about-towel-history__list" aria-label="Shelton family laundry story timeline">
@@ -657,7 +657,7 @@
       <p>Our retail dry cleaning operation lives over at Shelton Cleaners, where the family’s San Diego storefront story continues.</p>
     </div>
     <div class="about-cleaners-bridge__actions" aria-label="Shelton Cleaners link">
-      <a class="btn-ghost" href="https://www.sheltoncleanerssd.com/" target="_blank" rel="noopener">Visit Shelton Cleaners</a>
+      <a class="btn-ghost" href="https://www.sheltoncleanerssd.com/" target="_blank" rel="noopener" data-analytics-id="about-visit-cleaners" data-analytics-destination="external">Visit Shelton Cleaners</a>
     </div>
   </section>
 
@@ -689,10 +689,10 @@
         </nav>
         <nav class="footer-links" aria-label="Get started">
           <h2>Get Started</h2>
-          <a href="quote.html">Request a quote</a>
-          <a href="quote.html?request=plant-tour">Schedule a plant tour</a>
+          <a href="quote.html" data-analytics-id="request-quote-footer" data-analytics-destination="quote">Request a quote</a>
+          <a href="quote.html?request=plant-tour" data-analytics-id="plant-tour-footer" data-analytics-destination="plant-tour">Schedule a plant tour</a>
           <a href="https://www.sheltoncleanerssd.com/" target="_blank" rel="noopener">Shelton Cleaners</a>
-          <div class="footer-phone"><span>Phone</span><a class="footer-phone__link" href="tel:+16193208703">(619) 320-8703</a></div>
+          <div class="footer-phone"><span>Phone</span><a class="footer-phone__link" href="tel:+16193208703" data-analytics-id="phone-footer" data-analytics-channel="phone">(619) 320-8703</a></div>
         </nav>
       </div>
       <div class="footer-bottom">
@@ -702,5 +702,6 @@
     </div>
   </footer>
   <script src="assets/js/site.js?v=20260819-about-archive-affordance-v1"></script>
+  <script src="assets/js/analytics.js?v=20260825-first-party-v1"></script>
 </body>
 </html>

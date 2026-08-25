@@ -1,0 +1,20 @@
+.vercel
+.env.local
+node_modules
+*.zip
+.DS_Store
+.codex-services-stage/
+tmp/
+artifacts/
+current-compact-evidence/
+design-audit/
+design-audit-artifacts/
+design-ideation/
+design-qa-artifacts/
+process-loop-concept/
+
+# Sites serves dist/client directly. Root-level pricing files are legacy local
+# snapshots, not an editable production source.
+/pricing.html
+/assets/css/pricing-*.css
+/assets/js/pricing-*.js

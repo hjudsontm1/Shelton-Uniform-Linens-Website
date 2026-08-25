@@ -4,6 +4,9 @@
   const form = document.querySelector("[data-quote-form]");
   if (!form) return;
 
+  const trackAnalytics = (name, properties, context) => window.SheltonAnalytics?.track?.(name, properties, context) || false;
+  const trackAnalyticsOnce = (name, key, properties, context) => window.SheltonAnalytics?.trackOnce?.(name, key, properties, context) || false;
+
   const submit = form.querySelector("[data-quote-submit]");
   const submitLabel = form.querySelector("[data-quote-submit-label]");
   const submitIcon = form.querySelector("[data-quote-submit-icon]");
@@ -133,6 +136,12 @@
     field.addEventListener("change", clearWhenValid);
   });
 
+  const markQuoteStarted = () => {
+    trackAnalyticsOnce("quote_form_started", "quote-form-started", { stage: "started" }, { elementKey: "quote-form" });
+  };
+  form.addEventListener("input", markQuoteStarted);
+  form.addEventListener("change", markQuoteStarted);
+
   if (!("fetch" in window) || !("FormData" in window) || !("AbortController" in window)) return;
 
   form.addEventListener("submit", async (event) => {
@@ -143,6 +152,7 @@
       if (field.validity.valid) clearFieldError(field);
     });
 
+    trackAnalytics("quote_submit_attempt", { stage: "submitted" }, { elementKey: "quote-form" });
     inFlight = true;
     activeController = new AbortController();
     const configuredTimeout = Number.parseInt(form.dataset.submitTimeout || "15000", 10);
@@ -170,6 +180,8 @@
 
       setSubmitState("sent");
       setStatus("Quote brief sent. Opening confirmation…", "success");
+      trackAnalytics("quote_submit_result", { result: "accepted" }, { elementKey: "quote-form" });
+      window.SheltonAnalytics?.flush?.({ beacon: true });
       markSubmissionReceipt();
       window.setTimeout(() => window.location.assign("thank-you.html"), 220);
     } catch (error) {
@@ -183,6 +195,9 @@
 
       setSubmitState("idle");
       setStatus(message, "error", "submission");
+      trackAnalytics("quote_submit_result", {
+        result: timedOut ? "timeout" : rateLimited ? "rate_limited" : "failed"
+      }, { elementKey: "quote-form" });
       status?.focus({ preventScroll: true });
     } finally {
       window.clearTimeout(timeoutId);

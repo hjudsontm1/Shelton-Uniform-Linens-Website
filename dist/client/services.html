@@ -53,7 +53,7 @@
         <li><a href="industries.html">Who We Serve</a></li>
         <li><a href="pricing.html">Pricing</a></li>
         <li><a href="about.html">About</a></li>
-        <li><a class="nav-cta" href="quote.html">Request a Quote</a></li>
+        <li><a class="nav-cta" href="quote.html" data-analytics-id="request-quote-nav" data-analytics-destination="quote">Request a Quote</a></li>
       </ul>
     </div>
   </nav>
@@ -65,7 +65,7 @@
           <h1 id="services-hero-title"><span>A higher standard</span><span>for every item.</span></h1>
           <p>Explore professional cleaning and finishing for the goods your operation relies on, from everyday linens and towels to uniforms and specialty items.</p>
           <div class="service-library-hero__actions">
-            <a class="service-library-hero__explore" href="#linens-bedding" data-start-services>
+            <a class="service-library-hero__explore" href="#linens-bedding" data-start-services data-analytics-id="services-explore" data-analytics-destination="services">
               <span>Explore the services</span>
               <span class="service-library-hero__explore-icon" aria-hidden="true"><i class="ph ph-arrow-down"></i></span>
             </a>
@@ -90,7 +90,7 @@
         </nav>
       </div>
 
-      <section class="shelton-cleaning-standard" id="cleaning-standard" aria-labelledby="cleaning-standard-title" data-cleaning-standard>
+      <section class="shelton-cleaning-standard" id="cleaning-standard" aria-labelledby="cleaning-standard-title" data-cleaning-standard data-analytics-module="services-cleaning-standard">
         <div class="shelton-cleaning-standard__inner">
           <header class="shelton-cleaning-standard__header service-reveal">
             <p class="shelton-cleaning-standard__eyebrow">The Shelton Cleaning Standard</p>
@@ -286,7 +286,7 @@
               <label for="service-route-zip">ZIP code</label>
               <input id="service-route-zip" name="zip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" pattern="[0-9]{5}" required aria-describedby="route-check-note route-check-message" />
             </div>
-            <button class="services-button service-route-check__submit" type="submit">Request route review <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+            <button class="services-button service-route-check__submit" type="submit" data-analytics-id="services-route-review" data-analytics-destination="quote">Request route review <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
             <p id="route-check-note" class="service-route-check__note"><i class="ph ph-info" aria-hidden="true"></i>Routes are confirmed around volume, schedule, and account needs.</p>
             <p id="route-check-message" class="service-route-check__message" data-route-message aria-live="polite"></p>
           </form>
@@ -332,10 +332,10 @@
         </nav>
         <nav class="footer-links" aria-label="Get started">
           <h2>Get Started</h2>
-          <a href="quote.html">Request a quote</a>
-          <a href="quote.html?request=plant-tour">Schedule a plant tour</a>
+          <a href="quote.html" data-analytics-id="request-quote-footer" data-analytics-destination="quote">Request a quote</a>
+          <a href="quote.html?request=plant-tour" data-analytics-id="plant-tour-footer" data-analytics-destination="plant-tour">Schedule a plant tour</a>
           <a href="https://www.sheltoncleanerssd.com/" target="_blank" rel="noopener">Shelton Cleaners</a>
-          <div class="footer-phone"><span>Phone</span><a class="footer-phone__link" href="tel:+16193208703">(619) 320-8703</a></div>
+          <div class="footer-phone"><span>Phone</span><a class="footer-phone__link" href="tel:+16193208703" data-analytics-id="phone-footer" data-analytics-channel="phone">(619) 320-8703</a></div>
         </nav>
       </div>
       <div class="footer-bottom">
@@ -346,6 +346,7 @@
   </footer>
 
   <script src="assets/js/site.js?v=20260816-mobile-launch-v1"></script>
+  <script src="assets/js/analytics.js?v=20260825-first-party-v1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="assets/js/services-editorial.js?v=20260820-services-bugfix-v1"></script>
 </body>

@@ -3,6 +3,9 @@
 
   document.documentElement.classList.add("js");
 
+  const trackAnalytics = (name, properties, context) => window.SheltonAnalytics?.track?.(name, properties, context) || false;
+  const trackAnalyticsOnce = (name, key, properties, context) => window.SheltonAnalytics?.trackOnce?.(name, key, properties, context) || false;
+
   const chapters = Array.from(document.querySelectorAll("[data-service-chapter]"));
   const serviceIndex = document.querySelector("[data-service-index]");
   const indexLinks = Array.from(serviceIndex?.querySelectorAll("a[href^='#']") || []);
@@ -312,6 +315,12 @@
   const routeInput = routeForm?.querySelector("input[name='zip']");
   const routeMessage = document.querySelector("[data-route-message]");
 
+  const markRouteReviewStarted = () => {
+    trackAnalyticsOnce("route_review_started", "route-review-started", { stage: "started" }, { elementKey: "services-route-review" });
+  };
+  routeForm?.addEventListener("input", markRouteReviewStarted);
+  routeForm?.addEventListener("change", markRouteReviewStarted);
+
   routeForm?.addEventListener("submit", (event) => {
     event.preventDefault();
     const name = String(routeName?.value || "").trim();
@@ -357,6 +366,9 @@
     } catch {
       // The quote page still opens in route-review mode when storage is unavailable.
     }
+
+    trackAnalytics("route_review_handoff", { stage: "completed" }, { elementKey: "services-route-review" });
+    window.SheltonAnalytics?.flush?.({ beacon: true });
 
     window.location.href = "quote.html?request=route-review#quote-form";
   });

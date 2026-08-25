@@ -33,7 +33,7 @@
           <li><a class="" href="industries.html">Who We Serve</a></li>
           <li><a class="" href="pricing.html">Pricing</a></li>
           <li><a class="" href="about.html">About</a></li>
-        <li><a class="nav-cta" href="quote.html">Request a Quote</a></li>
+        <li><a class="nav-cta" href="quote.html" data-analytics-id="request-quote-nav" data-analytics-destination="quote">Request a Quote</a></li>
       </ul>
     </div>
   </nav>
@@ -43,15 +43,15 @@
         <span class="quote-success__icon" aria-hidden="true" data-confirmation-icon><i class="ph ph-chat-circle"></i></span>
         <h1 id="confirmation-title" data-confirmation-title>How can we help?</h1>
         <p data-confirmation-copy>This page confirms requests only after they are sent. Start a quote request, or contact Shelton directly.</p>
-        <a class="quote-success__home" href="quote.html" data-confirmation-action>
+        <a class="quote-success__home" href="quote.html" data-confirmation-action data-analytics-id="confirmation-action" data-analytics-destination="quote">
           <span data-confirmation-action-label>Request a quote</span>
           <i class="ph ph-arrow-right" aria-hidden="true"></i>
         </a>
         <p class="quote-success__contact">
           Need to reach us sooner?
-          <a href="tel:+16193208703">Call (619) 320-8703</a>
+          <a href="tel:+16193208703" data-analytics-id="confirmation-phone" data-analytics-channel="phone">Call (619) 320-8703</a>
           <span aria-hidden="true">·</span>
-          <a href="mailto:info@sheltonlinenanduniform.com">Email Shelton</a>
+          <a href="mailto:info@sheltonlinenanduniform.com" data-analytics-id="confirmation-email" data-analytics-channel="email">Email Shelton</a>
         </p>
       </div>
     </section>
@@ -61,6 +61,7 @@
     <p>Commercial laundry for San Diego businesses. <a href="privacy.html">Privacy</a></p>
   </footer>
   <script src="assets/js/site.js?v=20260816-mobile-launch-v1"></script>
+  <script src="assets/js/analytics.js?v=20260825-first-party-v1"></script>
   <script src="assets/js/quote-confirmation.js?v=20260820-confirmation-receipt-v1"></script>
 </body>
 </html>
