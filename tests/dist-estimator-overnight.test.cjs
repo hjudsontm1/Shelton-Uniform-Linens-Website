@@ -103,6 +103,29 @@ test("operation presets are explicit and custom goods begin blank", () => {
   assert.match(pricingHtml, /goods-icon-grid/);
 });
 
+test("Shelton-supplied ownership starts at Standard without replacing an existing tier", () => {
+  assert.match(learningSource, /state\.ownership === "supply" && !state\.rentalTier\) state\.rentalTier = "standard"/);
+  assert.match(learningSource, /state\.ownership === "supply" && !state\.rentalTier\) \{\s*state\.rentalTier = "standard";/);
+
+  const standard = inputFor({ ownership: "supply", rentalTier: "standard" });
+  assert.equal(standard.ownership.model, "shelton_supplied");
+  assert.equal(standard.ownership.tier, "standard");
+
+  const premium = inputFor({ ownership: "supply", rentalTier: "premium" });
+  assert.equal(premium.ownership.tier, "premium", "a later customer tier choice remains authoritative");
+});
+
+test("piece-count estimates use piece-appropriate result copy", () => {
+  const events = inputFor({
+    operation: "events",
+    goods: ["tablecloths"],
+    scale: { weeklyTablecloths: "150", weeklyNapkins: "0", totalWeeklyPieces: "150" }
+  });
+  assert.equal(events.volume.evidence, "piece_counts");
+  assert.match(learningSource, /sourceInput\?\.volume\?\.evidence === "piece_counts"/);
+  assert.match(learningSource, /Per-piece pricing is confirmed during review\./);
+});
+
 test("hotel legacy fields remain removed from config and payload", () => {
   assert.equal(fieldIds("hotel").includes("bedSystem"), false);
   assert.equal(fieldIds("hotel").includes("duvetPercent"), false);
@@ -236,7 +259,7 @@ test("STR readiness and numeric bounds reject misleading answers", () => {
   assert.deepEqual(selectedGood(invalid, "robes"), { id: "robes" }, "an out-of-bounds optional piece count is omitted");
 });
 
-test("specialty-event topology uses the direct piece path", () => {
+test("specialty-event topology keeps total-piece answers as an honest manual review", async () => {
   assert.equal(config.scaleEntryModes.events.directField, "totalWeeklyPieces");
   assert.match(
     learningSource,
@@ -260,6 +283,16 @@ test("specialty-event topology uses the direct piece path", () => {
   assert.equal(input.volume.evidence, "piece_counts");
   assert.equal(input.volume.totalWeeklyPieces, 500);
   assert.equal(input.pattern.seasonal, false);
+  let requested = false;
+  window.fetch = async () => {
+    requested = true;
+    throw new Error("the unsupported total-only payload must not reach the pricing API");
+  };
+  const result = await engine.calculatePlanningRange(directState);
+  assert.equal(requested, false);
+  assert.equal(result.rangeUnavailable, true);
+  assert.equal(result.manualReview, true);
+  assert.match(result.confidence.explanation, /does not identify the tablecloth and napkin mix/i);
 });
 
 test("low-value storage and demand-pattern questions stay out of every estimator path", () => {
@@ -345,6 +378,60 @@ test("missing refiners add uncertainty above each evidence baseline", () => {
   assert.ok(Math.abs(pounds.uncertaintySpread - 0.075) < Number.EPSILON);
   assert.ok(Math.abs(pieces.uncertaintySpread - 0.105) < Number.EPSILON);
   assert.ok(Math.abs(rooms.uncertaintySpread - 0.15) < Number.EPSILON);
+});
+
+test("neutral optional details do not manufacture confidence", () => {
+  const fields = config.scaleSchemas.hotel;
+  const baseState = makeState({
+    location: { type: "city", value: "" },
+    refinement: { storage: "", demand: "" }
+  });
+  const base = progressive.precision(baseState, fields, {
+    locationValid: false,
+    extraCapacity: 3,
+    extraAnswered: 0
+  });
+  const ordinaryDetails = progressive.precision({
+    ...baseState,
+    access: "limited",
+    refinement: { storage: "ample", demand: "steady" }
+  }, fields, {
+    locationValid: false,
+    extraCapacity: 3,
+    extraAnswered: 3
+  });
+
+  assert.deepEqual(ordinaryDetails, base, "ordinary review notes do not numerically narrow the range");
+
+  const supplyWithoutTier = progressive.precision({
+    ...baseState,
+    ownership: "supply",
+    rentalTier: ""
+  }, fields, { locationValid: false });
+  const supplyWithTier = progressive.precision({
+    ...baseState,
+    ownership: "supply",
+    rentalTier: "standard"
+  }, fields, { locationValid: false });
+  assert.ok(supplyWithTier.ratio > supplyWithoutTier.ratio, "a price-shaping supplied tier still improves confidence");
+});
+
+test("only difficult access broadens the supported uncertainty lane", () => {
+  const resultFor = (access) => ({
+    rangeUnavailable: false,
+    range: { weeklyLow: 400, weeklyBase: 500, weeklyHigh: 600 },
+    sourceInput: { volume: { evidence: "known_pounds" }, route: { access } },
+    factors: []
+  });
+  const detail = { ratio: 1, label: "Detailed" };
+  const standard = progressive.refine(resultFor("standard"), detail);
+  const limited = progressive.refine(resultFor("limited"), detail);
+  const difficult = progressive.refine(resultFor("difficult"), detail);
+
+  assert.equal(standard.uncertaintySpread, 0.05);
+  assert.equal(limited.uncertaintySpread, 0.05, "ordinary access notes do not invent a price or uncertainty change");
+  assert.equal(difficult.uncertaintySpread, 0.10, "difficult access preserves the lane's broadest supported spread");
+  assert.match(difficult.uncertaintyBasis, /difficult site access/);
 });
 
 test("medspa hand-towel quantity is scoped to selected hand towels", () => {
@@ -569,8 +656,8 @@ test("selected estimator cards preserve readable copy at every breakpoint", () =
   const selectedInvariant = pricingSpineCss.lastIndexOf("/* Selected-answer contrast is a component invariant");
 
   assert.match(pricingHtml, /pricing-spine-concept\.css\?v=20260823-overview-merge-v18/);
-  assert.match(pricingHtml, /pricing-progressive-range\.js\?v=20260820-confidence-lanes-v17/);
-  assert.match(pricingHtml, /pricing-learning\.js\?v=20260823-daily-cadence-v3/);
+  assert.match(pricingHtml, /pricing-progressive-range\.js\?v=20260824-approved-fixes-v1/);
+  assert.match(pricingHtml, /pricing-learning\.js\?v=20260824-approved-fixes-v1/);
   assert.match(learningSource, /Estimated processing rate · \$/);
   assert.match(pricingSpineCss, /#factor-volume \.volume-question--empty \{\s*align-items: center;\s*text-align: center;/);
   assert.match(pricingSpineCss, /#factor-program \.operation-picker-field > span,[\s\S]*?#factor-program \.calm-fieldset > legend,[\s\S]*?#factor-program \.calm-fieldset > p \{\s*text-align: center;/);
@@ -585,10 +672,23 @@ test("selected estimator cards preserve readable copy at every breakpoint", () =
 });
 
 test("planning range dock remains visible until the actual range readout is in view", () => {
-  assert.match(learningSource, /\[rangeLive, q\("\.quote-handoff"\), document\.querySelector\("\.site-footer"\)\]/);
+  assert.match(learningSource, /if \(rangeLive\) rangeObserver\.observe\(rangeLive\)/);
+  assert.match(learningSource, /\[q\("\.quote-handoff"\), document\.querySelector\("\.site-footer"\)\]/);
   assert.doesNotMatch(learningSource, /\[q\("\.planning-result"\), q\("\.quote-handoff"\)/);
-  assert.match(learningSource, /entry\.intersectionRatio >= 0\.08/);
-  assert.match(learningSource, /threshold: \[0, 0\.08\], rootMargin: "0px 0px -72px 0px"/);
+  assert.match(learningSource, /entry\.intersectionRatio >= 0\.4/);
+  assert.match(learningSource, /threshold: \[0, 0\.4\], rootMargin: "0px 0px -72px 0px"/);
+  assert.match(learningSource, /closingObserver[\s\S]*threshold: 0, rootMargin: "0px 0px 96px 0px"/);
+});
+
+test("quote and numeric corrections have specific accessible associations", () => {
+  ["name", "business", "email", "phone", "preferred"].forEach((fieldName) => {
+    assert.match(pricingHtml, new RegExp(`id="quote-${fieldName}-error"[^>]*data-quote-field-error="${fieldName}"`));
+  });
+  assert.match(pricingHtml, /data-volume-estimator-status role="status" aria-live="polite" aria-atomic="true"/);
+  assert.match(learningSource, /error\.dataset\.scaleFieldError = field\.id/);
+  assert.match(learningSource, /control\.setAttribute\("aria-errormessage", error\.id\)/);
+  assert.match(learningSource, /if \(entry\.error\) control\.setAttribute\("aria-errormessage", entry\.error\.id\)/);
+  assert.doesNotMatch(learningSource, /setAttribute\("aria-errormessage", "quote-error"\)/);
 });
 
 test("engine handles success, manual, and failure responses without stale numbers", async () => {

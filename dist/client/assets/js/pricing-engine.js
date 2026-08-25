@@ -397,6 +397,17 @@
     if (["wholesale", "other"].includes(state.operation)) {
       return unavailableRecommendation(state, "Wholesale dry cleaning and Other / Not Sure are reviewed manually; no numeric range is invented.", true);
     }
+    const eventTotalOnly = state.operation === "events"
+      && positive(numberValue(state, "totalWeeklyPieces"))
+      && !positive(numberValue(state, "weeklyTablecloths"))
+      && !positive(numberValue(state, "weeklyNapkins"));
+    if (eventTotalOnly) {
+      return unavailableRecommendation(
+        state,
+        "A total event-linen count does not identify the tablecloth and napkin mix needed for an automatic price. Shelton will confirm that mix during review.",
+        true
+      );
+    }
     const input = buildEstimateInput(state);
     if (!input) return unavailableRecommendation(state, "This program needs a Shelton review before pricing.", true);
     const controller = new AbortController();

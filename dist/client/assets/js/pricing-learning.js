@@ -72,6 +72,10 @@
     state = defaultState();
   }
   if (!["standard", "limited", "complex"].includes(state.access)) state.access = "standard";
+  // A Shelton-supplied program needs a concrete starting tier for the public
+  // estimator. Preserve any tier the customer already chose; otherwise use
+  // Standard as the default planning assumption.
+  if (state.ownership === "supply" && !state.rentalTier) state.rentalTier = "standard";
 
   let latestResult = null;
   let latestRawResult = null;
@@ -158,11 +162,26 @@
     const replacement = qa(`input[name="${name}"]`, container).find((input) => input.value === value);
     replacement?.focus({ preventScroll: true });
   };
+  const scaleFieldCorrectionMessage = (field) => {
+    const unit = String(field?.unit || "").trim();
+    return `Enter ${String(field?.label || "this value").toLowerCase()} between ${field?.min} and ${field?.max}${unit ? ` ${unit}` : ""}.`;
+  };
   const syncScaleControlValidity = (control, field) => {
     if (!control || !field || field.type !== "number") return;
     const hasValue = String(control.value || "").trim() !== "";
     const valid = !hasValue || basicFieldValid(field);
     control.setAttribute("aria-invalid", String(!valid));
+    const error = control.closest("label")?.querySelector(`[data-scale-field-error="${field.id}"]`);
+    if (!error) return;
+    if (valid) {
+      error.hidden = true;
+      error.textContent = "";
+      control.removeAttribute("aria-errormessage");
+    } else {
+      error.textContent = scaleFieldCorrectionMessage(field);
+      error.hidden = false;
+      control.setAttribute("aria-errormessage", error.id);
+    }
   };
   const scaleSchema = () => config.scaleSchemas[state.operation] || [];
   const directFollowupIds = new Set([
@@ -635,6 +654,12 @@
       hintCopy.textContent = field.hint;
       hint.append(hintLabel, hintCopy);
       label.appendChild(hint);
+      const error = document.createElement("small");
+      error.className = "sr-only";
+      error.id = `scale-${field.id}-error`;
+      error.dataset.scaleFieldError = field.id;
+      error.hidden = true;
+      label.appendChild(error);
       control.setAttribute("aria-describedby", hint.id);
       syncScaleControlValidity(control, field);
       fieldElement = label;
@@ -745,7 +770,7 @@
     const minimum = progressiveRange.minimumDriver(state);
     const invalidField = invalidEnteredScaleField();
     if (invalidField) {
-      scaleStatus.textContent = `Correct ${invalidField.label.toLowerCase()} before calculating the range.`;
+      scaleStatus.textContent = scaleFieldCorrectionMessage(invalidField);
       return;
     }
     if (!minimum.ready) {
@@ -941,38 +966,29 @@
     return { ready: true, message: "Ready to calculate a broad range.", href: "#planning-range", action: "View planning range" };
   };
   const estimateReady = () => estimateRequirement().ready;
-  const currentPrecision = () => {
-    const extraCapacity = 3 + (state.ownership === "supply" ? 1 : 0);
-    const extraAnswered = [
-      state.refinement.storage,
-      state.refinement.demand,
-      state.access && state.access !== "standard" ? state.access : "",
-      state.ownership === "supply" ? state.rentalTier : ""
-    ]
-      .filter(Boolean).length;
-    return progressiveRange.precision(state, visibleScaleFields(), {
-      locationValid: validLocation(state.location),
-      extraCapacity,
-      extraAnswered
-    });
-  };
+  const currentPrecision = () => progressiveRange.precision(state, visibleScaleFields(), {
+    locationValid: validLocation(state.location)
+  });
 
   const renderPrecisionRefinement = () => {
-    const answered = [
+    const reviewDetails = [
       state.refinement.storage,
       state.refinement.demand,
-      state.access && state.access !== "standard" ? state.access : "",
-      state.ownership === "supply" ? state.rentalTier : ""
+      state.access && state.access !== "standard" ? state.access : ""
     ].filter(Boolean).length;
+    const pricedDetails = state.ownership === "supply" && state.rentalTier ? 1 : 0;
+    const answered = reviewDetails + pricedDetails;
     const available = 3 + (state.ownership === "supply" ? 1 : 0);
     precisionToggle.setAttribute("aria-expanded", String(precisionOpen));
     precisionToggleLabel.textContent = precisionOpen ? "Hide optional questions" : "Show optional questions";
     precisionPanel.hidden = !precisionOpen;
     refinementStorage.value = state.refinement.storage || "";
     refinementDemand.value = state.refinement.demand || "";
-    precisionStatus.textContent = answered
-      ? `${answered} of ${available} optional details added. Your range has been refined.`
-      : "Your current broad range remains available without these questions.";
+    precisionStatus.textContent = !answered
+      ? "Your current broad range remains available without these questions."
+      : pricedDetails
+        ? `${answered} of ${available} optional details added. Supplied-inventory quality is reflected in the range; the other details support Shelton review.`
+        : `${answered} of ${available} optional details added for Shelton review. The displayed range stays appropriately broad.`;
   };
 
   const stateForEngine = () => ({
@@ -1184,9 +1200,12 @@
       weeklyRange.textContent = collapsed
         ? money(latestResult.range.weeklyBase)
         : money(latestResult.range.weeklyLow) + "–" + money(latestResult.range.weeklyHigh);
+      const piecePriced = latestResult.sourceInput?.volume?.evidence === "piece_counts";
       poundRange.textContent = latestResult.unitPricing
         ? "Estimated processing rate · $" + latestResult.unitPricing.poundLow.toFixed(2) + "–$" + latestResult.unitPricing.poundHigh.toFixed(2) + " / lb"
-        : "Per-pound pricing is confirmed during review.";
+        : piecePriced
+          ? "Per-piece pricing is confirmed during review."
+          : "Per-pound pricing is confirmed during review.";
       const precisionLabel = latestResult.precision?.label || "Planning";
       rangeStage.textContent = estimateLoading
         ? `Updating your ${precisionLabel.toLowerCase()} weekly range`
@@ -1480,7 +1499,9 @@
   ownershipOptions.addEventListener("change", (event) => {
     if (!event.target.matches('input[name="ownership"]')) return;
     state.ownership = event.target.value;
-    if (state.ownership !== "supply") {
+    if (state.ownership === "supply" && !state.rentalTier) {
+      state.rentalTier = "standard";
+    } else if (state.ownership !== "supply") {
       state.rentalCategory = "";
       state.rentalTier = "";
       state.rentalQuantity = "";
@@ -1602,7 +1623,14 @@
     pickerOpen = false;
     operationPanel.hidden = true;
     quoteForm.reset();
-    qa("[aria-invalid]", quoteForm).forEach((control) => control.removeAttribute("aria-invalid"));
+    qa("[aria-invalid]", quoteForm).forEach((control) => {
+      control.removeAttribute("aria-invalid");
+      control.removeAttribute("aria-errormessage");
+    });
+    qa("[data-quote-field-error]", quoteForm).forEach((error) => {
+      error.hidden = true;
+      error.textContent = "";
+    });
     quoteError.hidden = true;
     quoteStatus.hidden = true;
     quoteStatus.textContent = "";
@@ -1627,7 +1655,15 @@
       email: quoteForm.elements.namedItem("email"),
       phone: quoteForm.elements.namedItem("phone"),
       preferred: q('[name="preferredContact"]', quoteForm),
-      preferredGroup: q("[data-contact-choice-group]", quoteForm)
+      preferredGroup: q("[data-contact-choice-group]", quoteForm),
+      preferredInputs: qa('[name="preferredContact"]', quoteForm)
+    };
+    const errors = {
+      name: q('[data-quote-field-error="name"]', quoteForm),
+      business: q('[data-quote-field-error="business"]', quoteForm),
+      email: q('[data-quote-field-error="email"]', quoteForm),
+      phone: q('[data-quote-field-error="phone"]', quoteForm),
+      preferred: q('[data-quote-field-error="preferred"]', quoteForm)
     };
     const invalidEntries = [];
 
@@ -1635,23 +1671,36 @@
       control.removeAttribute("aria-invalid");
       control.removeAttribute("aria-errormessage");
     });
-    if (!name) invalidEntries.push({ control: controls.name, message: "Add your name." });
-    if (!business) invalidEntries.push({ control: controls.business, message: "Add your business name." });
-    if (!email) invalidEntries.push({ control: controls.email, message: "Add your email address." });
-    else if (!emailValid) invalidEntries.push({ control: controls.email, message: "Enter a valid email address." });
-    if (!preferred) invalidEntries.push({ control: controls.preferredGroup, message: "Choose how you prefer to be contacted." });
-    if (phoneRequired && !phone) invalidEntries.push({ control: controls.phone, message: "Add a phone number for your selected contact preference." });
-    const invalidControls = invalidEntries.map((entry) => entry.control);
-    invalidControls.filter(Boolean).forEach((control) => {
-      control.setAttribute("aria-invalid", "true");
-      control.setAttribute("aria-errormessage", "quote-error");
+    qa("[data-quote-field-error]", quoteForm).forEach((error) => {
+      error.hidden = true;
+      error.textContent = "";
+    });
+    if (!name) invalidEntries.push({ control: controls.name, associations: [controls.name], error: errors.name, message: "Add your name." });
+    if (!business) invalidEntries.push({ control: controls.business, associations: [controls.business], error: errors.business, message: "Add your business name." });
+    if (!email) invalidEntries.push({ control: controls.email, associations: [controls.email], error: errors.email, message: "Add your email address." });
+    else if (!emailValid) invalidEntries.push({ control: controls.email, associations: [controls.email], error: errors.email, message: "Enter a valid email address." });
+    if (!preferred) invalidEntries.push({
+      control: controls.preferred,
+      associations: [controls.preferredGroup, ...controls.preferredInputs],
+      error: errors.preferred,
+      message: "Choose how you prefer to be contacted."
+    });
+    if (phoneRequired && !phone) invalidEntries.push({ control: controls.phone, associations: [controls.phone], error: errors.phone, message: "Add a phone number for your selected contact preference." });
+    invalidEntries.forEach((entry) => {
+      if (entry.error) {
+        entry.error.textContent = entry.message;
+        entry.error.hidden = false;
+      }
+      entry.associations.filter(Boolean).forEach((control) => {
+        control.setAttribute("aria-invalid", "true");
+        if (entry.error) control.setAttribute("aria-errormessage", entry.error.id);
+      });
     });
 
-    const valid = invalidControls.length === 0;
-    quoteError.textContent = invalidEntries[0]?.message || "";
+    const valid = invalidEntries.length === 0;
+    quoteError.textContent = valid ? "" : "Review the highlighted required contact details.";
     quoteError.hidden = valid;
-    const firstInvalid = invalidControls.find(Boolean) || null;
-    return { valid, firstInvalidControl: firstInvalid === controls.preferredGroup ? controls.preferred : firstInvalid };
+    return { valid, firstInvalidControl: invalidEntries.find((entry) => entry.control)?.control || null };
   };
 
   const syncPhoneRequirement = () => {
@@ -1668,6 +1717,10 @@
     qa("[aria-invalid]", quoteForm).forEach((control) => {
       control.removeAttribute("aria-invalid");
       control.removeAttribute("aria-errormessage");
+    });
+    qa("[data-quote-field-error]", quoteForm).forEach((error) => {
+      error.hidden = true;
+      error.textContent = "";
     });
     quoteError.hidden = true;
   };
@@ -1817,17 +1870,26 @@
 
   if ("IntersectionObserver" in window) {
     const dockBlockers = new Set();
-    const observer = new IntersectionObserver((entries) => {
+    const syncDockVisibility = () => estimateDock.classList.toggle("is-suppressed", dockBlockers.size > 0);
+    const rangeObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.08) dockBlockers.add(entry.target);
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.4) dockBlockers.add(entry.target);
         else dockBlockers.delete(entry.target);
       });
-      estimateDock.classList.toggle("is-suppressed", dockBlockers.size > 0);
-    }, { threshold: [0, 0.08], rootMargin: "0px 0px -72px 0px" });
+      syncDockVisibility();
+    }, { threshold: [0, 0.4], rootMargin: "0px 0px -72px 0px" });
+    const closingObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) dockBlockers.add(entry.target);
+        else dockBlockers.delete(entry.target);
+      });
+      syncDockVisibility();
+    }, { threshold: 0, rootMargin: "0px 0px 96px 0px" });
     // Keep the quick range visible through the service-location step. Suppress
     // it only once the actual range readout (rather than the surrounding
     // planning section) has meaningfully entered the viewport.
-    [rangeLive, q(".quote-handoff"), document.querySelector(".site-footer")].filter(Boolean).forEach((target) => observer.observe(target));
+    if (rangeLive) rangeObserver.observe(rangeLive);
+    [q(".quote-handoff"), document.querySelector(".site-footer")].filter(Boolean).forEach((target) => closingObserver.observe(target));
   }
 
   renderOperationOptions();

@@ -83,8 +83,12 @@
     const optionalFields = visibleFields.filter((field) => !field.required && !field.routing);
     const optionalCapacity = Math.min(3, optionalFields.length);
     const optionalAnswered = Math.min(optionalCapacity, optionalFields.filter((field) => fieldAnswered(state, field)).length);
-    const extraCapacity = Math.max(0, Number(options.extraCapacity) || 0);
-    const extraAnswered = Math.min(extraCapacity, Math.max(0, Number(options.extraAnswered) || 0));
+    // Only count an extra answer when it changes the estimate itself. Storage,
+    // demand pattern, and ordinary access notes are useful for Shelton's review,
+    // but they do not justify a numerically narrower public range. A supplied-
+    // inventory tier is different because it is sent to the pricing model.
+    const extraCapacity = state?.ownership === "supply" ? 1 : 0;
+    const extraAnswered = extraCapacity && present(state?.rentalTier) ? 1 : 0;
     const answered = core.filter(Boolean).length + optionalAnswered + extraAnswered;
     const total = Math.max(1, core.length + optionalCapacity + extraCapacity);
     const ratio = Math.max(0, Math.min(1, answered / total));
@@ -140,7 +144,12 @@
     const base = Number(result.range.weeklyBase) || (serverLow + serverHigh) / 2;
     const ratio = Math.max(0, Math.min(1, Number(detail?.ratio) || 0));
     const profile = evidenceProfile(result);
-    const uncertaintySpread = profile.baseline + ((profile.ceiling - profile.baseline) * (1 - ratio));
+    const difficultAccess = result?.sourceInput?.route?.access === "difficult";
+    // Difficult access already has explicit review semantics in the public
+    // estimate contract. Keep that result at the lane's supported ceiling
+    // instead of pretending that unrelated optional answers remove the risk.
+    const effectiveRatio = difficultAccess ? 0 : ratio;
+    const uncertaintySpread = profile.baseline + ((profile.ceiling - profile.baseline) * (1 - effectiveRatio));
     const weeklyLow = Math.max(0, roundedMoney(base * (1 - uncertaintySpread), "down"));
     const weeklyHigh = roundedMoney(base * (1 + uncertaintySpread), "up");
     return {
@@ -153,7 +162,7 @@
       unitPricing: rangedUnitPricing(result.unitPricing, uncertaintySpread),
       precision: { ...detail },
       uncertaintySpread,
-      uncertaintyBasis: profile.label,
+      uncertaintyBasis: difficultAccess ? `${profile.label} plus difficult site access` : profile.label,
       serverRange: { weeklyLow: serverLow, weeklyHigh: serverHigh },
       factors: result.factors || []
     };

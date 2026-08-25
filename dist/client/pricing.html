@@ -3,6 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (() => {
+      if (window.location.hash) return;
+
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+
+      window.addEventListener("pageshow", (event) => {
+        const navigation = window.performance.getEntriesByType?.("navigation")?.[0];
+        const restored = event.persisted || navigation?.type === "reload" || navigation?.type === "back_forward";
+        if (!restored) return;
+
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            const opening = document.querySelector(".pricing-opening");
+            const scrollY = window.scrollY;
+            const openingBottom = opening ? opening.offsetTop + opening.offsetHeight : 0;
+
+            if (scrollY > 0 && scrollY < openingBottom) {
+              window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+            }
+          });
+        });
+      });
+    })();
+  </script>
   <title>Commercial Laundry Pricing | Shelton Linen &amp; Uniform Services</title>
   <meta name="description" content="Learn what shapes commercial laundry pricing and build a useful planning range with the details you already know." />
   <link rel="canonical" href="https://sheltonlinen.com/pricing.html" />
@@ -233,7 +260,7 @@
           </div>
           <div class="volume-estimator" data-volume-estimator>
             <div class="volume-estimator__fields" data-volume-estimator-fields></div>
-            <p class="volume-estimator__status" data-volume-estimator-status></p>
+            <p class="volume-estimator__status" data-volume-estimator-status role="status" aria-live="polite" aria-atomic="true"></p>
             <p class="conversion-note" data-volume-help-conversion hidden></p>
           </div>
         </div>
@@ -431,15 +458,16 @@
         <input class="hidden-field" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
         <input type="hidden" name="_subject" value="New Shelton Linen pricing estimator handoff" />
         <div class="quote-fields">
-          <label><span>Name</span><input type="text" name="name" autocomplete="name" required maxlength="100" /></label>
-          <label><span>Business</span><input type="text" name="business" autocomplete="organization" required maxlength="120" /></label>
-          <label><span>Email</span><input type="email" name="email" autocomplete="email" required maxlength="254" /></label>
-          <label><span>Phone <em data-phone-required-note hidden>required for phone contact</em></span><input type="tel" name="phone" autocomplete="tel" maxlength="32" /></label>
+          <label><span>Name</span><input type="text" name="name" autocomplete="name" required maxlength="100" /><small class="sr-only" id="quote-name-error" data-quote-field-error="name" hidden></small></label>
+          <label><span>Business</span><input type="text" name="business" autocomplete="organization" required maxlength="120" /><small class="sr-only" id="quote-business-error" data-quote-field-error="business" hidden></small></label>
+          <label><span>Email</span><input type="email" name="email" autocomplete="email" required maxlength="254" /><small class="sr-only" id="quote-email-error" data-quote-field-error="email" hidden></small></label>
+          <label><span>Phone <em data-phone-required-note hidden>required for phone contact</em></span><input type="tel" name="phone" autocomplete="tel" maxlength="32" /><small class="sr-only" id="quote-phone-error" data-quote-field-error="phone" hidden></small></label>
           <fieldset class="quote-contact-choice" data-contact-choice-group>
             <legend>Preferred contact</legend>
             <label><input type="radio" name="preferredContact" value="email" required /><span>Email</span></label>
             <label><input type="radio" name="preferredContact" value="phone" /><span>Phone</span></label>
             <label><input type="radio" name="preferredContact" value="either" /><span>Either</span></label>
+            <small class="sr-only" id="quote-preferred-error" data-quote-field-error="preferred" hidden></small>
           </fieldset>
           <label class="quote-field--notes"><span>Notes <em>optional</em></span><textarea name="notes" rows="3" maxlength="1200"></textarea></label>
         </div>
@@ -501,8 +529,8 @@
 
   <script src="assets/js/site.js?v=20260816-mobile-launch-v1"></script>
   <script src="assets/js/pricing-journey-config.js?v=20260823-exact-occupancy-v1"></script>
-  <script src="assets/js/pricing-engine.js?v=20260823-daily-cadence-v1"></script>
-  <script src="assets/js/pricing-progressive-range.js?v=20260820-confidence-lanes-v17"></script>
-  <script src="assets/js/pricing-learning.js?v=20260823-daily-cadence-v3"></script>
+  <script src="assets/js/pricing-engine.js?v=20260824-approved-fixes-v1"></script>
+  <script src="assets/js/pricing-progressive-range.js?v=20260824-approved-fixes-v1"></script>
+  <script src="assets/js/pricing-learning.js?v=20260824-approved-fixes-v1"></script>
 </body>
 </html>
