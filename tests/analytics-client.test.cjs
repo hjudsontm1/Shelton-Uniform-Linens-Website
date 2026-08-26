@@ -165,7 +165,7 @@ test("analytics loads only on canonical public pages with stable high-value iden
     const html = fs.readFileSync(path.join(distClient, file), "utf8");
     assert.doesNotMatch(html, /assets\/js\/analytics\.js/);
   });
-  assert.match(fs.readFileSync(path.join(distClient, "index.html"), "utf8"), /data-analytics-module="home-program-builder"/);
+  assert.match(fs.readFileSync(path.join(distClient, "index.html"), "utf8"), /data-analytics-module="home-industry-explorer"/);
   assert.match(fs.readFileSync(path.join(distClient, "services.html"), "utf8"), /data-analytics-module="services-cleaning-standard"/);
   assert.match(fs.readFileSync(path.join(distClient, "pricing.html"), "utf8"), /data-analytics-module="pricing-program-builder"/);
   assert.match(fs.readFileSync(path.join(distClient, "about.html"), "utf8"), /data-analytics-module="about-archive"/);
