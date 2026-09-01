@@ -101,13 +101,15 @@ const WEBSITE_ANALYTICS_OPERATIONS = new Set([
   "homeless_shelter",
   "hotel",
   "medspa",
+  "other",
   "residential_treatment",
   "resort_spa",
   "restaurant",
   "senior_living",
   "specialty",
   "str",
-  "uniform"
+  "uniform",
+  "wholesale"
 ]);
 const WEBSITE_ANALYTICS_MODES = new Set(["custom", "typical"]);
 const WEBSITE_ANALYTICS_EVIDENCE = new Set([

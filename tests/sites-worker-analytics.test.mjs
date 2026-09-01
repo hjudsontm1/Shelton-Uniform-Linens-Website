@@ -160,6 +160,40 @@ test("website analytics is same-origin POST/OPTIONS only", async () => {
   }
 });
 
+test("website analytics accepts the published manual-only estimator operations", async () => {
+  const originalFetch = globalThis.fetch;
+  const forwardedOperations = [];
+  globalThis.fetch = async (_url, options) => {
+    forwardedOperations.push(JSON.parse(options.body).events[0].properties.operation);
+    return new Response(JSON.stringify({
+      schemaVersion: "website-analytics.v1",
+      accepted: 1,
+      duplicates: 0,
+      rejected: 0
+    }), { status: 202, headers: { "Content-Type": "application/json" } });
+  };
+
+  try {
+    for (const operation of ["other", "wholesale"]) {
+      const event = analyticsBatch().events[0];
+      const response = await worker.fetch(
+        analyticsRequest(analyticsBatch({
+          events: [{
+            ...event,
+            name: "estimator_operation_selected",
+            properties: { operation, stage: "selected" }
+          }]
+        })),
+        env
+      );
+      assert.equal(response.status, 202);
+    }
+    assert.deepEqual(forwardedOperations, ["other", "wholesale"]);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test("website analytics enforces content type, 32KB, 20-event, and allowlist limits", async () => {
   const originalFetch = globalThis.fetch;
   let fetchCalls = 0;

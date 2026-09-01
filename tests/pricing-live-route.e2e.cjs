@@ -34,7 +34,19 @@ const publicEstimate = (lane, rental = []) => ({
 
 const installApiMocks = async (page, captures, options = {}) => {
   const leadStatus = options.leadStatus || 201;
-  await page.route("**/api/commercial-estimate", async (route) => {
+  await page.route("https://fonts.googleapis.com/**", async (route) => {
+    await route.fulfill({ status: 200, contentType: "text/css", body: "" });
+  });
+  await page.route("https://fonts.gstatic.com/**", async (route) => {
+    await route.fulfill({ status: 200, contentType: "application/octet-stream", body: "" });
+  });
+  await page.route("https://unpkg.com/**", async (route) => {
+    await route.fulfill({ status: 200, contentType: "text/css", body: "" });
+  });
+  await page.route("**/api/website-events", async (route) => {
+    await route.fulfill({ status: 202, contentType: "application/json", body: JSON.stringify({ accepted: true }) });
+  });
+  await page.route("**/api/public/commercial-estimate", async (route) => {
     const body = JSON.parse(route.request().postData() || "{}");
     captures.estimates.push(body);
     await route.fulfill({
@@ -43,7 +55,7 @@ const installApiMocks = async (page, captures, options = {}) => {
       body: JSON.stringify(publicEstimate(body.estimate?.operation || "hotel"))
     });
   });
-  await page.route("**/api/commercial-leads", async (route) => {
+  await page.route("**/api/public/commercial-leads", async (route) => {
     const lead = JSON.parse(route.request().postData() || "{}");
     captures.lead = lead;
     captures.leadAttempts ||= [];
@@ -66,7 +78,12 @@ const chooseOperation = async (page, id) => {
 };
 
 const chooseGood = async (page, id) => {
-  await page.locator(`[data-goods-options] label:has(input[value="${id}"])`).click();
+  const option = page.locator(`[data-goods-options] label:has(input[value="${id}"])`);
+  if (!await option.isVisible().catch(() => false)) {
+    const customize = page.locator("[data-goods-customize]");
+    if (await customize.isVisible().catch(() => false)) await customize.click();
+  }
+  await option.click();
 };
 
 const fillScale = async (page, values) => {
@@ -122,8 +139,11 @@ const main = async () => {
   assert.equal(await page.locator("[data-operation-option]").count(), 13);
   assert.equal(await page.locator("[data-operation-guide], [data-operation-guide-empty]").count(), 0, "the former operation note is removed");
   assert.equal(await page.locator("[data-program-details], .chapter-detail-list").count(), 0, "the compact detail-row introductions are removed");
-  assert.equal(await page.locator(".learning-chapter__lesson > .chapter-editorial-title").count(), 5, "all estimator chapters use the established editorial headline treatment");
-  assert.equal(await page.locator(".learning-chapter__lesson > .chapter-editorial-title:visible").count(), 5, "all editorial headlines are visible");
+  assert.equal(await page.locator(".learning-chapter").count(), 4, "the estimator presents its four actual decisions");
+  assert.equal(await page.locator(".learning-chapter__lesson > .chapter-editorial-title").count(), 3, "the three split chapters use the established editorial headline treatment");
+  assert.equal(await page.locator(".learning-chapter__lesson > .chapter-editorial-title:visible").count(), 3, "all split-chapter editorial headlines are visible");
+  assert.equal(await page.locator("#factor-ownership > .learning-chapter__lesson").count(), 0, "the compact ownership decision remains answer-only");
+  assert.equal(await page.locator("#factor-ownership > .learning-chapter__answer:visible").count(), 1, "the ownership decision remains visible");
   const initialHeadlines = await page.locator(".chapter-editorial-title").allTextContents();
   await assertNoOverflow(page, "desktop landing");
 
@@ -151,11 +171,11 @@ const main = async () => {
   assert.ok(desktopDock.rightGap >= 15 && desktopDock.rightGap <= 34, `desktop dock right gap: ${desktopDock.rightGap}`);
   assert.ok(desktopDock.bottomGap >= 15 && desktopDock.bottomGap <= 34, `desktop dock bottom gap: ${desktopDock.bottomGap}`);
   assert.ok(desktopDock.width <= 431, `desktop dock remains a compact utility card: ${desktopDock.width}`);
-  assert.match(await page.locator("[data-range-stage]").innerText(), /TYPICAL WEEKLY AMOUNT AND QUANTITY RANGE/i);
-  assert.equal(await page.locator("[data-pound-range]").innerText(), "$0.88 / lb fixed recommended rate");
-  assert.match(await page.locator("[data-range-guidance-copy]").innerText(), /material quantity and mix inputs are resolved/i);
+  assert.match(await page.locator("[data-range-stage]").innerText(), /DEVELOPING WEEKLY PLANNING RANGE/i);
+  assert.equal(await page.locator("[data-pound-range]").innerText(), "Estimated processing rate · $0.70–$1.06 / lb");
+  assert.match(await page.locator("[data-range-guidance-copy]").innerText(), /central San Diego planning route/i);
   assert.equal(await page.locator("[data-monthly-range], [data-confidence-label], [data-model-label], [data-range-assumptions]").count(), 0);
-  await fillScale(page, { occupancy: "75to89", bedSystem: "mixed", storage: "limited", weeklyRobes: 40 });
+  await fillScale(page, { occupancy: "75to89", weeklyRobes: 40 });
   await page.waitForTimeout(400);
   assert.deepEqual(await page.locator(".chapter-editorial-title").allTextContents(), initialHeadlines, "the editorial headings remain stable as the operation changes");
   assert.equal(await page.locator("#factor-program .learning-chapter__lesson > p:not(.chapter-index)").count(), 0, "the repeated generic paragraph is removed");
@@ -169,8 +189,8 @@ const main = async () => {
   assert.ok(desktopLessonBox && desktopAnswerBox, "desktop Section 01 columns are measurable");
   assert.ok(Math.abs(desktopLessonBox.height - desktopAnswerBox.height) <= 4, `desktop Section 01 columns share a baseline: ${desktopLessonBox.height}px vs ${desktopAnswerBox.height}px`);
   assert.match(await page.locator("[data-weekly-range]").innerText(), /^\$[\d,]+–\$[\d,]+$/);
-  assert.match(await page.locator("[data-range-stage]").innerText(), /TYPICAL WEEKLY AMOUNT AND QUANTITY RANGE/i);
-  const retained = JSON.parse(await page.evaluate(() => sessionStorage.getItem("shelton-pricing-spine-v9")));
+  assert.match(await page.locator("[data-range-stage]").innerText(), /REFINED WEEKLY PLANNING RANGE/i);
+  const retained = JSON.parse(await page.evaluate(() => sessionStorage.getItem("shelton-pricing-spine-v14")));
   assert.equal(retained.scale.rooms, "100");
   assert.deepEqual(retained.specialtyNeeds, []);
   assert.equal(captures.estimates.at(-1).estimate.service.customSorting, false);
@@ -180,6 +200,7 @@ const main = async () => {
   );
 
   await page.locator('[data-ownership-options] label:has(input[value="supply"])').click();
+  await page.locator("[data-precision-toggle]").click();
   await page.locator("[data-inventory-details]").waitFor({ state: "visible" });
   await page.locator("[data-inventory-tier]").selectOption("premium");
   await page.waitForTimeout(400);
@@ -187,7 +208,9 @@ const main = async () => {
   assert.deepEqual(rentalInput.ownership, { model: "shelton_supplied", tier: "premium" });
   assert.equal(JSON.stringify(rentalInput).includes("landedCostPerItem"), false, "public estimate requests never expose internal cost fields");
 
+  const routedEstimate = page.waitForResponse((response) => response.url().endsWith("/api/public/commercial-estimate"));
   await page.locator("[data-location-input]").fill("92101");
+  await routedEstimate;
   await page.locator('input[name="name"]').fill("Jordan Hudson");
   await page.locator('input[name="business"]').fill("Shelton Test Hotel");
   await page.locator('input[name="email"]').fill("jordan@example.com");
@@ -224,7 +247,9 @@ const main = async () => {
         programEditorialAlign: getComputedStyle(document.querySelector("#factor-program .chapter-editorial-title")).textAlign,
         programEditorialWidth: programEditorial.width,
         programEditorialCentered: Math.abs((programEditorial.left - programLesson.left) - (programLesson.right - programEditorial.right)) <= 2,
-        chapters: Array.from(document.querySelectorAll(".learning-chapter")).map((chapter) => {
+        chapters: Array.from(document.querySelectorAll(".learning-chapter")).filter((chapter) => (
+          chapter.querySelector(".learning-chapter__lesson") && chapter.querySelector(".learning-chapter__answer")
+        )).map((chapter) => {
           const lesson = rect(chapter.querySelector(".learning-chapter__lesson"));
           const answer = rect(chapter.querySelector(".learning-chapter__answer"));
           return {
@@ -240,10 +265,11 @@ const main = async () => {
     assert.ok(compactLayout.shell.width <= width - 28, `${width}: compact shell exposes the patterned rails`);
     assert.ok(Math.abs(compactLayout.shell.left - compactLayout.shell.rightGap) <= 2, `${width}: compact shell is centered`);
     assert.match(compactLayout.background, /pricing-halftone-transition-tall-v5/, `${width}: compact shell keeps the full desktop spine motif`);
-    assert.equal(compactLayout.backgroundSize, "744px", `${width}: compact keeps the desktop halftone density`);
+    assert.equal(compactLayout.backgroundSize, "744px auto", `${width}: compact keeps the desktop halftone density`);
     assert.equal(compactLayout.programLessonAlign, "center", `${width}: the stacked Section 01 lesson is centered`);
     assert.equal(compactLayout.programAnswerHeadingAlign, "center", `${width}: the stacked Section 01 answer heading is centered`);
     assert.equal(compactLayout.programEditorialAlign, "center", `${width}: the Section 01 editorial stays centered`);
+    assert.equal(compactLayout.chapters.length, 3, `${width}: the three split chapters retain the compact two-column checks`);
     assert.ok(compactLayout.programEditorialWidth <= compactLayout.chapters[0].lessonWidth, `${width}: the editorial headline stays within its lesson column`);
     assert.ok(compactLayout.programEditorialCentered, `${width}: the editorial headline is centered within the Section 01 lesson`);
     compactLayout.chapters.forEach((chapter) => {
@@ -264,14 +290,14 @@ const main = async () => {
   const restoredPage = await restored.newPage();
   await restoredPage.goto(baseUrl, { waitUntil: "networkidle" });
   await restoredPage.evaluate(() => {
-    sessionStorage.setItem("shelton-pricing-spine-v9", JSON.stringify({
+    sessionStorage.setItem("shelton-pricing-spine-v14", JSON.stringify({
       operation: "hotel",
       goods: ["sheets"],
       specialtyNeeds: ["whiteRetention"]
     }));
   });
   await restoredPage.reload({ waitUntil: "networkidle" });
-  const restoredState = JSON.parse(await restoredPage.evaluate(() => sessionStorage.getItem("shelton-pricing-spine-v9")));
+  const restoredState = JSON.parse(await restoredPage.evaluate(() => sessionStorage.getItem("shelton-pricing-spine-v14")));
   assert.deepEqual(restoredState.specialtyNeeds, [], "legacy specialty selections are removed from restored sessions");
   assert.equal(await restoredPage.locator("[data-specialty-fieldset], [data-specialty-options], input[name='specialty']").count(), 0);
   await restored.close();
@@ -313,7 +339,7 @@ const main = async () => {
   await manualPage.goto(baseUrl, { waitUntil: "networkidle" });
   await chooseOperation(manualPage, "other");
   await chooseGood(manualPage, "sheets");
-  await fillScale(manualPage, { weeklyVolume: 1000, volumeUnit: "pieces", activeDays: 5, variability: "steady", storage: "limited" });
+  await fillScale(manualPage, { weeklyVolume: 1000, volumeUnit: "pieces", activeDays: 5 });
   await manualPage.locator("[data-range-revealed]").waitFor({ state: "visible" });
   assert.equal(await manualPage.locator("[data-weekly-range]").innerText(), "Shelton review");
   assert.match(await manualPage.locator("[data-range-stage]").innerText(), /PERSONALIZED PRICING REVIEW/i);
