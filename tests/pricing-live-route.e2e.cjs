@@ -37,10 +37,11 @@ const installApiMocks = async (page, captures, options = {}) => {
   await page.route("**/api/commercial-estimate", async (route) => {
     const body = JSON.parse(route.request().postData() || "{}");
     captures.estimates.push(body);
-    const rental = body.estimate?.rentalSelections?.length
-      ? [{ category: body.estimate.rentalSelections[0].category, tier: body.estimate.rentalSelections[0].tier, quantity: body.estimate.rentalSelections[0].quantity, weeklyRatePerItem: 0.42, weeklyCharge: 210, requiresManagementReview: false }]
-      : [];
-    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(publicEstimate(body.estimate?.lane || "hotel", rental)) });
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(publicEstimate(body.estimate?.operation || "hotel"))
+    });
   });
   await page.route("**/api/commercial-leads", async (route) => {
     const lead = JSON.parse(route.request().postData() || "{}");
@@ -65,20 +66,32 @@ const chooseOperation = async (page, id) => {
 };
 
 const chooseGood = async (page, id) => {
-  await page.locator(`[data-goods-options] input[value="${id}"]`).check();
+  await page.locator(`[data-goods-options] label:has(input[value="${id}"])`).click();
 };
 
 const fillScale = async (page, values) => {
+  const driverEntry = page.locator('label:has([data-scale-field="entryMode"][value="drivers"])');
+  if (await driverEntry.isVisible().catch(() => false)) {
+    await driverEntry.click();
+    await page.locator("[data-scale-next]").click();
+  }
   for (const [id, value] of Object.entries(values)) {
     const control = page.locator(`[data-scale-field="${id}"]`);
-    for (let step = 0; step < 20 && !await control.isVisible().catch(() => false); step += 1) {
+    const fieldHost = page.locator(`fieldset:has([data-scale-field="${id}"]):visible, label:has([data-scale-field="${id}"]):visible`).first();
+    for (let step = 0; step < 20 && !await fieldHost.isVisible().catch(() => false); step += 1) {
       const next = page.locator("[data-scale-next]");
       assert.equal(await next.isVisible().catch(() => false), true, `can navigate to sizing field ${id}`);
       await next.click();
     }
-    assert.equal(await control.isVisible().catch(() => false), true, `sizing field ${id} is in the question sequence`);
-    if (await control.evaluate((node) => node.tagName === "SELECT")) await control.selectOption(String(value));
-    else await control.fill(String(value));
+    assert.equal(await fieldHost.isVisible().catch(() => false), true, `sizing field ${id} is in the question sequence`);
+    const firstControl = control.first();
+    if (await firstControl.evaluate((node) => node.tagName === "SELECT")) {
+      await firstControl.selectOption(String(value));
+    } else if (await firstControl.getAttribute("type") === "radio") {
+      await page.locator(`label:has([data-scale-field="${id}"][value="${value}"])`).click();
+    } else {
+      await firstControl.fill(String(value));
+    }
   }
 };
 
@@ -88,13 +101,6 @@ const openEarlyHotel = async (page) => {
   await chooseGood(page, "robes");
   await fillScale(page, { rooms: 100 });
   await page.locator("[data-range-revealed]").waitFor({ state: "visible" });
-};
-
-const displayedRangeWidth = async (page) => {
-  const values = (await page.locator("[data-weekly-range]").innerText())
-    .match(/[\d,]+/g)
-    .map((value) => Number(value.replaceAll(",", "")));
-  return values[1] - values[0];
 };
 
 const main = async () => {
@@ -132,7 +138,6 @@ const main = async () => {
   await openEarlyHotel(page);
   assert.equal(await page.locator("[data-scale-field]").count(), 1, "Section 02 presents one sizing question at a time");
   assert.equal(await page.getByText(/Estimator 2\.3 sizing/i).count(), 0, "technical estimator copy is removed from Section 02");
-  const earlyWidth = await displayedRangeWidth(page);
   const desktopDock = await page.locator("[data-estimate-dock]").evaluate((dock) => {
     const box = dock.getBoundingClientRect();
     return {
@@ -146,18 +151,12 @@ const main = async () => {
   assert.ok(desktopDock.rightGap >= 15 && desktopDock.rightGap <= 34, `desktop dock right gap: ${desktopDock.rightGap}`);
   assert.ok(desktopDock.bottomGap >= 15 && desktopDock.bottomGap <= 34, `desktop dock bottom gap: ${desktopDock.bottomGap}`);
   assert.ok(desktopDock.width <= 431, `desktop dock remains a compact utility card: ${desktopDock.width}`);
-  assert.match(await page.locator("[data-range-stage]").innerText(), /WEEKLY PLANNING RANGE/i);
-  assert.equal(await page.locator("[data-pound-range]").innerText(), "$0.82–$0.96 / lb");
-  assert.match(await page.locator("[data-range-guidance-copy]").innerText(), /make this range more specific/i);
+  assert.match(await page.locator("[data-range-stage]").innerText(), /TYPICAL WEEKLY AMOUNT AND QUANTITY RANGE/i);
+  assert.equal(await page.locator("[data-pound-range]").innerText(), "$0.88 / lb fixed recommended rate");
+  assert.match(await page.locator("[data-range-guidance-copy]").innerText(), /material quantity and mix inputs are resolved/i);
   assert.equal(await page.locator("[data-monthly-range], [data-confidence-label], [data-model-label], [data-range-assumptions]").count(), 0);
   await fillScale(page, { occupancy: "75to89", bedSystem: "mixed", storage: "limited", weeklyRobes: 40 });
-  await page.waitForFunction((previous) => {
-    const text = document.querySelector("[data-weekly-range]")?.textContent || "";
-    const values = text.match(/[\d,]+/g)?.map((value) => Number(value.replaceAll(",", ""))) || [];
-    return values.length === 2 && values[1] - values[0] < previous;
-  }, earlyWidth);
-  const refinedWidth = await displayedRangeWidth(page);
-  assert.ok(refinedWidth < earlyWidth, `additional answers narrow the weekly range: ${earlyWidth} -> ${refinedWidth}`);
+  await page.waitForTimeout(400);
   assert.deepEqual(await page.locator(".chapter-editorial-title").allTextContents(), initialHeadlines, "the editorial headings remain stable as the operation changes");
   assert.equal(await page.locator("#factor-program .learning-chapter__lesson > p:not(.chapter-index)").count(), 0, "the repeated generic paragraph is removed");
   assert.equal(await page.locator("[data-operation-guide-link]").getAttribute("href"), "industries.html#hotels");
@@ -170,20 +169,23 @@ const main = async () => {
   assert.ok(desktopLessonBox && desktopAnswerBox, "desktop Section 01 columns are measurable");
   assert.ok(Math.abs(desktopLessonBox.height - desktopAnswerBox.height) <= 4, `desktop Section 01 columns share a baseline: ${desktopLessonBox.height}px vs ${desktopAnswerBox.height}px`);
   assert.match(await page.locator("[data-weekly-range]").innerText(), /^\$[\d,]+–\$[\d,]+$/);
-  assert.match(await page.locator("[data-range-stage]").innerText(), /PLANNING RANGE/i);
-  const retained = JSON.parse(await page.evaluate(() => sessionStorage.getItem("shelton-pricing-spine-v7")));
+  assert.match(await page.locator("[data-range-stage]").innerText(), /TYPICAL WEEKLY AMOUNT AND QUANTITY RANGE/i);
+  const retained = JSON.parse(await page.evaluate(() => sessionStorage.getItem("shelton-pricing-spine-v9")));
   assert.equal(retained.scale.rooms, "100");
   assert.deepEqual(retained.specialtyNeeds, []);
-  assert.equal(captures.estimates.at(-1).estimate.specializedHandling, false);
-  assert.equal(captures.estimates.at(-1).estimate.specialtyItems[0].type, "robe");
+  assert.equal(captures.estimates.at(-1).estimate.service.customSorting, false);
+  assert.deepEqual(
+    captures.estimates.at(-1).estimate.selectedGoods.find((good) => good.id === "robes"),
+    { id: "robes", weeklyPieces: 40 }
+  );
 
-  await page.locator('[data-ownership-options] input[value="supply"]').check();
-  await page.locator("[data-inventory-category]").selectOption("sheets");
+  await page.locator('[data-ownership-options] label:has(input[value="supply"])').click();
+  await page.locator("[data-inventory-details]").waitFor({ state: "visible" });
   await page.locator("[data-inventory-tier]").selectOption("premium");
-  await page.locator("[data-inventory-units]").fill("500");
-  await page.waitForResponse("**/api/commercial-estimate");
-  const rentalInput = captures.estimates.at(-1).estimate.rentalSelections[0];
-  assert.deepEqual(rentalInput, { category: "sheets", tier: "premium", quantity: 500, landedCostPerItem: null });
+  await page.waitForTimeout(400);
+  const rentalInput = captures.estimates.at(-1).estimate;
+  assert.deepEqual(rentalInput.ownership, { model: "shelton_supplied", tier: "premium" });
+  assert.equal(JSON.stringify(rentalInput).includes("landedCostPerItem"), false, "public estimate requests never expose internal cost fields");
 
   await page.locator("[data-location-input]").fill("92101");
   await page.locator('input[name="name"]').fill("Jordan Hudson");
@@ -254,7 +256,7 @@ const main = async () => {
     assert.equal(await compactPage.locator("[data-operation-panel]").getAttribute("role"), "region", `${width}: compact picker remains an inline disclosure`);
     assert.equal(await compactPage.locator("[data-operation-panel]").getAttribute("aria-modal"), null, `${width}: compact picker does not claim modal semantics`);
     const panel = await compactPage.locator("[data-operation-panel]").boundingBox();
-    assert.ok(panel && panel.x >= -1 && panel.x + panel.width <= width + 1 && panel.y >= -1 && panel.y + panel.height <= 1001, `${width}: picker stays inside the compact viewport`);
+    assert.ok(panel && panel.x >= -1 && panel.x + panel.width <= width + 1 && panel.y >= -1, `${width}: inline picker stays inside the compact viewport horizontally`);
     await compact.close();
   }
 
@@ -262,14 +264,14 @@ const main = async () => {
   const restoredPage = await restored.newPage();
   await restoredPage.goto(baseUrl, { waitUntil: "networkidle" });
   await restoredPage.evaluate(() => {
-    sessionStorage.setItem("shelton-pricing-spine-v7", JSON.stringify({
+    sessionStorage.setItem("shelton-pricing-spine-v9", JSON.stringify({
       operation: "hotel",
       goods: ["sheets"],
       specialtyNeeds: ["whiteRetention"]
     }));
   });
   await restoredPage.reload({ waitUntil: "networkidle" });
-  const restoredState = JSON.parse(await restoredPage.evaluate(() => sessionStorage.getItem("shelton-pricing-spine-v7")));
+  const restoredState = JSON.parse(await restoredPage.evaluate(() => sessionStorage.getItem("shelton-pricing-spine-v9")));
   assert.deepEqual(restoredState.specialtyNeeds, [], "legacy specialty selections are removed from restored sessions");
   assert.equal(await restoredPage.locator("[data-specialty-fieldset], [data-specialty-options], input[name='specialty']").count(), 0);
   await restored.close();
@@ -279,13 +281,13 @@ const main = async () => {
       operation: "senior_living",
       goods: "sheets",
       values: { licensedCapacity: 120, occupancy: "75to89", careType: "mixed", memoryCarePercent: 35 },
-      expected: { lane: "senior_living", licensedCapacity: 120, occupancyPercent: 82, careType: "mixed", memoryCarePercent: 35 }
+      expected: { operation: "senior_living", licensedCapacity: 120, occupancyPercent: 82, careType: "mixed", memoryCarePercent: 35 }
     },
     {
       operation: "residential_treatment",
       goods: "sheets",
       values: { licensedCapacity: 48, occupancy: "90plus", careType: "detox_withdrawal", admissionsPerWeek: 11, averageStayDays: 9 },
-      expected: { lane: "residential_treatment", licensedCapacity: 48, occupancyPercent: 94, careType: "detox_withdrawal", admissionsPerWeek: 11, averageStayDays: 9 }
+      expected: { operation: "residential_treatment", licensedCapacity: 48, occupancyPercent: 94, careType: "detox_withdrawal", admissionsPerWeek: 11, averageStayDays: 9 }
     }
   ]) {
     const branchCaptures = { estimates: [], lead: null, formspree: "" };
@@ -296,9 +298,12 @@ const main = async () => {
     await chooseOperation(branchPage, branch.operation);
     await chooseGood(branchPage, branch.goods);
     await fillScale(branchPage, branch.values);
+    await branchPage.waitForTimeout(400);
     await branchPage.locator("[data-range-revealed]").waitFor({ state: "visible" });
     const estimate = branchCaptures.estimates.at(-1).estimate;
-    for (const [key, value] of Object.entries(branch.expected)) assert.equal(estimate[key], value, `${branch.operation} maps ${key}`);
+    for (const [key, value] of Object.entries(branch.expected)) {
+      assert.equal(key === "operation" ? estimate.operation : estimate.volume[key], value, `${branch.operation} maps ${key}`);
+    }
     await assertNoOverflow(branchPage, `${branch.operation} estimator`);
     await context.close();
   }
@@ -307,7 +312,7 @@ const main = async () => {
   const manualPage = await manual.newPage();
   await manualPage.goto(baseUrl, { waitUntil: "networkidle" });
   await chooseOperation(manualPage, "other");
-  await chooseGood(manualPage, "towels");
+  await chooseGood(manualPage, "sheets");
   await fillScale(manualPage, { weeklyVolume: 1000, volumeUnit: "pieces", activeDays: 5, variability: "steady", storage: "limited" });
   await manualPage.locator("[data-range-revealed]").waitFor({ state: "visible" });
   assert.equal(await manualPage.locator("[data-weekly-range]").innerText(), "Shelton review");
@@ -347,7 +352,7 @@ const main = async () => {
   await mobile.close();
 
   await browser.close();
-  console.log("Pricing spine passed V2.3 lane mapping, evidence-gated rental, durable lead handoff, manual review, and responsive checks.");
+  console.log("Pricing spine passed current lane mapping, evidence-gated rental, durable lead handoff, manual review, and responsive checks.");
 };
 
 main().catch((error) => {

@@ -1,0 +1,98 @@
+source	commit	parents	author_date	subject
+github-preferred	05552e8fd9c3682d259dc5fb0093c5dcbb9e4b8b	b4602630d0166bff007ac8f00c05342f6164540e	2026-08-16T18:35:59-07:00	Finalize heritage content and responsive polish
+github-preferred	b4602630d0166bff007ac8f00c05342f6164540e	1e79bd7a0324b905b4d37cdedd3f6cfabef4b953	2026-08-16T09:57:29-07:00	Complete launch-ready site and mobile pass
+github-preferred	1e79bd7a0324b905b4d37cdedd3f6cfabef4b953	7a289adfd5b1362a1f54a5d1093e2cb363550608	2026-08-08T13:28:34-07:00	Publish updated site content and experiences
+github-preferred	ddc18eac406edb8b14e381bfe522a9d0ca72e943	798a0d53471f9353641d008078119da45b2aaea9	2026-08-03T15:41:39-07:00	Refresh homepage commercial laundry copy
+github-preferred	798a0d53471f9353641d008078119da45b2aaea9	c0d92bdd768122bf4500ab8eeadce999c7fd72b1	2026-07-29T13:19:58-07:00	Integrate pricing estimator v2.3
+github-preferred	c0d92bdd768122bf4500ab8eeadce999c7fd72b1	10a5091e12dfd84382f0a2ad6136af89b297669d	2026-07-29T15:55:40-07:00	Publish complete local site snapshot
+github-preferred	10a5091e12dfd84382f0a2ad6136af89b297669d	7a289adfd5b1362a1f54a5d1093e2cb363550608	2026-07-29T14:29:15-07:00	Add Who We Serve tailored concept
+github-preferred	e60f15072886f81776fb44efd418cf2c15885bff	ef57e2fa61881135be7c6d67f0af4ba7f83d4021	2026-07-24T16:23:51-07:00	Connect pricing journey to estimator v2
+github-preferred	7a289adfd5b1362a1f54a5d1093e2cb363550608	8f27aadbd6716223c7a5936762e2d9168d6a2497	2026-07-22T16:26:06-07:00	Rebuild core site experiences and About timeline
+github-preferred	10190c8bcf16511c1ae14abf5ffd2bae394137f3	04b7193bf0931f277c62e68920bcdd5a4b1480d1	2026-07-17T05:59:39-07:00	Publish refreshed Shelton website
+github-preferred	ef57e2fa61881135be7c6d67f0af4ba7f83d4021	9835978b33b16a6af0ae29ab059efff24de96677	2026-07-12T12:39:20-05:00	Promote Pricing journey to website
+github-preferred	9835978b33b16a6af0ae29ab059efff24de96677	8dc7058a00e204a0525e0b6cd53a230b97487140	2026-07-12T08:03:13-05:00	Polish Pricing and Estimate experience for release
+github-preferred	8dc7058a00e204a0525e0b6cd53a230b97487140	2c70319dcf31648c75a9b36c3f217930d34b9dbe	2026-07-12T03:25:49-05:00	docs(pricing): record final atelier checkpoint
+github-preferred	2c70319dcf31648c75a9b36c3f217930d34b9dbe	9149425200bf909a3e5ba6f23081437008008e87	2026-07-12T03:25:00-05:00	checkpoint(pricing): finalize private atelier pricing journey
+github-preferred	8f27aadbd6716223c7a5936762e2d9168d6a2497	37b23000ade0e452a85c00a3a3e2108a639b8fd0	2026-07-12T00:58:06-05:00	Reduce pricing page copy repetition
+github-preferred	37b23000ade0e452a85c00a3a3e2108a639b8fd0	43e42a2fa8cb7fc0cd752daf0a7debb0436e5cb0	2026-07-12T00:51:00-05:00	Refine pricing page spacing and background
+github-preferred	43e42a2fa8cb7fc0cd752daf0a7debb0436e5cb0	9cfeefcf82781d2d3fa85c94d6a818e3a4c1f417	2026-07-12T00:32:45-05:00	Add pricing support vectors
+github-preferred	9cfeefcf82781d2d3fa85c94d6a818e3a4c1f417	cc495a9e36617b123defe5f9e7bb4640d91261c8	2026-07-12T00:13:21-05:00	Remove pricing commitment section
+github-preferred	cc495a9e36617b123defe5f9e7bb4640d91261c8	f0ec5720924bbbf899cdf30b94aaa99c6ef3e66b	2026-07-12T00:07:21-05:00	Revise pricing commitment section
+github-preferred	f0ec5720924bbbf899cdf30b94aaa99c6ef3e66b	5582d41c30fec309236f70d3e1336b527f34cbcd	2026-07-11T17:10:46-05:00	Add premium pricing page polish
+github-preferred	5582d41c30fec309236f70d3e1336b527f34cbcd	77fcc6ac9dc8fefe579034b517d17b7b9dc04903	2026-07-11T16:55:47-05:00	Revise pricing landing page hierarchy
+github-preferred	77fcc6ac9dc8fefe579034b517d17b7b9dc04903	04b7193bf0931f277c62e68920bcdd5a4b1480d1	2026-07-11T16:33:24-05:00	Rebuild pricing page preview
+github-preferred	9149425200bf909a3e5ba6f23081437008008e87	3c0d02d05068f94f6db8b67125261cf5f038f309	2026-07-11T05:44:27-05:00	docs(pricing): record final checkpoint status
+github-preferred	3c0d02d05068f94f6db8b67125261cf5f038f309	542930fbc3ef5cedd5a8e7cf326588bdf13ca50d	2026-07-11T05:41:15-05:00	checkpoint(pricing): finalize adaptive journey preview
+github-preferred	542930fbc3ef5cedd5a8e7cf326588bdf13ca50d	1bf6efb2a09a1ea26d63ab98db90d5e93e7cca0f	2026-07-11T05:06:42-05:00	docs(pricing): record checkpoint 6 status
+github-preferred	1bf6efb2a09a1ea26d63ab98db90d5e93e7cca0f	706b484215b66a2d5a9d192f59c02d985b1808d4	2026-07-11T05:02:36-05:00	checkpoint(pricing): complete responsive accessibility and performance QA
+github-preferred	706b484215b66a2d5a9d192f59c02d985b1808d4	2a3a1165ac8e6e9eaec30d55612945e01119a490	2026-07-11T04:14:05-05:00	docs(pricing): record checkpoint 5 status
+github-preferred	2a3a1165ac8e6e9eaec30d55612945e01119a490	cd00833a5aebbc3559d926590c8acbb7bedaaad2	2026-07-11T04:10:38-05:00	checkpoint(pricing): complete review result and quote handoff
+github-preferred	cd00833a5aebbc3559d926590c8acbb7bedaaad2	197886cc0302db99839541cb8bf03ff18cbdcf43	2026-07-11T03:21:54-05:00	docs(pricing): record checkpoint 4 status
+github-preferred	197886cc0302db99839541cb8bf03ff18cbdcf43	1c7b408b76337657ad459fff3077838c0df53608	2026-07-11T03:17:41-05:00	checkpoint(pricing): complete adaptive program inputs
+github-preferred	1c7b408b76337657ad459fff3077838c0df53608	339d8558fe3980c74e6e7afcf63259abcce15268	2026-07-11T01:41:25-05:00	docs(pricing): record checkpoint 3 status
+github-preferred	339d8558fe3980c74e6e7afcf63259abcce15268	887e5cdab90c579b691db2d154c2779c1a12108c	2026-07-11T01:38:37-05:00	checkpoint(pricing): complete adaptive goods branches
+github-preferred	887e5cdab90c579b691db2d154c2779c1a12108c	ae8b35a2588ecea96c06f29f76eaa9f4d1a378c2	2026-07-11T00:57:25-05:00	docs(pricing): record checkpoint 2 status
+github-preferred	ae8b35a2588ecea96c06f29f76eaa9f4d1a378c2	8ebe04e25bddf257558017130e4a74213548033c	2026-07-11T00:55:21-05:00	checkpoint(pricing): complete landing and operation journey
+github-preferred	8ebe04e25bddf257558017130e4a74213548033c	fce85988ab03eab1b66c04385158fcd7853859e4	2026-07-11T00:17:28-05:00	docs(pricing): record checkpoint 1 status
+github-preferred	fce85988ab03eab1b66c04385158fcd7853859e4	d63a27db7ef3f119be8fac69ed2bdd9e2173347e	2026-07-11T00:15:18-05:00	checkpoint(pricing): complete and select landing concepts
+github-preferred	d63a27db7ef3f119be8fac69ed2bdd9e2173347e	74c7444b6937942bb95c920b3bfdf89252b60583	2026-07-10T23:24:36-05:00	docs(pricing): record checkpoint 0 status
+github-preferred	74c7444b6937942bb95c920b3bfdf89252b60583	04b7193bf0931f277c62e68920bcdd5a4b1480d1	2026-07-10T23:21:45-05:00	checkpoint(pricing): establish adaptive journey architecture
+github-preferred	04b7193bf0931f277c62e68920bcdd5a4b1480d1	1ad6711678ca3fbbcea31bc3861e4b99c1a33d70	2026-07-07T12:26:50-07:00	Restore program selector layout
+github-preferred	1ad6711678ca3fbbcea31bc3861e4b99c1a33d70	4e7005dd565f71c0aa4981d916fbfc06c19fef01	2026-07-07T12:20:13-07:00	Polish program spacing and ownership comparison
+github-preferred	4e7005dd565f71c0aa4981d916fbfc06c19fef01	3cb7e2634862e46557e9c0120e592cbaa730ec89	2026-07-07T08:28:49-07:00	Widen archive carousel queue
+github-preferred	3cb7e2634862e46557e9c0120e592cbaa730ec89	33447cccbcc6cbb950ce22ef936ab14318c551a6	2026-07-06T21:02:00-07:00	Redesign archive carousel and homepage sections
+github-preferred	33447cccbcc6cbb950ce22ef936ab14318c551a6	0feb7069beaeeb7ac7b0bac9b40856f5197ae33f	2026-07-06T20:35:00-07:00	Adjust homepage program spacing
+github-preferred	0feb7069beaeeb7ac7b0bac9b40856f5197ae33f	a8412f9a33327833e35dfe2044f4d65fcb29ef4e	2026-07-06T20:13:16-07:00	Fix homepage polish alignment and colors
+github-preferred	a8412f9a33327833e35dfe2044f4d65fcb29ef4e	4faeb3a83104394719570f80018a82f735752d61	2026-07-06T20:06:33-07:00	Polish homepage spacing and carousel controls
+github-preferred	4faeb3a83104394719570f80018a82f735752d61	e03bfcf88ed310c67c0cabc4da3f5a421013ad66	2026-07-06T15:31:29-07:00	Refine archive carousel and cleaning quality section
+github-preferred	e03bfcf88ed310c67c0cabc4da3f5a421013ad66	7cf280b98a1d6a2d69aac1b2ae08817e97283dca	2026-07-06T15:01:25-07:00	Polish circular archive carousel interaction and spacing
+github-preferred	7cf280b98a1d6a2d69aac1b2ae08817e97283dca	8f848a662aed01f7dde456735dfef800255cac91	2026-07-06T14:51:55-07:00	Clip archive carousel image inside circular stage
+github-preferred	8f848a662aed01f7dde456735dfef800255cac91	c97277c0da96aaab56960f2475d822e100c2d168	2026-07-06T14:39:10-07:00	Rebuild Shelton story as archive carousel
+github-preferred	c97277c0da96aaab56960f2475d822e100c2d168	be738be76cfebfd459e8c3a150b79fab64916517	2026-07-06T13:16:15-07:00	Cohere sitewide language spacing and layout
+github-preferred	be738be76cfebfd459e8c3a150b79fab64916517	1cc76ff87db6a4ba35fff0f19405f6d1bf3c0fc9	2026-07-06T12:00:04-07:00	Update Shelton brand name order
+github-preferred	1cc76ff87db6a4ba35fff0f19405f6d1bf3c0fc9	fdacf501fdc6ffe89be991c97eeae2c7b6592d21	2026-07-06T11:55:08-07:00	Add Shelton story photo section and cleaning quality section
+github-preferred	fdacf501fdc6ffe89be991c97eeae2c7b6592d21	e530d965625f8b3598122bf798edb718814cd216	2026-06-29T10:10:45-07:00	Polish final CTA copy and footer spacing
+github-preferred	e530d965625f8b3598122bf798edb718814cd216	f05035df743132c32677d76333b233693f8cdeff	2026-06-29T09:32:44-07:00	Fix homepage spacing and alignment
+github-preferred	f05035df743132c32677d76333b233693f8cdeff	23f36168c1c477e8d8100c0805b47b53e2d521dd	2026-06-29T09:06:43-07:00	Clean up homepage structure and remove redundant sections
+github-preferred	23f36168c1c477e8d8100c0805b47b53e2d521dd	2ac82ce3c18185507f6bcca33ed3b4daaad1ac45	2026-06-29T08:47:02-07:00	Trim homepage sections and move equipment content to process page
+github-preferred	2ac82ce3c18185507f6bcca33ed3b4daaad1ac45	bb8b39a180104da026266db187e4e3e5a1a92d3b	2026-06-27T15:09:17-07:00	Refine homepage hero and positioning sections
+github-preferred	bb8b39a180104da026266db187e4e3e5a1a92d3b	71e70578db3fae9639aa401b6ada78a6fd1488ce	2026-06-27T15:03:30-07:00	Refine homepage hero and positioning sections
+github-preferred	71e70578db3fae9639aa401b6ada78a6fd1488ce	5e6d6872d03aa4cb8ab86aeabfe50c602b8f335f	2026-06-27T14:55:31-07:00	Refine homepage hero and positioning sections
+github-preferred	5e6d6872d03aa4cb8ab86aeabfe50c602b8f335f	9d2a3dab1ced8544874c37dc2749baeba889b219	2026-06-27T12:52:20-07:00	Refine homepage hero and positioning sections
+github-preferred	9d2a3dab1ced8544874c37dc2749baeba889b219	1b2612866cec6142eef5e3b75c85c9cb4b11e5bb	2026-06-27T12:29:06-07:00	Refine homepage hero and positioning sections
+github-preferred	1b2612866cec6142eef5e3b75c85c9cb4b11e5bb	d2098e41faa1af58055b42ea01b476203693a9fa	2026-06-27T12:16:28-07:00	Refine homepage hero and positioning sections
+github-preferred	d2098e41faa1af58055b42ea01b476203693a9fa	2506a74289abca02f03e3df7e9256c1479334571	2026-06-27T11:16:26-07:00	Update Shelton homepage and logo
+github-preferred	2506a74289abca02f03e3df7e9256c1479334571	155b92b5316942fda2a8c73f7ba56837773f39fd	2026-06-26T18:29:22-07:00	Rework homepage positioning and interactive program selector
+github-preferred	155b92b5316942fda2a8c73f7ba56837773f39fd	8f906b508e82ca6e67434c0c084210d3c39f5928	2026-06-26T17:48:13-07:00	Add gitignore
+github-preferred	8f906b508e82ca6e67434c0c084210d3c39f5928	9c20247058b1b47885bf42aafe24b54bf98519c9	2026-06-26T17:36:17-07:00	Connect quote form to Formspree
+github-preferred	9c20247058b1b47885bf42aafe24b54bf98519c9	55a27bfb69478f34036ef199cbf49f9152dfe7dc	2026-06-26T17:26:02-07:00	Add website files and Formspree quote form
+github-preferred	55a27bfb69478f34036ef199cbf49f9152dfe7dc		2026-06-26T16:37:27-07:00	Add files via upload
+sites-workspace	788278634abf4ed0736a30e35843249bfeffa8c3	1e3a49e0ddc4186501bc967d11d9dd218256931b bb4bf271536e7f4728554c275ae7023725748169	2026-08-23T21:48:05-07:00	Merge prior Sites publication history
+sites-workspace	1e3a49e0ddc4186501bc967d11d9dd218256931b	b095dcf4271d737813d714a5cb49034cbb3ed7ff	2026-08-23T21:42:04-07:00	Refine pricing estimator and approved About layout
+sites-workspace	bb4bf271536e7f4728554c275ae7023725748169	930dd5b1c99697195b2ade93f61cce220fd3ba23	2026-08-21T06:06:54-07:00	Publish guided pricing estimator
+sites-workspace	b095dcf4271d737813d714a5cb49034cbb3ed7ff	930dd5b1c99697195b2ade93f61cce220fd3ba23	2026-08-20T03:04:35-07:00	Refine estimator and overnight site UX
+sites-workspace	930dd5b1c99697195b2ade93f61cce220fd3ba23	6d44a4e6e335bd2f72f5952f4b5b060f1b8cb295	2026-08-19T19:12:07-07:00	Improve site image and map loading
+sites-workspace	6d44a4e6e335bd2f72f5952f4b5b060f1b8cb295	d8b9237c9a7917700f1dff48933d766508e9eef4	2026-08-19T18:00:08-07:00	Refine About TV screens at laptop widths
+sites-workspace	d8b9237c9a7917700f1dff48933d766508e9eef4	edab77fb3ce1570bc15a8c3f9588897dd2c002d7	2026-08-19T16:52:08-07:00	Add responsive archive swipe cue
+sites-workspace	edab77fb3ce1570bc15a8c3f9588897dd2c002d7	828ce43bce7c5b45adf6596b7678e3f8f12d792a	2026-08-19T16:16:27-07:00	Refine responsive About archive
+sites-workspace	828ce43bce7c5b45adf6596b7678e3f8f12d792a	96a0e1370e8f0ed52ce3ff0d74be89a209721bff	2026-08-19T13:05:19-07:00	Redeploy verified About spacing
+sites-workspace	96a0e1370e8f0ed52ce3ff0d74be89a209721bff	194e4a1512d60d114ff8c10fc8dfdb2c24bff719	2026-08-19T12:25:14-07:00	Balance About story towel spacing
+sites-workspace	194e4a1512d60d114ff8c10fc8dfdb2c24bff719	00ede44ffa237cb34bf8898ab8fbf5c72696ad59	2026-08-19T12:08:56-07:00	Refine About towel timeline spacing
+sites-workspace	00ede44ffa237cb34bf8898ab8fbf5c72696ad59	0a8179e0a042dba7b8b51378bce2c94ef7a6dcd0	2026-08-19T11:38:15-07:00	Restore and refine About towel timeline
+sites-workspace	0a8179e0a042dba7b8b51378bce2c94ef7a6dcd0	a3a3c118d7e1cc4cfe51e4fcddeb2b4237d7ea7c	2026-08-19T10:55:23-07:00	Add approved Shelton S favicon
+sites-workspace	a3a3c118d7e1cc4cfe51e4fcddeb2b4237d7ea7c	efdddf6bd3d839a8c24b352a057dfa075712fadf	2026-08-19T10:39:35-07:00	Package social preview deployment
+sites-workspace	efdddf6bd3d839a8c24b352a057dfa075712fadf	c4137282c6bbc5452538cc44918bf03666d69a38	2026-08-19T10:26:48-07:00	Replace portrait social preview image
+sites-workspace	c4137282c6bbc5452538cc44918bf03666d69a38	c965981d71920243610f7c51371ac007a9f21ea0	2026-08-18T18:32:17-07:00	Refresh production estimator asset
+sites-workspace	c965981d71920243610f7c51371ac007a9f21ea0	7864f3feb8db4673ca572358c429edd056c765f5	2026-08-18T18:11:53-07:00	Connect pricing to production API gateway
+sites-workspace	7864f3feb8db4673ca572358c429edd056c765f5	e4c8274206512e380ac30e6ddc88d8b2e2c2cf0e	2026-08-18T15:11:03-07:00	Add approved Jordan Hudson portrait
+sites-workspace	e4c8274206512e380ac30e6ddc88d8b2e2c2cf0e	72eea3bdf3959e23ce83f60665c379e7d689a089	2026-08-18T14:07:44-07:00	Confirm Shelton facility address
+sites-workspace	72eea3bdf3959e23ce83f60665c379e7d689a089	fb8f40af94f1af447e8ea361f6f47430c3c9f5af	2026-08-18T12:48:23-07:00	Fix estimator fetch for edge runtime
+sites-workspace	fb8f40af94f1af447e8ea361f6f47430c3c9f5af	b5d228d43da40e23c2531bc3d2930ed5fda822fa	2026-08-18T12:41:17-07:00	Log estimator upstream failures
+sites-workspace	b5d228d43da40e23c2531bc3d2930ed5fda822fa	ebbfbffe96e0acf06832ce9da5c15a279d8e897c	2026-08-18T12:15:00-07:00	Make skip links move keyboard focus
+sites-workspace	ebbfbffe96e0acf06832ce9da5c15a279d8e897c	03116ae2e3ef7adcc16a010b2afc9febeb04cf2b	2026-08-18T12:00:03-07:00	Add canonical domain redirects
+sites-workspace	03116ae2e3ef7adcc16a010b2afc9febeb04cf2b	f9dbc2588d4e53640133a99c9c5b4f67020d0a55	2026-08-17T19:58:51-07:00	Finalize responsive site refinements
+sites-workspace	f9dbc2588d4e53640133a99c9c5b4f67020d0a55	c7e1f69336de71a426e7ac67f632ed096be24a95	2026-08-17T14:21:31-07:00	Complete responsive UI consistency pass
+sites-workspace	c7e1f69336de71a426e7ac67f632ed096be24a95	b9a26f3f933d55f0ef5fd2d9a73d151ad99e734a	2026-08-16T13:00:18-07:00	Publish combined site updates
+sites-workspace	b9a26f3f933d55f0ef5fd2d9a73d151ad99e734a	ba3c633dca90966c8ed1c514206d5201cd9ca9f6	2026-07-29T16:00:41-07:00	Publish complete local site snapshot
+sites-workspace	ba3c633dca90966c8ed1c514206d5201cd9ca9f6		2026-07-26T16:01:45-07:00	Publish Shelton website
+redirect-host	aa2b93c164dfeeb6cb968c876b6908ee7491d96b		2026-08-18T19:29:00-07:00	Create matching-path domain redirects

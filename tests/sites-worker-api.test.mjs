@@ -140,7 +140,20 @@ try {
   assert.equal(about.status, 200);
   assert.deepEqual(assetPaths.slice(-2), ["/about", "/about.html"]);
 
-  console.log("Sites worker API routes verified: routing, allowlists, idempotency, timeout, and static fallback.");
+  for (const host of [
+    "www.sheltonlinen.com",
+    "sheltonlinenanduniform.com",
+    "www.sheltonlinenanduniform.com"
+  ]) {
+    const redirect = await worker.fetch(
+      new Request(`https://${host}/pricing.html?source=legacy`),
+      baseEnvironment
+    );
+    assert.equal(redirect.status, 308);
+    assert.equal(redirect.headers.get("location"), "https://sheltonlinen.com/pricing.html?source=legacy");
+  }
+
+  console.log("Sites worker routes verified: API routing, allowlists, idempotency, timeout, canonical redirects, and static fallback.");
 } finally {
   globalThis.fetch = originalFetch;
 }

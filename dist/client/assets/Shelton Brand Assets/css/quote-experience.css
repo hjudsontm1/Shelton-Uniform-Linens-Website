@@ -1,0 +1,418 @@
+body[data-page="quote"] main {
+  overflow: clip;
+}
+
+.quote-intake {
+  padding: clamp(8.25rem, 10vw, 9.75rem) 0 clamp(5rem, 8vw, 7.5rem);
+  border-bottom: 1px solid var(--border);
+}
+
+.quote-intake__frame {
+  width: var(--container-width);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.62fr) minmax(0, 1.38fr);
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.quote-intake__welcome {
+  position: sticky;
+  top: 7.5rem;
+  padding-top: 0.35rem;
+}
+
+.quote-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  color: var(--gold-2);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.quote-kicker::before {
+  content: "";
+  width: 2.7rem;
+  height: 1px;
+  flex: 0 0 auto;
+  background: var(--gold-2);
+}
+
+.quote-intake__welcome h1 {
+  max-width: 33rem;
+  margin: 1.1rem 0 1.25rem;
+  color: var(--cream-2);
+  font: 500 clamp(3.1rem, 4.8vw, 4.75rem)/0.94 "Cormorant Garamond", Georgia, serif;
+}
+
+.quote-intake__welcome > header > p:last-child {
+  max-width: 31rem;
+  color: rgba(242, 235, 217, 0.7);
+  font-size: 0.96rem;
+  line-height: 1.75;
+}
+
+.quote-reassurance {
+  margin-top: clamp(2.25rem, 5vw, 3.75rem);
+  padding: 1.15rem 0;
+  border-top: 1px solid rgba(210, 176, 113, 0.35);
+  border-bottom: 1px solid rgba(210, 176, 113, 0.2);
+}
+
+.quote-reassurance strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--cream);
+  font: 500 1.28rem/1.2 "Cormorant Garamond", Georgia, serif;
+}
+
+.quote-reassurance p,
+.quote-next li p {
+  color: rgba(242, 235, 217, 0.64);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.quote-estimate-link {
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  color: var(--cream);
+  border-top: 1px solid rgba(210, 176, 113, 0.18);
+  text-decoration: none;
+}
+
+.quote-estimate-link span {
+  color: rgba(242, 235, 217, 0.52);
+  font-size: 0.68rem;
+  line-height: 1.4;
+}
+
+.quote-estimate-link b {
+  color: var(--gold-2);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.quote-estimate-link i {
+  display: inline-block;
+  margin-left: 0.35rem;
+  font-style: normal;
+  transition: transform 180ms ease;
+}
+
+.quote-estimate-link:hover i,
+.quote-estimate-link:focus-visible i { transform: translateX(0.25rem); }
+
+.quote-estimate-link:focus-visible {
+  outline: 1px solid var(--gold-2);
+  outline-offset: 0.35rem;
+}
+
+.quote-next {
+  margin-top: 2rem;
+}
+
+.quote-next h2 {
+  margin: 0 0 1rem;
+  color: var(--cream);
+  font: 500 1.65rem/1.15 "Cormorant Garamond", Georgia, serif;
+}
+
+.quote-next ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quote-next li {
+  padding: 0.85rem 0;
+  display: grid;
+  grid-template-columns: 2.1rem minmax(0, 1fr);
+  gap: 0.75rem;
+  border-top: 1px solid rgba(242, 235, 217, 0.1);
+}
+
+.quote-next li span {
+  color: var(--gold-2);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.quote-commercial-note {
+  margin-top: 1.65rem;
+  color: rgba(210, 176, 113, 0.64);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+body[data-page="quote"] .quote-form {
+  --quote-ink: #2b2822;
+  --quote-ink-rgb: 43, 40, 34;
+  gap: 0;
+  padding: clamp(1.4rem, 3.5vw, 2.75rem);
+  color: var(--quote-ink);
+  border: 1px solid rgba(210, 176, 113, 0.68);
+  border-radius: 2px;
+  background:
+    linear-gradient(90deg, rgba(122, 97, 57, 0.055) 1px, transparent 1px),
+    linear-gradient(180deg, #f5efe1 0%, #e9dec8 100%);
+  background-size: 4rem 100%, auto;
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.28);
+}
+
+.quote-form__header {
+  padding-bottom: clamp(1.7rem, 3vw, 2.35rem);
+}
+
+.quote-form__header > p {
+  color: #81652f;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.quote-form__header h2 {
+  margin: 0.45rem 0 0.55rem;
+  color: var(--quote-ink);
+  font: 500 clamp(2.55rem, 4vw, 3.75rem)/0.96 "Cormorant Garamond", Georgia, serif;
+}
+
+.quote-form__header > span {
+  color: rgba(var(--quote-ink-rgb), 0.58);
+  font-size: 0.72rem;
+}
+
+.quote-form__group {
+  padding: clamp(1.6rem, 3vw, 2.2rem) 0;
+  border-top: 1px solid rgba(var(--quote-ink-rgb), 0.18);
+}
+
+.quote-form__group-header {
+  margin-bottom: 1.4rem;
+  display: grid;
+  grid-template-columns: 2.3rem minmax(0, 1fr);
+  gap: 0.85rem;
+  align-items: start;
+}
+
+.quote-form__group-header > span {
+  padding-top: 0.25rem;
+  color: #80632b;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.quote-form__group-header h3 {
+  margin: 0;
+  color: var(--quote-ink);
+  font: 600 1.45rem/1.1 "Cormorant Garamond", Georgia, serif;
+}
+
+.quote-form__group-header p {
+  margin-top: 0.25rem;
+  color: rgba(var(--quote-ink-rgb), 0.58);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+body[data-page="quote"] .form-row {
+  gap: 0.9rem;
+}
+
+body[data-page="quote"] .form-row + .form-row {
+  margin-top: 1rem;
+}
+
+body[data-page="quote"] .quote-form label,
+body[data-page="quote"] .quote-form fieldset legend {
+  color: rgba(var(--quote-ink-rgb), 0.74);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+body[data-page="quote"] .quote-form input,
+body[data-page="quote"] .quote-form select,
+body[data-page="quote"] .quote-form textarea {
+  min-height: 3.35rem;
+  border: 1px solid rgba(var(--quote-ink-rgb), 0.22);
+  border-radius: 0;
+  background: rgba(255, 252, 245, 0.58);
+  color: var(--quote-ink);
+  box-shadow: none;
+}
+
+body[data-page="quote"] .quote-form textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+body[data-page="quote"] .quote-form input::placeholder,
+body[data-page="quote"] .quote-form textarea::placeholder {
+  color: rgba(var(--quote-ink-rgb), 0.42);
+}
+
+body[data-page="quote"] .quote-form input:focus,
+body[data-page="quote"] .quote-form select:focus,
+body[data-page="quote"] .quote-form textarea:focus {
+  outline: 2px solid #9c7838;
+  outline-offset: 1px;
+  border-color: #9c7838;
+}
+
+body[data-page="quote"] .quote-form fieldset {
+  padding: 0;
+  border: 0;
+}
+
+body[data-page="quote"] .quote-form fieldset legend {
+  margin-bottom: 0.65rem;
+}
+
+body[data-page="quote"] .checkbox-grid {
+  gap: 0;
+  border-top: 1px solid rgba(var(--quote-ink-rgb), 0.18);
+  border-left: 1px solid rgba(var(--quote-ink-rgb), 0.18);
+}
+
+body[data-page="quote"] .checkbox-grid label {
+  min-height: 3.4rem;
+  padding: 0.8rem 0.95rem;
+  color: rgba(var(--quote-ink-rgb), 0.78);
+  border-right: 1px solid rgba(var(--quote-ink-rgb), 0.18);
+  border-bottom: 1px solid rgba(var(--quote-ink-rgb), 0.18);
+  background: rgba(255, 252, 245, 0.3);
+  font-size: 0.77rem;
+  line-height: 1.35;
+}
+
+body[data-page="quote"] .checkbox-grid input {
+  min-height: auto;
+  accent-color: #8b6d39;
+}
+
+body[data-page="quote"] .quote-form fieldset + label {
+  margin-top: 1.25rem;
+}
+
+.quote-form__submit {
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(var(--quote-ink-rgb), 0.18);
+}
+
+body[data-page="quote"] .quote-form__submit .form-submit {
+  min-height: 4rem;
+  color: var(--cream-2);
+  border: 1px solid var(--quote-ink);
+  background: var(--quote-ink);
+}
+
+body[data-page="quote"] .quote-form__submit .form-submit:hover {
+  color: var(--quote-ink);
+  border-color: var(--gold);
+  background: var(--gold-2);
+}
+
+.quote-form__submit > p:not(.form-status) {
+  max-width: 38rem;
+  margin: 0.9rem auto 0;
+  color: rgba(var(--quote-ink-rgb), 0.52);
+  font-size: 0.66rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+body[data-page="quote"] .form-status {
+  margin-top: 0.65rem;
+  color: #684e20;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .quote-intake__frame {
+    grid-template-columns: 1fr;
+  }
+
+  .quote-intake__welcome {
+    position: static;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.72fr);
+    gap: 2rem;
+  }
+
+  .quote-intake__welcome > header {
+    grid-column: 1 / -1;
+  }
+
+  .quote-reassurance,
+  .quote-next {
+    margin-top: 0;
+  }
+
+  .quote-commercial-note {
+    grid-column: 1 / -1;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .quote-intake {
+    padding-top: 7.4rem;
+    padding-bottom: 4rem;
+  }
+
+  .quote-intake__frame {
+    width: min(calc(100% - 2rem), var(--content));
+    gap: 2.25rem;
+  }
+
+  .quote-intake__welcome {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+  }
+
+  .quote-intake__welcome > header,
+  .quote-commercial-note {
+    grid-column: auto;
+  }
+
+  .quote-intake__welcome h1 {
+    font-size: clamp(2.85rem, 14vw, 4rem);
+  }
+
+  body[data-page="quote"] .quote-form {
+    padding: 1.2rem;
+    background-size: 3rem 100%, auto;
+  }
+
+  body[data-page="quote"] .form-row,
+  body[data-page="quote"] .checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quote-form__group-header {
+    grid-template-columns: 1.9rem minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-page="quote"] .quote-form__submit .form-submit {
+    transition: none;
+  }
+}

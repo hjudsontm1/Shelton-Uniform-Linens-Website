@@ -2,7 +2,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 
-const root = path.resolve(__dirname, "..");
+const root = path.resolve(__dirname, "../dist/client");
 const html = fs.readFileSync(path.join(root, "industries.html"), "utf8");
 const css = fs.readFileSync(path.join(root, "assets/css/industries.css"), "utf8");
 const programs = fs.readFileSync(path.join(root, "assets/js/industries-programs.js"), "utf8");
@@ -10,16 +10,21 @@ const programs = fs.readFileSync(path.join(root, "assets/js/industries-programs.
 assert.doesNotMatch(html, /data-drawer-image|program-drawer__image/);
 assert.doesNotMatch(css, /program-drawer__image/);
 assert.doesNotMatch(programs, /data-drawer-image|imageAlt|\bimage:\s*["']/);
-assert.match(html, /industries\.css\?v=20260816-mobile-hardening-v27/);
+assert.match(html, /industries\.css\?v=20260817-mobile-nav-docked-v31/);
 assert.doesNotMatch(html, /industries-programs\.js/);
 assert.doesNotMatch(html, /<dialog|program-drawer|data-program=/);
-assert.match(html, /industries-directory\.js\?v=20260816-directory-v1/);
+assert.match(html, /industries-directory\.js\?v=20260817-mobile-nav-docked-v3/);
 
 const directoryScript = fs.readFileSync(path.join(root, "assets/js/industries-directory.js"), "utf8");
 assert.match(directoryScript, /classList\.toggle\("is-docked", docked\)/);
 assert.match(directoryScript, /setAttribute\("aria-current", "location"\)/);
 assert.match(directoryScript, /directory\.scrollTo\(/);
+assert.match(directoryScript, /--serve-directory-docked-offset/);
+assert.match(directoryScript, /docked \? directoryHeight : siteNavigation\.offsetHeight/);
 assert.doesNotMatch(directoryScript, /program-drawer|data-program=/);
+
+assert.match(css, /@media \(max-width: 1080px\)[\s\S]*?\.industries-page\.has-directory-header \.site-nav[\s\S]*?visibility: visible;/);
+assert.match(css, /\.serve-directory\.is-docked[\s\S]*?inset: var\(--serve-directory-docked-offset\) 0 auto;/);
 
 const directQuoteLinks = html.match(/class="serve-program__link" href="quote\.html\?industry=[^"]+"/g) || [];
 assert.equal(directQuoteLinks.length, 10, "all ten industry programs have direct quote links");

@@ -1,15 +1,32 @@
-.vercel
-.env.local
-node_modules
-*.zip
 .DS_Store
-.codex-services-stage/
+Thumbs.db
+Desktop.ini
+
+# Local secrets. Keep only the documented placeholder file.
+.env
+.env.*
+!.env.example
+
+# Dependency, build, and test output.
+node_modules/
+.next/
+.vinext/
+.wrangler/
+.vercel/
+coverage/
+playwright-report/
+test-results/
 tmp/
-dist/
-artifacts/
-current-compact-evidence/
-design-audit/
-design-audit-artifacts/
-design-ideation/
-design-qa-artifacts/
-process-loop-concept/
+
+# Guard against recreating the retired root-level Pricing source.
+/pricing.html
+/assets/css/pricing-*.css
+/assets/js/pricing-*.js
+
+# Large transfer archives are not source material.
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar

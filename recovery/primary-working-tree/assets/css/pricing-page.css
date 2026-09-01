@@ -1,0 +1,989 @@
+@media (min-width: 1200px) {
+  .pricing-page,
+  .pricing-page body {
+    background: #e7e3dc;
+  }
+
+  .pricing-page .pricing-calm {
+    overflow: visible;
+    padding-bottom: 0;
+    background: #e7e3dc;
+  }
+
+  .pricing-page .pricing-opening {
+    overflow: visible;
+    background: #e7e3dc;
+  }
+
+  .pricing-page .calm-hero {
+    min-height: calc(100vh - 88px);
+    padding: clamp(6rem, 11vh, 8rem) 6rem 11rem;
+    overflow: hidden;
+    background: var(--calm-navy);
+  }
+
+  .pricing-page .calm-hero__copy {
+    z-index: 5;
+  }
+
+  .pricing-page .calm-hero__image {
+    z-index: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+    border-radius: 0;
+    background: var(--calm-navy);
+  }
+
+  .pricing-page .calm-hero__image::after {
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(8, 19, 33, 0.58) 0%,
+      rgba(8, 19, 33, 0.58) 66%,
+      rgba(4, 18, 36, 0.82) 86%,
+      #021225 100%
+    );
+  }
+
+  .pricing-page .calm-hero__image img {
+    opacity: 0.58;
+    object-position: center 54%;
+    filter: saturate(0.68) contrast(0.96);
+  }
+
+  .pricing-page .calm-scroll-cue {
+    display: none;
+  }
+
+  .pricing-page .calm-hero__actions {
+    position: relative;
+    z-index: 6;
+    margin-top: 5.75rem;
+  }
+
+  .pricing-page .calm-hero__actions .calm-text-action {
+    color: var(--calm-ink);
+    border-bottom-color: var(--calm-gold-dark);
+  }
+
+  .pricing-page .calm-hero__actions .calm-quiet-action {
+    color: rgba(23, 32, 42, 0.58);
+  }
+
+  .pricing-page .pricing-intro {
+    z-index: 4;
+    width: min(1180px, 82vw);
+    min-height: 790px;
+    margin: -16.25rem auto 0;
+    padding: 11.5rem max(5vw, 4rem) 8rem;
+    border-radius: 50% 50% 0 0 / 9rem 9rem 0 0;
+    background: var(--calm-ivory);
+  }
+
+  .pricing-page .pricing-intro__hero h2 {
+    color: var(--calm-ink);
+  }
+
+  .pricing-page .pricing-intro__hero > p:not(.calm-eyebrow) {
+    color: rgba(23, 32, 42, 0.68);
+  }
+
+  .pricing-page .factor-map {
+    margin-top: 6.5rem;
+  }
+
+  .pricing-page .learning-chapters,
+  .pricing-page .planning-result,
+  .pricing-page .quote-handoff {
+    width: min(1180px, 82vw);
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .pricing-page .learning-chapter {
+    min-height: 820px;
+    padding: 9rem max(5vw, 4rem);
+  }
+
+  .pricing-page .planning-result,
+  .pricing-page .quote-handoff {
+    padding-right: max(5vw, 4rem);
+    padding-left: max(5vw, 4rem);
+  }
+
+  .pricing-page .planning-result {
+    min-height: 0;
+    padding: 0;
+  }
+
+  .pricing-page .pricing-intro {
+    min-height: 0;
+    padding-top: 8.25rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .pricing-page .pricing-intro__hero > p:not(.calm-eyebrow) {
+    max-width: 920px;
+    margin-top: 1.65rem;
+    font-size: 0.84rem;
+    line-height: 1.65;
+  }
+
+  .pricing-page .factor-map {
+    margin-top: 3.25rem;
+  }
+
+  .pricing-page .learning-chapter {
+    scroll-margin-top: 5.5rem;
+  }
+
+  .pricing-page .pricing-intro,
+  .pricing-page .planning-result,
+  .pricing-page .quote-handoff {
+    scroll-margin-top: 5.5rem;
+  }
+
+  .pricing-page #factor-program,
+  .pricing-page #factor-volume {
+    min-height: 0;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    align-items: start;
+  }
+
+  .pricing-page #factor-program .learning-chapter__answer,
+  .pricing-page #factor-volume .learning-chapter__answer {
+    align-self: start;
+  }
+
+  .pricing-page #factor-volume .learning-chapter__answer {
+    padding: 2.35rem 2.45rem;
+  }
+
+  .pricing-page #factor-volume .answer-heading {
+    margin-bottom: 1.65rem;
+  }
+
+  .pricing-page #factor-volume .segmented-choice label span {
+    min-height: 52px;
+    padding: 0.7rem;
+  }
+
+  .pricing-page #factor-volume .volume-billing-note {
+    margin-top: 1rem;
+  }
+
+  .pricing-page #factor-volume .calm-field {
+    margin-top: 1.35rem;
+  }
+
+  .pricing-page #factor-volume .calm-field--large input {
+    font-size: clamp(1.75rem, 2.3vw, 2.15rem);
+  }
+
+  .pricing-page #factor-volume .calm-field small {
+    max-width: 24ch;
+    margin-top: 0.6rem;
+    font-size: 0.65rem;
+    letter-spacing: 0;
+    line-height: 1.45;
+    text-transform: none;
+  }
+
+  .pricing-page #factor-volume .volume-balance-note {
+    margin-top: 3.4rem;
+  }
+
+  .pricing-page #factor-program .lesson-note {
+    display: none;
+  }
+
+  .pricing-page #factor-ownership {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(3rem, 5vw, 4.5rem);
+    min-height: 0;
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+    align-items: start;
+  }
+
+  .pricing-page #factor-ownership .learning-chapter__lesson {
+    width: 100%;
+    max-width: none;
+    text-align: center;
+  }
+
+  .pricing-page #factor-ownership .learning-chapter__lesson h2 {
+    max-width: 900px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .pricing-page #factor-ownership .learning-chapter__lesson > p:not(.chapter-index) {
+    max-width: 820px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .pricing-page #factor-ownership .learning-chapter__answer {
+    align-self: start;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .pricing-page #factor-ownership .answer-heading {
+    width: 100%;
+    max-width: none;
+    margin: 0 0 2rem;
+    text-align: center;
+  }
+
+  .pricing-page #factor-ownership .ownership-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border: 1px solid var(--calm-ink-line);
+  }
+
+  .pricing-page #factor-ownership .ownership-list label {
+    height: 100%;
+  }
+
+  .pricing-page #factor-ownership .ownership-list label span {
+    height: 100%;
+    min-height: 150px;
+    padding: 1.35rem;
+    border-right: 1px solid var(--calm-ink-line);
+    border-bottom: 0;
+  }
+
+  .pricing-page #factor-ownership .ownership-list label:last-child span {
+    border-right: 0;
+  }
+
+  .pricing-page #factor-ownership .ownership-list input:checked + span {
+    padding: 1.35rem;
+  }
+
+  .pricing-page #factor-ownership .ownership-note {
+    display: flex;
+    width: 100%;
+    max-width: none;
+    min-height: 200px;
+    margin: 4.5rem 0 0;
+    padding: 2.75rem 0 3rem;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .pricing-page #factor-ownership .ownership-note p {
+    max-width: 900px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: clamp(1.48rem, 2.1vw, 2rem);
+    line-height: 1.28;
+  }
+
+  .pricing-page #factor-route {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(4rem, 6vw, 5.5rem);
+    min-height: 0;
+    padding-top: 7rem;
+    padding-bottom: 4.5rem;
+    align-items: start;
+  }
+
+  .pricing-page #factor-route .learning-chapter__lesson {
+    width: 100%;
+    max-width: none;
+    text-align: center;
+  }
+
+  .pricing-page #factor-route .learning-chapter__lesson h2 {
+    max-width: 900px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .pricing-page #factor-route .learning-chapter__answer {
+    align-self: start;
+    width: 100%;
+    padding: 3.25rem;
+  }
+
+  .pricing-page #factor-route .route-entry-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .pricing-page #factor-route .answer-heading {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    text-align: center;
+  }
+
+  .pricing-page #factor-route .calm-field {
+    margin: 0;
+  }
+
+  .pricing-page #factor-route .calm-field--large input {
+    font-size: clamp(1.6rem, 2vw, 1.9rem);
+  }
+
+  .pricing-page #factor-route .route-entry-explainer {
+    max-width: 860px;
+    margin: 2.75rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid var(--calm-ink-line);
+    text-align: center;
+  }
+
+  .pricing-page #factor-route .route-support {
+    display: block;
+  }
+
+  .pricing-page #factor-route .route-support .lesson-note {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  .pricing-page .calm-hero__actions {
+    transform: translateY(1rem);
+  }
+
+  .pricing-page .pricing-intro__hero .calm-eyebrow {
+    display: none;
+  }
+
+  .pricing-page,
+  .pricing-page body {
+    background: var(--calm-ivory);
+  }
+
+  .pricing-page .pricing-calm {
+    position: relative;
+    isolation: isolate;
+    background-color: var(--calm-ivory);
+    /* Continue the transition's y=3771 sparse row at its native desktop scale. */
+    background-image: url("../images/generated/pricing-sparse-bridge-v1.png");
+    background-position: center top;
+    background-repeat: repeat;
+    background-size: 744px 18.890625px;
+  }
+
+  .pricing-page .pricing-calm > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .pricing-page .pricing-opening {
+    background: transparent;
+  }
+
+  .pricing-page .calm-hero {
+    z-index: auto;
+    overflow: visible;
+  }
+
+  .pricing-page .calm-hero::after {
+    content: "";
+    position: absolute;
+    top: calc(100% - 1px);
+    right: 0;
+    left: 0;
+    z-index: 1;
+    height: 2740px;
+    background-color: var(--calm-ivory);
+    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.png");
+    background-position: center top;
+    background-repeat: repeat-x;
+    background-size: 744px auto;
+    pointer-events: none;
+  }
+
+  .pricing-page .pricing-calm::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    height: 2740px;
+    background-color: var(--calm-navy);
+    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.png");
+    background-position: center top;
+    background-repeat: repeat-x;
+    background-size: 744px auto;
+    transform: scaleY(-1);
+    transform-origin: center;
+    pointer-events: none;
+  }
+
+  .pricing-page .site-footer {
+    border-top-color: transparent;
+    background: var(--calm-navy);
+  }
+
+  .pricing-page .site-footer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    background-color: var(--calm-navy);
+    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.png");
+    background-position: center top;
+    background-repeat: repeat-x;
+    background-size: 744px auto;
+    pointer-events: none;
+  }
+
+  .pricing-page .learning-chapter {
+    position: relative;
+    overflow: visible;
+    isolation: isolate;
+  }
+
+  .pricing-page .learning-chapter > * {
+    position: relative;
+    z-index: 1;
+  }
+
+}
+
+@media (min-width: 1051px) and (max-width: 1199px) {
+  .pricing-page #factor-ownership .ownership-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pricing-page #factor-ownership .ownership-list label:nth-child(2n) span {
+    border-right: 0;
+  }
+
+  .pricing-page #factor-ownership .ownership-list label:nth-child(n + 3) span {
+    border-top: 1px solid var(--calm-ink-line);
+  }
+
+  .pricing-page #factor-route .route-entry-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pricing-page #factor-route .answer-heading {
+    grid-column: 1 / -1;
+  }
+
+  .pricing-page #factor-route .route-support {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .pricing-page,
+  .pricing-page body {
+    min-width: 0;
+    background-color: var(--calm-navy);
+  }
+
+  .pricing-page body.pricing-calm-page {
+    background-color: var(--calm-navy);
+    background-image: url("../images/generated/pricing-halftone-transition-tall-v5.png");
+    background-position: center 5.5rem;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 640px auto;
+  }
+
+  .pricing-page .pricing-calm {
+    width: 100%;
+    overflow: visible;
+    background: transparent;
+  }
+
+  .pricing-page .pricing-opening,
+  .pricing-page .learning-chapters,
+  .pricing-page .planning-result,
+  .pricing-page .quote-handoff {
+    width: calc(100% - 28px);
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .pricing-page .pricing-opening {
+    overflow: hidden;
+    background: var(--calm-ivory);
+  }
+
+  .pricing-page .calm-hero {
+    min-height: 690px;
+    padding: 8.4rem 1.25rem 6.25rem;
+    overflow: hidden;
+    border-radius: 0 0 50% 50% / 0 0 4.25rem 4.25rem;
+    place-items: start center;
+    background: var(--calm-navy);
+  }
+
+  .pricing-page .calm-hero__copy {
+    z-index: 3;
+    width: 100%;
+  }
+
+  .pricing-page .calm-hero h1 {
+    max-width: 8.2em;
+    font-size: clamp(3.25rem, 14.25vw, 4.05rem);
+    line-height: 0.91;
+    text-wrap: balance;
+  }
+
+  .pricing-page .calm-hero__support {
+    max-width: 29rem;
+    margin-top: 1.65rem;
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+
+  .pricing-page .calm-hero__actions {
+    gap: 1rem 1.3rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .pricing-page .calm-text-action,
+  .pricing-page .calm-quiet-action {
+    min-height: 42px;
+    font-size: 0.61rem;
+    letter-spacing: 0.13em;
+  }
+
+  .pricing-page .calm-hero__image {
+    z-index: 1;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+    border-radius: 0 0 50% 50% / 0 0 4.25rem 4.25rem;
+  }
+
+  .pricing-page .calm-hero__image::after {
+    background: rgba(8, 19, 33, 0.56);
+  }
+
+  .pricing-page .calm-hero__image img {
+    opacity: 0.62;
+    object-position: 62% center;
+    filter: saturate(0.66) contrast(0.98);
+  }
+
+  .pricing-page .calm-scroll-cue {
+    display: none;
+  }
+
+  .pricing-page .pricing-intro,
+  .pricing-page .learning-chapter,
+  .pricing-page .planning-result,
+  .pricing-page .quote-handoff {
+    scroll-margin-top: 5.5rem;
+  }
+
+  .pricing-page .pricing-intro {
+    min-height: 0;
+    padding: 4.25rem 1.25rem 2rem;
+    color: var(--calm-ink);
+    background: var(--calm-ivory);
+  }
+
+  .pricing-page .pricing-intro__hero .calm-eyebrow {
+    display: none;
+  }
+
+  .pricing-page .pricing-intro__hero h2 {
+    max-width: 8.2em;
+    color: var(--calm-ink);
+    font-size: clamp(2.8rem, 12.5vw, 3.55rem);
+    line-height: 0.94;
+    text-wrap: balance;
+  }
+
+  .pricing-page .pricing-intro__hero > p:not(.calm-eyebrow) {
+    max-width: 32rem;
+    margin-top: 1.45rem;
+    color: rgba(23, 32, 42, 0.68);
+    font-size: 0.8rem;
+    line-height: 1.68;
+  }
+
+  .pricing-page .factor-map {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: none;
+    margin-top: 2.75rem;
+    border: 1px solid var(--calm-ink-line);
+  }
+
+  .pricing-page .factor-map li,
+  .pricing-page .factor-map li:first-child {
+    border: 0;
+    border-right: 1px solid var(--calm-ink-line);
+    border-bottom: 1px solid var(--calm-ink-line);
+  }
+
+  .pricing-page .factor-map li:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .pricing-page .factor-map li:nth-child(5) {
+    grid-column: 1 / -1;
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  .pricing-page .factor-map a {
+    min-height: 96px;
+    padding: 1rem;
+    font-size: 1.05rem;
+  }
+
+  .pricing-page .learning-chapters {
+    background: var(--calm-paper);
+  }
+
+  .pricing-page .learning-chapter {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.6rem;
+    min-height: 0;
+    padding: 4.5rem 1.25rem;
+    overflow: visible;
+    align-items: start;
+  }
+
+  .pricing-page .learning-chapter__lesson,
+  .pricing-page .learning-chapter__answer {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .pricing-page .learning-chapter h2 {
+    max-width: 8.8em;
+    font-size: clamp(2.85rem, 12.6vw, 3.65rem);
+    line-height: 0.94;
+    text-wrap: balance;
+  }
+
+  .pricing-page .learning-chapter__lesson > p:not(.chapter-index),
+  .pricing-page .route-entry-explainer {
+    max-width: none;
+    margin-top: 1.6rem;
+    font-size: 0.85rem;
+    line-height: 1.72;
+  }
+
+  .pricing-page .learning-chapter__answer {
+    align-self: start;
+    padding: 1.65rem 1.1rem;
+    background: rgba(255, 253, 248, 0.74);
+    box-shadow: 0 16px 42px rgba(23, 32, 42, 0.07);
+  }
+
+  .pricing-page .learning-chapter__answer--recommendation {
+    min-height: 0;
+  }
+
+  .pricing-page .answer-heading {
+    margin-bottom: 1.8rem;
+  }
+
+  .pricing-page .answer-heading h3 {
+    font-size: 1.8rem;
+  }
+
+  .pricing-page #factor-program .lesson-note {
+    display: none;
+  }
+
+  .pricing-page .operation-picker__trigger {
+    min-height: 60px;
+  }
+
+  .pricing-page .operation-picker__trigger strong {
+    font-size: 1.25rem;
+  }
+
+  .pricing-page .choice-cloud {
+    gap: 0.45rem;
+  }
+
+  .pricing-page .choice-cloud label span {
+    min-height: 42px;
+    padding: 0.7rem 0.75rem;
+  }
+
+  .pricing-page .segmented-choice--volume {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pricing-page .known-volume-grid {
+    gap: 0.4rem;
+  }
+
+  .pricing-page .calm-field--large input {
+    font-size: 1.95rem;
+  }
+
+  .pricing-page .number-field em {
+    padding-bottom: 0.72rem;
+    font-size: 0.52rem;
+  }
+
+  .pricing-page .finish-recommendation__basis > div {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .pricing-page #factor-ownership,
+  .pricing-page #factor-route {
+    gap: 2.6rem;
+  }
+
+  .pricing-page #factor-ownership .learning-chapter__lesson,
+  .pricing-page #factor-ownership .answer-heading,
+  .pricing-page #factor-route .learning-chapter__lesson,
+  .pricing-page #factor-route .answer-heading {
+    text-align: center;
+  }
+
+  .pricing-page #factor-ownership .learning-chapter__lesson h2,
+  .pricing-page #factor-route .learning-chapter__lesson h2 {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .pricing-page #factor-ownership .learning-chapter__lesson > p:not(.chapter-index) {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .pricing-page #factor-ownership .learning-chapter__answer,
+  .pricing-page #factor-route .learning-chapter__answer {
+    padding: 1.65rem 1.1rem;
+  }
+
+  .pricing-page #factor-ownership .ownership-note {
+    max-width: none;
+    min-height: 0;
+    margin-top: 2.6rem;
+    padding: 2rem 0 0;
+    text-align: center;
+  }
+
+  .pricing-page #factor-ownership .ownership-note p {
+    font-size: 1.3rem;
+  }
+
+  .pricing-page #factor-route .route-entry-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .pricing-page #factor-route .answer-heading,
+  .pricing-page #factor-route .rhythm-control,
+  .pricing-page #factor-route .route-choice-group {
+    grid-column: 1;
+  }
+
+  .pricing-page #factor-route .calm-field {
+    margin-top: 0;
+  }
+
+  .pricing-page #factor-route .route-entry-explainer {
+    margin: 2rem auto 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--calm-ink-line);
+    text-align: center;
+  }
+
+  .pricing-page .rhythm-recommendation,
+  .pricing-page .conditional-panel {
+    padding: 1.15rem;
+  }
+
+  .pricing-page .rhythm-cadence li {
+    min-height: 38px;
+  }
+
+  .pricing-page .editorial-choice-list label > span {
+    min-height: 76px;
+    padding: 0.85rem;
+  }
+
+  .pricing-page .planning-result {
+    min-height: 0;
+    padding: 3.4rem 1rem;
+    background: var(--calm-navy);
+  }
+
+  .pricing-page .range-shell {
+    padding: 1.25rem 1rem;
+    box-shadow: none;
+  }
+
+  .pricing-page .range-progress {
+    gap: 0.9rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .pricing-page .range-progress li {
+    width: 22px;
+  }
+
+  .pricing-page .range-shell__intro {
+    padding: 2.2rem 0 2rem;
+  }
+
+  .pricing-page .range-shell__intro h2 {
+    max-width: 8.5em;
+    font-size: 2.75rem;
+    text-wrap: balance;
+  }
+
+  .pricing-page .range-shell__intro > p:not(.chapter-index) {
+    margin-top: 1.15rem;
+    font-size: 0.78rem;
+  }
+
+  .pricing-page .range-locked {
+    min-height: 0;
+    padding: 3.25rem 0.25rem 2.25rem;
+  }
+
+  .pricing-page .range-locked p {
+    font-size: 2.45rem;
+  }
+
+  .pricing-page .range-number {
+    flex-wrap: wrap;
+  }
+
+  .pricing-page .range-number strong {
+    font-size: 3.6rem;
+  }
+
+  .pricing-page .range-details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pricing-page .range-details div,
+  .pricing-page .range-details div:not(:first-child) {
+    padding: 1rem 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--calm-ink-line);
+  }
+
+  .pricing-page .range-details div:last-child {
+    border-bottom: 0;
+  }
+
+  .pricing-page .quote-handoff {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3rem;
+    min-height: 0;
+    padding: 4.5rem 1.25rem;
+  }
+
+  .pricing-page .quote-handoff__intro {
+    text-align: center;
+  }
+
+  .pricing-page .quote-handoff__intro h2 {
+    max-width: 8.4em;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: clamp(2.9rem, 12.8vw, 3.65rem);
+    text-wrap: balance;
+  }
+
+  .pricing-page .quote-handoff__intro > p:not(.chapter-index) {
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 0.82rem;
+  }
+
+  .pricing-page .quote-fields {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.6rem;
+  }
+
+  .pricing-page .quote-handoff button {
+    width: 100%;
+  }
+
+  .pricing-page .quote-status {
+    grid-column: 1;
+  }
+
+  .pricing-page .estimate-dock {
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    width: auto;
+    min-height: 70px;
+    padding: 0.85rem 1rem;
+  }
+
+  .pricing-page .estimate-dock strong {
+    max-width: 15rem;
+    font-size: 0.95rem;
+  }
+
+  .pricing-page .estimate-dock a {
+    flex: 0 0 auto;
+    font-size: 0.54rem;
+  }
+
+  .pricing-page .site-footer {
+    padding: 4.25rem 1rem 2rem;
+    border-top-color: rgba(250, 246, 238, 0.12);
+    background: transparent;
+  }
+
+  .pricing-page .site-footer::before,
+  .pricing-page .site-footer::after {
+    content: none;
+    display: none;
+  }
+
+  .pricing-page .site-footer__inner {
+    width: calc(100% - 28px);
+  }
+
+  .pricing-page .footer-directory {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.25rem;
+  }
+
+  .pricing-page .footer-brand-panel {
+    grid-column: auto;
+  }
+
+  .pricing-page .footer-logo {
+    align-items: flex-start;
+  }
+
+  .pricing-page .footer-brand {
+    font-size: 1.22rem;
+  }
+
+  .pricing-page .footer-bottom {
+    flex-direction: column;
+  }
+}

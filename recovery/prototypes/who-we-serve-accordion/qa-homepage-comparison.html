@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Homepage Integration Design QA</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 28px;
+      background: #050b14;
+      color: #faf6ee;
+      font: 14px/1.45 Inter, Arial, sans-serif;
+    }
+    main { width: 1348px; margin: 0 auto; }
+    h1 { margin: 0 0 18px; font: 400 28px/1.1 Georgia, serif; }
+    h2 { margin: 0 0 10px; color: #d2b071; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; }
+    .comparison { display: grid; grid-template-columns: 660px 660px; gap: 28px; margin-bottom: 30px; }
+    figure { margin: 0; }
+    figcaption { margin-top: 8px; color: rgba(250, 246, 238, 0.72); }
+    .frame {
+      position: relative;
+      width: 660px;
+      overflow: hidden;
+      border: 1px solid rgba(184, 150, 90, 0.7);
+      background: #081321;
+    }
+    .frame--accordion { height: 290px; }
+    .frame--models { height: 113px; }
+    .frame img { position: absolute; display: block; max-width: none; }
+    .source-accordion img { inset: 0; width: 660px; height: auto; }
+    .implementation-accordion img { width: 689px; height: auto; transform: translate(-14px, -69px); }
+    .source-models img { inset: 0; width: 660px; height: auto; }
+    .implementation-models img { width: 720px; height: auto; transform: translate(-30px, -385px); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Homepage integration comparison</h1>
+
+    <h2>Primary accordion composition</h2>
+    <section class="comparison" aria-label="Primary accordion comparison">
+      <figure>
+        <div class="frame frame--accordion source-accordion">
+          <img src="qa-homepage-source-accordion.png" alt="Approved accordion direction" />
+        </div>
+        <figcaption>Approved source direction</figcaption>
+      </figure>
+      <figure>
+        <div class="frame frame--accordion implementation-accordion">
+          <img src="qa-homepage-integration-desktop.png" alt="Accordion integrated into the homepage" />
+        </div>
+        <figcaption>Rendered homepage integration · Hotels active · 1440 × 1024</figcaption>
+      </figure>
+    </section>
+
+    <h2>Service-model group</h2>
+    <section class="comparison" aria-label="Service model comparison">
+      <figure>
+        <div class="frame frame--models source-models">
+          <img src="qa-homepage-source-models.png" alt="Approved service-model row treatment" />
+        </div>
+        <figcaption>Approved row treatment</figcaption>
+      </figure>
+      <figure>
+        <div class="frame frame--models implementation-models">
+          <img src="qa-homepage-integration-desktop.png" alt="Service-model rows integrated into the homepage" />
+        </div>
+        <figcaption>Rendered homepage integration · current compact scale</figcaption>
+      </figure>
+    </section>
+  </main>
+</body>
+</html>

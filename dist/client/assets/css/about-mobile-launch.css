@@ -1,0 +1,305 @@
+/* Responsive launch adjustments for the About archive. */
+body[data-page="about"] .about-archive-rail {
+  display: contents;
+}
+
+body[data-page="about"] .about-archive-affordance {
+  display: none;
+}
+
+@keyframes about-archive-row-nudge {
+  0%, 100% { transform: translateX(0); }
+  48% { transform: translateX(-0.72rem); }
+}
+
+@media (max-width: 900px) {
+  body[data-page="about"] .about-archive-rail {
+    position: relative;
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  body[data-page="about"] .about-archive-rail::after {
+    content: "";
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    right: 0;
+    width: clamp(2.5rem, 8vw, 3.6rem);
+    height: calc((var(--about-mobile-tile) * 2) + 1px);
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(8, 19, 33, 0.84));
+    opacity: 1;
+    transition: opacity 0.35s ease;
+  }
+
+  body[data-page="about"] .about-archive-affordance {
+    position: absolute;
+    z-index: 12;
+    top: var(--about-mobile-tile);
+    right: 0;
+    min-width: clamp(4.3rem, 14vw, 5.4rem);
+    min-height: clamp(1.8rem, 5vw, 2.15rem);
+    padding: 0.35rem 0.55rem 0.35rem 0.72rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.32rem;
+    transform: translateY(-50%);
+    border: 1px solid rgba(184, 150, 90, 0.82);
+    border-right: 0;
+    border-radius: 999px 0 0 999px;
+    background: rgba(8, 19, 33, 0.84);
+    color: #faf6ee;
+    box-shadow: 0 0.55rem 1.1rem rgba(0, 0, 0, 0.32);
+    font-family: "Inter", Arial, sans-serif;
+    font-size: clamp(0.55rem, 1.45vw, 0.68rem);
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    line-height: 1;
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+  }
+
+  body[data-page="about"] .about-archive-affordance > span:last-child {
+    color: #b8965a;
+    font-size: 1.2em;
+    letter-spacing: 0;
+  }
+
+  body[data-page="about"] .about-archive-rail.is-hinting .about-tile:not(.about-tile--reserved) {
+    animation: about-archive-row-nudge 760ms cubic-bezier(0.33, 1, 0.68, 1) both;
+  }
+
+  body[data-page="about"] .about-archive-rail.is-discovered::after,
+  body[data-page="about"] .about-archive-rail.is-discovered .about-archive-affordance {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (min-width: 621px) and (max-width: 900px) {
+  body[data-page="about"] .about-montage {
+    --about-mobile-tile: calc((100vw - 3px) / 4);
+    width: 100vw;
+    max-width: 100vw;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  body[data-page="about"] .about-tv-viewer {
+    order: 1;
+    flex: 0 0 auto;
+  }
+
+  body[data-page="about"] .about-tile-strip {
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+    height: calc((var(--about-mobile-tile) * 3) + 2px);
+    padding: 0;
+    display: grid;
+    grid-auto-flow: unset;
+    grid-template-columns: repeat(12, var(--about-mobile-tile));
+    grid-template-rows: repeat(3, var(--about-mobile-tile));
+    gap: 1px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body[data-page="about"] .about-tile-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  body[data-page="about"] .about-tile,
+  body[data-page="about"] .about-tile--optional,
+  body[data-page="about"] .about-tile--quiet {
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  body[data-page="about"] .about-tile:not(.about-tile--reserved) {
+    grid-column: var(--about-mobile-column);
+    grid-row: var(--about-mobile-row);
+    scroll-snap-align: start;
+  }
+
+  body[data-page="about"] .about-tile--reserved {
+    position: sticky;
+    left: var(--about-mobile-person-left);
+    z-index: 8;
+    grid-column: var(--about-mobile-person-column);
+    grid-row: 3;
+    box-shadow: inset 0 1px 0 rgba(239, 228, 204, 0.2);
+  }
+
+  body[data-page="about"] .about-tile__reserved-name {
+    margin: 0.5rem;
+    font-size: clamp(0.54rem, 1.1vw, 0.68rem);
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-page="about"] .about-archive-rail.is-hinting .about-tile:not(.about-tile--reserved) {
+    animation: none;
+  }
+}
+
+@media (max-width: 620px) {
+  body[data-page="about"] .about-montage {
+    --about-mobile-tile: calc((100vw - 3px) / 4);
+  }
+
+  body[data-page="about"] .about-tv-viewer {
+    align-self: stretch;
+    width: 100vw;
+    max-width: none;
+    aspect-ratio: 1.52;
+    margin: 0;
+    scroll-margin-top: 5.5rem;
+    filter: drop-shadow(0 1.35rem 2.15rem rgba(0, 0, 0, 0.72));
+  }
+
+  body[data-page="about"] .about-tv-viewer::before {
+    inset: -1% -1% -4%;
+  }
+
+  body[data-page="about"] .archive-tv-shadow {
+    bottom: -3%;
+    height: 7%;
+    opacity: 0.58;
+  }
+
+  body[data-page="about"] .about-tv-cabinet {
+    padding: 0.45rem;
+    border-radius: 0.9rem;
+  }
+
+  body[data-page="about"] .about-tv-face {
+    grid-template-columns: minmax(0, 1fr) 3.15rem;
+    gap: 0.38rem;
+    padding: 0.38rem;
+    border-radius: 0.7rem;
+  }
+
+  body[data-page="about"] .about-tv-screen {
+    padding: clamp(0.78rem, 3.8vw, 1rem);
+    border-width: 0.34rem;
+  }
+
+  body[data-page="about"] .about-tv-controls {
+    min-width: 2.75rem;
+    padding: 0.1rem 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    border-radius: 0.8rem;
+  }
+
+  body[data-page="about"] .about-tv-controls::after,
+  body[data-page="about"] .about-tv-speaker {
+    display: none;
+  }
+
+  body[data-page="about"] .about-tv-dial {
+    width: 2.75rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    margin-top: 0;
+  }
+
+  body[data-page="about"] .about-tile-strip {
+    width: 100%;
+    max-width: 100%;
+    height: calc((var(--about-mobile-tile) * 3) + 2px);
+    padding: 0;
+    display: grid;
+    grid-auto-flow: unset;
+    grid-template-columns: repeat(12, var(--about-mobile-tile));
+    grid-template-rows: repeat(3, var(--about-mobile-tile));
+    gap: 1px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body[data-page="about"] .about-tile-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  body[data-page="about"] .about-tile,
+  body[data-page="about"] .about-tile--optional,
+  body[data-page="about"] .about-tile--quiet {
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  body[data-page="about"] .about-tile:not(.about-tile--reserved) {
+    grid-column: var(--about-mobile-column);
+    grid-row: var(--about-mobile-row);
+    scroll-snap-align: start;
+  }
+
+  body[data-page="about"] .about-tile--reserved {
+    position: sticky;
+    left: var(--about-mobile-person-left);
+    z-index: 8;
+    grid-column: var(--about-mobile-person-column);
+    grid-row: 3;
+    box-shadow: inset 0 1px 0 rgba(239, 228, 204, 0.2);
+  }
+
+  body[data-page="about"] .about-tile__reserved-name {
+    margin: 0.34rem;
+    font-size: clamp(0.42rem, 1.75vw, 0.54rem);
+    letter-spacing: 0.08em;
+  }
+
+  /* Match the approved towel treatment: year and title only. */
+  body[data-page="about"] .about-linen-fold__number {
+    display: none;
+  }
+
+  body[data-page="about"] .about-linen-fold__heading,
+  body[data-page="about"] .about-linen-fold[open] .about-linen-fold__heading {
+    grid-template-columns: 5rem minmax(0, 1fr) 2.3rem;
+  }
+
+  /* Keep the woven date band neutral in both settled and selected states. */
+  body[data-page="about"] .about-linen-fold__heading time,
+  body[data-page="about"] .about-linen-fold[open] .about-linen-fold__heading time {
+    color: #8a6228;
+    background: none;
+    background-blend-mode: normal;
+    text-shadow: none;
+  }
+}
+
+@media (max-width: 390px) {
+  body[data-page="about"] .about-linen-fold__heading,
+  body[data-page="about"] .about-linen-fold[open] .about-linen-fold__heading {
+    grid-template-columns: 4.85rem minmax(0, 1fr) 2.15rem;
+  }
+}
