@@ -99,3 +99,43 @@ The three original folders were used read-only. The standalone target was
 created by cloning the preferred GitHub repository and importing a separately
 assembled overlay; no restore, checkout, clean, reset, commit, or write was
 performed in an original folder.
+
+## Verified production release: 2026-09-01
+
+The checkpoint was re-audited against every local/remote branch, the recovery
+evidence, the Sites source history, and the live public site. The live static
+tree matched `dist/client` after normalization of provider-injected Cloudflare
+markup and line endings. No unpublished recovery concept was complete enough
+to promote.
+
+The audit identified one production bug: the analytics client emitted the
+manual-only estimator operations `other` and `wholesale`, while the Worker
+allowlist rejected them. Commit `662c661f0f4dc44b5efce5a110b5ca01d096a84b`
+adds both operations and regression coverage. It also restores the established
+Sites binding and brings the Pricing end-to-end test forward to the current v14
+contract. There is no customer-visible design, content, navigation, form, or
+pricing-model change.
+
+Release branch `codex/reconcile-production-release-2026-09-01` was pushed to
+the established GitHub remote. Provenance merge
+`c50e04556a9d27f6dbec8e52f5ca64242f8a8937` preserves the previous Sites
+source tip as a second parent without changing the verified release tree or
+rewriting either history. Compact provider commit
+`cfe31f114b36e2f6363c16a247fb3ec663c4dbd6` fast-forwarded the Sites source
+and was packaged from the exact verified `dist/` tree.
+
+Sites version 26 was deployed successfully at
+`2026-09-01T19:55:23.963025+00:00` as deployment
+`appgdep_6a972d9d6f848191bc140ff717b2d9bf`. The canonical custom domain remains
+`https://sheltonlinen.com/`; environment revision 8, access policy, runtime
+secrets, and domain configuration were unchanged. Version 25
+(`appgprj_6a6690e204188191b9f68cb6e952be76~appgver_28860ab356588191bc12a34413816e83`)
+remains the rollback target.
+
+All automated, WSL, source-integrity, responsive, accessibility, Git, provider,
+and live-safe checks passed. The post-deployment estimator returned a planning
+range, the quote page blocked an empty submission with accessible errors, all
+redirect aliases preserved path/query, and the new analytics operations passed
+their live allowlist without forwarding test events. No customer form was
+submitted. The full evidence and candidate classification are recorded in
+`docs/PRODUCTION-RECONCILIATION-AUDIT-2026-09-01.md`.
