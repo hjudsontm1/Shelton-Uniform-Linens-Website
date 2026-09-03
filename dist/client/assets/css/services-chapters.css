@@ -101,8 +101,17 @@
 .service-chapter--linens .service-chapter__media img { object-position: 72% center; }
 .service-chapter--towels .service-chapter__media img { object-position: 54% center; }
 .service-chapter--uniforms .service-chapter__media img { object-position: 60% center; }
-.service-chapter--events .service-chapter__media img { object-position: 57% center; }
+.service-chapter--events .service-chapter__media img { object-position: 50% center; }
 .service-chapter--specialty .service-chapter__media img { object-position: 58% center; }
+
+.service-chapter--uniforms .service-chapter__media img.service-chapter__image--untreated {
+  object-position: 64% center;
+  filter: none;
+}
+
+.service-chapter--events .service-chapter__media img.service-chapter__image--untreated {
+  filter: none;
+}
 
 .service-chapter__content {
   width: min(100%, 51rem);

@@ -262,82 +262,57 @@ test("Services uses a two-column tab layout with two-position vertical keyboard 
   assert.match(servicesScript, /event\.key === "ArrowUp"\) nextIndex = \(index - verticalStep \+ standardTabs\.length\) % standardTabs\.length/);
 });
 
-test("Services reveals the live map only after both map and service-area readiness", () => {
-  const revealMatch = servicesScript.match(/const revealLiveMap = \(\) => \{([\s\S]*?)\n    \};/);
-  assert.ok(revealMatch, "Services defines a live-map reveal gate");
-  assert.match(revealMatch[1], /if \(!mapReady \|\| !serviceAreaReady\) return;/);
-  assert.match(revealMatch[1], /routeMapStage\?\.classList\.add\("has-live-map"\)/);
-  assert.equal((servicesScript.match(/classList\.add\("has-live-map"\)/g) || []).length, 1);
-  assert.match(servicesScript, /serviceAreaReady = true;[\s\S]*?revealLiveMap\(\)/);
-  assert.match(servicesScript, /mapReady = true;[\s\S]*?revealLiveMap\(\)/);
-  assert.match(servicesScript, /window\.L\.control\.zoom\(\{ position: "topright" \}\)\.addTo\(routeMap\)/);
-});
-
-test("Services uses the vendor-published Leaflet integrity digests", () => {
-  assert.match(
-    servicesHtml,
-    /leaflet\.css" integrity="sha256-p4NxAoJBhIIN\+hmNHrzRCf9tD\/miZyoHS5obTRR9BMY="/
-  );
-  assert.match(
-    servicesHtml,
-    /leaflet\.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2\/Z9VM\+kNiyxNV1lvTlZBo="/
+test("Services keeps the route-review form and removes the map entirely", () => {
+  assert.match(servicesHtml, /<section class="service-route-check"[^>]*>/);
+  assert.match(servicesHtml, /<form class="service-route-check__form" data-route-form novalidate>/);
+  assert.match(servicesHtml, /All of San Diego County, plus Temecula, Temecula Wine Country, and southern Orange County\./);
+  assert.doesNotMatch(servicesHtml, /service-route-check__(?:map-stage|static-map|map)\b/);
+  assert.doesNotMatch(servicesHtml, /https?:\/\/[^"'\s]*(?:leaflet|cartocdn)/i);
+  assert.doesNotMatch(servicesHtml, /data-route-map-fallback|Interactive map/i);
+  assert.doesNotMatch(
+    servicesScript,
+    /\bwindow\.L\b|\bL\.(?:map|tileLayer|geoJSON|marker|control)|cartocdn|shelton-service-area\.geojson/i
   );
 });
 
-test("Services CSS gates the live map and keeps fallback, focus, and scroll behavior hardened", () => {
-  const hiddenMap = cssDeclarations(servicesPolishCss, ".service-route-check__map");
-  assert.match(hiddenMap, /visibility:\s*hidden/);
-  assert.match(hiddenMap, /opacity:\s*0/);
-  assert.match(hiddenMap, /pointer-events:\s*none/);
+test("Services centers the map-free route review and preserves responsive safeguards", () => {
+  const routeInner = cssDeclarations(servicesPolishCss, ".service-route-check__inner");
+  assert.match(routeInner, /width:\s*min\(calc\(100% - 2rem\),\s*64rem\)/);
+  assert.match(routeInner, /min-height:\s*0/);
+  assert.match(routeInner, /margin-inline:\s*auto/);
+  assert.match(routeInner, /grid-template-columns:\s*minmax\(0,\s*1fr\)/);
 
-  const liveMap = cssDeclarations(servicesPolishCss, ".service-route-check__map-stage.has-live-map .service-route-check__map");
-  assert.match(liveMap, /visibility:\s*visible/);
-  assert.match(liveMap, /opacity:\s*1/);
-  assert.match(liveMap, /pointer-events:\s*auto/);
+  const routeConversion = cssDeclarations(servicesPolishCss, ".service-route-check__conversion");
+  assert.match(routeConversion, /border-right:\s*0/);
 
-  const hiddenFallback = cssDeclarations(servicesPolishCss, ".service-route-check__map-stage.has-live-map .service-route-check__map-fallback");
-  assert.match(hiddenFallback, /display:\s*none/);
+  const routeCopy = cssDeclarations(servicesPolishCss, ".service-route-check__copy");
+  assert.match(routeCopy, /margin-inline:\s*auto/);
+
+  const routeForm = cssDeclarations(servicesPolishCss, ".service-route-check__form");
+  assert.match(routeForm, /max-width:\s*48rem/);
+  assert.match(routeForm, /margin-inline:\s*auto/);
 
   [
     [servicesStandardCss, ".shelton-cleaning-standard__tab:focus-visible"],
     [servicesStandardCss, ".shelton-cleaning-standard__panel:focus-visible"],
-    [servicesPolishCss, ".service-route-check__field input:focus-visible"],
-    [servicesPolishCss, ".service-route-check__facility-marker:focus-visible"]
+    [servicesPolishCss, ".service-route-check__field input:focus-visible"]
   ].forEach(([css, selector]) => {
     const declarations = cssDeclarations(css, selector);
     assert.match(declarations, /outline:\s*2px solid/);
   });
 
+  const tabletBlocks = balancedBlocks(servicesPolishCss, "@media (max-width: 820px)");
+  assert.ok(tabletBlocks.some((block) => (
+    /\.service-route-check__form\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*1fr\) minmax\(0,\s*1fr\);/.test(block)
+  )), "route-review form keeps two columns on tablets");
+
   const compactBlocks = balancedBlocks(servicesPolishCss, "@media (min-width: 621px) and (max-width: 900px)");
   const phoneBlocks = balancedBlocks(servicesPolishCss, "@media (max-width: 620px)");
+  assert.ok(phoneBlocks.some((block) => (
+    /\.service-route-check__form\s*\{[\s\S]*?grid-template-columns:\s*1fr;/.test(block)
+  )), "route-review form becomes one column on phones");
   assert.ok(compactBlocks.some((block) => /\.service-chapter\s*\{\s*scroll-margin-top:\s*9\.75rem;/.test(block)));
   assert.ok(phoneBlocks.some((block) => /\.service-chapter\s*\{\s*scroll-margin-top:\s*9\.35rem;/.test(block)));
-});
-
-test("Services map GeoJSON is a closed Polygon FeatureCollection", () => {
-  const fetchMatch = servicesScript.match(/fetch\("([^"]+\.geojson(?:\?[^"]*)?)"\)/);
-  assert.ok(fetchMatch, "Services fetches a GeoJSON service-area asset");
-  const relativeGeoJsonPath = fetchMatch[1].split("?")[0];
-  assert.ok(!path.isAbsolute(relativeGeoJsonPath) && !relativeGeoJsonPath.includes(".."));
-
-  const serviceArea = JSON.parse(readDist(relativeGeoJsonPath));
-  assert.equal(serviceArea.type, "FeatureCollection");
-  assert.ok(Array.isArray(serviceArea.features) && serviceArea.features.length > 0);
-
-  serviceArea.features.forEach((feature, featureIndex) => {
-    assert.equal(feature.type, "Feature", `feature ${featureIndex} is a GeoJSON Feature`);
-    assert.equal(feature.geometry?.type, "Polygon", `feature ${featureIndex} is a Polygon`);
-    assert.ok(Array.isArray(feature.geometry.coordinates) && feature.geometry.coordinates.length > 0);
-
-    feature.geometry.coordinates.forEach((ring, ringIndex) => {
-      assert.ok(Array.isArray(ring) && ring.length >= 4, `feature ${featureIndex} ring ${ringIndex} has enough points`);
-      ring.forEach((coordinate) => {
-        assert.ok(Array.isArray(coordinate) && coordinate.length >= 2);
-        assert.ok(coordinate.slice(0, 2).every(Number.isFinite));
-      });
-      assert.deepEqual(ring.at(-1), ring[0], `feature ${featureIndex} ring ${ringIndex} closes`);
-    });
-  });
 });
 
 test("Home story controls preserve 24px desktop targets and larger phone targets", () => {

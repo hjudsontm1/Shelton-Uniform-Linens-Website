@@ -27,7 +27,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.2/src/regular/style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <link rel="stylesheet" href="assets/css/site.css?v=20260816-mobile-launch-v1" />
   <link rel="stylesheet" href="assets/css/services-editorial.css?v=20260812-launch-responsive-v3" />
   <link rel="stylesheet" href="assets/css/services-spine-refinement.css?v=20260812-launch-responsive-v2" />
@@ -35,7 +34,7 @@
   <link rel="stylesheet" href="assets/css/services-standard.css?v=20260820-services-bugfix-v1" />
   <link rel="stylesheet" href="assets/css/services-route-map.css?v=20260812-launch-responsive-v6" />
   <link rel="stylesheet" href="assets/css/header.css?v=20260817-phone-menu-height-v2" />
-  <link rel="stylesheet" href="assets/css/services-final-polish.css?v=20260820-services-bugfix-v1" />
+  <link rel="stylesheet" href="assets/css/services-final-polish.css?v=20260903-centered-route-v1" />
 </head>
 <body class="services-experience-page" data-page="services">
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -59,7 +58,7 @@
   </nav>
 
   <main id="main-content" tabindex="-1">
-    <section class="service-library-hero" aria-labelledby="services-hero-title">
+    <section class="service-library-hero service-library-hero--text-only" aria-labelledby="services-hero-title">
       <div class="service-library-hero__stage">
         <div class="service-library-hero__copy service-reveal">
           <h1 id="services-hero-title"><span>A higher standard</span><span>for every item.</span></h1>
@@ -71,10 +70,6 @@
             </a>
           </div>
         </div>
-
-        <figure class="service-library-hero__visual service-reveal">
-          <img src="assets/images/generated/services-hero-option2-textiles-v1.webp" alt="Finished commercial linens, towels, chef coats, and navy workwear prepared in a laundry facility" width="1086" height="1448" fetchpriority="high" />
-        </figure>
       </div>
     </section>
 
@@ -195,7 +190,7 @@
 
       <section class="service-chapter service-chapter--dark service-chapter--image-right service-chapter--towels" id="towels-wellness" aria-labelledby="towels-wellness-title" data-service-chapter>
         <div class="service-chapter__frame">
-          <figure class="service-chapter__media service-reveal"><img src="assets/images/generated/services-towels-dark-library-v2.webp" alt="Finished white towels arranged on a dark stone counter in a linen room" width="1024" height="1536" loading="lazy" /></figure>
+          <figure class="service-chapter__media service-reveal"><img src="assets/images/generated/services-towels-dark-library-source-114-v1.webp" alt="Three folded white towels arranged on a dark stone counter in a linen room" width="1024" height="1536" loading="lazy" /></figure>
           <div class="service-chapter__content">
             <header class="service-chapter__header service-reveal"><h2 id="towels-wellness-title">Towels</h2><p>Professional cleaning, conditioning, and finishing for towels used throughout hotels, spas, fitness facilities, pools, and other high-volume operations. Each program is designed to maintain consistent cleanliness, softness, absorbency, and presentation through repeated use.</p></header>
             <div class="service-chapter__disclosures service-reveal">
@@ -211,7 +206,7 @@
 
       <section class="service-chapter service-chapter--light service-chapter--image-left service-chapter--uniforms" id="uniforms-chef-coats" aria-labelledby="uniforms-chef-coats-title" data-service-chapter>
         <div class="service-chapter__frame">
-          <figure class="service-chapter__media service-reveal"><img src="assets/images/industry-uniform.jpg" alt="Commercial uniforms and chef coats prepared for recurring service" width="1672" height="941" loading="lazy" decoding="async" /></figure>
+          <figure class="service-chapter__media service-reveal"><img class="service-chapter__image--untreated" src="assets/images/services-uniforms-chef-coats-photo-010-zuma-blurred.png" alt="White chef coats hanging on a garment rail inside the Shelton plant" width="1620" height="1080" loading="lazy" decoding="async" /></figure>
           <div class="service-chapter__content">
             <header class="service-chapter__header service-reveal"><h2 id="uniforms-chef-coats-title">Uniforms</h2><p>High-quality cleaning and professional finishing for chef coats, kitchen garments, service uniforms, and commercial workwear. Each program is designed to maintain consistent cleanliness and a sharp, professional appearance while protecting garment quality through repeated use.</p></header>
             <div class="service-chapter__disclosures service-reveal">
@@ -227,7 +222,7 @@
 
       <section class="service-chapter service-chapter--dark service-chapter--image-right service-chapter--events" id="event-linens" aria-labelledby="event-linens-title" data-service-chapter>
         <div class="service-chapter__frame">
-          <figure class="service-chapter__media service-reveal"><img src="assets/images/industry-event.jpg" alt="Event linens prepared for presentation" width="1672" height="941" loading="lazy" decoding="async" /></figure>
+          <figure class="service-chapter__media service-reveal"><img class="service-chapter__image--untreated" src="assets/images/services-event-linens-photo-303.jpg" alt="White event napkin arranged with a decorative gold ring and formal place setting" width="1800" height="1200" loading="lazy" decoding="async" /></figure>
           <div class="service-chapter__content">
             <header class="service-chapter__header service-reveal"><h2 id="event-linens-title">Event Linens</h2><p>Cleaning and professional finishing for event companies, venues, convention centers, and planners working with presentation goods, colored linens, and tight turnaround windows. Each program is shaped around fabric, color, batch size, finishing needs, and the date each order is required.</p></header>
             <div class="service-chapter__disclosures service-reveal">
@@ -292,14 +287,6 @@
           </form>
         </div>
 
-        <div class="service-route-check__map-stage">
-          <div class="service-route-check__map" data-service-route-map role="region" aria-label="Interactive map showing Shelton's San Diego processing facility and continuous service region across all of San Diego County, Temecula, Temecula Wine Country, and southern Orange County"></div>
-          <div class="service-route-check__map-fallback" data-route-map-fallback>
-            <p>Serving San Diego County, Temecula, Wine Country, and southern Orange County.</p>
-            <strong>Shelton processing facility</strong>
-            <span>1580 J Street · San Diego, CA 92101</span>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -347,7 +334,6 @@
 
   <script src="assets/js/site.js?v=20260816-mobile-launch-v1"></script>
   <script src="assets/js/analytics.js?v=20260825-first-party-v1"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="assets/js/services-editorial.js?v=20260820-services-bugfix-v1"></script>
+  <script src="assets/js/services-editorial.js?v=20260903-static-map-v1"></script>
 </body>
 </html>
